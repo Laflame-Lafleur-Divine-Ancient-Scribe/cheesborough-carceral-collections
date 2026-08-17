@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collections | The Cheesborough Carceral Collections</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root { --navy: #102c4c; --gold: #c29b53; --paper: #f4f0e8; --ink: #202020; }
+      * { box-sizing: border-box; }
+      body { background: var(--paper); color: var(--ink); font-family: "Source Sans 3", sans-serif; margin: 0; }
+      a { color: inherit; text-decoration: none; }
+      .topbar { background: var(--gold); color: #fff; padding: 0.7rem 1rem; text-align: center; }
+      .topbar a { font-size: 0.9rem; letter-spacing: 0.04em; padding: 0 0.7rem; }
+      .topbar a + a { border-left: 1px solid #fff; }
+      .topbar .active { color: var(--navy); font-weight: 700; }
+      header { background: #fff; border-bottom: 10px solid var(--navy); padding: 3rem clamp(1.3rem, 8vw, 8rem) 2rem; }
+      .eyebrow { color: #967038; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; }
+      .title { align-items: end; display: flex; gap: 2rem; justify-content: space-between; }
+      .title h1 { color: var(--navy); font: 700 clamp(2.5rem, 7vw, 6rem) / 1 "Libre Baskerville", serif; margin: 0.7rem 0 0; }
+      .title p { font-size: 1.1rem; margin: 0; max-width: 18rem; }
+      .catalog { margin: 0 auto; max-width: 1100px; padding: 3rem 1.3rem; }
+      .catalog-bar { align-items: baseline; border-bottom: 1px solid #bbb2a3; display: flex; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; }
+      .catalog-bar h2 { font: 700 1.4rem "Libre Baskerville", serif; margin: 0; }
+      .collection-grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(2, 1fr); }
+      .collection { background: var(--navy); border: 1px solid #c7bba8; color: #fff; display: flex; flex-direction: column; justify-content: space-between; min-height: 19rem; padding: 1.5rem; transition: transform 0.2s; }
+      .collection:nth-child(2) { background: #d7c8a7; color: var(--navy); }
+      .collection:nth-child(3) { background: #313131; }
+      .collection:nth-child(4) { background: #fff; color: var(--navy); }
+      .collection:hover { transform: translateY(-5px); }
+      .number { color: var(--gold); font: 700 2.2rem "Libre Baskerville", serif; }
+      .collection h3 { font: 700 clamp(1.3rem, 3vw, 2.4rem) / 1.2 "Libre Baskerville", serif; margin: 1rem 0 0.5rem; }
+      .collection p { font-size: 1rem; line-height: 1.45; margin: 0; max-width: 28rem; }
+      .browse { color: var(--gold); font-weight: 700; letter-spacing: 0.08em; margin-top: 1.2rem; text-transform: uppercase; }
+      .collection:nth-child(2) .browse, .collection:nth-child(4) .browse { color: var(--navy); }
+      footer { background: var(--navy); color: #fff; padding: 1rem; text-align: center; }
+      @media (max-width: 650px) {
+        .title { align-items: start; display: block; }
+        .title p { margin-top: 1.5rem; }
+        .collection-grid { grid-template-columns: 1fr; }
+        .topbar a { font-size: 0.72rem; padding: 0 0.3rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="topbar" aria-label="Primary navigation">
+        <a href="ABOUT.html">ABOUT</a>
+        <a class="active" href="COLLECTIONS.html">COLLECTIONS</a>
+        <a href="RESEARCH.html">RESEARCH</a>
+        <a href="LAW-LIBRARY.html">LAW LIBRARY</a>
+        <a href="NEWS.html">NEWS</a>
+        <a href="CONTACT.html">CONTACT</a>
+        <a href="index2.html">HOME</a>
+        <a href="DONATE.html">DONATE</a>
+      </nav>
+      <div class="eyebrow">Catalog / Open access</div>
+      <div class="title">
+        <h1>Collections</h1>
+        <p>Primary sources for studying carceral history, law, institutional practice, and lived experience.</p>
+      </div>
+    </header>
+
+    <main class="catalog">
+      <div class="catalog-bar">
+        <h2>Browse the collections</h2>
+        <span>04 divisions / 126 finding aids</span>
+      </div>
+      <section class="collection-grid" aria-label="Collection divisions">
+        <article class="collection">
+          <span class="number">01</span>
+          <div>
+            <h3>Digital Photography Collections</h3>
+            <p>Photographs documenting places, people, events, and everyday life within histories of incarceration and justice reform.</p>
+          </div>
+          <a class="browse" href="DIGITAL-PHOTOGRAPHY-COLLECTIONS.html">Explore collection &rarr;</a>
+        </article>
+        <article class="collection">
+          <span class="number">02</span>
+          <div>
+            <h3>Research Starters</h3>
+            <p>Guides, timelines, framing questions, and recommended sources for beginning research in law, history, and lived experience.</p>
+          </div>
+          <a class="browse" href="RESEARCH-STARTERS.html">Explore collection &rarr;</a>
+        </article>
+        <article class="collection">
+          <span class="number">03</span>
+          <div>
+            <h3>Books and Manuscripts</h3>
+            <p>Rare books, handwritten materials, published works, and scholarly texts documenting changing ideas about justice and confinement.</p>
+          </div>
+          <a class="browse" href="BOOKS-AND-MANUSCRIPTS.html">Explore collection &rarr;</a>
+        </article>
+        <article class="collection">
+          <span class="number">04</span>
+          <div>
+            <h3>Personal Collections</h3>
+            <p>Stories, memories, letters, and family materials preserved through personal testimony and community knowledge.</p>
+          </div>
+          <a class="browse" href="PERSONAL-COLLECTIONS.html">Explore collection &rarr;</a>
+        </article>
+      </section>
+    </main>
+
+    <footer>The Cheesborough Carceral Collections | COLLECTIONS</footer>
+  <script src="title-case.js"></script></body>
+</html>

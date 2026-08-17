@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photography Collections</title>
+    <style>
+      :root { --ink: #14283d; --gold: #c29b53; --paper: #f4f0e8; --muted: #68747d; }
+      * { box-sizing: border-box; }
+      body { background: var(--paper); color: var(--ink); font: 16px Arial, sans-serif; margin: 0; }
+      a { color: inherit; text-decoration: none; }
+      .nav { background: var(--ink); color: #fff; display: flex; gap: 1rem; justify-content: space-between; padding: 0.8rem max(1rem, calc((100% - 1100px) / 2)); font-size: 0.85rem; }
+      .nav-links { display: flex; gap: 0.8rem; }
+      .nav a:hover { color: var(--gold); }
+      .hero { background: linear-gradient(120deg, #102c4c 35%, #283f51); color: #fff; padding: clamp(3rem, 8vw, 7rem) max(1rem, calc((100% - 1100px) / 2)) 3rem; }
+      .hero h1 { font: 700 clamp(2.5rem, 7vw, 6rem) / 1 Georgia, serif; margin: 0; }
+      .hero p { color: #d8e0e5; line-height: 1.5; max-width: 38rem; }
+      .content { margin: auto; max-width: 1100px; padding: 2rem 1rem; }
+      .tools { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-bottom: 1.5rem; }
+      .tools input, .tools select { background: #fff; border: 1px solid #b8b1a6; padding: 0.8rem; }
+      .gallery { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
+      .photo { background: #fff; border: 1px solid #d5cec2; cursor: pointer; overflow: hidden; }
+      .photo[hidden] { display: none; }
+      .image { background-position: center; background-size: cover; height: 13rem; }
+      .one { background-image: url("01_Photos/01_By-Collection/Historic/Men/SanQuinten.jpg"); }
+      .two { background-image: url("01_Photos/01_By-Collection/Historic/Juveniles/California%20Youth%20Authority_1982.jpeg"); }
+      .three { background-image: url("https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=800&q=80"); }
+      .four { background-image: url("01_Photos/01_By-Collection/Contemporary/Men/Prison_crowded.jpg"); }
+      .five { background-image: url("01_Photos/01_By-Collection/Contemporary/Juveniles/FDS-Dozier-1280x960.jpg"); }
+      .six { background-image: url("https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80"); }
+      .photo h2, .photo p { margin: 0.8rem 1rem; }
+      .photo h2 { font: 700 1.1rem Georgia, serif; }
+      .photo p { color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+      .state-link { color: var(--ink); display: inline-block; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; margin: 0 1rem 1rem; text-transform: uppercase; }
+      .state-link:hover { color: var(--gold); }
+      .viewer { align-items: center; background: rgba(9, 30, 54, 0.85); display: grid; inset: 0; justify-items: center; padding: 1rem; position: fixed; }
+      .viewer[hidden] { display: none; }
+      .viewer-box { background: #fff; max-width: 650px; padding: 1rem; position: relative; }
+      .viewer-box img { display: block; max-height: 65vh; max-width: 100%; object-fit: cover; }
+      .close { background: var(--ink); border: 0; color: #fff; cursor: pointer; padding: 0.5rem; position: absolute; right: 0.5rem; top: 0.5rem; }
+      .empty { color: var(--muted); grid-column: 1 / -1; text-align: center; }
+      @media (max-width: 720px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 470px) { .gallery { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <a href="index2.html">CCC / PHOTOGRAPHY</a>
+      <div class="nav-links"><a href="index2.html">Home</a><a href="COLLECTIONS.html">Collections</a><a href="RESEARCH-STARTERS.html">Research starters</a><a href="CONTACT.html">Contact</a><a href="DONATE.html">Donate</a></div>
+    </nav>
+    <header class="hero"><h1>Photography</h1><p>A visual index of places, people, and material details for studying the history of incarceration with attention to context.</p></header>
+    <main class="content">
+      <div class="tools"><input id="search" type="search" placeholder="Search photographs..." aria-label="Search photographs" /><select id="filter" aria-label="Filter photographs"><option value="all">All photographs</option><option value="Historic Photographs: Men">Historic Photographs: Men</option><option value="Historic Photographs: Juveniles">Historic Photographs: Juveniles</option><option value="Historic Photographs: Women">Historic Photographs: Women</option><option value="Contemporary Photographs: Men">Contemporary Photographs: Men</option><option value="Contemporary Photographs: Juveniles">Contemporary Photographs: Juveniles</option><option value="Contemporary Photographs: Women">Contemporary Photographs: Women</option></select></div>
+      <section class="gallery" id="gallery" aria-label="Photography collections">
+        <article class="photo" data-tags="historic men" data-title="Historic Photographs: Men"><div class="image one"></div><h2>Historic Photographs: Men</h2><p>Historic / Men / 1900-1999</p><a class="state-link" href="PHOTOGRAPHY-STATES.html?collection=Historic%20Photographs%3A%20Men">Browse by state &rarr;</a></article>
+        <article class="photo" data-tags="historic juveniles" data-title="Historic Photographs: Juveniles"><div class="image two"></div><h2>Historic Photographs: Juveniles</h2><p>Historic / Juveniles / 1900-1999</p><a class="state-link" href="PHOTOGRAPHY-STATES.html?collection=Historic%20Photographs%3A%20Juveniles">Browse by state &rarr;</a></article>
+        <article class="photo" data-tags="historic women" data-title="Historic Photographs: Women"><div class="image three"></div><h2>Historic Photographs: Women</h2><p>Historic / Women / 1900-1999</p><a class="state-link" href="PHOTOGRAPHY-STATES.html?collection=Historic%20Photographs%3A%20Women">Browse by state &rarr;</a></article>
+        <article class="photo" data-tags="contemporary men" data-title="Contemporary Photographs: Men"><div class="image four"></div><h2>Contemporary Photographs: Men</h2><p>Contemporary / Men / 2000-Present</p><a class="state-link" href="PHOTOGRAPHY-STATES.html?collection=Contemporary%20Photographs%3A%20Men">Browse by state &rarr;</a></article>
+        <article class="photo" data-tags="contemporary juveniles" data-title="Contemporary Photographs: Juveniles"><div class="image five"></div><h2>Contemporary Photographs: Juveniles</h2><p>Contemporary / Juveniles / 2000-Present</p><a class="state-link" href="PHOTOGRAPHY-STATES.html?collection=Contemporary%20Photographs%3A%20Juveniles">Browse by state &rarr;</a></article>
+        <article class="photo" data-tags="contemporary women" data-title="Contemporary Photographs: Women"><div class="image six"></div><h2>Contemporary Photographs: Women</h2><p>Contemporary / Women / 2000-Present</p><a class="state-link" href="PHOTOGRAPHY-STATES.html?collection=Contemporary%20Photographs%3A%20Women">Browse by state &rarr;</a></article>
+        <p class="empty" id="empty" hidden>No photographs correspond to this search.</p>
+      </section>
+    </main>
+    <div class="viewer" id="viewer" hidden><div class="viewer-box"><button class="close" id="close" aria-label="Close viewer">Close</button><img id="viewer-image" alt="" /><h2 id="viewer-title"></h2><p id="viewer-caption"></p></div></div>
+    <script>
+      const cards = [...document.querySelectorAll(".photo")];
+      const search = document.querySelector("#search");
+      const filter = document.querySelector("#filter");
+      const empty = document.querySelector("#empty");
+      function update() {
+        const query = search.value.toLowerCase();
+        const subject = filter.value;
+        let visible = 0;
+        cards.forEach((card) => {
+          const matches = (!query || card.dataset.title.toLowerCase().includes(query)) && (subject === "all" || card.dataset.title === subject);
+          card.hidden = !matches;
+          if (matches) visible++;
+        });
+        empty.hidden = visible !== 0;
+      }
+      search.addEventListener("input", update);
+      filter.addEventListener("change", update);
+      const viewer = document.querySelector("#viewer");
+      cards.forEach((card) => card.addEventListener("click", () => {
+        const image = card.querySelector(".image");
+        document.querySelector("#viewer-image").src = getComputedStyle(image).backgroundImage.slice(5, -2);
+        document.querySelector("#viewer-title").textContent = card.dataset.title;
+        document.querySelector("#viewer-caption").textContent = card.querySelector("p").textContent;
+        viewer.hidden = false;
+      }));
+      document.querySelector("#close").addEventListener("click", () => viewer.hidden = true);
+      viewer.addEventListener("click", (event) => { if (event.target === viewer) viewer.hidden = true; });
+    </script>
+  <script src="title-case.js"></script></body>
+</html>

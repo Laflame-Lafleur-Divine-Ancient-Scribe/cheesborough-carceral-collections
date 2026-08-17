@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document Reader | The Cheesborough Carceral Collections</title>
+  <style>
+    :root { --navy:#102c4c; --deep:#091e36; --gold:#c29b53; --paper:#f5f2eb; }
+    * { box-sizing: border-box; }
+    body { background: var(--paper); color: #202020; font-family: Georgia, serif; margin: 0; }
+    header { align-items: center; background: var(--deep); color: #fff; display: flex; gap: 1rem; justify-content: space-between; padding: 1rem clamp(1rem, 5vw, 4rem); }
+    header a { color: #fff; font-family: Arial, sans-serif; text-decoration: none; }
+    .reader { margin: 0 auto; max-width: 1200px; padding: 1.5rem; }
+    h1 { color: var(--navy); font-size: clamp(1.5rem, 3vw, 2.4rem); margin: 0 0 1rem; overflow-wrap: anywhere; }
+    .document { background: #fff; border: 1px solid #d6cdbd; height: min(78vh, 58rem); min-height: 30rem; position: relative; width: 100%; }
+    .document { background: #2b2b2b; overflow: auto; padding: 1.2rem; }
+    .pdf-pages { display: grid; gap: 1.2rem; justify-items: center; margin: 0 auto; max-width: 60rem; }
+    .pdf-page { background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.28); display: block; height: auto; max-width: 100%; }
+    .document-loading { align-items: center; background: #2b2b2b; color: #fff; display: flex; font-family: Arial, sans-serif; inset: 0; justify-content: center; padding: 2rem; position: absolute; text-align: center; }
+    .document-error { align-items: center; color: #625f59; display: flex; font-family: Arial, sans-serif; inset: 0; justify-content: center; padding: 2rem; position: absolute; text-align: center; }
+    .fallback { background: #fff; border-top: 5px solid var(--gold); margin-top: 1rem; padding: 1rem; }
+    .fallback a { color: var(--navy); font-family: Arial, sans-serif; font-weight: 700; }
+    .reader-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+    .reader-actions a { border: 1px solid var(--navy); display: inline-block; padding: 0.65rem 0.9rem; }
+    .reader-actions .download { background: var(--navy); color: #fff; }
+    .status { color: #625f59; font-family: Arial, sans-serif; line-height: 1.5; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header><a href="index2.html">The Cheesborough Carceral Collections</a><a href="javascript:history.back()">Back to research</a></header>
+  <main class="reader">
+    <h1 id="title">Document reader</h1>
+    <div class="document"><p id="document-loading" class="document-loading">Loading the original scan...</p><div id="pdf-pages" class="pdf-pages"></div><p id="document-error" class="document-error" hidden>That document could not be rendered here. Use “Open original PDF” to open the browser's native PDF viewer or download the file below.</p></div>
+    <section class="fallback"><p id="status" class="status">The original scan is rendered above. Use the controls below only when you want the native viewer or a downloaded copy.</p><div class="reader-actions"><a id="view-original" target="_blank" rel="noopener" type="application/pdf">Open native PDF viewer &#8599;</a><a id="original" class="download" download rel="noopener" type="application/pdf">Download original PDF &#8595;</a></div></section>
+  </main>
+  <script type="module">
+    import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
+
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get("file");
+    const pages = document.querySelector("#pdf-pages");
+    const loading = document.querySelector("#document-loading");
+    const original = document.querySelector("#original");
+    const viewOriginal = document.querySelector("#view-original");
+    const title = document.querySelector("#title");
+    const error = document.querySelector("#document-error");
+
+    function toFileUrl(path) {
+      const normalized = path.replaceAll("\\", "/");
+      if (/^https?:\/\//i.test(normalized)) return normalized;
+      const encodedPath = normalized.split("/").map((part) => encodeURIComponent(part)).join("/");
+      return new URL(encodedPath, document.baseURI).href;
+    }
+
+    if (file) {
+      const source = toFileUrl(file);
+      const name = file.replaceAll("\\", "/").split("/").pop();
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+      const documentTask = pdfjsLib.getDocument(source);
+      documentTask.promise.then(async (documentProxy) => {
+        for (let pageNumber = 1; pageNumber <= documentProxy.numPages; pageNumber += 1) {
+          const page = await documentProxy.getPage(pageNumber);
+          const viewport = page.getViewport({ scale: 1.35 });
+          const canvas = document.createElement("canvas");
+          canvas.className = "pdf-page";
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          canvas.setAttribute("aria-label", `Page ${pageNumber} of ${documentProxy.numPages}`);
+          pages.append(canvas);
+          await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+        }
+        loading.hidden = true;
+      }).catch(() => {
+        loading.hidden = true;
+        error.hidden = false;
+      });
+      original.href = source;
+      viewOriginal.href = source;
+      title.textContent = name || "Document reader";
+    } else {
+      title.textContent = "No document selected";
+      document.querySelector(".document").hidden = true;
+      original.hidden = true;
+      viewOriginal.hidden = true;
+      loading.hidden = true;
+      document.querySelector("#status").textContent = "Select a PDF from a research page to open it here.";
+    }
+  </script>
+</body>
+</html>

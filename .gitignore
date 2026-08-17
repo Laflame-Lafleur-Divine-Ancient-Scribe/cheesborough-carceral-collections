@@ -1,0 +1,22 @@
+# OS and editor metadata
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+.vscode/
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
+
+# Heavy book and newspaper scans exceeding GitHub/Pages limits
+FullBooks/Full Books/
+*Full Books*
+*TheYellowjacket_DozierPaper*
+*Burning Down The House*
+
+# Nested empty repo (superfluous — this project itself is the repo)
+cheesborough-carceral-collections/
