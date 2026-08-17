@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 120" width="100%" height="100%">
+  <rect width="580" height="120" rx="8" fill="#FFFFFF"/>
+  
+  <!-- Decorative Left Accent Rule -->
+  <line x1="30" y1="25" x2="30" y2="95" stroke="#9A7B38" stroke-width="4"/>
+  <line x1="38" y1="25" x2="38" y2="95" stroke="#111827" stroke-width="1.5"/>
+  
+  <!-- Typography -->
+  <text x="55" y="46" font-family="'Times New Roman', Times, serif" font-size="22" font-weight="bold" fill="#111827" letter-spacing="1">CHEESBOROUGH</text>
+  <text x="55" y="72" font-family="'Times New Roman', Times, serif" font-size="22" font-weight="normal" fill="#9A7B38" letter-spacing="1.5">CARCERAL COLLECTIONS</text>
+  <text x="55" y="93" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#4B5563" letter-spacing="2">CARCERALCOLLECTIONS.ORG</text>
+</svg>
