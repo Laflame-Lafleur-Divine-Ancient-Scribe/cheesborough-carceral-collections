@@ -60,21 +60,18 @@
         text-align: center;
       }
 
-      h1 {
-        font-family: "Libre Baskerville", Georgia, serif;
-        font-size: clamp(1.8rem, 4.5vw, 3.15rem);
-        letter-spacing: 0.015em;
-        line-height: 1.12;
-        margin: 0;
-        text-shadow: 2px 2px 0 #050d16;
-      }
-      .trademark {
+      .masthead a {
         display: inline-block;
-        font-size: 0.34em;
-        line-height: 1;
-        position: relative;
-        top: 0.35em;
-        vertical-align: baseline;
+        transition: transform 180ms ease;
+      }
+      .masthead a:hover {
+        transform: translateY(-2px);
+      }
+      .masthead img {
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+        height: auto;
+        max-width: min(560px, 92vw);
+        width: 100%;
       }
 
       .tagline {
@@ -347,7 +344,9 @@
         </nav>
       </div>
       <div class="masthead">
-        <h1>The Cheesborough Carceral Collections<span class="trademark" aria-label="registered trademark">&reg;</span></h1>
+        <a href="https://carceralcollections.org" aria-label="Cheesborough Carceral Collections - CarceralCollections.org">
+          <img src="logo.svg" alt="Cheesborough Carceral Collections - CarceralCollections.org" width="350" />
+        </a>
       </div>
       <p class="tagline">Preserving sources, supporting research, and advancing critical legal inquiry</p>
     </header>
