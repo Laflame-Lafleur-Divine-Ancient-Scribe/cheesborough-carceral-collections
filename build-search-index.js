@@ -223,6 +223,20 @@ SEARCH_INDEX.push(
     actionLabel: "Open PDF in Reader ↗"
   },
   {
+    id: "pdf-for-their-own-good-tbt",
+    title: "Tampa Bay Times: For Their Own Good (Complete Investigative Series PDF)",
+    url: "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FFOR%20THEIR%20OWN%20GOOD.pdf",
+    category: "Primary PDF",
+    badge: "Investigative Series",
+    icon: "📰",
+    date: "2009–2010",
+    author: "Tampa Bay Times (Ben Montgomery, Waveney Ann Moore, Curtis Krueger)",
+    description: "Complete Pulitzer Prize-finalist investigative report chronicling the 111-year history of abuse, child labor, White House beatings, and unrecorded deaths at the Arthur G. Dozier School for Boys.",
+    tags: ["For Their Own Good", "Tampa Bay Times", "Ben Montgomery", "White House Boys", "Dozier School", "Investigative Journalism", "Primary PDF Scan"],
+    keywords: ["for their own good pdf", "tbt marianna pdf", "tampa bay times dozier investigation", "st petersburg times dozier", "for their own good st pete times", "white house boys investigation"],
+    actionLabel: "Open PDF in Reader ↗"
+  },
+  {
     id: "pdf-congressional-juvenile-report",
     title: "Congressional Juvenile Delinquency Committee Report on State Reformatories",
     url: "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FDozier%2FDozierArchives%2FCongressional%20Report%20Juvenile%20Delinquency%20Report%20of%20the%20Committe.pdf",
