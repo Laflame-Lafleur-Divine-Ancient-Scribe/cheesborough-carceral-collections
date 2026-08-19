@@ -34,7 +34,7 @@
     {
       id: "brief-newberry-ferguson",
       title: "The Newberry Six, Fortune Ferguson, and the Political Climate of Alachua County, Florida",
-      url: "CENSUS-AND-CAMP.html",
+      url: "NEWBERRY-AND-FORTUNE.html",
       category: "Research Brief",
       badge: "Research Brief",
       icon: "📖",
@@ -48,7 +48,7 @@
     {
       id: "brief-fortune-ferguson",
       title: "Fortune Ferguson Jr. and the Record of Racialized Punishment",
-      url: "FORTUNE-FERGUSON-RESEARCH.html",
+      url: "FORTUNE-FERGUSON.html",
       category: "Research Brief",
       badge: "Research Brief",
       icon: "📖",
@@ -76,7 +76,7 @@
     {
       id: "brief-powell-siberia",
       title: "The Insider's Ghost: J. C. Powell's The American Siberia",
-      url: "POWELL-AMERICAN-SIBERIA.html",
+      url: "AMERICAN-SIBERIA.html",
       category: "Research Brief",
       badge: "Research Brief",
       icon: "📖",
@@ -106,7 +106,7 @@
     {
       id: "doc-1969-dozier-report",
       title: "Report of the Visiting Committee, Arthur G. Dozier School for Boys (1969)",
-      url: "DOC-1969-DOZIER-REPORT.html",
+      url: "DOZIER-1969-REPORT.html",
       category: "Primary Document",
       badge: "Transcribed Document",
       icon: "📄",
@@ -120,7 +120,7 @@
     {
       id: "doc-jett-fortune-ferguson",
       title: "The State of Florida v. Fortune Ferguson Jr. (Brandon T. Jett, 2024)",
-      url: "DOC-FORTUNE-FERGUSON-JETT.html",
+      url: "FERGUSON-JETT-STUDY.html",
       category: "Primary Document",
       badge: "Legal Scholarship",
       icon: "⚖️",
@@ -134,7 +134,7 @@
     {
       id: "doc-wapo-juvenile-death-penalty",
       title: "History of the Juvenile Death Penalty: Key Events in the United States (Washington Post, 1988)",
-      url: "DOC-FORTUNE-FERGUSON-WAPO.html",
+      url: "JUVENILE-DEATH-PENALTY.html",
       category: "Primary Document",
       badge: "Historical Chronology",
       icon: "📰",
@@ -478,7 +478,7 @@
     {
       id: "col-digital-photography",
       title: "Digital Photography Collections: Historic & Contemporary Carceral Images",
-      url: "DIGITAL-PHOTOGRAPHY-COLLECTIONS.html",
+      url: "PHOTOGRAPHY.html",
       category: "Photo Archive",
       badge: "Photo Archive",
       icon: "📷",
@@ -492,7 +492,7 @@
     {
       id: "col-photography-states",
       title: "Carceral Photography by State Index (All 50 Jurisdictions)",
-      url: "PHOTOGRAPHY-STATES.html",
+      url: "PHOTOGRAPHY-BY-STATE.html",
       category: "Photo Archive",
       badge: "State Visual Index",
       icon: "🗺️",
@@ -620,11 +620,8 @@
   }
 
   function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\      keywords: ["contact", "research help", "ask a librarian", "submit records", "oral history inquiries", "contact the archive", "reference desk"],
-      actionLabel: "Contact Reference Desk →"
-    }
-  ]; ');
-}
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
 
   function highlightMatches(text, query) {
     if (!text || !query) return text || "";

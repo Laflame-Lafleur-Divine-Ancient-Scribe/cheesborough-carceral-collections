@@ -41,11 +41,10 @@
       color: #fff;
       display: flex;
       flex-wrap: wrap;
-      gap: 0.85rem 1.4rem;
+      gap: 0.8rem;
       justify-content: center;
-      padding: 0.65rem 1rem;
-      font-size: 0.88rem;
-      font-weight: 600;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
@@ -59,19 +58,20 @@
       color: #fff;
       display: grid;
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-      min-height: 34rem;
-      border-bottom: 5px solid var(--gold);
+      min-height: 32rem;
     }
     .hero-copy {
       align-self: center;
       max-width: 44rem;
-      padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4rem);
+      padding: clamp(2rem, 4vw, 4.25rem) clamp(1.5rem, 4vw, 4rem);
       box-sizing: border-box;
     }
     .hero-image {
-      background-position: center;
-      background-size: cover;
+      display: block;
+      height: 100%;
       min-height: 22rem;
+      object-fit: cover;
+      width: 100%;
     }
     .eyebrow {
       color: var(--gold-light);
@@ -101,11 +101,11 @@
     /* Main Layout Grid */
     .layout {
       display: grid;
-      gap: 3.5rem;
+      gap: 3rem;
       grid-template-columns: minmax(0, 1fr) 21rem;
       margin: auto;
-      max-width: 1200px;
-      padding: 3.5rem 1.3rem 5rem;
+      max-width: 1100px;
+      padding: 4rem 1.3rem;
     }
     article {
       min-width: 0;
@@ -355,7 +355,7 @@
       <h1>The Arthur G. Dozier School for Boys: A History of Institutional Terror, Forensic Excavation, and Historical Reckoning</h1>
       <p>A comprehensive examination of the Florida Industrial School for Boys in Marianna (1900–2011), synthesizing survivor testimonies, USF forensic excavations at Boot Hill, state legislative findings, and contemporary investigative journalism.</p>
     </div>
-    <div class="hero-image" data-dozier-photo="hero" role="img" aria-label="Archival photograph of Arthur G. Dozier School for Boys"></div>
+    <img class="hero-image" data-dozier-photo="hero" src="01_Photos/02_By-State/Florida/1950s_African American boys gathered on grounds to see a Ross Allen Reptile Institute demonstration at the School for Boys in Marianna, Florida..jpg" alt="Archival photograph of Arthur G. Dozier School for Boys" />
   </header>
 
   <main class="layout">
@@ -543,7 +543,7 @@
         <h3>Archival Visual Evidence</h3>
         <p style="font-size:0.86rem; color:var(--muted); margin-bottom:0.8rem;">Every 24 hours, the featured historical photograph rotates through the 10 curated Dozier School archival photographs.</p>
         <div style="border:1px solid var(--line); border-radius:3px; overflow:hidden;">
-          <div data-dozier-photo="sidebar" style="height:12rem; background-position:center; background-size:cover;"></div>
+          <img data-dozier-photo="sidebar" src="01_Photos/02_By-State/Florida/1950s_African American boys gathered on grounds to see a Ross Allen Reptile Institute demonstration at the School for Boys in Marianna, Florida..jpg" alt="" style="display:block; height:12rem; object-fit:cover; width:100%;" />
           <p data-dozier-caption style="padding:0.6rem; font-size:0.8rem; line-height:1.4; color:#555; font-style:italic; background:#faf7f0;"></p>
         </div>
         <div style="margin-top:0.8rem;">

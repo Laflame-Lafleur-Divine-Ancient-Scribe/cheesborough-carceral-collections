@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Developer analytics dashboard for The Cheesborough Carceral Collections.">
+  <title>Developer Analytics | Cheesborough Carceral Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #102c4c;
+      --deep-navy: #091e36;
+      --gold: #c29b53;
+      --paper: #f5f2eb;
+      --paper-dark: #e7e0d2;
+      --ink: #313131;
+      --muted: #6b6b67;
+      --cyan: #4e9aa8;
+      --green: #4e8069;
+      --amber: #d19b42;
+      --red: #a65748;
+      --white: #fffdf8;
+      --rule: rgba(16, 44, 76, 0.17);
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--paper); }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Source Sans 3", sans-serif;
+      font-size: 15px;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    :focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+
+    .app-shell { min-height: 100vh; }
+    .utility-bar {
+      align-items: center;
+      background: var(--deep-navy);
+      color: #dce6ed;
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      min-height: 42px;
+      padding: 0.55rem clamp(1rem, 3vw, 3rem);
+    }
+    .utility-kicker { font-size: 0.73rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+    .back-link { border-bottom: 1px solid rgba(255,255,255,.45); color: #fff; font-size: .85rem; }
+    .back-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    .masthead {
+      align-items: end;
+      background: var(--navy);
+      border-bottom: 3px solid var(--gold);
+      color: #fff;
+      display: flex;
+      gap: 2rem;
+      justify-content: space-between;
+      padding: clamp(1.4rem, 3vw, 2.5rem) clamp(1rem, 3vw, 3rem) 1.35rem;
+    }
+    .brand { max-width: 680px; }
+    .brand-overline { color: var(--gold); font-size: .73rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    h1, h2, h3 { font-family: "Libre Baskerville", Georgia, serif; }
+    h1 { font-size: clamp(1.7rem, 3.3vw, 2.55rem); line-height: 1.12; margin: .45rem 0 .5rem; }
+    .brand-copy { color: #bfcbd5; font-size: .98rem; margin: 0; }
+    .masthead-status { align-items: end; display: flex; flex-direction: column; gap: .55rem; text-align: right; }
+    .status-line { align-items: center; display: flex; gap: .5rem; font-size: .85rem; }
+    .status-dot { background: #79b68f; border-radius: 50%; box-shadow: 0 0 0 4px rgba(121,182,143,.13); display: inline-block; height: 8px; width: 8px; }
+    .refresh-note { color: #bfcbd5; font-size: .75rem; }
+
+    main { margin: 0 auto; max-width: 1440px; padding: 1.4rem clamp(1rem, 3vw, 3rem) 3rem; }
+    .toolbar {
+      align-items: center;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      flex-wrap: wrap;
+      gap: .85rem 1.4rem;
+      justify-content: space-between;
+      padding-bottom: 1rem;
+    }
+    .range-control { align-items: center; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .range-label { color: var(--muted); font-size: .75rem; font-weight: 700; letter-spacing: .1em; margin-right: .25rem; text-transform: uppercase; }
+    .range-button, .export-button {
+      background: transparent;
+      border: 1px solid var(--navy);
+      color: var(--navy);
+      cursor: pointer;
+      font-size: .83rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      padding: .5rem .75rem;
+      transition: background .15s, color .15s, transform .15s;
+    }
+    .range-button:hover, .range-button.active { background: var(--navy); color: #fff; }
+    .range-button:active, .export-button:active { transform: translateY(1px); }
+    .toolbar-actions { align-items: center; display: flex; gap: 1rem; }
+    .compare-control { align-items: center; color: var(--navy); display: flex; font-size: .84rem; font-weight: 600; gap: .45rem; }
+    .compare-control input { accent-color: var(--gold); height: 16px; width: 16px; }
+    .export-button { background: var(--gold); border-color: var(--gold); color: var(--deep-navy); }
+    .export-button:hover { background: #d0ab69; }
+
+    .section-label { color: var(--navy); font-size: .72rem; font-weight: 700; letter-spacing: .16em; margin: 1.5rem 0 .65rem; text-transform: uppercase; }
+    .kpi-grid { display: grid; gap: 1px; grid-template-columns: repeat(4, 1fr); }
+    .kpi { background: var(--white); border-top: 3px solid var(--navy); min-height: 122px; padding: 1rem 1.1rem; }
+    .kpi:nth-child(2) { border-color: var(--gold); }
+    .kpi:nth-child(3) { border-color: var(--cyan); }
+    .kpi:nth-child(4) { border-color: var(--green); }
+    .kpi-label { color: var(--muted); font-size: .77rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .kpi-value { color: var(--deep-navy); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.55rem, 3vw, 2.2rem); margin: .55rem 0 .35rem; }
+    .kpi-change { color: var(--green); font-size: .8rem; font-weight: 700; }
+    .kpi-change.down { color: var(--red); }
+    .compare-copy { color: var(--muted); font-size: .75rem; font-weight: 500; margin-left: .25rem; }
+
+    .panel { background: var(--white); border: 1px solid var(--rule); min-width: 0; }
+    .panel-heading { align-items: baseline; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; padding: .8rem 1rem; }
+    .panel-heading h2 { color: var(--navy); font-size: 1rem; margin: 0; }
+    .panel-meta { color: var(--muted); font-size: .74rem; }
+    .trend-panel { margin-top: 1.5rem; }
+    .trend-wrap { padding: 1rem 1rem .75rem; }
+    .legend { align-items: center; display: flex; flex-wrap: wrap; gap: 1.1rem; margin-bottom: .8rem; }
+    .legend-item { align-items: center; color: var(--muted); display: flex; font-size: .75rem; gap: .4rem; }
+    .legend-swatch { background: var(--navy); height: 3px; width: 24px; }
+    .legend-swatch.visitors { background: var(--cyan); }
+    .chart { display: block; height: 255px; overflow: visible; width: 100%; }
+    .chart-grid { stroke: #d9d4ca; stroke-width: 1; }
+    .chart-axis { fill: var(--muted); font-family: "Source Sans 3", sans-serif; font-size: 11px; }
+    .chart-area { fill: rgba(16,44,76,.08); }
+    .chart-line { fill: none; stroke: var(--navy); stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; }
+    .chart-line.visitors { stroke: var(--cyan); stroke-width: 2.5; }
+    .chart-point { fill: var(--white); stroke: var(--navy); stroke-width: 2; }
+    .chart-point.visitors { stroke: var(--cyan); }
+    .peak-line { stroke: var(--gold); stroke-dasharray: 4 4; stroke-width: 1.5; }
+    .peak-label { fill: var(--deep-navy); font-family: "Source Sans 3", sans-serif; font-size: 11px; font-weight: 700; }
+    .chart-caption { border-top: 1px solid var(--rule); color: var(--muted); font-size: .75rem; margin: .1rem 0 0; padding-top: .65rem; }
+
+    .analytics-grid { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1.65fr) minmax(290px, .95fr); margin-top: 1.5rem; min-width: 0; }
+    .table-scroll { max-width: 100%; overflow-x: auto; }
+    table { border-collapse: collapse; min-width: 560px; width: 100%; }
+    th { background: #eee9df; color: var(--muted); font-size: .69rem; font-weight: 700; letter-spacing: .09em; padding: .65rem 1rem; text-align: left; text-transform: uppercase; }
+    td { border-top: 1px solid #e5dfd4; font-size: .84rem; padding: .72rem 1rem; }
+    tbody tr { transition: background .14s; }
+    tbody tr:hover, tbody tr:focus-within { background: #faf4e6; }
+    .page-name { color: var(--navy); font-weight: 700; }
+    .page-type { color: var(--muted); display: block; font-size: .72rem; font-weight: 500; margin-top: .1rem; }
+    .number { font-variant-numeric: tabular-nums; text-align: right; }
+    .metric-up { color: var(--green); font-weight: 700; }
+    .side-stack { display: grid; gap: 1.5rem; min-width: 0; }
+    .region-list { list-style: none; margin: 0; padding: .8rem 1rem 1rem; }
+    .region-row { display: grid; gap: .3rem .7rem; grid-template-columns: minmax(90px, 1fr) auto; margin: .8rem 0; }
+    .region-name { font-size: .82rem; }
+    .region-value { color: var(--muted); font-size: .78rem; font-variant-numeric: tabular-nums; }
+    .bar-track { background: #e8e1d5; grid-column: 1 / -1; height: 6px; }
+    .bar-fill { background: var(--gold); height: 100%; }
+    .device-body { padding: .9rem 1rem 1.1rem; }
+    .device-row { align-items: center; display: grid; gap: .65rem; grid-template-columns: 65px 1fr 42px; margin: .78rem 0; }
+    .device-label, .device-value { font-size: .8rem; }
+    .device-value { color: var(--muted); text-align: right; }
+    .device-track { background: #e8e1d5; height: 10px; }
+    .device-fill { background: var(--navy); height: 100%; }
+    .device-fill.mobile { background: var(--cyan); }
+    .device-fill.tablet { background: var(--green); }
+
+    .events-panel { margin-top: 1.5rem; }
+    .event-label { align-items: center; display: inline-flex; gap: .45rem; }
+    .event-mark { border: 1px solid currentColor; display: inline-block; height: 7px; width: 7px; }
+    .event-search { color: var(--cyan); }
+    .event-pdf { color: var(--red); }
+    .event-data { color: var(--green); }
+    .event-state { color: var(--gold); }
+    .event-outbound { color: var(--navy); }
+
+    .footer-grid { display: grid; gap: 1.5rem; grid-template-columns: 1.3fr .7fr; margin-top: 1.5rem; min-width: 0; }
+    .source-panel { background: var(--deep-navy); color: #dce6ed; padding: 1.1rem 1.2rem; }
+    .source-panel h2 { color: #fff; font-size: 1rem; margin: 0 0 .6rem; }
+    .source-copy { font-size: .82rem; line-height: 1.5; margin: 0; max-width: 720px; }
+    code { background: rgba(255,255,255,.1); color: #f4d99d; font-family: Consolas, monospace; font-size: .78rem; padding: .12rem .3rem; }
+    .source-status { align-items: center; border-top: 1px solid rgba(255,255,255,.2); display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .9rem; padding-top: .75rem; }
+    .badge { background: rgba(121,182,143,.18); border: 1px solid #79b68f; color: #a8d8b7; font-size: .7rem; font-weight: 700; letter-spacing: .08em; padding: .25rem .45rem; text-transform: uppercase; }
+    .source-status span:last-child { color: #aebdc7; font-size: .75rem; }
+    .notes-panel { padding: 1.1rem 1.2rem; }
+    .notes-panel h2 { color: var(--navy); font-size: 1rem; margin: 0 0 .65rem; }
+    .notes-panel p { color: var(--muted); font-size: .8rem; line-height: 1.5; margin: 0; }
+
+    .reveal { animation: rise .5s ease both; }
+    .reveal.delay-1 { animation-delay: .07s; }
+    .reveal.delay-2 { animation-delay: .14s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 860px) {
+      .masthead { align-items: start; flex-direction: column; gap: 1.1rem; }
+      .masthead-status { align-items: start; text-align: left; }
+      .analytics-grid, .footer-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .utility-bar { align-items: start; flex-direction: column; gap: .25rem; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi { min-height: 112px; padding: .8rem; }
+      .kpi-value { font-size: 1.45rem; }
+      .toolbar-actions { justify-content: space-between; width: 100%; }
+      .chart { height: 220px; }
+      main { padding-top: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="utility-bar">
+      <span class="utility-kicker">Cheesborough Carceral Collections / Internal</span>
+      <a class="back-link" href="index2.html">Back to public archive</a>
+    </div>
+    <header class="masthead">
+      <div class="brand">
+        <div class="brand-overline">Archive operations / analytics</div>
+        <h1>Developer Analytics</h1>
+        <p class="brand-copy">A compact view of how researchers move through the collection.</p>
+      </div>
+      <div class="masthead-status" aria-label="Dashboard status">
+        <div class="status-line"><span class="status-dot" aria-hidden="true"></span><strong>Demo adapter connected</strong></div>
+        <div class="refresh-note">Updated 19 Aug 2026 · 09:42 UTC</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="toolbar reveal" aria-label="Analytics controls">
+        <div class="range-control" role="group" aria-label="Time range">
+          <span class="range-label">Window</span>
+          <button class="range-button" data-range="7" type="button">7 days</button>
+          <button class="range-button active" data-range="30" type="button">30 days</button>
+          <button class="range-button" data-range="90" type="button">90 days</button>
+          <span class="panel-meta" id="range-label">22 Jul – 19 Aug 2026</span>
+        </div>
+        <div class="toolbar-actions">
+          <label class="compare-control"><input id="compare-toggle" type="checkbox"> Compare prior period</label>
+          <button class="export-button" id="export-button" type="button">Export CSV</button>
+        </div>
+      </section>
+
+      <div class="section-label reveal delay-1">At a glance</div>
+      <section class="kpi-grid reveal delay-1" aria-label="Key performance indicators">
+        <article class="kpi"><div class="kpi-label">Page views</div><div class="kpi-value" id="kpi-views">48,392</div><div class="kpi-change" id="change-views">↑ 12.8% <span class="compare-copy">vs. prior period</span></div></article>
+        <article class="kpi"><div class="kpi-label">Unique visitors</div><div class="kpi-value" id="kpi-visitors">16,804</div><div class="kpi-change" id="change-visitors">↑ 8.4% <span class="compare-copy">vs. prior period</span></div></article>
+        <article class="kpi"><div class="kpi-label">Engaged sessions</div><div class="kpi-value" id="kpi-sessions">9,721</div><div class="kpi-change" id="change-sessions">↑ 16.2% <span class="compare-copy">vs. prior period</span></div></article>
+        <article class="kpi"><div class="kpi-label">Average time</div><div class="kpi-value" id="kpi-time">04:18</div><div class="kpi-change down" id="change-time">↓ 0:12 <span class="compare-copy">vs. prior period</span></div></article>
+      </section>
+
+      <section class="panel trend-panel reveal delay-2" aria-labelledby="trend-title">
+        <div class="panel-heading"><h2 id="trend-title">Traffic trend</h2><span class="panel-meta" id="trend-meta">Daily totals · 30 day window</span></div>
+        <div class="trend-wrap">
+          <div class="legend" aria-label="Chart legend"><span class="legend-item"><span class="legend-swatch"></span>Page views</span><span class="legend-item"><span class="legend-swatch visitors"></span>Unique visitors</span><span class="legend-item" id="chart-compare-note">Current period</span></div>
+          <svg class="chart" id="trend-chart" viewBox="0 0 1000 255" role="img" aria-labelledby="chart-title chart-desc" preserveAspectRatio="none">
+            <title id="chart-title">Page views and unique visitors over time</title><desc id="chart-desc">A line chart with a visible peak annotation.</desc>
+            <g id="chart-grid"></g><path id="chart-area" class="chart-area"></path><path id="views-line" class="chart-line"></path><path id="visitors-line" class="chart-line visitors"></path><g id="chart-points"></g><g id="chart-labels"></g>
+          </svg>
+          <p class="chart-caption" id="peak-caption">Peak: 2,184 views on 12 Aug, following the Dozier daily photo feature.</p>
+        </div>
+      </section>
+
+      <section class="analytics-grid" aria-label="Detailed analytics">
+        <article class="panel reveal"><div class="panel-heading"><h2>Top pages</h2><span class="panel-meta">Ranked by views</span></div><div class="table-scroll"><table id="pages-table"><thead><tr><th>Page</th><th class="number">Views</th><th class="number">Avg. engagement</th><th class="number">CTR</th></tr></thead><tbody></tbody></table></div></article>
+        <div class="side-stack">
+          <article class="panel reveal delay-1"><div class="panel-heading"><h2>Visitor regions</h2><span class="panel-meta">Unique visitors</span></div><ul class="region-list" id="region-list"></ul></article>
+          <article class="panel reveal delay-2"><div class="panel-heading"><h2>Device mix</h2><span class="panel-meta">Share of sessions</span></div><div class="device-body" id="device-mix"></div></article>
+        </div>
+      </section>
+
+      <section class="panel events-panel reveal" aria-labelledby="events-title"><div class="panel-heading"><h2 id="events-title">Engagement events</h2><span class="panel-meta">Selected actions · current window</span></div><div class="table-scroll"><table id="events-table"><thead><tr><th>Event</th><th class="number">Count</th><th class="number">Change</th><th>Signal</th></tr></thead><tbody></tbody></table></div></section>
+
+      <section class="footer-grid"><article class="source-panel reveal"><h2>Data source</h2><p class="source-copy">This dashboard currently reads from a local demo adapter. A production integration can replace the sample payload with GA4, Matomo, or Azure Application Insights data without changing the view layer.</p><div class="source-status"><span class="badge">Demo data</span><code>window.CarceralAnalyticsAdapter</code><span>Last refresh: 09:42 UTC</span></div></article><article class="panel notes-panel reveal delay-1"><h2>Operator notes</h2><p>Values are intentionally illustrative. No tracking IDs, secrets, or external analytics calls are present in this page.</p></article></section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const analyticsData = {
+        7: { label: "13 Aug – 19 Aug 2026", views: "12,814", visitors: "4,674", sessions: "2,871", time: "04:26", changes: ["↑ 4.9%", "↑ 3.1%", "↑ 8.7%", "↓ 0:05"], peak: "Peak: 2,184 views on 18 Aug, following the Dozier daily photo feature.", points: [42, 48, 46, 57, 51, 67, 76, 71], visitorPoints: [30, 34, 33, 42, 38, 49, 56, 53] },
+        30: { label: "22 Jul – 19 Aug 2026", views: "48,392", visitors: "16,804", sessions: "9,721", time: "04:18", changes: ["↑ 12.8%", "↑ 8.4%", "↑ 16.2%", "↓ 0:12"], peak: "Peak: 2,184 views on 12 Aug, following the Dozier daily photo feature.", points: [31, 38, 35, 44, 41, 49, 45, 56, 51, 60, 55, 63, 58, 70, 67, 75, 69, 81, 72, 88, 77, 73, 84, 79, 94, 87, 91, 100], visitorPoints: [22, 27, 25, 31, 29, 36, 34, 40, 38, 44, 41, 47, 43, 52, 49, 58, 53, 61, 56, 65, 60, 57, 63, 61, 70, 65, 68, 75] },
+        90: { label: "21 May – 19 Aug 2026", views: "142,768", visitors: "42,691", sessions: "25,119", time: "04:05", changes: ["↑ 18.6%", "↑ 11.2%", "↑ 20.4%", "↓ 0:19"], peak: "Peak: 2,936 views on 12 Aug, following the Dozier daily photo feature.", points: [27, 31, 29, 36, 34, 40, 38, 45, 41, 48, 46, 54, 50, 59, 56, 63, 60, 68, 65, 72, 69, 77, 73, 82, 79, 86, 82, 91, 88, 94], visitorPoints: [18, 22, 20, 26, 25, 29, 28, 34, 31, 37, 35, 40, 38, 44, 42, 48, 46, 51, 49, 55, 53, 59, 56, 62, 60, 65, 63, 68, 66, 71] }
+      };
+      const pages = [
+        ["Dozier Research", "Research guide", "12,804", "06:44", "18.6%"],
+        ["Florida Prison System", "Collection overview", "8,932", "05:21", "14.2%"],
+        ["Evidence Index", "Finding aid", "7,416", "04:57", "11.8%"],
+        ["American Siberia", "Digital exhibit", "5,309", "07:12", "9.4%"],
+        ["Photography by State", "Browse collection", "4,887", "03:38", "8.1%"]
+      ];
+      const events = [
+        ["Search submitted", "search", "3,812", "↑ 21.4%", "Discovery intent"],
+        ["PDF opened", "pdf", "1,964", "↑ 14.7%", "Deep reading"],
+        ["Spreadsheet opened", "data", "842", "↑ 32.5%", "Data reuse"],
+        ["State selector used", "state", "611", "↑ 8.9%", "Collection browse"],
+        ["Outbound click", "outbound", "294", "↑ 5.1%", "Research handoff"]
+      ];
+      const regions = [["United States", "9,826", 58], ["United Kingdom", "1,926", 11], ["Canada", "1,504", 9], ["Germany", "1,012", 6], ["Other regions", "2,536", 16]];
+      const devices = [["Desktop", 61, "desktop"], ["Mobile", 31, "mobile"], ["Tablet", 8, "tablet"]];
+      window.CarceralAnalyticsAdapter = { getSnapshot: (range) => analyticsData[range] };
+      let currentRange = 30;
+
+      function setText(id, value) { document.getElementById(id).textContent = value; }
+      function renderTables() {
+        document.querySelector("#pages-table tbody").innerHTML = pages.map((row) => `<tr><td><span class="page-name">${row[0]}</span><span class="page-type">${row[1]}</span></td><td class="number">${row[2]}</td><td class="number">${row[3]}</td><td class="number metric-up">${row[4]}</td></tr>`).join("");
+        document.querySelector("#events-table tbody").innerHTML = events.map((row) => `<tr><td><span class="event-label event-${row[1]}"><span class="event-mark" aria-hidden="true"></span>${row[0]}</span></td><td class="number">${row[2]}</td><td class="number metric-up">${row[3]}</td><td>${row[4]}</td></tr>`).join("");
+        document.getElementById("region-list").innerHTML = regions.map((row) => `<li class="region-row"><span class="region-name">${row[0]}</span><span class="region-value">${row[1]} · ${row[2]}%</span><span class="bar-track"><span class="bar-fill" style="width:${row[2]}%"></span></span></li>`).join("");
+        document.getElementById("device-mix").innerHTML = devices.map((row) => `<div class="device-row"><span class="device-label">${row[0]}</span><span class="device-track"><span class="device-fill ${row[2]}" style="width:${row[1]}%"></span></span><span class="device-value">${row[1]}%</span></div>`).join("");
+      }
+      function linePath(values, width, top, height) { return values.map((value, i) => `${i ? "L" : "M"} ${(i * width / (values.length - 1)).toFixed(1)} ${(top + height - value * height / 100).toFixed(1)}`).join(" "); }
+      function renderChart(snapshot) {
+        const width = 930, left = 54, top = 17, height = 187;
+        const path = (values) => values.map((value, i) => `${i ? "L" : "M"} ${(left + i * width / (values.length - 1)).toFixed(1)} ${(top + height - value * height / 100).toFixed(1)}`).join(" ");
+        const area = `${path(snapshot.points)} L ${left + width} ${top + height} L ${left} ${top + height} Z`;
+        document.getElementById("views-line").setAttribute("d", path(snapshot.points));
+        document.getElementById("visitors-line").setAttribute("d", path(snapshot.visitorPoints));
+        document.getElementById("chart-area").setAttribute("d", area);
+        document.getElementById("chart-grid").innerHTML = [0, 25, 50, 75, 100].map((value) => { const y = top + height - value * height / 100; return `<line class="chart-grid" x1="${left}" y1="${y}" x2="${left + width}" y2="${y}"/><text class="chart-axis" x="8" y="${y + 4}">${value === 0 ? "0" : value + "%"}</text>`; }).join("");
+        const peakIndex = snapshot.points.indexOf(Math.max(...snapshot.points));
+        const peakX = left + peakIndex * width / (snapshot.points.length - 1);
+        const peakY = top + height - snapshot.points[peakIndex] * height / 100;
+        document.getElementById("chart-points").innerHTML = snapshot.points.map((value, i) => `<circle class="chart-point" cx="${left + i * width / (snapshot.points.length - 1)}" cy="${top + height - value * height / 100}" r="${i === peakIndex ? 4.5 : 2.5}"/><circle class="chart-point visitors" cx="${left + i * width / (snapshot.visitorPoints.length - 1)}" cy="${top + height - snapshot.visitorPoints[i] * height / 100}" r="2.5"/>`).join("");
+        document.getElementById("chart-labels").innerHTML = `<line class="peak-line" x1="${peakX}" y1="${top}" x2="${peakX}" y2="${top + height}"/><text class="peak-label" x="${Math.min(peakX + 8, 875)}" y="${Math.max(peakY - 11, 14)}">peak</text>${["start", "mid", "now"].map((label, i) => `<text class="chart-axis" x="${left + (i * width / 2)}" y="235">${label}</text>`).join("")}`;
+      }
+      function render(range) {
+        const snapshot = window.CarceralAnalyticsAdapter.getSnapshot(range);
+        currentRange = range;
+        ["views", "visitors", "sessions", "time"].forEach((key) => setText(`kpi-${key}`, snapshot[key]));
+        ["views", "visitors", "sessions", "time"].forEach((key, i) => { document.getElementById(`change-${key}`).innerHTML = `${snapshot.changes[i]} <span class="compare-copy">vs. prior period</span>`; });
+        setText("range-label", snapshot.label);
+        setText("trend-meta", `Daily totals · ${range} day window`);
+        setText("peak-caption", snapshot.peak);
+        renderChart(snapshot);
+        document.querySelectorAll(".range-button").forEach((button) => button.classList.toggle("active", button.dataset.range === String(range)));
+      }
+      function exportCsv() {
+        const lines = [["Top pages", "Views", "Average engagement", "CTR"], ...pages.map((row) => [row[0], row[2], row[3], row[4]]), [], ["Engagement events", "Count", "Change", "Signal"], ...events.map((row) => [row[0], row[2], row[3], row[4]])];
+        const csv = lines.map((line) => line.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+        const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+        const link = document.createElement("a"); link.href = url; link.download = `carceral-analytics-${currentRange}d.csv`; link.click(); URL.revokeObjectURL(url);
+      }
+      document.querySelectorAll(".range-button").forEach((button) => button.addEventListener("click", () => render(Number(button.dataset.range))));
+      document.getElementById("compare-toggle").addEventListener("change", (event) => { document.querySelectorAll(".compare-copy").forEach((node) => { node.textContent = event.target.checked ? "vs. prior period" : "current period"; }); setText("chart-compare-note", event.target.checked ? "Current period vs. prior period" : "Current period"); });
+      document.getElementById("export-button").addEventListener("click", exportCsv);
+      renderTables(); render(currentRange);
+    }());
+  </script>
+</body>
+</html>

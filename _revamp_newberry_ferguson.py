@@ -1,5 +1,5 @@
-# Script to generate revamped CENSUS-AND-CAMP.html and update FORTUNE-FERGUSON-RESEARCH.html
-with open("CENSUS-AND-CAMP.html", "w", encoding="utf-8") as f:
+# Script to generate the revamped Newberry and Fortune research brief.
+with open("NEWBERRY-AND-FORTUNE.html", "w", encoding="utf-8") as f:
     f.write("""<!doctype html>
 <html lang="en">
 <head>
@@ -372,7 +372,7 @@ with open("CENSUS-AND-CAMP.html", "w", encoding="utf-8") as f:
     <a href="ABOUT.html">ABOUT</a>
     <a href="SEARCH.html">SEARCH</a>
     <a href="COLLECTIONS.html">COLLECTIONS</a>
-    <a class="active" href="CENSUS-AND-CAMP.html">NEWBERRY &amp; FORTUNE</a>
+    <a class="active" href="NEWBERRY-AND-FORTUNE.html">NEWBERRY &amp; FORTUNE</a>
     <a href="DOZIER-RESEARCH.html">DOZIER RESEARCH</a>
     <a href="DOZIER-NEWSPAPERS.html">DOZIER NEWSPAPERS</a>
     <a href="BOOKS-AND-MANUSCRIPTS.html">BOOKS &amp; MANUSCRIPTS</a>
@@ -671,4 +671,4 @@ with open("CENSUS-AND-CAMP.html", "w", encoding="utf-8") as f:
 </html>
 """)
 
-print("Revamped CENSUS-AND-CAMP.html generated successfully.")
+print("Revamped NEWBERRY-AND-FORTUNE.html generated successfully.")
