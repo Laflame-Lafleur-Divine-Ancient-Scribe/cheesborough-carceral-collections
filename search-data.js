@@ -969,7 +969,7 @@
   {
     "id": "pdf-fortune-ferguson-jett",
     "title": "Fortune Ferguson Jr. by Brandon T. Jett (Scholarly PDF Article)",
-    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFORTUNE%20FERGUSON%20JR%20by%20Brandon%20Jett.pdf",
+    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FBrandon_Jett_State_of_Florida_v_Fortune_Ferguson_Jr_2024.pdf",
     "category": "Primary PDF",
     "badge": "Scholarly PDF",
     "icon": "📄",
@@ -993,7 +993,7 @@
   {
     "id": "pdf-wapo-juvenile-death-penalty",
     "title": "History of the Juvenile Death Penalty (Washington Post 1988 Original PDF)",
-    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FHISTORY%20OF%20THE%20JUVENILE%20DEATH%20PENALTY%20-%20The%20Washington%20Post.pdf",
+    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FHistory_of_Juvenile_Death_Penalty_Washington_Post_1988.pdf",
     "category": "Primary PDF",
     "badge": "Primary PDF Scan",
     "icon": "📰",
@@ -1017,7 +1017,7 @@
   {
     "id": "pdf-fortune-ferguson-card",
     "title": "Fortune Ferguson Archival Card (M.E. Grenander Special Collections)",
-    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFortune%20Ferguson%2C%20FL%2C%201927%20April%2027%20-%20M.E.%20Grenander%20Department%20of%20Special%20Collections%20%26%20Archives.pdf",
+    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFortune_Ferguson_1927_Execution_Record_Card_Grenander_Archives.pdf",
     "category": "Primary PDF",
     "badge": "Primary PDF Scan",
     "icon": "📄",
@@ -1041,7 +1041,7 @@
   {
     "id": "pdf-florida-prison-register",
     "title": "Florida State Prison Register, 1875–1959 (Facsimile Scan)",
-    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFlorida%2C%20U.S.%2C%20State%20Prison%20Register%2C%201875-1959%20-%20Ancestry.com.pdf",
+    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFlorida_State_Prison_Register_Fortune_Ferguson_1924_1927.pdf",
     "category": "Primary PDF",
     "badge": "Primary PDF Scan",
     "icon": "📄",
@@ -1066,7 +1066,7 @@
   {
     "id": "pdf-newberry-six-transcript",
     "title": "Newberry Six Memorial Record & Historical Inquest Transcript",
-    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2Fnewberry%206.pdf",
+    "url": "PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FNewberry_Six_1916_Memorial_Service_Transcript_AAHP.pdf",
     "category": "Primary PDF",
     "badge": "Primary PDF Scan",
     "icon": "📄",
