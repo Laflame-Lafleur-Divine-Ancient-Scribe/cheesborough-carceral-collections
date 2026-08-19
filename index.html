@@ -73,9 +73,9 @@
 
       .masthead a {
         display: inline-block;
+        max-width: min(620px, 94vw);
         transition: transform 180ms ease;
         width: clamp(320px, 55vw, 620px);
-        max-width: 94vw;
       }
       .masthead a:hover {
         transform: translateY(-2px);
@@ -84,6 +84,8 @@
         display: block;
         filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
         height: auto;
+        max-width: 100%;
+        object-fit: contain;
         width: 100%;
       }
 
