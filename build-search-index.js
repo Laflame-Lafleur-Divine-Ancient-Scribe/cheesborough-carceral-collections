@@ -668,6 +668,20 @@ SEARCH_INDEX.push(
     actionLabel: "Explore State Photos →"
   },
   {
+    id: "col-florida-juvenile-photos",
+    title: "Florida Juvenile Institutions Photographic Collection (Dozier School & State Archives)",
+    url: "PHOTOGRAPHY-STATES.html?state=Florida",
+    category: "Photo Archive",
+    badge: "State Photo Index",
+    icon: "📷",
+    date: "1940s–1950s",
+    author: "State Archives of Florida / Dozier Collection",
+    description: "Curated collection of 10+ archival photographs documenting student life, dining halls, vocational trades, infirmary exams, and institutional events at the Florida Industrial School for Boys in Marianna.",
+    tags: ["Florida Photos", "Dozier School", "Juvenile Photography", "Marianna", "State Archives", "Photo Archive"],
+    keywords: ["florida juvenile photo", "dozier school photos", "marianna florida photos", "florida industrial school for boys photographs", "state photo index"],
+    actionLabel: "View Florida Photos ↗"
+  },
+  {
     id: "col-books-manuscripts",
     title: "Books and Manuscripts Collection: Rare Treatises & Prisoner Writings",
     url: "BOOKS-AND-MANUSCRIPTS.html",

@@ -5,30 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Photography by State</title>
     <style>
-      :root { --ink: #14283d; --gold: #c29b53; --paper: #f4f0e8; --muted: #68747d; }
+      :root { --ink: #14283d; --deep: #091e36; --gold: #c29b53; --gold-light: #dfc287; --paper: #f4f0e8; --muted: #68747d; --line: #d5cec2; }
       * { box-sizing: border-box; }
-      body { background: var(--paper); color: var(--ink); font: 16px Arial, sans-serif; margin: 0; }
+      body { background: var(--paper); color: var(--ink); font: 16px "Source Sans 3", Arial, sans-serif; margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
       a { color: inherit; text-decoration: none; }
-      .nav { align-items: center; background: var(--ink); color: #fff; display: flex; justify-content: space-between; padding: 0.8rem max(1rem, calc((100% - 1100px) / 2)); }
-      .nav-links { display: flex; gap: 1rem; }
+      .nav { align-items: center; background: var(--deep); color: #fff; display: flex; flex-wrap: wrap; justify-content: space-between; padding: 0.8rem max(1rem, calc((100% - 1100px) / 2)); font-size: 0.88rem; }
+      .nav-links { display: flex; flex-wrap: wrap; gap: 1rem; }
       .nav a:hover { color: var(--gold); }
-      .hero { background: linear-gradient(120deg, #102c4c 35%, #283f51); color: #fff; padding: clamp(2.5rem, 5vw, 5rem) max(1rem, calc((100% - 1100px) / 2)); }
-      .eyebrow { color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-      h1 { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; margin: 0.7rem 0; text-wrap: balance; }
-      .hero p { color: #d8e0e5; font-size: clamp(1rem, 0.3vw + 0.9rem, 1.15rem); line-height: 1.6; margin: 0; max-width: 42rem; }
-      .content { margin: auto; max-width: 1100px; padding: 2rem 1rem 4rem; }
+      .hero { background: linear-gradient(135deg, #091e36 0%, #102c4c 100%); color: #fff; padding: clamp(2.5rem, 5vw, 5rem) max(1rem, calc((100% - 1100px) / 2)); border-bottom: 5px solid var(--gold); }
+      .eyebrow { color: var(--gold-light); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.4rem; }
+      h1 { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; margin: 0.5rem 0; text-wrap: balance; }
+      .hero p { color: #d8e0e5; font-size: clamp(1rem, 0.3vw + 0.9rem, 1.15rem); line-height: 1.6; margin: 0; max-width: 44rem; }
+      .content { margin: auto; max-width: 1100px; padding: 2.5rem 1rem 4rem; width: 100%; flex: 1; }
       .controls { align-items: center; display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; margin-bottom: 1.5rem; }
-      .controls input { background: #fff; border: 1px solid #b8b1a6; min-width: min(22rem, 100%); padding: 0.8rem; }
-      .count { color: var(--muted); font-size: 0.9rem; }
-      .states { display: grid; gap: 0.75rem; grid-template-columns: repeat(4, 1fr); }
-      .state { background: #fff; border: 1px solid #d5cec2; min-height: 7rem; padding: 1rem; transition: border-color 0.2s, transform 0.2s; }
-      .state:hover { border-color: var(--gold); transform: translateY(-3px); }
-      .state strong { color: var(--ink); display: block; font: 700 1.1rem Georgia, serif; }
-      .state span { color: var(--muted); display: block; font-size: 0.82rem; margin-top: 0.65rem; }
+      .controls input { background: #fff; border: 1px solid #b8b1a6; border-radius: 4px; min-width: min(22rem, 100%); padding: 0.75rem 1rem; font-family: inherit; font-size: 0.95rem; }
+      .count { color: var(--muted); font-size: 0.9rem; font-weight: 600; }
+
+      /* State Grid */
+      .states { display: grid; gap: 0.85rem; grid-template-columns: repeat(4, 1fr); }
+      .state { background: #fff; border: 1px solid var(--line); border-radius: 3px; min-height: 6.5rem; padding: 1rem; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
+      .state:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+      .state.has-photos { border-left: 5px solid var(--gold); background: #fdfbf7; }
+      .state strong { color: var(--ink); display: block; font: 700 1.15rem "Libre Baskerville", Georgia, serif; }
+      .state span { color: var(--muted); display: block; font-size: 0.82rem; margin-top: 0.4rem; }
+      .state .badge-photo-count { background: rgba(16, 44, 76, 0.08); color: var(--ink); font-size: 0.74rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; align-self: flex-start; margin-top: 0.4rem; }
+      .state.has-photos .badge-photo-count { background: var(--gold); color: var(--deep); }
       .state[hidden] { display: none; }
-      .empty { color: var(--muted); grid-column: 1 / -1; text-align: center; }
-      @media (max-width: 760px) { .states { grid-template-columns: repeat(2, 1fr); } }
-      @media (max-width: 470px) { .states { grid-template-columns: 1fr; } .nav { align-items: flex-start; flex-direction: column; gap: 0.7rem; } }
+
+      /* State Photo Drawer */
+      .state-gallery-drawer { background: #fff; border: 1px solid var(--line); border-top: 5px solid var(--gold); padding: 1.8rem; margin-bottom: 2.5rem; border-radius: 3px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+      .drawer-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 0.8rem; margin-bottom: 1.5rem; }
+      .drawer-header h2 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.4rem; color: var(--deep); margin: 0; }
+      .state-photo-grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(3, 1fr); }
+      .photo-card { background: var(--paper); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; cursor: pointer; transition: transform 0.18s, box-shadow 0.18s; display: flex; flex-direction: column; }
+      .photo-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+      .photo-card img { width: 100%; height: 13rem; object-fit: cover; display: block; }
+      .photo-card-body { padding: 0.85rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+      .photo-card-kicker { color: var(--gold); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+      .photo-card-caption { font-size: 0.88rem; line-height: 1.45; color: var(--ink); margin-top: 0.3rem; }
+
+      /* Lightbox Viewer */
+      .viewer { align-items: center; background: rgba(9, 30, 54, 0.9); display: grid; inset: 0; justify-items: center; padding: 1.5rem; position: fixed; z-index: 1000; }
+      .viewer[hidden] { display: none; }
+      .viewer-box { background: #fff; max-width: 850px; width: 100%; padding: 1.5rem; position: relative; border-radius: 4px; box-shadow: 0 20px 48px rgba(0,0,0,0.6); }
+      .viewer-box img { display: block; max-height: 68vh; max-width: 100%; margin: 0 auto; object-fit: contain; }
+      .close { background: var(--deep); border: 0; color: #fff; cursor: pointer; padding: 0.5rem 0.85rem; position: absolute; right: 0.8rem; top: 0.8rem; font-weight: bold; border-radius: 3px; }
+      .close:hover { background: var(--gold); }
+      .viewer-title { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.15rem; color: var(--deep); margin: 1rem 0 0.3rem; }
+      .viewer-caption { font-size: 0.92rem; color: #45423e; line-height: 1.5; margin: 0; }
+
+      footer { background: var(--deep); color: #fff; padding: 1.5rem 1rem; text-align: center; font-size: 0.9rem; }
+      @media (max-width: 900px) { .states { grid-template-columns: repeat(3, 1fr); } .state-photo-grid { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 650px) { .states { grid-template-columns: repeat(2, 1fr); } .state-photo-grid { grid-template-columns: 1fr; } }
+      @media (max-width: 450px) { .states { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
@@ -43,24 +72,162 @@
     </header>
     <main class="content">
       <div class="controls"><input id="state-search" type="search" placeholder="Search states..." aria-label="Search states" /><span class="count" id="count"></span></div>
+
+      <!-- State Photo Gallery Drawer (Opened when state is selected) -->
+      <section class="state-gallery-drawer" id="state-gallery-drawer" hidden>
+        <div class="drawer-header">
+          <div>
+            <span style="color:var(--gold); font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em;">State Photographic Finding Aid</span>
+            <h2 id="drawer-state-title">Florida Archival Photographs</h2>
+          </div>
+          <button type="button" onclick="closeStateDrawer()" style="background:#f0eae1; border:0; color:var(--deep); padding:0.4rem 0.8rem; border-radius:3px; cursor:pointer; font-weight:bold;">✕ Close Gallery</button>
+        </div>
+        <p id="drawer-desc" style="color:var(--muted); font-size:0.95rem; margin-bottom:1.5rem; line-height:1.5;">Photographs documenting juvenile institutions, reform schools, prison administration, and institutional life in Florida.</p>
+        <div class="state-photo-grid" id="state-photo-grid"></div>
+      </section>
+
       <section class="states" id="states" aria-label="All 50 states"></section>
     </main>
+
+    <div class="viewer" id="viewer" hidden>
+      <div class="viewer-box">
+        <button class="close" id="close-viewer-btn" onclick="closeViewer()" aria-label="Close viewer">✕</button>
+        <img id="viewer-image" alt="" />
+        <h3 class="viewer-title" id="viewer-title"></h3>
+        <p class="viewer-caption" id="viewer-caption"></p>
+      </div>
+    </div>
+
+    <footer>The Cheesborough Carceral Collections | 50-State Photography Index</footer>
+
     <script>
+      const FLORIDA_PHOTOS = [
+        {
+          title: "African American Boys at Open House",
+          caption: "1950s: African American boys gathering as guests arrive for Open House at the School for Boys in Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_African%20American%20boys%20gathering%20as%20guests%20arrive%20for%20Open%20House%20at%20the%20School%20for%20Boys%20in%20Marianna%2C%20Florida..jpg",
+          year: "1950s",
+          category: "Juvenile Institution"
+        },
+        {
+          title: "Barbershop Routines",
+          caption: "1950s: Barbershop for African American boys at the School for Boys in Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_Barbershop%20for%20African%20American%20boys%20at%20the%20School%20for%20Boys%20in%20Marianna%2C%20Florida..jpg",
+          year: "1950s",
+          category: "Vocational & Daily Life"
+        },
+        {
+          title: "Reptile Institute Demonstration",
+          caption: "1950s: African American boys gathered on grounds to see a Ross Allen Reptile Institute demonstration at the School for Boys in Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_African%20American%20boys%20gathered%20on%20grounds%20to%20see%20a%20Ross%20Allen%20Reptile%20Institute%20demonstration%20at%20the%20School%20for%20Boys%20in%20Marianna%2C%20Florida..jpg",
+          year: "1950s",
+          category: "Campus Events"
+        },
+        {
+          title: "Boy Playing Bugle",
+          caption: "1950s: Boy playing bugle at the School for Boys in Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_Boy%20playing%20bugle%20at%20the%20School%20for%20Boys%20in%20Marianna%2C%20Florida..jpg",
+          year: "1950s",
+          category: "Regimentation & Music"
+        },
+        {
+          title: "Campus Fire Incident",
+          caption: "1950s: Fire at the School for Boys in Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_Fire%20at%20the%20School%20for%20Boys%20in%20Marianna%2C%20Florida..jpg",
+          year: "1950s",
+          category: "Institutional Incidents"
+        },
+        {
+          title: "School Bus & Students",
+          caption: "1957: Boys and bus from the Florida School for Boys at Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1957_Boys%20and%20bus%20from%20the%20Florida%20School%20for%20Boys%20at%20Marianna%2C%20Florida..jpg",
+          year: "1957",
+          category: "Transportation & Grounds"
+        },
+        {
+          title: "Infirmary Medical Examination",
+          caption: "1957: Doctor examining a boy in the infirmary at the Florida Industrial School for Boys in Marianna.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1957_Doctor%20examining%20a%20boy%20in%20the%20infirmary%20at%20the%20Florida%20Industrial%20School%20for%20Boys%20in%20Marianna..jpg",
+          year: "1957",
+          category: "Medical & Health"
+        },
+        {
+          title: "Annual Circus Costumes",
+          caption: "3rd Annual F.I.S. circus clowns posing with costumes in Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/3rd%20Annual%20F.I.S.%20circus%20clowns%20posing%20with%20costumes%20in%20Marianna_Florida.jpg",
+          year: "Historic",
+          category: "Staged Festivities"
+        },
+        {
+          title: "Dining Hall Mealtime",
+          caption: "1940s: African American boys in dining hall at the School for Boys in Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1940s_African%20American%20boys%20in%20dining%20hall%20at%20the%20School%20for%20Boys%20in%20Marianna%2C%20Florida.jpg",
+          year: "1940s",
+          category: "Segregated Dining"
+        },
+        {
+          title: "Boys Boxing Match",
+          caption: "1940s: Boys in boxing match at the School for Boys in Marianna, Florida.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1940s_Boys%20in%20boxing%20match%20at%20the%20School%20for%20Boys%20in%20Marianna%2C%20Florida..jpg",
+          year: "1940s",
+          category: "Physical Discipline & Sport"
+        }
+      ];
+
+      const CALIFORNIA_PHOTOS = [
+        {
+          title: "California Youth Authority (1982)",
+          caption: "1982: Wards at California Youth Authority facility.",
+          src: "01_Photos/01_By-Collection/Historic/Juveniles/California%20Youth%20Authority_1982.jpeg",
+          year: "1982",
+          category: "Juvenile Authority"
+        },
+        {
+          title: "San Quentin Historic Yard",
+          caption: "Historic: Inmates gathered in San Quentin prison yard.",
+          src: "01_Photos/01_By-Collection/Historic/Men/SanQuinten.jpg",
+          year: "Historic",
+          category: "State Prison"
+        }
+      ];
+
+      const STATE_PHOTO_DB = {
+        "Florida": FLORIDA_PHOTOS,
+        "California": CALIFORNIA_PHOTOS
+      };
+
       const states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+
       const params = new URLSearchParams(window.location.search);
       const collection = params.get("collection") || "Photography Collection";
+      const initialQueryState = params.get("state") || "";
+
       document.querySelector("#collection-title").textContent = collection;
       const stateGrid = document.querySelector("#states");
+
       states.forEach((state) => {
-        const card = document.createElement("a");
-        card.className = "state";
-        card.href = `#${state.toLowerCase().replaceAll(" ", "-")}`;
+        const photoList = STATE_PHOTO_DB[state] || [];
+        const hasPhotos = photoList.length > 0;
+        const card = document.createElement("div");
+        card.className = `state ${hasPhotos ? 'has-photos' : ''}`;
         card.dataset.state = state.toLowerCase();
-        card.innerHTML = `<strong>${state}</strong><span>${collection} / State index</span>`;
+        card.id = `state-${state.toLowerCase()}`;
+        card.innerHTML = `
+          <div>
+            <strong>${state}</strong>
+            <span>${hasPhotos ? `${photoList.length} archival photos indexed` : 'Finding aid index'}</span>
+          </div>
+          ${hasPhotos ? `<span class="badge-photo-count">📷 ${photoList.length} Photos</span>` : '<span class="badge-photo-count" style="opacity:0.5;">0 Photos</span>'}
+        `;
+        card.addEventListener("click", () => {
+          openStateDrawer(state);
+        });
         stateGrid.append(card);
       });
+
       const search = document.querySelector("#state-search");
       const count = document.querySelector("#count");
+
       function filterStates() {
         const query = search.value.toLowerCase();
         let visible = 0;
@@ -72,6 +239,68 @@
       }
       search.addEventListener("input", filterStates);
       filterStates();
+
+      function openStateDrawer(stateName) {
+        const drawer = document.getElementById("state-gallery-drawer");
+        const drawerTitle = document.getElementById("drawer-state-title");
+        const photoGrid = document.getElementById("state-photo-grid");
+        const photos = STATE_PHOTO_DB[stateName];
+
+        if (!photos || photos.length === 0) {
+          alert(`The archival finding aid for ${stateName} is currently being cataloged. Explore Florida or California for active photo sets.`);
+          return;
+        }
+
+        drawerTitle.textContent = `${stateName} Archival Photographs (${photos.length} items)`;
+        photoGrid.innerHTML = photos.map((p, idx) => `
+          <article class="photo-card" onclick="openViewer('${stateName}', ${idx})">
+            <img src="${p.src}" alt="${p.title}" loading="lazy" />
+            <div class="photo-card-body">
+              <div>
+                <span class="photo-card-kicker">${p.category} • ${p.year}</span>
+                <p class="photo-card-caption">${p.caption}</p>
+              </div>
+            </div>
+          </article>
+        `).join("");
+
+        drawer.hidden = false;
+        drawer.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function closeStateDrawer() {
+        document.getElementById("state-gallery-drawer").hidden = true;
+      }
+
+      function openViewer(stateName, idx) {
+        const photos = STATE_PHOTO_DB[stateName];
+        if (!photos || !photos[idx]) return;
+        const p = photos[idx];
+        const viewer = document.getElementById("viewer");
+        document.getElementById("viewer-image").src = p.src;
+        document.getElementById("viewer-title").textContent = p.title;
+        document.getElementById("viewer-caption").textContent = p.caption;
+        viewer.hidden = false;
+      }
+
+      function closeViewer() {
+        document.getElementById("viewer").hidden = true;
+      }
+
+      document.getElementById("viewer")?.addEventListener("click", (e) => {
+        if (e.target === document.getElementById("viewer")) {
+          closeViewer();
+        }
+      });
+
+      // Handle auto-open if state parameter in URL or hash
+      if (initialQueryState) {
+        openStateDrawer(initialQueryState);
+      } else if (window.location.hash) {
+        const hashState = window.location.hash.replace("#", "").toLowerCase();
+        const match = states.find(s => s.toLowerCase() === hashState);
+        if (match) openStateDrawer(match);
+      }
     </script>
   <script src="title-case.js"></script></body>
 </html>
