@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Collections | The Cheesborough Carceral Collections</title>
+    <meta name="description" content="Explore the Cheesborough Carceral Collections: Digital Photography, Research Starters, Books and Manuscripts, and Personal Collections." />
+    <meta name="keywords" content="collections, archival catalog, digital photography, research starters, books and manuscripts, personal collections, carceral history, finding aids, primary sources" />
+    <meta name="tags" content="collections, catalog, photography, manuscripts, research, primary sources" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -16,11 +19,12 @@
       .topbar a { font-size: 0.9rem; letter-spacing: 0.04em; padding: 0 0.7rem; }
       .topbar a + a { border-left: 1px solid #fff; }
       .topbar .active { color: var(--navy); font-weight: 700; }
-      header { background: #fff; border-bottom: 10px solid var(--navy); padding: 3rem clamp(1.3rem, 8vw, 8rem) 2rem; }
+      header { background: #fff; border-bottom: 10px solid var(--navy); padding: 2rem clamp(1.3rem, 5vw, 4.5rem) 2.5rem; box-sizing: border-box; }
+      .header-inner { margin: 0 auto; max-width: 1100px; }
       .eyebrow { color: #967038; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; }
       .title { align-items: end; display: flex; gap: 2rem; justify-content: space-between; }
-      .title h1 { color: var(--navy); font: 700 clamp(2.5rem, 7vw, 6rem) / 1 "Libre Baskerville", serif; margin: 0.7rem 0 0; }
-      .title p { font-size: 1.1rem; margin: 0; max-width: 18rem; }
+      .title h1 { color: var(--navy); font-family: "Libre Baskerville", serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; margin: 0.7rem 0 0; text-wrap: balance; }
+      .title p { font-size: clamp(1rem, 0.3vw + 0.9rem, 1.15rem); line-height: 1.55; margin: 0; max-width: 22rem; }
       .catalog { margin: 0 auto; max-width: 1100px; padding: 3rem 1.3rem; }
       .catalog-bar { align-items: baseline; border-bottom: 1px solid #bbb2a3; display: flex; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; }
       .catalog-bar h2 { font: 700 1.4rem "Libre Baskerville", serif; margin: 0; }
@@ -31,14 +35,14 @@
       .collection:nth-child(4) { background: #fff; color: var(--navy); }
       .collection:hover { transform: translateY(-5px); }
       .number { color: var(--gold); font: 700 2.2rem "Libre Baskerville", serif; }
-      .collection h3 { font: 700 clamp(1.3rem, 3vw, 2.4rem) / 1.2 "Libre Baskerville", serif; margin: 1rem 0 0.5rem; }
-      .collection p { font-size: 1rem; line-height: 1.45; margin: 0; max-width: 28rem; }
+      .collection h3 { font-family: "Libre Baskerville", serif; font-size: clamp(1.25rem, 2vw + 0.4rem, 1.85rem); font-weight: 700; line-height: 1.25; margin: 1rem 0 0.5rem; text-wrap: balance; }
+      .collection p { font-size: 1rem; line-height: 1.5; margin: 0; max-width: 28rem; }
       .browse { color: var(--gold); font-weight: 700; letter-spacing: 0.08em; margin-top: 1.2rem; text-transform: uppercase; }
       .collection:nth-child(2) .browse, .collection:nth-child(4) .browse { color: var(--navy); }
       footer { background: var(--navy); color: #fff; padding: 1rem; text-align: center; }
-      @media (max-width: 650px) {
+      @media (max-width: 768px) {
         .title { align-items: start; display: block; }
-        .title p { margin-top: 1.5rem; }
+        .title p { margin-top: 1rem; max-width: 100%; }
         .collection-grid { grid-template-columns: 1fr; }
         .topbar a { font-size: 0.72rem; padding: 0 0.3rem; }
       }
@@ -46,20 +50,23 @@
   </head>
   <body>
     <header>
-      <nav class="topbar" aria-label="Primary navigation">
-        <a href="ABOUT.html">ABOUT</a>
-        <a class="active" href="COLLECTIONS.html">COLLECTIONS</a>
-        <a href="RESEARCH.html">RESEARCH</a>
-        <a href="LAW-LIBRARY.html">LAW LIBRARY</a>
-        <a href="NEWS.html">NEWS</a>
-        <a href="CONTACT.html">CONTACT</a>
-        <a href="index2.html">HOME</a>
-        <a href="DONATE.html">DONATE</a>
-      </nav>
-      <div class="eyebrow">Catalog / Open access</div>
-      <div class="title">
-        <h1>Collections</h1>
-        <p>Primary sources for studying carceral history, law, institutional practice, and lived experience.</p>
+      <div class="header-inner">
+        <nav class="topbar" aria-label="Primary navigation">
+          <a href="ABOUT.html">ABOUT</a>
+          <a href="SEARCH.html">SEARCH</a>
+          <a class="active" href="COLLECTIONS.html">COLLECTIONS</a>
+          <a href="RESEARCH.html">RESEARCH</a>
+          <a href="LAW-LIBRARY.html">LAW LIBRARY</a>
+          <a href="NEWS.html">NEWS</a>
+          <a href="CONTACT.html">CONTACT</a>
+          <a href="index2.html">HOME</a>
+          <a href="DONATE.html">DONATE</a>
+        </nav>
+        <div class="eyebrow">Catalog / Open access</div>
+        <div class="title">
+          <h1>Collections</h1>
+          <p>Primary sources for studying carceral history, law, institutional practice, and lived experience.</p>
+        </div>
       </div>
     </header>
 

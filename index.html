@@ -56,21 +56,23 @@
       .masthead {
         background: var(--navy);
         color: #fff;
-        padding: clamp(1.2rem, 3vw, 2rem) 1rem 1.35rem;
+        padding: clamp(1.4rem, 3.5vw, 2.5rem) 1rem clamp(1.4rem, 3vw, 2.2rem);
         text-align: center;
       }
 
       .masthead a {
         display: inline-block;
         transition: transform 180ms ease;
+        width: clamp(320px, 55vw, 620px);
+        max-width: 94vw;
       }
       .masthead a:hover {
         transform: translateY(-2px);
       }
       .masthead img {
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+        display: block;
+        filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
         height: auto;
-        max-width: min(560px, 92vw);
         width: 100%;
       }
 
@@ -97,14 +99,22 @@
 
       .hero-inner { margin: 0 auto; max-width: 980px; width: 100%; }
 
+      .search-container {
+        position: relative;
+        margin: 0 auto clamp(2rem, 4.5vw, 3.8rem);
+        max-width: 700px;
+        width: 100%;
+      }
+
       .search {
         background: rgba(43, 43, 43, 0.94);
         border: 1px solid rgba(255, 255, 255, 0.09);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
         display: flex;
-        margin: 0 auto clamp(2.6rem, 5vw, 4.5rem);
+        margin: 0 auto 0.85rem;
         max-width: 700px;
         padding: 0.25rem 0.5rem;
+        position: relative;
       }
 
       .search::before, .search::after {
@@ -133,8 +143,147 @@
         cursor: pointer;
         font-size: 1.7rem;
         padding: 0 0.35rem;
+        transition: transform 0.15s, color 0.15s;
       }
-      .search button:hover { color: #fff; }
+      .search button:hover { color: #fff; transform: scale(1.1); }
+
+      /* Live Autocomplete Dropdown */
+      .search-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        color: #202020;
+        border: 2px solid var(--gold);
+        border-top: none;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+        z-index: 1000;
+        max-height: 480px;
+        overflow-y: auto;
+        display: none;
+        border-radius: 0 0 4px 4px;
+        text-align: left;
+      }
+      .search-dropdown.open { display: block; }
+      .dropdown-header {
+        background: var(--navy);
+        color: #fff;
+        padding: 0.6rem 0.9rem;
+        font-size: 0.82rem;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .dropdown-header span.gold { color: var(--gold); }
+      .dropdown-items { list-style: none; margin: 0; padding: 0; }
+      .dropdown-item {
+        border-bottom: 1px solid #ede8de;
+        transition: background 0.15s;
+      }
+      .dropdown-item:last-child { border-bottom: 0; }
+      .dropdown-item:hover, .dropdown-item.focused {
+        background: #faf6ee;
+      }
+      .dropdown-link {
+        display: block;
+        padding: 0.75rem 0.9rem;
+        text-decoration: none;
+        color: inherit;
+      }
+      .dropdown-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.74rem;
+        margin-bottom: 0.25rem;
+      }
+      .dropdown-badge {
+        background: var(--navy);
+        color: #fff;
+        font-weight: 700;
+        padding: 0.15rem 0.45rem;
+        border-radius: 3px;
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .dropdown-badge.pdf { background: #8f2d22; }
+      .dropdown-badge.data { background: #1b6343; }
+      .dropdown-badge.law { background: #4a347f; }
+      .dropdown-badge.photo { background: #8c561b; }
+      .dropdown-title {
+        font-family: Georgia, serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--navy);
+        line-height: 1.25;
+        margin-bottom: 0.2rem;
+      }
+      .dropdown-snippet {
+        font-size: 0.82rem;
+        color: #555;
+        line-height: 1.35;
+      }
+      .search-highlight {
+        background: #fef08a;
+        color: #713f12;
+        font-weight: 600;
+        padding: 0 2px;
+      }
+      .dropdown-footer {
+        background: #f4f0e8;
+        border-top: 1px solid #ded7cb;
+        padding: 0.65rem 0.9rem;
+        text-align: center;
+      }
+      .dropdown-footer-link {
+        color: var(--navy);
+        font-weight: 700;
+        font-size: 0.88rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .dropdown-footer-link:hover { color: var(--gold); text-decoration: underline; }
+
+      /* Hero Quick Topics */
+      .hero-quick-topics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0.6rem;
+      }
+      .quick-topic-label {
+        color: var(--gold);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-right: 0.2rem;
+      }
+      .quick-topic-chip {
+        background: rgba(16, 44, 76, 0.85);
+        border: 1px solid rgba(194, 155, 83, 0.4);
+        color: #f5f2eb;
+        font-size: 0.76rem;
+        font-weight: 600;
+        padding: 0.18rem 0.55rem;
+        border-radius: 999px;
+        text-decoration: none;
+        transition: all 0.15s;
+        cursor: pointer;
+      }
+      .quick-topic-chip:hover {
+        background: var(--gold);
+        color: var(--deep);
+        border-color: var(--gold);
+        text-decoration: none;
+        transform: translateY(-1px);
+      }
 
       .collections {
         display: grid;
@@ -166,13 +315,16 @@
       }
       .card-art span { filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.1)); }
       .collection-card h2 {
-        font-size: clamp(0.95rem, 1.8vw, 1.2rem);
-        line-height: 1.08;
+        font-size: clamp(0.92rem, 1.4vw, 1.15rem);
+        line-height: 1.25;
         margin: 0;
         min-height: 3.35rem;
         padding: 0.65rem 0.5rem 0.58rem;
         text-align: center;
         text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .publication {
@@ -197,10 +349,11 @@
       .publication-title {
         border-bottom: 1px solid rgba(16, 44, 76, 0.32);
         font-family: "Libre Baskerville", Georgia, serif;
-        font-size: clamp(2rem, 5vw, 3.7rem);
-        line-height: 1.08;
+        font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+        line-height: 1.2;
         margin: 0;
         padding-bottom: 1.1rem;
+        text-wrap: balance;
       }
       .publication-deck { color: #5c5a55; font-size: 1.08rem; margin: 0.9rem 0 1.7rem; max-width: 48rem; }
       .publication-grid { display: grid; gap: 1.4rem; grid-template-columns: minmax(0, 1.55fr) minmax(13rem, 0.9fr); }
@@ -211,33 +364,33 @@
       }
       .story-copy { padding: 1.15rem 1.25rem 1.25rem; }
       .story-label { color: #9b7435; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-      .story-copy h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.35rem, 3vw, 2.1rem); line-height: 1.15; margin: 0.45rem 0; }
-      .story-copy p { color: #5c5a55; font-size: 1rem; line-height: 1.45; margin: 0; }
+      .story-copy h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.25rem, 2.5vw, 1.8rem); line-height: 1.25; margin: 0.45rem 0; text-wrap: balance; }
+      .story-copy p { color: #5c5a55; font-size: 1rem; line-height: 1.55; margin: 0; }
       .story-meta { border-top: 1px solid #ded8cd; color: #76736c; font-size: 0.82rem; margin-top: 1rem; padding-top: 0.7rem; }
       .story-list { display: grid; gap: 1.1rem; }
       .mini-story { border-bottom: 1px solid #cfc7b9; padding-bottom: 1rem; }
       .mini-story:last-child { border-bottom: 0; }
-      .mini-story h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.08rem; line-height: 1.25; margin: 0.3rem 0; }
-      .mini-story p { color: #66635d; font-size: 0.93rem; line-height: 1.35; margin: 0; }
+      .mini-story h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.08rem; line-height: 1.3; margin: 0.3rem 0; }
+      .mini-story p { color: #66635d; font-size: 0.93rem; line-height: 1.45; margin: 0; }
       .archive-box { background: var(--navy); color: #fff; padding: 1.15rem; }
       .archive-box h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.25rem; margin: 0 0 0.55rem; }
-      .archive-box p { color: #e6dfd1; font-size: 0.94rem; line-height: 1.4; margin: 0 0 0.85rem; }
+      .archive-box p { color: #e6dfd1; font-size: 0.94rem; line-height: 1.45; margin: 0 0 0.85rem; }
       .archive-link { color: var(--gold); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
       .archive-link:hover { color: #fff; }
 
       .prison-hero { background: var(--deep-navy); color: #fff; }
       .prison-hero-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.8fr); margin: 0 auto; max-width: 980px; min-height: 26rem; }
-      .prison-hero-copy { align-self: center; max-width: 39rem; padding: clamp(2.5rem, 7vw, 5rem) 1rem clamp(2.5rem, 7vw, 5rem) 0; }
+      .prison-hero-copy { align-self: center; max-width: 39rem; padding: clamp(2rem, 5vw, 4rem) 1rem clamp(2rem, 5vw, 4rem) 0; }
       .prison-hero-copy .story-label { color: var(--gold); }
-      .prison-hero-copy h2 { color: #fff; font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.08; margin: 0.55rem 0 1rem; }
-      .prison-hero-copy p { color: #e6dfd1; font-size: 1.05rem; line-height: 1.5; margin: 0 0 1.25rem; max-width: 36rem; }
+      .prison-hero-copy h2 { color: #fff; font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.8rem, 3.2vw + 0.4rem, 2.85rem); line-height: 1.22; margin: 0.55rem 0 1rem; text-wrap: balance; }
+      .prison-hero-copy p { color: #e6dfd1; font-size: 1.05rem; line-height: 1.6; margin: 0 0 1.25rem; max-width: 36rem; }
       .prison-hero-image { background: url("RESEARCH%20WEBSITE%20HERO/American_Prisons_and_Jails/Florida%20Prison%20Photo/American%20Siberia.jpg") center / cover; min-height: 20rem; }
       .prison-hero-link { color: var(--gold); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
       .topic-band { background: #e8e1d6; border-top: 1px solid #cfc5b5; padding: clamp(2.5rem, 5vw, 4rem) 1rem; }
       .topic-inner { margin: 0 auto; max-width: 980px; }
       .topic-kicker { color: var(--navy); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; margin: 0 0 0.65rem; text-transform: uppercase; }
-      .topic-title { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; margin: 0 0 0.8rem; }
+      .topic-title { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.8rem, 3.2vw + 0.4rem, 2.7rem); line-height: 1.22; margin: 0 0 0.8rem; text-wrap: balance; }
       .topic-deck { color: #5c5a55; font-size: 1.05rem; line-height: 1.5; margin: 0 0 1.5rem; max-width: 48rem; }
       .topic-grid { display: grid; gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .topic-card { background: #fff; border-top: 4px solid var(--gold); display: flex; flex-direction: column; min-height: 13rem; padding: 1rem; }
@@ -275,13 +428,47 @@
         padding: 0.62rem 1rem 0.85rem;
       }
       .news-inner { margin: 0 auto; max-width: 980px; }
+      .news-header {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin: 0 0 0.35rem;
+      }
       .news h2 {
         font-size: 1.45rem;
-        margin: 0 0 0.1rem;
+        margin: 0;
         text-transform: uppercase;
       }
+      .news h2 a {
+        color: #fff;
+        text-decoration: none;
+        transition: color 150ms ease;
+      }
+      .news h2 a:hover {
+        color: var(--gold);
+      }
+      .news-more-link {
+        color: var(--gold);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: color 150ms ease;
+      }
+      .news-more-link:hover {
+        color: #fff;
+      }
       .news-grid { display: grid; gap: 2rem; grid-template-columns: 1fr 1fr; }
-      .news article { font-size: 1.02rem; line-height: 1.2; }
+      .news article { font-size: 1.02rem; line-height: 1.55; }
+      .news article a {
+        color: #fff;
+        text-decoration: none;
+        transition: color 150ms ease;
+      }
+      .news article a:hover {
+        color: var(--gold);
+      }
       .news time { color: var(--gold); }
 
       footer {
@@ -334,6 +521,7 @@
       <div class="topbar">
         <nav aria-label="Primary navigation">
           <a href="ABOUT.html">ABOUT</a>
+          <a href="SEARCH.html">SEARCH</a>
           <a href="COLLECTIONS.html">COLLECTIONS</a>
           <a href="RESEARCH.html">RESEARCH</a>
           <a href="LAW-LIBRARY.html">LAW LIBRARY</a>
@@ -345,7 +533,7 @@
       </div>
       <div class="masthead">
         <a href="https://carceralcollections.org" aria-label="Cheesborough Carceral Collections - CarceralCollections.org">
-          <img src="logo.svg" alt="Cheesborough Carceral Collections - CarceralCollections.org" width="350" />
+          <img src="logo.svg" alt="Cheesborough Carceral Collections - CarceralCollections.org" width="580" height="140" />
         </a>
       </div>
       <p class="tagline">Preserving sources, supporting research, and advancing critical legal inquiry</p>
@@ -354,24 +542,39 @@
     <main>
       <section class="hero" id="about" aria-label="Collections search">
         <div class="hero-inner">
-          <form class="search" id="search-form" role="search">
-            <input id="search-input" type="search" placeholder="SEARCH CASE LAW, HISTORY, OR DOCUMENTS..." aria-label="Search case law, history, or documents" />
-            <button type="submit" aria-label="Submit search" title="Search">&#8981;</button>
-          </form>
+          <div class="search-container">
+            <form class="search" id="search-form" role="search" action="SEARCH.html" method="get">
+              <input id="search-input" name="q" type="search" placeholder="SEARCH CASE LAW, HISTORY, OR DOCUMENTS..." aria-label="Search case law, history, or documents" autocomplete="off" />
+              <button type="submit" aria-label="Submit search" title="Search">&#8981;</button>
+            </form>
+            <div class="search-dropdown" id="search-dropdown" role="region" aria-label="Live search suggestions"></div>
+            <div class="hero-quick-topics" aria-label="Popular search topics">
+              <span class="quick-topic-label">Suggested:</span>
+              <a class="quick-topic-chip" href="SEARCH.html?q=Dozier+School">Dozier School</a>
+              <a class="quick-topic-chip" href="SEARCH.html?q=Fortune+Ferguson">Fortune Ferguson</a>
+              <a class="quick-topic-chip" href="SEARCH.html?q=American+Siberia">American Siberia</a>
+              <a class="quick-topic-chip" href="SEARCH.html?q=Convict+Leasing">Convict Leasing</a>
+              <a class="quick-topic-chip" href="SEARCH.html?q=Newberry+Six">Newberry Six</a>
+              <a class="quick-topic-chip" href="SEARCH.html?q=1880+Census">1880 Census</a>
+              <a class="quick-topic-chip" href="SEARCH.html?q=Solitary+Confinement">Solitary Confinement</a>
+              <a class="quick-topic-chip" href="SEARCH.html?q=Law+Library">Law Library</a>
+              <a class="quick-topic-chip" href="SEARCH.html?q=Photography">Photography</a>
+            </div>
+          </div>
           <div class="collections" id="collections">
-            <a class="collection-card" href="#research">
+            <a class="collection-card" href="COLLECTIONS.html">
               <div class="card-art" aria-hidden="true"><span>&#128196;</span></div>
               <h2>Carceral History<br />&amp; Archival Sources</h2>
             </a>
-            <a class="collection-card" href="#research">
+            <a class="collection-card" href="BOOKS-AND-MANUSCRIPTS.html">
               <div class="card-art" aria-hidden="true"><span>&#128218;</span></div>
-              <h2>Juvenile Justice<br />Research</h2>
+              <h2>Books &amp;<br />Manuscripts</h2>
             </a>
-            <a class="collection-card" href="#research">
+            <a class="collection-card" href="NEWS.html">
               <div class="card-art" aria-hidden="true"><span>&#9878;</span></div>
-              <h2>Women, Gender,<br />&amp; Justice</h2>
+              <h2>News &amp;<br />The Review</h2>
             </a>
-            <a class="collection-card" href="#research">
+            <a class="collection-card" href="LAW-LIBRARY.html">
               <div class="card-art" aria-hidden="true"><span>&#9876;</span></div>
               <h2>Law Library &amp;<br />Reform History</h2>
             </a>
@@ -387,7 +590,7 @@
           <p class="publication-deck">Investigations into institutional power, juvenile justice, racialized punishment, and the people too often reduced to a line in someone else&apos;s record.</p>
           <div class="publication-grid">
             <article class="feature-story">
-              <div class="feature-image" role="img" aria-label="Rows of books in a research library"></div>
+              <div class="feature-image" data-dozier-photo="feature" role="img" aria-label="Archival photograph of Arthur G. Dozier School for Boys"></div>
               <div class="story-copy">
                 <span class="story-label">Dozier / archival investigation</span>
                 <h3><a href="DOZIER-RESEARCH.html">What the Dozier record reveals about a school, its deaths, and its buried history</a></h3>
@@ -463,10 +666,13 @@
 
       <section class="news" id="news">
         <div class="news-inner">
-          <h2>Recent Updates</h2>
+          <div class="news-header">
+            <h2><a href="NEWS.html">News</a></h2>
+            <a class="news-more-link" href="NEWS.html">Read The Review &rarr;</a>
+          </div>
           <div class="news-grid">
-            <article><time datetime="2026-08-14">August 14, 2026</time> | New study: solitary confinement in juvenile facilities</article>
-            <article><time datetime="2026-07-30">July 30, 2026</time> | Supreme Court rulings on the rights of incarcerated people</article>
+            <article><a href="NEWS.html"><time datetime="2026-08-14">August 14, 2026</time> | New study: solitary confinement in juvenile facilities &rarr;</a></article>
+            <article><a href="NEWS.html"><time datetime="2026-07-30">July 30, 2026</time> | Supreme Court rulings on the rights of incarcerated people &rarr;</a></article>
           </div>
         </div>
       </section>
@@ -481,25 +687,128 @@
       </div>
     </footer>
 
-    <script>
-      const searchForm = document.querySelector("#search-form");
-      const searchInput = document.querySelector("#search-input");
-      const searchStatus = document.querySelector("#search-status");
-      const stateSelect = document.querySelector("#state-select");
+        <script src="search-data.js"></script>
+        <script>
+          const searchForm = document.querySelector("#search-form");
+          const searchInput = document.querySelector("#search-input");
+          const searchDropdown = document.querySelector("#search-dropdown");
+          const stateSelect = document.querySelector("#state-select");
 
-      searchForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const query = searchInput.value.trim();
-        searchStatus.hidden = query.length === 0;
-        searchStatus.textContent = query ? `Showing collection results for: ${query}` : "";
-      });
+          function escapeHtml(str) {
+            if (!str) return "";
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+          }
 
-      stateSelect.addEventListener("change", () => {
-        if (stateSelect.value) {
-          searchStatus.hidden = false;
-          searchStatus.textContent = `State case index selected: ${stateSelect.value}`;
-        }
-      });
-    </script>
-  <script src="title-case.js"></script></body>
-</html>
+          function getBadgeClass(category) {
+            const cat = (category || "").toLowerCase();
+            if (cat.includes("pdf")) return "pdf";
+            if (cat.includes("data") || cat.includes("spreadsheet")) return "data";
+            if (cat.includes("law")) return "law";
+            if (cat.includes("photo")) return "photo";
+            return "brief";
+          }
+
+          function renderLiveDropdown(query) {
+            if (!searchDropdown || !window.CheesboroughSearch) return;
+            const q = (query || "").trim();
+            if (!q) {
+              searchDropdown.classList.remove("open");
+              searchDropdown.innerHTML = "";
+              return;
+            }
+
+            const results = window.CheesboroughSearch.search(q);
+            const topResults = results.slice(0, 5);
+
+            if (results.length === 0) {
+              searchDropdown.innerHTML = `
+                <div class="dropdown-header">
+                  <span>No direct records found</span>
+                  <a href="SEARCH.html?q=${encodeURIComponent(q)}" style="color:var(--gold); text-decoration:underline;">Open Search Page &rarr;</a>
+                </div>
+                <div style="padding:1rem; text-align:center; font-size:0.88rem; color:#666;">
+                  Try searching for <strong>Dozier, Powell, Ferguson, 1880 Census, or Confinement</strong>
+                </div>
+              `;
+              searchDropdown.classList.add("open");
+              return;
+            }
+
+            searchDropdown.innerHTML = `
+              <div class="dropdown-header">
+                <span>Found <span class="gold">${results.length}</span> matching record${results.length === 1 ? '' : 's'}</span>
+                <a href="SEARCH.html?q=${encodeURIComponent(q)}" style="color:var(--gold); text-decoration:none; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.04em;">Full Search Desk &rarr;</a>
+              </div>
+              <ul class="dropdown-items">
+                ${topResults.map(item => `
+                  <li class="dropdown-item">
+                    <a class="dropdown-link" href="${item.url}">
+                      <div class="dropdown-meta">
+                        <span class="dropdown-badge ${getBadgeClass(item.category)}">${item.icon || '📄'} ${escapeHtml(item.badge || item.category)}</span>
+                        ${item.date ? `<span style="color:#777; font-weight:600;">${escapeHtml(item.date)}</span>` : ''}
+                      </div>
+                      <div class="dropdown-title">${item.highlightedTitle || escapeHtml(item.title)}</div>
+                      <div class="dropdown-snippet">${item.highlightedDescription ? item.highlightedDescription.slice(0, 140) + '...' : escapeHtml(item.description.slice(0, 140)) + '...'}</div>
+                    </a>
+                  </li>
+                `).join('')}
+              </ul>
+              <div class="dropdown-footer">
+                <a class="dropdown-footer-link" href="SEARCH.html?q=${encodeURIComponent(q)}">
+                  View all <strong>${results.length}</strong> matching sources on Search Page &rarr;
+                </a>
+              </div>
+            `;
+            searchDropdown.classList.add("open");
+          }
+
+          let liveDebounce;
+          if (searchInput) {
+            searchInput.addEventListener("input", () => {
+              clearTimeout(liveDebounce);
+              liveDebounce = setTimeout(() => {
+                renderLiveDropdown(searchInput.value);
+              }, 150);
+            });
+
+            searchInput.addEventListener("focus", () => {
+              if (searchInput.value.trim().length > 0) {
+                renderLiveDropdown(searchInput.value);
+              }
+            });
+          }
+
+          // Close dropdown when clicking outside
+          document.addEventListener("click", (e) => {
+            if (!e.target.closest(".search-container")) {
+              if (searchDropdown) searchDropdown.classList.remove("open");
+            }
+          });
+
+          // Close dropdown on ESC
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && searchDropdown) {
+              searchDropdown.classList.remove("open");
+            }
+          });
+
+          // Form submission navigates directly to SEARCH.html
+          if (searchForm) {
+            searchForm.addEventListener("submit", (event) => {
+              event.preventDefault();
+              const query = searchInput ? searchInput.value.trim() : "";
+              window.location.href = `SEARCH.html${query ? `?q=${encodeURIComponent(query)}` : ''}`;
+            });
+          }
+
+          if (stateSelect) {
+            stateSelect.addEventListener("change", () => {
+              if (stateSelect.value) {
+                window.location.href = `SEARCH.html?q=${encodeURIComponent(stateSelect.value)}`;
+              }
+            });
+          }
+        </script>
+        <script src="dozier-daily-photo.js"></script>
+        <script src="title-case.js"></script></body>
+    </html>
