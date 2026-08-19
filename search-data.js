@@ -16,14 +16,14 @@
   const SEARCH_INDEX = [
   {
     "id": "brief-dozier",
-    "title": "Dozier School Research Brief: What the Record Reveals About a School, Its Deaths, and Its Buried History",
+    "title": "The Arthur G. Dozier School for Boys: A History of Institutional Terror, Forensic Excavation, and Historical Reckoning",
     "url": "DOZIER-RESEARCH.html",
     "category": "Research Brief",
     "badge": "Research Brief",
     "icon": "📖",
     "date": "1900–2016",
     "author": "Cheesborough Research Desk",
-    "description": "Archival investigation into the Arthur G. Dozier School for Boys in Marianna, Florida. Explores USF forensic findings, Boot Hill cemetery, unrecorded deaths, the 1958 handbook, 1969 Visiting Committee report, and survivor accounts.",
+    "description": "Comprehensive historical and forensic investigation into the Arthur G. Dozier School for Boys in Marianna, Florida. Details the White House beatings, USF forensic exhumations at Boot Hill, the 1914 fire, racialized labor regimes, Tampa Bay Times findings, and state apology.",
     "tags": [
       "Dozier",
       "Arthur G. Dozier School for Boys",
@@ -31,6 +31,10 @@
       "USF Investigation",
       "White House Boys",
       "Boot Hill Cemetery",
+      "The Nickel Boys",
+      "Colson Whitehead",
+      "Tampa Bay Times",
+      "1914 Fire",
       "Juvenile Justice",
       "Institutional Violence",
       "Forensic Findings",
@@ -59,7 +63,12 @@
       "burial records",
       "handbook 1958",
       "1969 report",
-      "jackson county"
+      "jackson county",
+      "the nickel boys",
+      "colson whitehead",
+      "for their own good",
+      "tampa bay times",
+      "1914 fire"
     ],
     "actionLabel": "Read Research Brief →"
   },
@@ -1438,6 +1447,41 @@
       "state photo index"
     ],
     "actionLabel": "View Florida Photos ↗"
+  },
+  {
+    "id": "col-dozier-newspapers",
+    "title": "The Dozier School Newspaper Collection - Florida: The Yellow Jacket (1933–1960)",
+    "url": "DOZIER-NEWSPAPERS.html",
+    "category": "Archival Collection",
+    "badge": "Newspaper Archive",
+    "icon": "📰",
+    "date": "1933–1960",
+    "author": "Florida Industrial School for Boys (Print Shop)",
+    "description": "Over 520 digitized primary issues of The Yellow Jacket, the official student and institutional newspaper printed at the Florida Industrial School for Boys in Marianna.",
+    "tags": [
+      "Dozier Newspapers",
+      "The Yellow Jacket",
+      "Student Newspapers",
+      "Marianna Florida",
+      "Primary Print Archive",
+      "1930s",
+      "1940s",
+      "1950s",
+      "1960s"
+    ],
+    "keywords": [
+      "dozier school newspaper collection",
+      "yellow jacket",
+      "the yellow jacket",
+      "marianna newspaper",
+      "student print shop",
+      "florida industrial school for boys paper",
+      "dozier paper",
+      "1933",
+      "1960",
+      "dozier newspapers"
+    ],
+    "actionLabel": "Browse Newspaper Issues →"
   },
   {
     "id": "col-books-manuscripts",
