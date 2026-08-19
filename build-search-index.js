@@ -19,7 +19,7 @@ const SEARCH_INDEX = [
   {
     id: "brief-newberry-ferguson",
     title: "The Newberry Six, Fortune Ferguson, and the Political Climate of Alachua County, Florida",
-    url: "CENSUS-AND-CAMP.html",
+    url: "NEWBERRY-AND-FORTUNE.html",
     category: "Research Brief",
     badge: "Research Brief",
     icon: "📖",
@@ -33,7 +33,7 @@ const SEARCH_INDEX = [
   {
     id: "brief-fortune-ferguson",
     title: "Fortune Ferguson Jr. and the Record of Racialized Punishment",
-    url: "FORTUNE-FERGUSON-RESEARCH.html",
+    url: "FORTUNE-FERGUSON.html",
     category: "Research Brief",
     badge: "Research Brief",
     icon: "📖",
@@ -63,7 +63,7 @@ SEARCH_INDEX.push(
   {
     id: "brief-powell-siberia",
     title: "The Insider's Ghost: J. C. Powell's The American Siberia",
-    url: "POWELL-AMERICAN-SIBERIA.html",
+    url: "AMERICAN-SIBERIA.html",
     category: "Research Brief",
     badge: "Research Brief",
     icon: "📖",
@@ -94,7 +94,7 @@ SEARCH_INDEX.push(
   {
     id: "doc-1969-dozier-report",
     title: "Report of the Visiting Committee, Arthur G. Dozier School for Boys (1969)",
-    url: "DOC-1969-DOZIER-REPORT.html",
+    url: "DOZIER-1969-REPORT.html",
     category: "Primary Document",
     badge: "Transcribed Document",
     icon: "📄",
@@ -108,7 +108,7 @@ SEARCH_INDEX.push(
   {
     id: "doc-jett-fortune-ferguson",
     title: "The State of Florida v. Fortune Ferguson Jr. (Brandon T. Jett, 2024)",
-    url: "DOC-FORTUNE-FERGUSON-JETT.html",
+    url: "FERGUSON-JETT-STUDY.html",
     category: "Primary Document",
     badge: "Legal Scholarship",
     icon: "⚖️",
@@ -122,7 +122,7 @@ SEARCH_INDEX.push(
   {
     id: "doc-wapo-juvenile-death-penalty",
     title: "History of the Juvenile Death Penalty: Key Events in the United States (Washington Post, 1988)",
-    url: "DOC-FORTUNE-FERGUSON-WAPO.html",
+    url: "JUVENILE-DEATH-PENALTY.html",
     category: "Primary Document",
     badge: "Historical Chronology",
     icon: "📰",
@@ -365,7 +365,7 @@ SEARCH_INDEX.push(
   {
     id: "book-correctional-bookshelf",
     title: "Correctional Bookshelf: A Bibliography of the U.S. Bureau of Prisons Library",
-    url: "PDF-READER.html?file=02_Books-and-Manuscripts%2FBooks%2F02_Secondary-Scholarship%2FCorrectional%20bookshelf_a%20bibliography%20%20U.S.%20Bureau%20of%20Prisons%20Library.pdf",
+    url: "PDF-READER.html?file=02_Books-and-Manuscripts%2FBooks%2F02_Secondary-Scholarship%2FCorrectional_Bookshelf_Bibliography_US_Bureau_of_Prisons.pdf",
     category: "Manuscript & Book",
     badge: "Federal Bibliography",
     icon: "📚",
@@ -656,7 +656,7 @@ SEARCH_INDEX.push(
   {
     id: "col-digital-photography",
     title: "Digital Photography Collections: Historic & Contemporary Carceral Images",
-    url: "DIGITAL-PHOTOGRAPHY-COLLECTIONS.html",
+    url: "PHOTOGRAPHY.html",
     category: "Photo Archive",
     badge: "Photo Archive",
     icon: "📷",
@@ -670,7 +670,7 @@ SEARCH_INDEX.push(
   {
     id: "col-photography-states",
     title: "Carceral Photography by State Index (All 50 Jurisdictions)",
-    url: "PHOTOGRAPHY-STATES.html",
+    url: "PHOTOGRAPHY-BY-STATE.html",
     category: "Photo Archive",
     badge: "State Visual Index",
     icon: "🗺️",
@@ -684,7 +684,7 @@ SEARCH_INDEX.push(
   {
     id: "col-florida-juvenile-photos",
     title: "Florida Juvenile Institutions Photographic Collection (Dozier School & State Archives)",
-    url: "PHOTOGRAPHY-STATES.html?state=Florida",
+    url: "PHOTOGRAPHY-BY-STATE.html?state=Florida",
     category: "Photo Archive",
     badge: "State Photo Index",
     icon: "📷",

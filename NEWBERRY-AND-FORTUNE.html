@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Newberry Six, Fortune Ferguson, and Racial Reckoning in Alachua County | The Cheesborough Carceral Collections</title>
+  <meta name="description" content="A comprehensive historical and archival investigation into the 1916 Newberry Six lynchings, Fortune 'Jew' Ferguson Jr., the centralization of Florida's death penalty, and ongoing truth and reconciliation in Alachua County." />
+  <meta name="keywords" content="newberry six, fortune ferguson, fortune jew ferguson, alachua county, boisey long, newberry florida, 1916 lynching, electric chair, brandon jett, dudley farm, soil collection, equal justice initiative, pleasant plain, truth and reconciliation" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #102c4c;
+      --deep: #091e36;
+      --gold: #c29b53;
+      --gold-light: #dfc287;
+      --paper: #f5f2eb;
+      --paper-card: #ffffff;
+      --line: #ded7cb;
+      --line-dark: #c4baa9;
+      --ink: #202020;
+      --muted: #65615a;
+      --red: #8f3d32;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Source Sans 3", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    a { color: var(--navy); text-decoration: none; }
+    a:hover { text-decoration: underline; color: var(--gold); }
+
+    /* Topbar Navigation */
+    .topbar {
+      background: var(--gold);
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem 1.4rem;
+      justify-content: center;
+      padding: 0.65rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .topbar a { color: #fff; transition: opacity 0.15s; }
+    .topbar a:hover { opacity: 0.82; text-decoration: none; }
+    .topbar a.active { border-bottom: 2px solid #fff; }
+
+    /* Hero Section */
+    .hero {
+      background: var(--deep);
+      color: #fff;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      min-height: 34rem;
+      border-bottom: 5px solid var(--gold);
+    }
+    .hero-copy {
+      align-self: center;
+      max-width: 44rem;
+      padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4rem);
+      box-sizing: border-box;
+    }
+    .hero-image {
+      background: url("RESEARCH%20WEBSITE%20HERO/FORTUNE%20FERGUSON%20JR/Fortune%20Ferguson%2C%20FL%2C%201927%20April%2027%20-%20M.E.%20Grenander%20Department%20of%20Special%20Collections%20%26%20Archives_files/thumbnail.jpg") center/cover;
+      min-height: 22rem;
+    }
+    .eyebrow {
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: clamp(1.85rem, 2.3vw + 0.5rem, 2.85rem);
+      line-height: 1.22;
+      letter-spacing: -0.01em;
+      margin: 0.85rem 0 1.15rem;
+      text-wrap: balance;
+      word-break: normal;
+      overflow-wrap: break-word;
+    }
+    .hero p {
+      color: #e6dfd1;
+      font-size: clamp(1.02rem, 0.4vw + 0.85rem, 1.15rem);
+      line-height: 1.65;
+      max-width: 38rem;
+    }
+
+    /* Main Layout Grid */
+    .layout {
+      display: grid;
+      gap: 3.5rem;
+      grid-template-columns: minmax(0, 1fr) 21rem;
+      margin: auto;
+      max-width: 1200px;
+      padding: 3.5rem 1.3rem 5rem;
+    }
+    article { min-width: 0; }
+    article h2 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.75rem;
+      line-height: 1.3;
+      margin: 2.8rem 0 1rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 2px solid var(--line);
+    }
+    article h2:first-of-type { margin-top: 0; }
+    article h3 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.25rem;
+      line-height: 1.35;
+      margin: 1.8rem 0 0.6rem;
+    }
+    article p {
+      color: #383531;
+      font-size: 1.06rem;
+      line-height: 1.75;
+      margin: 1rem 0;
+    }
+    article ul, article ol {
+      margin: 1rem 0 1.5rem 1.5rem;
+      color: #383531;
+      font-size: 1.04rem;
+      line-height: 1.7;
+    }
+    article li { margin-bottom: 0.5rem; }
+
+    /* Callouts & Quotes */
+    .pullquote {
+      border-left: 5px solid var(--gold);
+      background: #faf7f0;
+      color: var(--navy);
+      font: italic 700 1.2rem/1.6 "Libre Baskerville", Georgia, serif;
+      margin: 2rem 0;
+      padding: 1.2rem 1.6rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .warning-box {
+      background: #fff;
+      border-left: 5px solid var(--red);
+      padding: 1.2rem 1.4rem;
+      margin: 1.8rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .warning-box strong {
+      color: var(--red);
+      display: block;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .warning-box p {
+      font-size: 0.98rem;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .reconciliation-card {
+      background: #fdfbf7;
+      border: 1px solid var(--gold);
+      border-left: 6px solid var(--gold);
+      padding: 1.4rem 1.6rem;
+      margin: 2rem 0;
+      border-radius: 2px;
+      box-shadow: 0 4px 16px rgba(194, 155, 83, 0.12);
+    }
+    .reconciliation-card h3 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    /* Stat Cards */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .stat-card {
+      background: var(--navy);
+      color: #fff;
+      padding: 1.2rem;
+      border-top: 4px solid var(--gold);
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-number {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .stat-label {
+      font-size: 0.84rem;
+      line-height: 1.4;
+      color: #dce5ec;
+    }
+
+    /* Comparative Data Matrix */
+    .matrix-table-wrap {
+      overflow-x: auto;
+      margin: 2rem 0;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .matrix-table th {
+      background: #eee8de;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Timeline */
+    .timeline-list {
+      border-left: 3px solid var(--gold);
+      margin: 2rem 0 2rem 0.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline-event {
+      margin-bottom: 1.6rem;
+      position: relative;
+    }
+    .timeline-event::before {
+      content: "";
+      position: absolute;
+      left: -1.96rem;
+      top: 0.35rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--deep);
+    }
+    .timeline-date {
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .timeline-title {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0.15rem 0 0.35rem;
+    }
+
+    /* Sidebar Panels */
+    .sidebar-panel {
+      position: sticky;
+      top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    .panel-box {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--gold);
+      padding: 1.4rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      border-radius: 2px;
+    }
+    .panel-box h3 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.15rem;
+      color: var(--navy);
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .source-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .source-item a {
+      color: var(--navy);
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: block;
+    }
+    .source-item a:hover {
+      color: var(--gold);
+      text-decoration: underline;
+    }
+    .source-meta {
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .community-action-box {
+      background: #102c4c;
+      color: #fff;
+      border-top: 5px solid var(--gold);
+      padding: 1.4rem;
+      border-radius: 2px;
+    }
+    .community-action-box h3 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      color: #fff;
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+    .community-action-box p {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #dce5ec;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background: var(--deep);
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 4px solid var(--gold);
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-image { min-height: 18rem; }
+      .hero-copy { max-width: 100%; padding: clamp(2rem, 5vw, 3rem) clamp(1.2rem, 4vw, 2rem); }
+      .layout { grid-template-columns: 1fr; padding-top: 2rem; }
+      .sidebar-panel { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topbar" aria-label="Primary navigation">
+    <a href="index.html">HOME</a>
+    <a href="ABOUT.html">ABOUT</a>
+    <a href="SEARCH.html">SEARCH</a>
+    <a href="COLLECTIONS.html">COLLECTIONS</a>
+    <a class="active" href="NEWBERRY-AND-FORTUNE.html">NEWBERRY &amp; FORTUNE</a>
+    <a href="DOZIER-RESEARCH.html">DOZIER RESEARCH</a>
+    <a href="DOZIER-NEWSPAPERS.html">DOZIER NEWSPAPERS</a>
+    <a href="BOOKS-AND-MANUSCRIPTS.html">BOOKS &amp; MANUSCRIPTS</a>
+    <a href="EVIDENCE-INDEX.html">EVIDENCE INDEX</a>
+    <a href="DONATE.html">DONATE</a>
+    <a href="CONTACT.html">CONTACT</a>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Alachua County, Florida / Racial Terror &amp; State Centralization (1916–1927)</div>
+      <h1>The Newberry Six and Fortune "Jew" Ferguson: Racial Terror, State Centralization, and the Work of Historical Reconciliation in Alachua County</h1>
+      <p>A comprehensive archival investigation connecting the August 1916 Newberry mob lynchings with the 1927 state electrocution of Fortune Ferguson Jr., exploring how county-level violence transitioned into centralized criminal punishment and how community truth-seeking projects preserve public memory today.</p>
+    </div>
+    <div class="hero-image" role="img" aria-label="Archival record card and primary census ledger of Fortune Ferguson Jr."></div>
+  </header>
+
+  <main class="layout">
+    <article>
+      <h2>I. Executive Overview: Two Epochs of Violence in Alachua County</h2>
+      <p>Between 1916 and 1927, Alachua County, Florida, stood at the epicenter of two defining moments in the history of American racial violence and criminal punishment. The first was the <strong>Newberry Lynchings of August 1916</strong>, in which a white mob murdered at least six African American residents following an attempted arrest over stolen hogs. The second was the prosecution and execution of <strong>Fortune "Jew" Ferguson Jr.</strong>, an African American teenager from Newberry who, in 1924, became the first person in Florida history sentenced to die in the state's newly constructed electric chair at Raiford.</p>
+
+      <p>These two events are traditionally treated as separate episodes: one an extralegal atrocity committed by a local mob, the other a formal judicial proceeding carried out inside a state prison. This research brief reads them as <strong>one continuous political and institutional history</strong>. They reveal how white political authority in Florida evolved from decentralized county mob terror during World War I into a centralized, bureaucratic apparatus of state-administered capital punishment during the 1920s.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-number">6+</div>
+          <div class="stat-label">Black residents lynched in Newberry in August 1916</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">7 Min</div>
+          <div class="stat-label">All-white jury deliberation time to sentence Boisey Long to death</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">#1</div>
+          <div class="stat-label">Fortune Ferguson Jr.: 1st person sentenced to Florida's electric chair</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">40+</div>
+          <div class="stat-label">Documented racial terror lynchings in Alachua County history</div>
+        </div>
+      </div>
+
+      <h2>II. The Newberry Lynchings of August 1916: Mob Terror and Official Collusion</h2>
+      <p>On the evening of Thursday, August 17, 1916, Constable George Wynne and Dr. L. G. Harris went to the rural home of <strong>Boisey Long</strong>, an industrious Black farmer living near Newberry and Jonesville, to execute a warrant for alleged hog theft. Accounts of the encounter vary, but gunfire was exchanged. Wynne was mortally wounded, Harris was shot, and Long fled into the dense pine flatwoods.</p>
+
+      <p>What followed was not a lawful police search, but an armed mobilization of hundreds of white men from Alachua, Levy, and Marion counties. Over the next forty-eight hours, official law enforcement and private vigilantes merged into a single punitive force that terrorized the Black community of western Alachua County:</p>
+
+      <ul>
+        <li><strong>James Dennis:</strong> An innocent Black farmer and brother-in-law of Long, James Dennis was shot and killed in his agricultural field on August 18 by posse members during the initial manhunt.</li>
+        <li><strong>The Jail Seizure:</strong> Seeking leverage and vengeance, the mob arrested five Black citizens with personal or familial ties to Long and confined them in the small Newberry municipal jail:
+          <ul>
+            <li><strong>Bert Dennis</strong> (brother of James Dennis)</li>
+            <li><strong>Mary Dennis</strong> (the pregnant wife of Bert Dennis)</li>
+            <li><strong>Stella Young</strong> (sister of Bert and James Dennis)</li>
+            <li><strong>Andrew McHenry</strong> (local resident)</li>
+            <li><strong>Reverend Joshua Baskin</strong> (respected local African Methodist Episcopal pastor)</li>
+          </ul>
+        </li>
+        <li><strong>The Hangings at Lynch's Hammock:</strong> In the early morning hours of Saturday, <strong>August 19, 1916</strong>, a mob of white citizens stormed the Newberry jail, seized the five prisoners without resistance from local constables, and transported them two miles outside town to a large live oak tree near Watermelon Pond Road (Lynch's Hammock). All five—including the pregnant Mary Dennis—were hanged from a single tree limb.</li>
+      </ul>
+
+      <div class="pullquote">
+        “Local government was present throughout the episode. Authorities organized the posse, detained people suspected of assisting Long, and maintained prisoners in the county's custody. The mob's seizure represented a complete collapse of official protection, demonstrating that violence against Black residents carried no expectation of punishment.”
+      </div>
+
+      <h2>III. The Capture, Trial, and Public Execution of Boisey Long</h2>
+      <p>Boisey Long avoided the mob and surrendered to authorities in Marion County two days later. Recognizing that keeping him in Gainesville invited an immediate lynching that would challenge the court's authority, officials secretly conveyed Long to the Duval County Jail in Jacksonville for safekeeping.</p>
+
+      <p>Returned to Gainesville under heavy guard on <strong>September 7, 1916</strong>, Long stood trial before an all-white jury in the Alachua County Courthouse. In a proceeding lasting less than two hours, the jury deliberated for just <strong>seven minutes</strong> before returning a guilty verdict of first-degree murder with no recommendation for mercy. On <strong>October 27, 1916</strong>—less than ten weeks after the initial shootout—Long was publicly hanged in the enclosed yard of the Alachua County Jail.</p>
+
+      <div class="warning-box">
+        <strong>The Imbalance of Southern Justice</strong>
+        <p>While the State of Florida expended maximum resources to convict and hang Boisey Long in sixty days, a subsequent coroner's inquest and grand jury concluded that the Newberry Six were killed "at the hands of persons unknown." No white person was ever arrested, charged, or prosecuted for the murders of James Dennis, Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, or Joshua Baskin.</p>
+      </div>
+
+      <h2>IV. Fortune "Jew" Ferguson Jr. and the New Machinery of the Electric Chair (1923–1927)</h2>
+      <p>The institutional landscape of capital punishment in Florida underwent a profound structural transformation in the decade following World War I. Prior to 1923, executions in Florida were entirely decentralized: each county sheriff constructed wooden gallows and administered public hangings within local jail yards. In 1923, the Florida Legislature enacted legislation abolishing county hangings and centralizing all state executions at the newly expanded <strong>Florida State Prison at Raiford</strong> using a state-of-the-art electric chair.</p>
+
+      <p>The first person sentenced to die in Florida's new electric chair was <strong>Fortune Ferguson Jr.</strong> (known to his family and community as "Jew"), a 16-year-old African American teenager from Newberry. Federal census records preserved in this archive (the 1910 and 1920 Population Schedules) document that the Ferguson family were established landowners and agricultural farmers in the Newberry district, headed by Fortune Ferguson Sr. and his wife Sarah.</p>
+
+      <p>In 1924, Fortune Ferguson Jr. was accused of sexually assaulting an eight-year-old white girl in rural Alachua County. In an atmosphere fraught with the memories of 1916, local authorities swiftly arrested Ferguson and secured a capital conviction in the Circuit Court of Alachua County. The judgment ordered that he be transferred from the Alachua County Sheriff's custody directly to the state prison at Raiford to await the governor's death warrant.</p>
+
+      <p>Ferguson's case did not end swiftly. His defense counsel mounted an extraordinary three-year appellate battle, challenging jurisdictional defects, racial bias in jury selection, and the constitutionality of executing a juvenile. The Governor of Florida issued temporary reprieves, and legal custody reverted between the Alachua County Sheriff and the state prison warden. However, on <strong>April 27, 1927</strong>, after all legal appeals were exhausted, the State of Florida executed eighteen-year-old Fortune Ferguson Jr. in the electric chair.</p>
+
+      <h2>V. Centralization as "Preservation Through Transformation"</h2>
+      <p>As legal historian <strong>Dr. Brandon T. Jett</strong> argues in his landmark 2024 study in the <em>American Journal of Legal History</em>, the case of Fortune Ferguson Jr. illustrates that the centralization of capital punishment was not a progressive victory that eradicated racial terror. Instead, it functioned as what legal scholar Reva Siegel terms <strong>"preservation through transformation."</strong></p>
+
+      <p>By moving executions behind prison walls at Raiford and replacing public hangings with electrocution, the state sanitized the spectacle of racialized punishment. It removed lethal violence from unpredictable local mobs and transferred it into an orderly, bureaucratic state procedure. Yet the underlying racial disparities remained intact: between 1890 and 1965, the State of Florida executed 194 African Americans out of 277 total executions, demonstrating that state-administered death reinforced the same racial hierarchy that had previously driven mob violence in Newberry.</p>
+
+      <h2>VI. Comparative Institutional Matrix: 1916 vs. 1927</h2>
+      <div class="matrix-table-wrap">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Analytical Dimension</th>
+              <th>The Newberry Six (August 1916)</th>
+              <th>Fortune Ferguson Jr. (April 1927)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Primary Location</strong></td>
+              <td>Newberry &amp; Lynch's Hammock (Alachua County)</td>
+              <td>Gainesville (Trial) / Raiford State Prison (Execution)</td>
+            </tr>
+            <tr>
+              <td><strong>Lethal Mechanism</strong></td>
+              <td>Extralegal hanging by mob &amp; county gallows (Boisey Long)</td>
+              <td>State-administered electrocution ("Old Sparky")</td>
+            </tr>
+            <tr>
+              <td><strong>Institutional Authority</strong></td>
+              <td>Decentralized county sheriff, posse, and local jail</td>
+              <td>Florida Supreme Court, Governor death warrant, State Warden</td>
+            </tr>
+            <tr>
+              <td><strong>Victims / Condemned</strong></td>
+              <td>6 Black residents (James, Bert, Mary, Stella, Andrew, Joshua)</td>
+              <td>Fortune Ferguson Jr. (16-year-old juvenile at offense)</td>
+            </tr>
+            <tr>
+              <td><strong>Official Accountability</strong></td>
+              <td>Total impunity; grand jury found "persons unknown"</td>
+              <td>Formalized legal review; procedural legitimacy without equity</td>
+            </tr>
+            <tr>
+              <td><strong>Historical Function</strong></td>
+              <td>Terroristic community enforcement of racial subordination</td>
+              <td>Centralized state monopoly over racialized capital punishment</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>VII. Memory, Truth, and Reconciliation in Alachua County</h2>
+      <p>For decades after 1916 and 1927, official public history in Alachua County maintained a conspiracy of silence. Textbooks, historical markers, and civic celebrations celebrated white pioneer heritage while completely omitting racial terror lynchings and capital injustice. In recent years, a powerful coalition of descendant families, local historians, public institutions, and civil rights advocates has pioneered restorative measures to confront this buried past:</p>
+
+      <div class="reconciliation-card">
+        <h3>1. The Alachua County Soil Collection Project (Equal Justice Initiative)</h3>
+        <p>In partnership with Bryan Stevenson's Equal Justice Initiative (EJI), the <strong>Alachua County Community Remembrance Project</strong> organized public soil collection ceremonies at Lynch's Hammock and other county lynching sites. Community members and descendants gathered soil from the exact ground where the victims were killed. Large glass jars containing this soil—each bearing the names of the Newberry Six—are permanently exhibited in the foyer of the <strong>Alachua County Administration Building in Gainesville</strong> and at the <strong>Legacy Museum in Montgomery, Alabama</strong>, providing an undeniable physical presence of truth in the halls of civic government.</p>
+      </div>
+
+      <div class="reconciliation-card">
+        <h3>2. The City of Newberry Historical Marker &amp; Official Proclamation (2018)</h3>
+        <p>On <strong>September 21, 2018</strong>, after over a century of official denial, the City of Newberry took an extraordinary step toward historical reconciliation. The Newberry City Commission unanimously passed an official resolution publicly acknowledging the 1916 lynchings and issuing a formal municipal apology. A permanent bronze historical marker sponsored by the JMU Lynching Sites Project and community leaders was unveiled in downtown Newberry, ensuring that future generations learn the names of Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, Rev. Joshua Baskin, and James Dennis.</p>
+      </div>
+
+      <div class="reconciliation-card">
+        <h3>3. Dudley Farm State Historic Site: Confronting Plantation History</h3>
+        <p>Located just east of Newberry, the <strong>Dudley Farm State Historic Site</strong> preserves an authentic Florida farm from the 1880s through the 1920s. Historically, the park presented an idyllic narrative of white agrarian pioneer life while ignoring the racial terror occurring in the surrounding landscape. In 2021, investigative reporting and community advocacy prompted state park historians to re-evaluate Dudley Farm's interpretive programming, incorporating the stories of enslaved laborers, Black tenant farmers, and the proximity of the 1916 Newberry killings into the official educational tour.</p>
+      </div>
+
+      <div class="reconciliation-card">
+        <h3>4. Oral History &amp; Descendant Memory (Samuel Proctor Archive &amp; Miami Center)</h3>
+        <p>Through the <strong>Samuel Proctor Oral History Program (SPOHP)</strong> at the University of Florida and the <strong>Miami Center for Racial Justice</strong>, researchers have recorded dozens of oral histories with descendants of the Newberry Six and Fortune Ferguson. Transcripts—such as the 2019 memorial service transcript held in this archive—ensure that family recollections, spiritual resistance, and genealogical lineages are preserved as unvarnished historical evidence.</p>
+      </div>
+
+      <h2>VIII. Chronological Timeline (1910–2025)</h2>
+      <div class="timeline-list">
+        <div class="timeline-event">
+          <div class="timeline-date">1910 Federal Census</div>
+          <div class="timeline-title">Ferguson Family Enumerated in Newberry</div>
+          <p>Federal census schedules record Fortune Ferguson Sr. and his family operating their agricultural farm in western Alachua County.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">August 17, 1916</div>
+          <div class="timeline-title">The Attempted Arrest of Boisey Long</div>
+          <p>Constable George Wynne is killed and Dr. L. G. Harris wounded at Long's homestead near Newberry; Long flees into the flatwoods.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">August 18–19, 1916</div>
+          <div class="timeline-title">The Newberry Six Lynchings</div>
+          <p>James Dennis is shot; Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, and Rev. Joshua Baskin are taken from the Newberry jail and hanged at Lynch's Hammock.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">October 27, 1916</div>
+          <div class="timeline-title">Public Hanging of Boisey Long</div>
+          <p>After a seven-minute jury deliberation in Gainesville, Long is executed in the yard of the Alachua County Jail.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">1923</div>
+          <div class="timeline-title">Florida Centralizes the Death Penalty</div>
+          <p>State legislature abolishes county hangings and establishes the permanent electric chair at Florida State Prison (Raiford).</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">1924</div>
+          <div class="timeline-title">Fortune Ferguson Jr. Sentenced to Death</div>
+          <p>Ferguson, an African American teenager from Newberry, becomes the first person sentenced to Florida's new electric chair.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">April 27, 1927</div>
+          <div class="timeline-title">Execution of Fortune Ferguson Jr.</div>
+          <p>After three years of stays and appellate litigation, eighteen-year-old Ferguson is electrocuted at Raiford.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">September 21, 2018</div>
+          <div class="timeline-title">Newberry City Apology &amp; Memorial Marker</div>
+          <p>City of Newberry officially apologizes for the 1916 killings and dedicates a permanent historical marker commemorating the victims.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">2021–2025</div>
+          <div class="timeline-title">Soil Exhibit &amp; Dudley Farm Historical Reckoning</div>
+          <p>Alachua County installs permanent soil collection jars in the county building, while public historians integrate racial terror history at Dudley Farm.</p>
+        </div>
+      </div>
+    </article>
+
+    <aside class="sidebar-panel">
+      <!-- Primary Source Dossier Box -->
+      <div class="panel-box">
+        <h3>Primary Source Dossier</h3>
+        <ul class="source-list">
+          <li class="source-item">
+            <span class="source-meta">Oral History Transcript</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FNewberry_Six_1916_Memorial_Service_Transcript_AAHP.pdf">Newberry Six Memorial Transcript (AAHP) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Scholarly Legal History</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FBrandon_Jett_State_of_Florida_v_Fortune_Ferguson_Jr_2024.pdf">Brandon Jett: State v. Fortune Ferguson (2024) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Execution Record</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFortune_Ferguson_1927_Execution_Record_Card_Grenander_Archives.pdf">Ferguson Execution Card (Grenander Archives) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">State Prison Register</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFlorida_State_Prison_Register_Fortune_Ferguson_1924_1927.pdf">Florida Prison Register (1924–1927) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Federal Census Record</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2F1910_Federal_Census_Fortune_Ferguson_Sr_Newberry_Alachua.pdf">1910 Census: Ferguson Family Farm &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Federal Census Record</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2F1920_Federal_Census_Fortune_Ferguson_Family_Farm_Newberry.pdf">1920 Census: Ferguson Household &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Legal Jurisprudence</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FDeath_Penalty_for_Children_Victor_Streib_Oklahoma_Law_Review_1983.pdf">Victor Streib: Death Penalty for Children (1983) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Historical Context</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FJudge_Herbert_Rider_and_the_Lynching_at_LaBelle_Shofner_1980.pdf">Lynching at LaBelle (Shofner, 1980) &#8599;</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- External Investigative & Truth-Seeking Links -->
+      <div class="panel-box">
+        <h3>Truth &amp; Reconciliation Links</h3>
+        <ul class="source-list">
+          <li class="source-item">
+            <span class="source-meta">Investigative Journalism</span>
+            <a href="https://www.gainesville.com/story/news/2005/09/04/the-newberry-six/31702953007/" target="_blank" rel="noopener">Gainesville Sun: "The Newberry Six" (2005) ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Historical Memorial</span>
+            <a href="https://sites.lib.jmu.edu/lynchingmarkers/fl1902090101/" target="_blank" rel="noopener">JMU Lynching Sites Project: Newberry Marker ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Community Remembrance</span>
+            <a href="https://www.mainstreetdailynews.com/news/local/alachua-soil-exhibit-lynching-victims" target="_blank" rel="noopener">Mainstreet News: Alachua Soil Exhibit ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Civic Acknowledgment</span>
+            <a href="https://www.wcjb.com/content/news/City-of-Newberry6-493918581.html" target="_blank" rel="noopener">WCJB News: City of Newberry Proclamation ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Historical Center</span>
+            <a href="https://miamicenterforracialjustice.org/newberry/" target="_blank" rel="noopener">Miami Center for Racial Justice: Newberry ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Public History</span>
+            <a href="https://www.theneighborlyfl.com/p/whats-done-is-done-at-dudley-farm" target="_blank" rel="noopener">The Neighborly: Reckoning at Dudley Farm ↗</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Community Remembrance Box -->
+      <div class="community-action-box">
+        <span class="source-meta" style="color:var(--gold-light);">Alachua County Remembrance</span>
+        <h3>Soil Collection Project</h3>
+        <p>Soil gathered from Lynch's Hammock in Newberry rests permanently in the Alachua County Administration Building in Gainesville and at the Legacy Museum in Montgomery, Alabama.</p>
+        <a class="btn-promo-gold" href="EVIDENCE-INDEX.html">View Evidence Index ↗</a>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <p>The Cheesborough Carceral Collections | The Newberry Six and Fortune Ferguson Archival Brief &copy; 2026</p>
+  </footer>
+
+  <script src="title-case.js"></script>
+</body>
+</html>
