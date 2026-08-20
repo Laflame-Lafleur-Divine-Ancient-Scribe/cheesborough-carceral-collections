@@ -1,0 +1,78 @@
+{
+  "updated": "2026-08-20",
+  "editorialNote": "Source links point to reputable outlet search pages or official sources. Verify the current docket before publication.",
+  "cases": [
+    {
+      "name": "Duane 'Keffe D' Davis / Tupac Shakur",
+      "theme": "Cold-case prosecution, witness memory, and historical criminal investigation",
+      "status": "Trial proceedings reported in Las Vegas",
+      "sources": [
+        { "outlet": "Associated Press", "url": "https://apnews.com/search?q=Duane%20Davis%20Tupac" },
+        { "outlet": "Nevada Courts", "url": "https://nvcourts.gov/" }
+      ]
+    },
+    {
+      "name": "Luigi Mangione / Brian Thompson",
+      "theme": "Federal and state jurisdiction, double jeopardy, and public attitudes toward defendants",
+      "status": "Federal and New York proceedings require separate procedural tracking",
+      "sources": [
+        { "outlet": "Reuters", "url": "https://www.reuters.com/site-search/?query=Luigi%20Mangione" },
+        { "outlet": "U.S. Department of Justice", "url": "https://www.justice.gov/" }
+      ]
+    },
+    {
+      "name": "Mario Fernandez Saldana / Jared Bridegan",
+      "theme": "Alleged murder-for-hire, circumstantial evidence, cooperating witnesses, and separate trials",
+      "status": "Florida prosecution with related defendants and separate proceedings",
+      "sources": [
+        { "outlet": "Associated Press", "url": "https://apnews.com/search?q=Jared%20Bridegan" },
+        { "outlet": "Florida Courts", "url": "https://www.flcourts.gov/" }
+      ]
+    },
+    {
+      "name": "Karmelo Anthony / Austin Metcalf",
+      "theme": "Youth prosecution, self-defense claims, trial evidence, and post-verdict review",
+      "status": "Post-verdict proceedings should be tracked through court filings",
+      "sources": [
+        { "outlet": "Associated Press", "url": "https://apnews.com/search?q=Karmelo%20Anthony" },
+        { "outlet": "Texas Courts", "url": "https://www.txcourts.gov/" }
+      ]
+    },
+    {
+      "name": "D4vd / David Anthony Burke and Celeste Rivas Hernandez",
+      "theme": "Pretrial publicity, youth victimization, forensic evidence, and media ethics",
+      "status": "Allegations remain subject to court proceedings and proof",
+      "sources": [
+        { "outlet": "NBC News", "url": "https://www.nbcnews.com/search/?q=Celeste%20Rivas%20Hernandez" },
+        { "outlet": "Los Angeles County District Attorney", "url": "https://da.lacounty.gov/" }
+      ]
+    },
+    {
+      "name": "Madison Brooks case",
+      "theme": "Rape law, consent, intoxication, adult prosecution of a young defendant, and evidentiary disputes",
+      "status": "Louisiana proceedings require careful distinction between allegation and adjudicated fact",
+      "sources": [
+        { "outlet": "Associated Press", "url": "https://apnews.com/search?q=Madison%20Brooks" },
+        { "outlet": "Louisiana Courts", "url": "https://www.lasc.org/" }
+      ]
+    },
+    {
+      "name": "Andrew and Tristan Tate",
+      "theme": "Extradition, trafficking allegations, jurisdiction, and the presumption of innocence",
+      "status": "Proceedings span multiple jurisdictions; allegations remain unproven",
+      "sources": [
+        { "outlet": "Reuters", "url": "https://www.reuters.com/site-search/?query=Andrew%20Tristan%20Tate" },
+        { "outlet": "Crown Prosecution Service", "url": "https://www.cps.gov.uk/" }
+      ]
+    },
+    {
+      "name": "Nicolás Maduro and Cilia Flores",
+      "theme": "Extraterritorial jurisdiction, narcotics prosecution, political defendants, and federal procedure",
+      "status": "Track federal docket and official charging documents",
+      "sources": [
+        { "outlet": "Reuters", "url": "https://www.reuters.com/site-search/?query=Maduro%20Flores%20trial" },
+        { "outlet": "U.S. Department of Justice", "url": "https://www.justice.gov/" }
+      ]
+    }
+  ]
+}
