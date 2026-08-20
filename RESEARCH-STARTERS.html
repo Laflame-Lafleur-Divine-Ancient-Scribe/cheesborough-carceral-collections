@@ -185,12 +185,12 @@
   <header>
     <div>
       <h1>Search &amp; UI Test Workbench</h1>
-      <p style="font-size:0.85rem; color:#d8e2ec;">Live verification tool for The Cheesborough Carceral Collections
+      <p class="verification-caption">Live verification tool for The Cheesborough Carceral Collections
         search engine</p>
     </div>
     <div class="nav-links">
-      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
-      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
+      <a href="index2.html" target="_blank">Open Homepage (index2.html) Ã¢â€ â€”</a>
+      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) Ã¢â€ â€”</a>
     </div>
   </header>
 
@@ -206,13 +206,13 @@
     <main class="panel preview-container">
       <h2>Interactive Page Preview</h2>
       <div class="preview-bar">
-        <input type="text" id="preview-url-input" value="index2.html" />
+        <label class="sr-only" for="preview-url-input">Preview page URL</label><input type="text" id="preview-url-input" value="index2.html" aria-label="Preview page URL" placeholder="Enter a page filename" />
         <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
           Page</button>
         <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
         <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
       </div>
-      <iframe id="preview-iframe" class="preview-frame" src="index2.html"></iframe>
+      <iframe id="preview-iframe" class="preview-frame" src="index2.html" title="Live page preview"></iframe>
     </main>
   </div>
 
@@ -250,7 +250,7 @@
         const results = window.CheesboroughSearch.search(q);
         return `
             <button class="btn-query" onclick="runQueryTest('${q}')">
-              <span>ðŸ”Ž "${q}"</span>
+              <span>Ã°Å¸â€Å½ "${q}"</span>
               <span class="badge">${results.length} matches</span>
             </button>
           `;
