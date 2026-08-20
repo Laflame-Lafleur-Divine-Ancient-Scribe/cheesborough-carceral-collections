@@ -36,8 +36,11 @@ h2:first-child{margin-top:0}
 h3{color:var(--navy);font-size:1.2rem;margin:1.8rem 0 .5rem}
 .note{background:#fff;border-left:5px solid var(--gold);padding:1rem 1.1rem;margin:1.3rem 0;color:var(--muted)}
 .photo-grid{display:grid;gap:1rem;grid-template-columns:repeat(3,minmax(0,1fr));margin:1.6rem 0}
+.photo-grid.wide{grid-template-columns:repeat(2,minmax(0,1fr))}
 .photo-grid figure{background:#fff;border:1px solid var(--line);margin:0;padding:.65rem}
 .photo-grid img{display:block;height:12rem;object-fit:cover;width:100%}
+.photo-grid.wide img{height:15rem}
+.photo-grid figure.portrait img{object-position:center top}
 .photo-grid figcaption{color:var(--muted);font-size:.82rem;line-height:1.45;padding:.65rem .15rem .1rem}
 .table-wrap{overflow-x:auto;max-width:100%;margin:1.3rem 0}
 table{border-collapse:collapse;width:100%;background:#fff}
@@ -54,10 +57,12 @@ blockquote{border-left:5px solid var(--gold);color:var(--navy);font:700 1.15rem/
 .source-item a:hover{color:var(--gold);text-decoration:underline}
 .source-meta{color:var(--muted);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase}
 .panel-box p{color:var(--muted);font-size:.92rem;line-height:1.55}
-.sidebar-end-bar{background:var(--red);border-left:1px solid rgba(223,194,135,.7);box-shadow:-10px 0 22px rgba(9,30,54,.22),0 10px 24px rgba(9,30,54,.14);flex:1 1 auto;margin-top:1rem;min-height:12rem;width:100%}
+.credit-box{background:#fff;border:1px solid var(--line);border-left:5px solid var(--gold);color:var(--muted);font-size:.82rem;line-height:1.45;padding:1rem}
+.credit-box strong{color:var(--navy);display:block;font-family:"Libre Baskerville",Georgia,serif;font-size:.92rem;margin-bottom:.35rem}
+.sidebar-end-bar{background:var(--red);border-left:1px solid rgba(223,194,135,.7);box-shadow:-10px 0 22px rgba(9,30,54,.22),0 10px 24px rgba(9,30,54,.14);display:flex;flex:1 1 auto;justify-content:center;margin-top:1rem;min-height:20rem;width:100%}
 .caps{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 footer{background:var(--deep);color:#fff;padding:1rem;text-align:center}
-@media(max-width:900px){.hero,.layout{grid-template-columns:1fr}.hero-image{min-height:18rem}.hero-copy{max-width:100%;padding:clamp(2rem,5vw,3rem) clamp(1.2rem,4vw,2rem)}.sidebar-panel{position:static}.photo-grid{grid-template-columns:1fr}}
+@media(max-width:900px){.hero,.layout{grid-template-columns:1fr}.hero-image{min-height:18rem}.hero-copy{max-width:100%;padding:clamp(2rem,5vw,3rem) clamp(1.2rem,4vw,2rem)}.sidebar-panel{position:static}.photo-grid,.photo-grid.wide{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -95,10 +100,23 @@ footer{background:var(--deep);color:#fff;padding:1rem;text-align:center}
     <p>In the 1820s the settlement was known as Mount Vernon. A ferry and river port connected it to Gadsden County's plantation economy. The U.S. Army selected the site for an arsenal because it stood at the head of the Apalachicola waterway. Construction began in 1834 and was completed in 1839. The four-acre Apalachicola Arsenal was enclosed by a strong brick wall and included a powder magazine, barracks, workshops, and officers' quarters. The community was eventually renamed Chattahoochee after postal confusion with Mount Vernon, Alabama.</p>
 
     <div class="photo-grid" aria-label="Chattahoochee historical photographs">
-      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Chattahoochee-Prison-Department-State-Hospital.jpeg" alt="Prison department at Florida State Hospital in Chattahoochee" /><figcaption>Prison department at Florida State Hospital, Chattahoochee, Florida. State Archives of Florida image shared through the Sutori timeline.</figcaption></figure>
-      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Chattahoochee-Mattress-Factory-1960s.jpeg" alt="Employee working in the Chattahoochee mattress factory in the 1960s" /><figcaption>An employee in the Chattahoochee mattress factory in the 1960s. State Archives of Florida image shared through the Sutori timeline.</figcaption></figure>
-      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Apalachee-Correctional-Institution-Sneads.jpeg" alt="Apalachee Correctional Institution in Sneads, Florida" /><figcaption>Apalachee Correctional Institution in nearby Sneads, Florida. State Archives of Florida image shared through the Sutori timeline.</figcaption></figure>
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Chattahoochee-Prison-Department-State-Hospital.jpeg" alt="Prison department at Florida State Hospital in Chattahoochee" /><figcaption>1876 and after: prison department at Florida State Hospital, Chattahoochee. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Chattahoochee-Mattress-Factory-1960s.jpeg" alt="Employee working in the Chattahoochee mattress factory in the 1960s" /><figcaption>1960s: employee in the Chattahoochee mattress factory. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Apalachee-Correctional-Institution-Sneads.jpeg" alt="Apalachee Correctional Institution in Sneads, Florida" /><figcaption>Modern regional context: Apalachee Correctional Institution, Sneads. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
     </div>
+
+    <h3>Chattahoochee chronology</h3>
+    <div class="table-wrap"><table><thead><tr><th>Date</th><th>Institutional development</th><th>Historical significance</th></tr></thead><tbody>
+      <tr><td>c. 900-1500</td><td>Chattahoochee Landing Mounds</td><td>Fort Walton culture communities used the river confluence for settlement, ceremony, and exchange.</td></tr>
+      <tr><td>1799</td><td>Ellicott's observatory</td><td>Andrew Ellicott used the site to determine the boundary between the United States and Spanish Florida.</td></tr>
+      <tr><td>1814-1817</td><td>War of 1812 fortification and Scott Massacre</td><td>The river corridor became a military route during the Seminole conflicts and the U.S. conquest of Florida.</td></tr>
+      <tr><td>1820s</td><td>Mount Vernon settlement and ferry</td><td>The river port connected Gadsden County agriculture to Apalachicola transportation.</td></tr>
+      <tr><td>1834-1839</td><td>Apalachicola Arsenal</td><td>The U.S. Army built a walled four-acre military supply complex with a powder magazine, barracks, workshops, and officers' quarters.</td></tr>
+      <tr><td>1861-1865</td><td>Confederate occupation</td><td>Florida militia seized the arsenal; Confederate forces used it as a camp of instruction and barracks.</td></tr>
+      <tr><td>1868-1869</td><td>Florida's first state prison</td><td>The state converted the former arsenal into a penitentiary and appointed Malachi Martin as commandant.</td></tr>
+      <tr><td>1871-1874</td><td>Civil administration and investigations</td><td>Martin continued as warden while legislators and investigators examined discipline, labor, sanitation, and access.</td></tr>
+      <tr><td>1876</td><td>Florida Asylum for the Indigent Insane</td><td>The prison compound became a psychiatric hospital, beginning the site's long institutional afterlife.</td></tr>
+    </tbody></table></div>
 
     <h2>The Arsenal and the Civil War</h2>
     <p>The arsenal's purpose changed as Florida entered the Civil War. On January 6, 1861, Florida militia seized the installation, making it the first military site in Florida taken by the forces that would become the Confederacy. The Confederate army used the grounds as a camp of instruction and barracks. The First and Sixth Florida Infantry were organized there before serving in battles including Shiloh, Chickamauga, Missionary Ridge, and Atlanta.</p>
@@ -114,7 +132,33 @@ footer{background:var(--deep);color:#fff;padding:1rem;text-align:center}
     <p>Guards relied upon chains, muskets, bayonets, solitary confinement, restricted food, and close supervision to prevent escape and enforce institutional rules. Martin described his own approach as firm but humane and argued that the discipline compared favorably with better established prisons elsewhere. That claim belongs to the history of the institution because it shows how the warden wanted the state to understand its new prison: orderly, productive, and governed by rules rather than uncontrolled violence.</p>
     <p>The surviving record does not allow that self-assessment to stand alone. Complaints about violence and conditions began almost immediately. In July 1869, allegations circulated that a prisoner who attempted to escape had been treated cruelly. Governor Harrison Reed traveled to Chattahoochee with the Gadsden County sheriff to investigate. A court of inquiry cleared Martin of the specific cruelty charge, but the investigation made clear that punishment at the new prison was already a public question.</p>
     <p>State officials could praise Martin's management while acknowledging the prison's inadequacy. The Commissioners of Public Institutions adopted his disciplinary rules in 1869. An inspection in 1871 described him as energetic and personally involved in virtually every aspect of the institution while calling the physical prison grossly inadequate. A legislative committee in 1872 reported that it found neither illegal employment of prison labor nor harsh disciplinary practices during its inspection.</p>
-    <p>By 1874, criticism had become more serious. A special investigator reviewing the treatment of federal prisoners found eighty-one people confined at Chattahoochee, most working under guard on the prison farm. He described the housing as filthy and infested with vermin. The prison was therefore both a productive agricultural workplace and a place where living conditions could fail basic standards of cleanliness. The two descriptions are not mutually exclusive; they reveal the institution's priorities.</p>
+    <p>By 1874, criticism had become more serious. A special investigator reviewing the treatment of federal prisoners found eighty-one people confined at Chattahoochee, most working under guard on the prison farm. He described the housing as filthy and infested with vermin. The prison functioned as a productive agricultural workplace while its living conditions failed basic standards of cleanliness. These conditions show the institution's priorities.</p>
+
+    <h2>From Chattahoochee to the Lease System</h2>
+    <p>Florida's first prison became the starting point for a broader penal economy. In 1877, Governor George Franklin Drew argued that the financially strained state should lease prisoners to corporations and individuals for fees. The policy dispersed prisoners beyond Chattahoochee into railroad, timber, turpentine, phosphate, and road camps. Custody remained a state responsibility in law while private operators controlled much of the labor process in practice.</p>
+    <p>The Sutori chronology records approximately 530 state convicts in 1899, about 90 percent of them Black, living in thirteen camps. By 1900 the number had risen to 778. In 1907, Florida expanded vagrancy provisions that private companies supported as a source of labor. These developments extended the labor principle established at Chattahoochee: incarceration supplied workers, and the state treated their labor as an institutional resource.</p>
+    <div class="photo-grid wide" aria-label="Florida convict labor chronology photographs">
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Florida-Convict-Labor-Railroad-Volusia-1914.jpeg" alt="Convict laborers working on railroad tracks in Volusia County in 1914" /><figcaption>1914: convict laborers on railroad tracks in Volusia County. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Florida-Convict-Labor-Taylor-County-1920s.jpeg" alt="Convict labor force in Taylor County in the 1920s" /><figcaption>1920s: convict labor force in Taylor County. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+    </div>
+
+    <h2>Raiford, Road Camps, and State Control</h2>
+    <p>In 1913, Florida built Raiford State Prison with inmate labor and profits derived from convict leasing. The State Road Department and the State Convict Road Force expanded the use of prisoners on public roads in 1917 and 1919. In 1919, the state classified adult male prisoners by physical fitness for road work; the road camps held 628 people compared with 484 at the prison farm.</p>
+    <p>In 1922, Martin Tabert died after a beating at a Putnam Lumber Company camp near Clara, Florida. Legislative hearings in 1923 followed national attention to his death and led Florida to prohibit county-level convict leasing. The prohibition changed the legal structure of leasing while state-controlled road labor continued.</p>
+    <div class="photo-grid wide" aria-label="Florida prison administration and labor photographs">
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/J-S-Blitch-Florida-State-Prison-Raiford-1913-1931.jpeg" alt="J. S. Blitch, superintendent at Florida State Prison in Raiford" /><figcaption>1913-1931: J. S. Blitch, superintendent at Florida State Prison in Raiford. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Florida-Convict-Labor-Road-Temple-Terrace-1922.jpeg" alt="Convict laborers working on a road near Tampa in 1922" /><figcaption>1922: convict laborers work on a road in Temple Terrace near Tampa. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+      <figure class="portrait"><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Martin-Talbert-1921.jpeg" alt="Martin Tabert photographed in December 1921" /><figcaption>December 1921: Martin Tabert. His death in a Florida convict camp prompted the 1923 legislative hearings. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Florida-State-Prison-Electric-Chair-1936.jpeg" alt="Electric chair at Raiford prison in 1936" /><figcaption>1936: electric chair at Raiford prison. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+    </div>
+
+    <h2>Industrial Prison Labor and the Division of Corrections</h2>
+    <p>From 1925 through 1928, Raiford expanded its industrial operations to include shirt, shoe, license-tag, and underwear factories. The state road system continued to use incarcerated labor through the 1930s. By December 1938, 1,503 prisoners were under the State Road Department's control. The work camps became symbols of racialized punishment, inadequate food, insufficient rest, and guard violence.</p>
+    <p>In 1957, Florida created the Division of Corrections to centralize prison administration. By July 1961, the agency had assumed custody of the state's thirty-six road prisons, while the State Road Department retained equipment and financial benefit from prison labor. In 1966, Florida desegregated Sumter, Apalachee, Glades, and Lowell correctional institutions. Apalachee's presence near Chattahoochee demonstrates the continuing regional concentration of correctional institutions.</p>
+    <div class="photo-grid wide" aria-label="Later Florida prison labor photographs">
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Raiford-License-Plate-Factory-1928.jpeg" alt="Prisoner making license plates at Raiford in 1928" /><figcaption>1928: prisoner making license plates at Raiford. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+      <figure><img src="01_Photos/01_By-Collection/Historic/Chattahoochee/Florida-Road-Prison-Lake-City.jpeg" alt="Undated road prison in Lake City, Florida" /><figcaption>Undated: road prison at Lake City. State Archives of Florida image; contributor: Gary Mills, Sutori timeline.</figcaption></figure>
+    </div>
 
     <h2>Martin's Authority and Private Labor</h2>
     <p>Martin's public authority became especially controversial when prison labor intersected with his private property. After leaving military service, he pursued agricultural ventures in the Tallahassee and Gadsden County region. Grape cultivation became his most successful enterprise, and by the 1870s he had developed vineyards and promoted the potential of scuppernong grapes.</p>
@@ -171,6 +215,7 @@ footer{background:var(--deep);color:#fff;padding:1rem;text-align:center}
       </ul>
       <p>Florida's early prison history is best read as a reconstruction of state power, labor, and politics rather than a single heroic or villainous narrative.</p>
     </section>
+    <div class="credit-box"><strong>Image credits</strong>State Archives of Florida images. Contributor: Gary Mills, <em>History of Florida prison labor</em> Sutori timeline.</div>
     <div class="sidebar-end-bar" aria-hidden="true"></div>
   </aside>
 </main>
