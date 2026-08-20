@@ -73,20 +73,6 @@ SEARCH_INDEX.push(
     tags: ["J.C. Powell", "The American Siberia", "1891 Memoir", "Convict Leasing", "Si Williams", "Cy Williams", "Cyrus Wilson", "Sing Sing Breakout", "Corporal Punishment", "Thumb Hanging", "Turpentine", "Malachi Martin"],
     keywords: ["powell", "j c powell", "american siberia", "1891 memoir", "convict leasing", "si williams", "cy williams", "cyrus wilson", "prisoner no 1", "prisoner no 11", "sing sing breakout", "columbus see", "dick evans", "hounds", "corporal punishment", "thumb hanging", "self mutilation", "turpentine camp", "malachi martin", "jerald jarquis cheesborough", "bloodhounds", "escapes"],
     actionLabel: "Read Research Brief →"
-  },
-  {
-    id: "brief-institutional-census",
-    title: "Counting Confinement: Institutional Census & Demographic Records",
-    url: "INSTITUTIONAL-CENSUS.html",
-    category: "Research Brief",
-    badge: "Research Brief",
-    icon: "📊",
-    date: "1910–1940",
-    author: "Cheesborough Research Desk",
-    description: "Analysis of institutional census data, girls' industrial schools, Mary McLeod Bethune household records, Anita Pinckney, and how state institutions classified and erased incarcerated Black youth.",
-    tags: ["Institutional Census", "Mary McLeod Bethune", "Anita Pinckney", "Daytona Beach", "1910 Census", "1940 Census", "Alachua County", "Girls Industrial School", "Demographics", "Inmate Enumeration"],
-    keywords: ["institutional census", "counting confinement", "mary mcleod bethune", "anita pinckney", "daytona beach", "1910 census", "1940 census", "alachua county", "girls industrial school", "juvenile detention", "prison census", "demographic records", "inmate count", "reformatory census"],
-    actionLabel: "Read Research Brief →"
   }
 );
 SEARCH_INDEX.push(
