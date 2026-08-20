@@ -136,6 +136,10 @@
       border-color: var(--gold);
       color: #fff;
     }
+    .btn-control:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
     .page-counter {
       color: #a8b6c5;
       font-size: 0.85rem;
@@ -156,6 +160,10 @@
       padding: 0.25rem 0.4rem;
       text-align: center;
       border-radius: 3px;
+    }
+    .toolbar-divider {
+      color: #4a5568;
+      margin: 0 0.2rem;
     }
 
     /* Document Viewport */
@@ -180,6 +188,8 @@
     .pdf-page-card {
       background: #fff;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+      max-width: 960px;
+      width: 100%;
       position: relative;
       border-radius: 2px;
       overflow: hidden;
@@ -202,6 +212,20 @@
       padding: 0.15rem 0.45rem;
       border-radius: 3px;
       letter-spacing: 0.04em;
+    }
+    .pdf-fallback-card {
+      background: #fff;
+      border-radius: 3px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+      max-width: 960px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .pdf-fallback-embed {
+      border: 0;
+      display: block;
+      height: 82vh;
+      width: 100%;
     }
 
     /* Loading and Status */
@@ -275,7 +299,7 @@
         Page <input type="number" id="page-jump-input" class="page-input" min="1" value="1" aria-label="Current page" /> of <span id="total-pages-count">1</span>
       </div>
       <button type="button" class="btn-control" id="btn-next-page" title="Next Page">Next ▶</button>
-      <span style="color:#4a5568; margin: 0 0.2rem;">|</span>
+      <span class="toolbar-divider" aria-hidden="true">|</span>
       <button type="button" class="btn-control" id="btn-zoom-out" title="Zoom Out">🔍 −</button>
       <button type="button" class="btn-control" id="btn-zoom-in" title="Zoom In">🔍 +</button>
       <button type="button" class="btn-control" id="btn-fit-width" title="Fit Width">↔ Fit</button>
@@ -317,11 +341,14 @@
     const btnZoomIn = document.getElementById("btn-zoom-in");
     const btnZoomOut = document.getElementById("btn-zoom-out");
     const btnFit = document.getElementById("btn-fit-width");
+    const controlsWrap = document.getElementById("controls-wrap");
+    const readerContainer = document.getElementById("reader-container");
 
     let currentPdf = null;
     let totalPages = 0;
+    let currentPage = 1;
     let currentScale = 1.35;
-    let pageCanvases = [];
+    let renderRequestId = 0;
 
     function formatTitleFromPath(path) {
       if (!path) return "Document Reader";
@@ -373,114 +400,91 @@
         pageJumpInput.max = totalPages;
 
         statusOverlay.hidden = true;
-        await renderAllPages();
+        await renderPage(1);
       } catch (err) {
         console.warn("PDF.js direct fetch notice (falling back to embedded canvas/object reader):", err);
         const fileUrl = toFileUrl(rawFile);
         statusOverlay.hidden = true;
-        pagesContainer.innerHTML = `
-          <div style="width:100%; max-width:960px; background:#fff; border-radius:3px; box-shadow:0 8px 30px rgba(0,0,0,0.55); overflow:hidden;">
-            <embed src="${fileUrl}#toolbar=0&navpanes=0&scrollbar=1" type="application/pdf" style="width:100%; height:82vh; border:none; display:block;" />
-          </div>
-        `;
+        controlsWrap.hidden = true;
+        const fallbackCard = document.createElement("div");
+        fallbackCard.className = "pdf-fallback-card";
+        const embeddedPdf = document.createElement("embed");
+        embeddedPdf.className = "pdf-fallback-embed";
+        embeddedPdf.src = `${fileUrl}#toolbar=0&navpanes=0&scrollbar=1`;
+        embeddedPdf.type = "application/pdf";
+        fallbackCard.appendChild(embeddedPdf);
+        pagesContainer.replaceChildren(fallbackCard);
       }
     }
 
-    async function renderAllPages() {
+    function updateControls() {
+      pageJumpInput.value = currentPage;
+      btnPrev.disabled = currentPage <= 1;
+      btnNext.disabled = currentPage >= totalPages;
+    }
+
+    async function renderPage(pageNumber) {
       if (!currentPdf) return;
-      pagesContainer.innerHTML = "";
-      pageCanvases = [];
+      currentPage = Math.max(1, Math.min(pageNumber, totalPages));
+      updateControls();
+      const requestId = ++renderRequestId;
+      const page = await currentPdf.getPage(currentPage);
+      const viewport = page.getViewport({ scale: currentScale });
+      if (requestId !== renderRequestId) return;
 
-      for (let num = 1; num <= totalPages; num++) {
-        const page = await currentPdf.getPage(num);
-        const viewport = page.getViewport({ scale: currentScale });
+      const card = document.createElement("div");
+      card.className = "pdf-page-card";
+      card.id = `pdf-page-num-${currentPage}`;
 
-        const card = document.createElement("div");
-        card.className = "pdf-page-card";
-        card.id = `pdf-page-num-${num}`;
-        card.style.maxWidth = `${Math.min(viewport.width, 960)}px`;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      canvas.setAttribute("aria-label", `Page ${currentPage} of ${totalPages}`);
 
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        canvas.setAttribute("aria-label", `Page ${num} of ${totalPages}`);
+      const label = document.createElement("span");
+      label.className = "page-label-tag";
+      label.textContent = `Page ${currentPage} / ${totalPages}`;
 
-        const label = document.createElement("span");
-        label.className = "page-label-tag";
-        label.textContent = `Page ${num} / ${totalPages}`;
+      card.append(canvas, label);
+      pagesContainer.replaceChildren(card);
+      readerContainer.scrollTo({ top: 0, behavior: "smooth" });
 
-        card.appendChild(canvas);
-        card.appendChild(label);
-        pagesContainer.appendChild(card);
-        pageCanvases.push({ num, card, canvas, page, viewport });
-
-        const ctx = canvas.getContext("2d");
-        await page.render({ canvasContext: ctx, viewport }).promise;
-      }
+      const context = canvas.getContext("2d");
+      await page.render({ canvasContext: context, viewport }).promise;
     }
 
     // Interactive Controls
     btnPrev?.addEventListener("click", () => {
-      let cur = parseInt(pageJumpInput.value, 10) || 1;
-      if (cur > 1) {
-        cur--;
-        jumpToPage(cur);
-      }
+      renderPage(currentPage - 1);
     });
 
     btnNext?.addEventListener("click", () => {
-      let cur = parseInt(pageJumpInput.value, 10) || 1;
-      if (cur < totalPages) {
-        cur++;
-        jumpToPage(cur);
-      }
+      renderPage(currentPage + 1);
     });
 
     pageJumpInput?.addEventListener("change", (e) => {
       let val = parseInt(e.target.value, 10) || 1;
       val = Math.max(1, Math.min(val, totalPages));
-      jumpToPage(val);
+      renderPage(val);
     });
-
-    function jumpToPage(num) {
-      pageJumpInput.value = num;
-      const target = document.getElementById(`pdf-page-num-${num}`);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }
 
     btnZoomIn?.addEventListener("click", async () => {
       if (currentScale < 2.5) {
         currentScale += 0.2;
-        await renderAllPages();
+        await renderPage(currentPage);
       }
     });
 
     btnZoomOut?.addEventListener("click", async () => {
       if (currentScale > 0.7) {
         currentScale -= 0.2;
-        await renderAllPages();
+        await renderPage(currentPage);
       }
     });
 
     btnFit?.addEventListener("click", async () => {
       currentScale = 1.25;
-      await renderAllPages();
-    });
-
-    // Track scroll to update current page number in toolbar
-    const readerContainer = document.getElementById("reader-container");
-    readerContainer?.addEventListener("scroll", () => {
-      const scrollTop = readerContainer.scrollTop;
-      for (const item of pageCanvases) {
-        const top = item.card.offsetTop;
-        const height = item.card.offsetHeight;
-        if (scrollTop >= top - 200 && scrollTop < top + height - 200) {
-          pageJumpInput.value = item.num;
-          break;
-        }
-      }
+      await renderPage(currentPage);
     });
 
     loadDocument();

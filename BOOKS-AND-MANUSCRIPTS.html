@@ -80,7 +80,6 @@
       line-height: 1.18;
       letter-spacing: -0.01em;
       margin-bottom: 0.85rem;
-      text-wrap: balance;
     }
     .hero p {
       color: #e2dbcd;
@@ -342,6 +341,7 @@
 
     /* Grid Layout */
     .grid-view-section { display: grid; gap: 1.6rem; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+    .grid-view-section[hidden] { display: none; }
     .catalog-card { background: var(--paper-card); border: 1px solid var(--line); border-top: 4px solid var(--navy); padding: 1.4rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: transform 0.18s, box-shadow 0.18s; border-radius: 2px; }
     .catalog-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,0.08); border-top-color: var(--gold); }
     .card-top-row { display: flex; gap: 1.2rem; align-items: flex-start; }
@@ -359,11 +359,12 @@
     .card-actions-row { margin-top: auto; display: flex; gap: 0.6rem; border-top: 1px solid var(--line); padding-top: 0.8rem; }
     .btn-read-online { background: var(--navy); color: #fff; font-size: 0.84rem; font-weight: 700; padding: 0.5rem 0.9rem; border-radius: 3px; display: inline-flex; align-items: center; gap: 0.35rem; transition: background 0.15s, transform 0.15s; }
     .btn-read-online:hover { background: var(--gold); color: var(--deep); transform: translateY(-1px); }
+    .modal-read-online { justify-content: center; padding: 0.7rem; width: 100%; }
     .btn-inspect { background: #f5f2eb; border: 1px solid var(--line-dark); color: var(--navy); font-size: 0.84rem; font-weight: 600; padding: 0.5rem 0.85rem; border-radius: 3px; cursor: pointer; transition: all 0.15s; }
     .btn-inspect:hover { background: #e6decb; }
 
     /* Inspector Modal */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(9, 30, 54, 0.82); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(9, 30, 54, 0.82); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
     .modal-overlay.open { opacity: 1; pointer-events: auto; }
     .modal-card { background: #fff; border-top: 6px solid var(--gold); max-width: 820px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2.2rem; box-shadow: 0 20px 48px rgba(0,0,0,0.5); position: relative; border-radius: 3px; }
     .modal-close-btn { position: absolute; top: 1rem; right: 1.2rem; background: #f0eae1; border: 0; color: var(--navy); font-size: 1.35rem; width: 2.2rem; height: 2.2rem; border-radius: 50%; cursor: pointer; display: grid; place-items: center; font-weight: bold; transition: background 0.15s; }
@@ -379,6 +380,15 @@
     .modal-meta-table th { color: var(--muted); width: 32%; font-weight: 600; }
     .citation-box { background: #f6f2ea; border-left: 4px solid var(--gold); padding: 0.85rem 1rem; margin: 1.2rem 0; font-size: 0.84rem; line-height: 1.5; }
     .citation-header { display: flex; justify-content: space-between; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; }
+    .modal-summary { color: #3d3b37; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem; }
+    .copy-citation-btn { background: transparent; border: 0; color: var(--navy); cursor: pointer; font-weight: bold; }
+    .modal-citation { color: #2d3748; font-family: Georgia, serif; font-size: 0.82rem; }
+    .catalog-empty-message { color: #a0aec0; grid-column: 1 / -1; padding: 3rem 1rem; text-align: center; }
+    .shelf-empty-message { color: var(--gold-light); padding: 3rem; text-align: center; }
+    .mini-cover-badge { color: var(--gold-light); font-size: 0.55rem; }
+    .mini-cover-title { font-size: 0.75rem; line-height: 1.15; }
+    .mini-cover-year { color: #ccc; font-size: 0.6rem; }
+    .modal-cover-title { font-size: 1.05rem; }
 
     footer { background: var(--deep); color: #e5ded2; padding: 2rem 1rem; text-align: center; font-size: 0.9rem; border-top: 4px solid var(--gold); margin-top: auto; }
   </style>
@@ -440,7 +450,7 @@
     </section>
 
     <!-- Catalog Grid View Section -->
-    <section class="grid-view-section" id="grid-view-container" aria-label="Catalog Grid" style="display:none;"></section>
+    <section class="grid-view-section" id="grid-view-container" aria-label="Catalog Grid" hidden></section>
   </main>
 
   <!-- Interactive Book Inspector Modal -->
@@ -450,14 +460,14 @@
       <div class="modal-body-grid">
         <div class="modal-cover-wrap">
           <div class="book-cover-3d modal-cover" id="modal-cover-box"></div>
-          <a class="btn-read-online" id="modal-read-online-btn" href="#" style="width:100%; justify-content:center; padding:0.7rem;">📖 Read Book Online ↗</a>
+          <a class="btn-read-online modal-read-online" id="modal-read-online-btn" href="#">📖 Read Book Online ↗</a>
         </div>
         <div class="modal-details-wrap">
           <span class="card-badge" id="modal-badge">Primary Text</span>
           <h2 class="modal-title" id="modal-title">Book Title</h2>
           <div class="modal-author-line" id="modal-author">By Author Name</div>
           
-          <p id="modal-summary" style="font-size:0.95rem; line-height:1.6; color:#3d3b37; margin-bottom:1rem;">Summary text here...</p>
+          <p class="modal-summary" id="modal-summary">Summary text here...</p>
 
           <table class="modal-meta-table">
             <tbody>
@@ -472,9 +482,9 @@
           <div class="citation-box">
             <div class="citation-header">
               <span>Bibliographic Citation (Chicago / Turabian)</span>
-              <button type="button" onclick="copyCitation()" style="background:transparent;border:0;color:var(--navy);cursor:pointer;font-weight:bold;">Copy</button>
+              <button class="copy-citation-btn" type="button" onclick="copyCitation()">Copy</button>
             </div>
-            <p id="modal-citation" style="font-family:Georgia, serif; font-size:0.82rem; color:#2d3748;">Citation text...</p>
+            <p class="modal-citation" id="modal-citation">Citation text...</p>
           </div>
         </div>
       </div>
@@ -510,8 +520,8 @@
       currentView = mode;
       document.getElementById("view-shelf-btn").classList.toggle("active", mode === "shelf");
       document.getElementById("view-grid-btn").classList.toggle("active", mode === "grid");
-      document.getElementById("shelf-view-container").style.display = mode === "shelf" ? "block" : "none";
-      document.getElementById("grid-view-container").style.display = mode === "grid" ? "grid" : "none";
+      document.getElementById("shelf-view-container").hidden = mode !== "shelf";
+      document.getElementById("grid-view-container").hidden = mode !== "grid";
     }
 
     function filterCategory(cat) {
@@ -559,8 +569,8 @@
       }
 
       if (filtered.length === 0) {
-        const emptyHtml = `<div style="grid-column: 1 / -1; text-align: center; color: #a0aec0; padding: 3rem 1rem;">No books match your search.</div>`;
-        shelfContainer.innerHTML = `<div style="color: var(--gold-light); padding: 3rem; text-align:center;">No books found matching "${escapeHtml(searchQuery)}"</div>`;
+        const emptyHtml = '<div class="catalog-empty-message">No books match your search.</div>';
+        shelfContainer.innerHTML = `<div class="shelf-empty-message">No books found matching "${escapeHtml(searchQuery)}"</div>`;
         gridContainer.innerHTML = emptyHtml;
         return;
       }
@@ -589,9 +599,9 @@
         <article class="catalog-card">
           <div class="card-top-row">
             <div class="card-mini-cover ${b.themeClass}" onclick="openBookModal('${b.id}')">
-              <span style="font-size:0.55rem; color:var(--gold-light);">${escapeHtml(b.badge)}</span>
-              <strong style="font-size:0.75rem; line-height:1.15;">${escapeHtml(b.shortTitle)}</strong>
-              <span style="font-size:0.6rem; color:#ccc;">${escapeHtml(b.year)}</span>
+              <span class="mini-cover-badge">${escapeHtml(b.badge)}</span>
+              <strong class="mini-cover-title">${escapeHtml(b.shortTitle)}</strong>
+              <span class="mini-cover-year">${escapeHtml(b.year)}</span>
             </div>
             <div class="card-meta-wrap">
               <span class="card-badge ${b.category}">${escapeHtml(b.categoryLabel)}</span>
@@ -629,7 +639,7 @@
       coverBox.className = `book-cover-3d modal-cover ${book.themeClass}`;
       coverBox.innerHTML = `
         <div class="cover-header"><span class="cover-kicker">${escapeHtml(book.badge)}</span></div>
-        <div class="cover-body"><h3 class="cover-title" style="font-size:1.05rem;">${escapeHtml(book.shortTitle)}</h3><p class="cover-author">${escapeHtml(book.author)}</p></div>
+        <div class="cover-body"><h3 class="cover-title modal-cover-title">${escapeHtml(book.shortTitle)}</h3><p class="cover-author">${escapeHtml(book.author)}</p></div>
         <div class="cover-footer"><span class="cover-seal">CCC ARCHIVE</span><span class="cover-year">${escapeHtml(book.year)}</span></div>
       `;
 

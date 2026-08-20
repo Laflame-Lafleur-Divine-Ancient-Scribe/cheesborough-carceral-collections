@@ -80,7 +80,6 @@
       line-height: 1.18;
       letter-spacing: -0.01em;
       margin-bottom: 0.85rem;
-      text-wrap: balance;
     }
     .hero p {
       color: #e2dbcd;
@@ -193,6 +192,7 @@
       border-top: 1px dashed var(--line-dark);
       padding-top: 0.75rem;
     }
+    .year-pills-list { display: inline-flex; flex-wrap: wrap; gap: 0.35rem; }
     .year-label {
       font-size: 0.78rem;
       font-weight: 700;
@@ -236,11 +236,13 @@
       font-size: 0.92rem;
     }
     .status-counter-bar strong { color: var(--navy); }
+    .reader-mode-label { color: var(--muted); font-size: 0.8rem; }
     .newspaper-grid {
       display: grid;
       gap: 1.25rem;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     }
+    .empty-grid-message { color: var(--muted); grid-column: 1 / -1; padding: 3rem; text-align: center; }
 
     .issue-card {
       background: var(--paper-card);
@@ -377,7 +379,7 @@
       </div>
       <div class="year-subpills" id="year-subpills">
         <span class="year-label">Select Year:</span>
-        <div id="year-pills-list" style="display:inline-flex; flex-wrap:wrap; gap:0.35rem;"></div>
+        <div class="year-pills-list" id="year-pills-list"></div>
       </div>
     </div>
   </section>
@@ -385,7 +387,7 @@
   <main class="main-wrap">
     <div class="status-counter-bar">
       <div id="status-counter-text">Loading cataloged issues...</div>
-      <div style="font-size:0.8rem; color:var(--muted);">In-Browser Reading • View-Only Mode</div>
+      <div class="reader-mode-label">In-Browser Reading • View-Only Mode</div>
     </div>
     <section class="newspaper-grid" id="newspaper-grid"></section>
   </main>
@@ -515,7 +517,7 @@
       }
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--muted); padding: 3rem;">No newspaper issues match your selected filters.</div>`;
+        grid.innerHTML = '<div class="empty-grid-message">No newspaper issues match your selected filters.</div>';
         return;
       }
 

@@ -14,7 +14,7 @@
       .nav a:hover { color: var(--gold); }
       .hero { background: linear-gradient(135deg, #091e36 0%, #102c4c 100%); color: #fff; padding: clamp(2.5rem, 5vw, 5rem) max(1rem, calc((100% - 1100px) / 2)); border-bottom: 5px solid var(--gold); }
       .eyebrow { color: var(--gold-light); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 0.4rem; }
-      h1 { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; margin: 0.5rem 0; text-wrap: balance; }
+      h1 { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 700; line-height: 1.18; letter-spacing: -0.01em; margin: 0.5rem 0; }
       .hero p { color: #d8e0e5; font-size: clamp(1rem, 0.3vw + 0.9rem, 1.15rem); line-height: 1.6; margin: 0; max-width: 44rem; }
       .content { margin: auto; max-width: 1100px; padding: 2.5rem 1rem 4rem; width: 100%; flex: 1; }
       .controls { align-items: center; display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; margin-bottom: 1.5rem; }
@@ -30,12 +30,16 @@
       .state span { color: var(--muted); display: block; font-size: 0.82rem; margin-top: 0.4rem; }
       .state .badge-photo-count { background: rgba(16, 44, 76, 0.08); color: var(--ink); font-size: 0.74rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; align-self: flex-start; margin-top: 0.4rem; }
       .state.has-photos .badge-photo-count { background: var(--gold); color: var(--deep); }
+      .badge-photo-count-empty { opacity: 0.5; }
       .state[hidden] { display: none; }
 
       /* State Photo Drawer */
       .state-gallery-drawer { background: #fff; border: 1px solid var(--line); border-top: 5px solid var(--gold); padding: 1.8rem; margin-bottom: 2.5rem; border-radius: 3px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
       .drawer-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 0.8rem; margin-bottom: 1.5rem; }
       .drawer-header h2 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.4rem; color: var(--deep); margin: 0; }
+      .drawer-kicker { color: var(--gold); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+      .drawer-close { background: #f0eae1; border: 0; border-radius: 3px; color: var(--deep); cursor: pointer; font-weight: bold; padding: 0.4rem 0.8rem; }
+      .drawer-description { color: var(--muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem; }
       .state-photo-grid { display: grid; gap: 1.2rem; grid-template-columns: repeat(3, 1fr); }
       .photo-card { background: var(--paper); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; cursor: pointer; transition: transform 0.18s, box-shadow 0.18s; display: flex; flex-direction: column; }
       .photo-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
@@ -77,12 +81,12 @@
       <section class="state-gallery-drawer" id="state-gallery-drawer" hidden>
         <div class="drawer-header">
           <div>
-            <span style="color:var(--gold); font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em;">State Photographic Finding Aid</span>
+            <span class="drawer-kicker">State Photographic Finding Aid</span>
             <h2 id="drawer-state-title">Florida Archival Photographs</h2>
           </div>
-          <button type="button" onclick="closeStateDrawer()" style="background:#f0eae1; border:0; color:var(--deep); padding:0.4rem 0.8rem; border-radius:3px; cursor:pointer; font-weight:bold;">✕ Close Gallery</button>
+          <button class="drawer-close" type="button" onclick="closeStateDrawer()">✕ Close Gallery</button>
         </div>
-        <p id="drawer-desc" style="color:var(--muted); font-size:0.95rem; margin-bottom:1.5rem; line-height:1.5;">Photographs documenting juvenile institutions, reform schools, prison administration, and institutional life in Florida.</p>
+        <p class="drawer-description" id="drawer-desc">Photographs documenting juvenile institutions, reform schools, prison administration, and institutional life in Florida.</p>
         <div class="state-photo-grid" id="state-photo-grid"></div>
       </section>
 
@@ -217,7 +221,7 @@
             <strong>${state}</strong>
             <span>${hasPhotos ? `${photoList.length} archival photos indexed` : 'Finding aid index'}</span>
           </div>
-          ${hasPhotos ? `<span class="badge-photo-count">📷 ${photoList.length} Photos</span>` : '<span class="badge-photo-count" style="opacity:0.5;">0 Photos</span>'}
+          ${hasPhotos ? `<span class="badge-photo-count">📷 ${photoList.length} Photos</span>` : '<span class="badge-photo-count badge-photo-count-empty">0 Photos</span>'}
         `;
         card.addEventListener("click", () => {
           openStateDrawer(state);
