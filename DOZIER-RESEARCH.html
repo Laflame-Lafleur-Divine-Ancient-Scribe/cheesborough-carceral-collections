@@ -1,291 +1,787 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search &amp; UI Test Workbench | The Cheesborough Collections</title>
+  <title>The Arthur G. Dozier School for Boys: Reform, Confinement, and the Historical Record | The Cheesborough Carceral Collections</title>
+  <meta name="description" content="An archival study of the Florida State Reform School, the Florida Industrial School for Boys, and the Arthur G. Dozier School for Boys, 1900ΓÇô2011, with documented records, survivor testimony, forensic findings, and unresolved questions." />
+  <meta name="keywords" content="dozier school for boys, arthur g dozier, marianna florida, florida industrial school for boys, white house boys, boot hill cemetery, erin kimmerle, usf forensic report, the nickel boys, colson whitehead, for their own good, tampa bay times, 1914 fire, juvenile justice, institutional violence" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
       --navy: #102c4c;
       --deep: #091e36;
       --gold: #c29b53;
+      --gold-light: #dfc287;
       --paper: #f5f2eb;
-      --card: #ffffff;
+      --paper-card: #ffffff;
       --line: #ded7cb;
+      --line-dark: #c4baa9;
       --ink: #202020;
-      --green: #1b6343;
+      --muted: #625f59;
+      --red: #8f3d32;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--paper);
       color: var(--ink);
       font-family: "Source Sans 3", sans-serif;
-      padding: 1.5rem;
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0;
     }
+    a { color: var(--navy); text-decoration: none; }
+    a:hover { text-decoration: underline; color: var(--gold); }
 
-    header {
+    /* Topbar */
+    .topbar {
+      background: var(--gold);
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .topbar a { color: #fff; transition: opacity 0.15s; }
+    .topbar a:hover { opacity: 0.82; text-decoration: none; }
+    .topbar a.active { border-bottom: 2px solid #fff; }
+
+    /* Hero Section */
+    .hero {
       background: var(--deep);
       color: #fff;
-      padding: 1.5rem 2rem;
-      border-bottom: 4px solid var(--gold);
-      margin-bottom: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      min-height: 32rem;
+    }
+    .hero-copy {
+      align-self: center;
+      max-width: 44rem;
+      padding: clamp(2rem, 4vw, 4.25rem) clamp(1.5rem, 4vw, 4rem);
+      box-sizing: border-box;
+    }
+    .hero-image {
+      display: block;
+      height: 100%;
+      min-height: 22rem;
+      object-fit: cover;
+      width: 100%;
+    }
+    .eyebrow {
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: clamp(1.85rem, 2.3vw + 0.5rem, 2.85rem);
+      line-height: 1.22;
+      letter-spacing: -0.01em;
+      margin: 0.85rem 0 1.15rem;
+      word-break: normal;
+      overflow-wrap: break-word;
+    }
+    .hero p {
+      color: #e6dfd1;
+      font-size: clamp(1.02rem, 0.4vw + 0.85rem, 1.15rem);
+      line-height: 1.65;
+      max-width: 38rem;
+    }
+
+    /* Main Layout Grid */
+    .layout {
+      display: grid;
+      gap: 3rem;
+      grid-template-columns: minmax(0, 1fr) 21rem;
+      margin: auto;
+      max-width: 1100px;
+      padding: 4rem 1.3rem;
+    }
+    article {
+      min-width: 0;
+    }
+    article h2 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.75rem;
+      line-height: 1.3;
+      margin: 2.8rem 0 1rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 2px solid var(--line);
+    }
+    article h2:first-of-type {
+      margin-top: 0;
+    }
+    article h3 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.25rem;
+      line-height: 1.35;
+      margin: 1.8rem 0 0.6rem;
+    }
+    article p {
+      color: #383531;
+      font-size: 1.06rem;
+      line-height: 1.75;
+      margin: 1rem 0;
+    }
+    article ul, article ol {
+      margin: 1rem 0 1.5rem 1.5rem;
+      color: #383531;
+      font-size: 1.04rem;
+      line-height: 1.7;
+    }
+    article li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Callout Components */
+    .pullquote {
+      border-left: 5px solid var(--gold);
+      background: #faf7f0;
+      color: var(--navy);
+      font: italic 700 1.2rem/1.6 "Libre Baskerville", Georgia, serif;
+      margin: 2rem 0;
+      padding: 1.2rem 1.6rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .warning-box {
+      background: #fff;
+      border-left: 5px solid var(--red);
+      padding: 1.2rem 1.4rem;
+      margin: 1.8rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .warning-box strong {
+      color: var(--red);
+      display: block;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .warning-box p {
+      font-size: 0.98rem;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* Data Callout Cards */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1rem;
+      margin: 2rem 0;
     }
-
-    header h1 {
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.6rem;
-    }
-
-    .nav-links {
+    .stat-card {
+      background: var(--navy);
+      color: #fff;
+      padding: 1.2rem;
+      border-top: 4px solid var(--gold);
+      border-radius: 2px;
       display: flex;
-      gap: 0.8rem;
+      flex-direction: column;
+    }
+    .stat-number {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .stat-label {
+      font-size: 0.84rem;
+      line-height: 1.4;
+      color: #dce5ec;
     }
 
-    .nav-links a {
+    /* Timeline & Data Matrix */
+    .matrix-table-wrap {
+      overflow-x: auto;
+      margin: 2rem 0;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .matrix-table th {
+      background: #eee8de;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Sidebar Panels */
+    .sidebar-panel {
+      height: 100%;
+      position: sticky;
+      top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    .panel-box {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--gold);
+      padding: 1.4rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      border-radius: 2px;
+    }
+    .panel-box h3 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.15rem;
+      color: var(--navy);
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .source-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .source-item a {
+      color: var(--navy);
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: block;
+    }
+    .source-item a:hover {
+      color: var(--gold);
+      text-decoration: underline;
+    }
+    .source-meta {
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .source-meta-light { color: var(--gold-light); }
+    .pullquote-citation { color: var(--muted); font-size: 0.85rem; font-style: normal; font-weight: 600; }
+    .daily-photo-note { color: var(--muted); font-size: 0.86rem; margin-bottom: 0.8rem; }
+    .daily-photo-card { border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+    .daily-photo-image { display: block; height: 12rem; object-fit: cover; width: 100%; }
+    .daily-photo-caption { background: #faf7f0; color: #555; font-size: 0.8rem; font-style: italic; line-height: 1.4; padding: 0.6rem; }
+    .daily-photo-action { margin-top: 0.8rem; }
+    .daily-photo-source-link { color: var(--navy); font-size: 0.82rem; font-weight: 700; }
+    .archive-photo-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .archive-photo {
+      border: 1px solid var(--line);
+      background: #faf7f0;
+      margin: 0;
+      overflow: hidden;
+    }
+    .archive-photo img {
+      display: block;
+      height: 10rem;
+      object-fit: cover;
+      width: 100%;
+    }
+    .archive-photo figcaption {
+      color: #555;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      padding: 0.6rem;
+    }
+    .archive-credit-tile a {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+    .archive-credit-tile img {
+      aspect-ratio: 1;
+      height: auto;
+    }
+    .archive-credit-tile figcaption strong {
+      color: var(--navy);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .sidebar-end-bar {
+      background: var(--navy);
+      border-left: 1px solid rgba(223, 194, 135, 0.7);
+      box-shadow: -10px 0 22px rgba(9, 30, 54, 0.22), 0 10px 24px rgba(9, 30, 54, 0.14);
+      flex: 1 1 auto;
+      margin-top: 1rem;
+      min-height: 12rem;
+      width: 100%;
+    }
+    .newspaper-promo-box {
+      background: #102c4c;
+      color: #fff;
+      border-top: 5px solid var(--gold);
+      padding: 1.4rem;
+      border-radius: 2px;
+    }
+    .newspaper-promo-box h3 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      color: #fff;
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+    .newspaper-promo-box p {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #dce5ec;
+      margin-bottom: 1rem;
+    }
+    .btn-promo-gold {
       background: var(--gold);
       color: var(--deep);
-      padding: 0.4rem 0.8rem;
       font-weight: 700;
-      font-size: 0.85rem;
-      text-decoration: none;
+      font-size: 0.84rem;
+      padding: 0.55rem 0.95rem;
+      display: inline-block;
       border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: background 0.15s;
+    }
+    .btn-promo-gold:hover {
+      background: #e2bc68;
+      color: var(--deep);
+      text-decoration: none;
+    }
+    .yellow-jacket-random {
+      border-top: 1px solid rgba(223, 194, 135, 0.45);
+      margin-top: 1.2rem;
+      padding-top: 1rem;
+    }
+    .yellow-jacket-random h4 {
+      color: var(--gold-light);
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      margin: 0 0 0.6rem;
+      text-transform: uppercase;
+    }
+    .yellow-jacket-random-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      list-style: none;
+    }
+    .yellow-jacket-random-list a {
+      color: #fff;
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+    .yellow-jacket-random-list a:hover {
+      color: var(--gold-light);
     }
 
-    .workbench-grid {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 1.5rem;
+    footer {
+      background: var(--deep);
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 4px solid var(--gold);
     }
 
     @media (max-width: 900px) {
-      .workbench-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      padding: 1.2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .panel h2 {
-      color: var(--navy);
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--gold);
-      padding-bottom: 0.4rem;
-    }
-
-    .query-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .btn-query {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      color: var(--navy);
-      padding: 0.55rem 0.8rem;
-      text-align: left;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.15s;
-      border-radius: 3px;
-    }
-
-    .btn-query:hover {
-      background: var(--gold);
-      color: var(--deep);
-    }
-
-    .btn-query span.badge {
-      background: var(--navy);
-      color: #fff;
-      font-size: 0.72rem;
-      padding: 0.15rem 0.45rem;
-      border-radius: 999px;
-    }
-
-    .test-log {
-      background: #111a24;
-      color: #a8d1ff;
-      font-family: Consolas, monospace;
-      font-size: 0.82rem;
-      line-height: 1.45;
-      padding: 1rem;
-      border-radius: 4px;
-      max-height: 350px;
-      overflow-y: auto;
-    }
-
-    .preview-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .preview-bar {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .preview-bar input {
-      flex: 1;
-      padding: 0.5rem 0.8rem;
-      border: 1px solid var(--line);
-      font-size: 0.95rem;
-    }
-
-    .preview-bar button {
-      background: var(--navy);
-      color: #fff;
-      border: 0;
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    iframe.preview-frame {
-      width: 100%;
-      height: 650px;
-      border: 1px solid var(--line);
-      background: #fff;
+      .hero { grid-template-columns: 1fr; }
+      .hero-image { min-height: 18rem; }
+      .hero-copy { max-width: 100%; padding: clamp(2rem, 5vw, 3rem) clamp(1.2rem, 4vw, 2rem); }
+      .layout { grid-template-columns: 1fr; padding-top: 2rem; }
+      .sidebar-panel { position: static; }
     }
   </style>
+<link rel="stylesheet" href="responsive.css" />
 </head>
-
 <body>
-  <header>
-    <div>
-      <h1>Search &amp; UI Test Workbench</h1>
-      <p class="verification-caption">Live verification tool for The Cheesborough Carceral Collections
-        search engine</p>
+  <nav class="topbar" aria-label="Primary navigation">
+    <a href="index.html">HOME</a>
+    <a href="ABOUT.html">ABOUT</a>
+    <a href="SEARCH.html">SEARCH</a>
+    <a href="COLLECTIONS.html">COLLECTIONS</a>
+    <a class="active" href="DOZIER-RESEARCH.html">DOZIER RESEARCH</a>
+    <a href="DOZIER-NEWSPAPERS.html">DOZIER NEWSPAPERS</a>
+    <a href="BOOKS-AND-MANUSCRIPTS.html">BOOKS &amp; MANUSCRIPTS</a>
+    <a href="EVIDENCE-INDEX.html">EVIDENCE INDEX</a>
+    <a href="DONATE.html">DONATE</a>
+    <a href="CONTACT.html">CONTACT</a>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Florida Juvenile Justice ΓÇó Research Dossier 01</div>
+      <h1>The Arthur G. Dozier School for Boys</h1>
+      <p>Reform, Confinement, and the Historical Record. An archival study of the Florida State Reform School, the Florida Industrial School for Boys, and the Arthur G. Dozier School for Boys, 1900ΓÇô2011.</p>
     </div>
-    <div class="nav-links">
-      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
-      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
-    </div>
+    <img class="hero-image" data-dozier-photo="hero" src="01_Photos/02_By-State/Florida/1950s_African American boys gathered on grounds to see a Ross Allen Reptile Institute demonstration at the School for Boys in Marianna, Florida..jpg" alt="Archival photograph of Arthur G. Dozier School for Boys" />
   </header>
 
-  <div class="workbench-grid">
-    <aside class="panel">
-      <h2>Automated Query Tests</h2>
-      <div class="query-buttons" id="query-buttons-list"></div>
+  <main class="layout">
+    <article>
+      <h2>I. Reform, Confinement, and the Historical Record</h2>
+      <p>For more than a century, the institution at Marianna occupied an important and deeply contested place within Florida's juvenile justice system. It opened on January 1, 1900, as the <strong>Florida State Reform School</strong>, an institution created specifically for children whom Florida officials sought to remove from adult penal custody. Over the following 111 years, the school changed its name, administrative structure, educational philosophy, physical organization, and public explanation of juvenile confinement.</p>
 
-      <h2>Live Search Diagnostics</h2>
-      <div class="test-log" id="test-log">Click any query above to run diagnostics...</div>
-    </aside>
+      <p>It also accumulated a record of segregation, compulsory labor, corporal punishment, institutional violence, deaths in custody, disputed burials, investigations, survivor testimony, and repeated demands for public accountability. The history cannot be reduced either to the reform language through which Florida created the school or to the abuses later associated with its name. Both belong to the record.</p>
 
-    <main class="panel preview-container">
-      <h2>Interactive Page Preview</h2>
-      <div class="preview-bar">
-        <label class="sr-only" for="preview-url-input">Preview page URL</label><input type="text" id="preview-url-input" value="index2.html" aria-label="Preview page URL" placeholder="Enter a page filename" />
-        <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
-          Page</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
+      <p>Florida lawmakers initially presented juvenile confinement as a means of separating children from adult prisoners and providing education, discipline, occupational training, and moral development. Those objectives represented an important change in the state's treatment of childhood. At the same time, the institutions created in the name of reform gave courts and administrators extraordinary authority over children's movement, education, labor, punishment, correspondence, racial placement, release, and daily lives.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-number">111</div>
+          <div class="stat-label">Years of continuous operation by the State of Florida (1900ΓÇô2011)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1,400</div>
+          <div class="stat-label">Original name: Florida State Reform School</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">90+</div>
+          <div class="stat-label">Deaths recorded at the school while under state control</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2017</div>
+          <div class="stat-label">Formal Florida legislative apology</div>
+        </div>
       </div>
-      <iframe id="preview-iframe" class="preview-frame" src="index2.html" title="Live page preview"></iframe>
-    </main>
-  </div>
 
-  <script src="search-data.js"></script>
+      <p>The archive examines Dozier through that contradiction. Statutes, institutional reports, handbooks, census schedules, photographs, newspapers, administrative records, death records, and government investigations stand alongside survivor testimony, archaeological evidence, forensic findings, family memory, and later public inquiries. No single category of evidence provides the complete history. Read together, these sources reveal how Florida constructed, administered, defended, investigated, and ultimately reconsidered one of the longest-operating juvenile institutions in the state.</p>
+
+      <div class="warning-box">
+        <strong>Research Note</strong>
+        <p>The archive separates documented fact, survivor testimony, forensic interpretation, and unresolved historical questions. An absent record neither proves that an event never occurred nor establishes an allegation as fact. Each claim remains tied to the evidence that supports it.</p>
+      </div>
+
+      <h2>II. From Reform School to Dozier</h2>
+      <p>Governor William D. Bloxham argued in 1897 that people under sixteen should not remain among older and more experienced offenders. His proposal combined separation with agricultural labor, education, institutional discipline, and an expectation that the school might offset part of its operating costs. The legislature subsequently enacted Chapter 4565 of the Laws of Florida, establishing a state reform school for children committed by Florida courts.</p>
+
+      <p>The statute expressed an ambitious theory of juvenile reform. It described the committed child as a young offender who should be removed from harmful associations and receive physical, intellectual, and moral training. Officials were also expected to teach useful trades through which children could eventually support themselves. Florida therefore did more than construct another place of confinement. It claimed the ability to reshape a child's habits, education, work, conduct, and future.</p>
+
+      <p>That expansion of responsibility also expanded state power. Reform did not eliminate coercion. It gave coercive authority a rehabilitative purpose and placed it inside an institution described as a school.</p>
+
+      <h2>III. The Meaning of a Changing Name</h2>
+      <p>The succession of names assigned to the Marianna institution records how Florida described juvenile confinement. The changes were more than cosmetic, but they do not prove that institutional practice changed uniformly at each date.</p>
+
+      <div class="pullquote">
+        ΓÇ£They would take you in the dead of night. You'd hear the keys rattling and the guard's boots on the floor. In the White House, they beat you with a leather strap until your underwear was embedded in your flesh. The fan was turned on so nobody outside could hear the screaming.ΓÇ¥
+        <br /><span class="pullquote-citation">Survivor Testimony. White House Boys Organization, NPR Investigation, 2012.</span>
+      </div>
+
+      <p>As documented in survivor testimonies collected by National Public Radio, the <em>Tampa Bay Times</em>, and state investigators, beatings were administered using a weighted leather strap approximately 3 feet long, 4 inches wide, and half an inch thick. Accounts describe the strap as often reinforced with lead or metal rivets and nicknamed by staff the <em>"One-Eyed Monster"</em> or <em>"The Bat."</em> Boys were ordered to lie face-down on a mattress stained with bodily fluids, grab the metal bed rails, and endure anywhere from 30 to over 100 lashes administered with full force by adult administrators.</p>
+
+      <p>The trauma inflicted inside the White House was both physical and psychological. Victims suffered deep contusions, open lacerations, permanent nerve damage, kidney failure, and lifelong post-traumatic stress. Those who cried out, flinched, or let go of the bed frame were beaten more severely. Multiple survivor accounts record that boys who lost consciousness were revived with ammonia or cold water and beaten further.</p>
+
+      <h2>IV. Race and the Structure of Institutional Life</h2>
+      <p>Racial segregation formed part of the institution from its legal creation. The 1897 statute required white and Black children to remain separated within the reform school. Florida therefore used age to distinguish children from adult prisoners while simultaneously using race to divide the children from one another.</p>
+
+      <p>Marianna produced no uniform experience of juvenile reform. Black and white children could enter the same legal institution while living within separate residential, educational, religious, recreational, and working environments. Later campus arrangements formalized the division through what became commonly identified as the North and South campuses.</p>
+
+      <p>Evidence of segregation is extensive and documentary. Comparative claims about food, punishment, educational opportunity, work assignments, or mortality require attribution to the reports, testimony, census records, photographs, or administrative documents that support them.</p>
+
+      <ul>
+        <li><strong>51 individuals, 55 graves:</strong> USF reported 51 individuals represented within 55 graves. The difference matters because remains associated with some victims of the 1914 fire were commingled across several burial locations.</li>
+        <li><strong>Documentary and physical evidence:</strong> Researchers compared grave locations, biological profiles, historical death records, burial information, institutional documents, family information, and DNA evidence.</li>
+        <li><strong>Identification remained uneven:</strong> Some cases produced strong or presumptive identifications. In others, missing records, commingling, decomposition, or the absence of suitable DNA prevented a conclusive result.</li>
+        <li><strong>Forensic interpretation has limits:</strong> Archaeological findings can clarify burial history and biological evidence, but they do not automatically establish the cause or manner of every death.</li>
+      </ul>
+
+      <div class="warning-box">
+        <strong>Forensic Finding: Boot Hill Cemetery</strong>
+        <p>USF reported 51 individuals represented within 55 graves. Researchers explained that remains associated with three victims of the 1914 fire were distributed among seven graves.</p>
+      </div>
+
+      <h2>V. Labor, Education, and the Problem of Reform</h2>
+      <p>Work occupied an important place at Marianna from the institution's earliest years. Administrators treated agriculture and productive labor simultaneously as training, discipline, character formation, and a means of supporting the school. The 1910 federal census identified many older male residents as laborers on the general farm while also reporting school attendance and literacy.</p>
+
+      <p>Those entries establish the presence of both work and schooling, but the census cannot tell us how much time children spent in either activity, whether educational opportunities were equal, or whether work interfered with classroom instruction. The limitations of the source are as important as the information it provides.</p>
+
+      <h2>VI. Discipline and the White House</h2>
+      <p>No structure at Marianna became more closely associated with survivor accounts of violence than the small building later known publicly as the <strong>White House</strong>. Former students described being taken there for corporal punishment and subjected to severe beatings by staff. Their testimony eventually became central to newspaper investigations, state inquiries, public hearings, and the broader movement to reconsider the school's history.</p>
+
+      <p>The surviving evidence requires careful attribution. Different survivors remembered different staff members, periods, procedures, and levels of severity. The strength of the record lies not in transforming every recollection into an identical narrative, but in recognizing repeated descriptions of institutionalized corporal punishment across numerous accounts.</p>
+
+      <div class="pullquote">
+        Survivor testimony is historical evidence, but recollection and institutional documentation must be evaluated according to different standards.
+        <br /><span class="pullquote-citation">Editorial and Research Standard.</span>
+      </div>
+
+      <p>Official records also confirm that corporal punishment had a place within the school's disciplinary history. The existence of officially recognized punishment and the severity alleged by former students are related questions, but they are not identical. A responsible account places policy, administrative documentation, survivor recollection, medical evidence when available, and later investigations beside one another.</p>
+
+      <h2>VII. The 1914 Dormitory Fire</h2>
+      <p>One of the earliest major disasters in the institution's history occurred in 1914, when fire engulfed a dormitory at the Florida Industrial School for Boys. <strong>Eight boys and two adult employees died.</strong> The event became an early demonstration of the dangers created when institutional custody, unsafe physical conditions, and limited avenues of escape converged.</p>
+
+      <p>Later investigations raised questions about the building's construction, nighttime supervision, fire protection, locked sleeping arrangements, emergency procedures, and the ability of residents to escape. University of South Florida researchers subsequently reported that remains associated with three victims of the fire were commingled across multiple graves.</p>
+
+      <h2>VIII. Death, Burial, and Boot Hill Cemetery</h2>
+      <p>Beginning in 2012, a multidisciplinary University of South Florida team investigated deaths and burials associated with the former school through documentary research, archaeology, ground-penetrating radar, excavation, forensic anthropology, and DNA analysis.</p>
+
+      <p>USF ultimately reported <strong>51 individuals represented within 55 graves</strong>. An unidentified burial is not evidence that the person had no identity. It means that the surviving evidence has not yet allowed researchers to restore that identity with sufficient confidence.</p>
+
+      <h2>IX. Billey Jackson and the Limits of Historical Certainty</h2>
+      <p>The death of thirteen-year-old Billey Jackson illustrates why the history of Dozier requires careful distinctions among testimony, medical evidence, and inference. Jackson died at Jackson County Hospital in October 1952 after spending sixty-three days at the institution. His death certificate identified pyelonephritis as the cause of death. Former students later remembered Jackson, punishment, abdominal trauma, hospitalization, death, and burial at Boot Hill.</p>
+
+      <p>Those recollections raise serious questions, but they do not establish medical causation. Later forensic reviewers explained that pyelonephritis may follow several conditions, including obstruction associated with congenital disease, kidney stones, or trauma. Without the original autopsy report, they could not determine whether injury, disease, or some combination caused the infection. They classified the underlying cause as unknown and the manner of death as undetermined.</p>
+
+      <h2>X. Memory Against the Archive</h2>
+      <p>Administrative records tend to reduce institutional life to admissions, classifications, disciplinary entries, transfers, illnesses, releases, and deaths. Survivor testimony preserves a different record: friendships, fear, punishment, escape, work, hunger, teachers, guards, dormitories, funerals, buildings, routines, and other children whose names sometimes appear only faintly in official documentation.</p>
+
+      <p>The archive yields its clearest account when sources stand beside one another. A ledger can establish that a child entered custody. A census can establish presence on a particular campus. A death certificate can identify an official cause of death. A former student can describe what he observed. Archaeology can locate a grave. Forensic anthropology can estimate biological characteristics. DNA may connect remains to a family. Each form of evidence answers different questions.</p>
+
+      <h2>XI. Investigation, Closure, and Public Reckoning</h2>
+      <p>The modern reconsideration of Dozier resulted from the accumulated work of former students, families, journalists, researchers, government investigators, legislators, and forensic scientists. The United States Department of Justice announced a federal investigation in April 2010 into conditions at Dozier and the Jackson Juvenile Offender Center.</p>
+
+      <p>Florida's Department of Juvenile Justice announced the planned closure of the facilities in May 2011, and they officially closed on <strong>June 30, 2011</strong>. The Department of Justice issued its findings in December of that year. The federal findings did not themselves order the June closure, although the investigation documented serious constitutional concerns involving conditions and treatment within the facilities.</p>
+
+      <p>Florida formally apologized in 2017 to former students who endured abuse at the Dozier School for Boys and the related Okeechobee School. In 2024, the state created the <strong>Dozier School for Boys and Okeechobee School Victim Compensation Program</strong> and appropriated $20 million. Eligibility was limited by statute to qualifying living persons confined at Dozier or Okeechobee between 1940 and 1975; the law did not create compensation claims for estates of deceased former students.</p>
+
+      <h2>XII. Dozier in Literature and Public Memory</h2>
+      <p>Colson Whitehead drew inspiration from the history of the Florida school when constructing the fictional Nickel Academy in <em>The Nickel Boys</em>. The novel transformed historical themes associated with segregation, institutional violence, burial, memory, and survival into fiction rather than reproducing Dozier as documentary history.</p>
+
+      <p><em>The Nickel Boys</em> should not be used as evidence for events at Dozier. Its significance lies in the way literature carried questions raised by the historical record into a wider discussion about childhood, race, institutional authority, violence, memory, and survival.</p>
+
+      <h2>XIII. What the Archive Can and Cannot Tell Us</h2>
+      <p>The Dozier record is extensive but incomplete. State records establish admissions, administrative structures, appropriations, programs, policies, employment, institutional populations, deaths, and other aspects of official operation. Newspapers preserve contemporary descriptions and later investigations. Former students preserve experiences that officials often did not record. Archaeological and forensic investigations provide physical evidence that can confirm, complicate, or contradict documentary accounts.</p>
+
+      <p>Missing records may result from destruction, loss, administrative reorganization, ordinary disposal, misfiling, poor preservation, or the fact that a document was never created. Absence should generate a research question before it produces an accusation of concealment. The same principle applies to disputed deaths: evidence of trauma does not automatically establish homicide, and a survivor recollection does not automatically establish medical causation.</p>
+
+      <h2>XIV. Research Chronology</h2>
+      <div class="matrix-table-wrap">
+        <table class="matrix-table">
+          <thead><tr><th>Year</th><th>Development</th><th>Why It Matters</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1897</strong></td><td>Florida authorizes a reform school</td><td>Chapter 4565 created a separate institution for young offenders and promised physical, intellectual, and moral training.</td></tr>
+            <tr><td><strong>1900</strong></td><td>Florida State Reform School opens</td><td>The Marianna institution begins operating under a reform-school model intended to separate children from adult prisoners.</td></tr>
+            <tr><td><strong>1914</strong></td><td>Dormitory fire kills ten</td><td>Eight boys and two adult employees died. Later archaeological research returned investigators to the burial history of several victims.</td></tr>
+            <tr><td><strong>1957</strong></td><td>Institution renamed Florida School for Boys</td><td>Administrative language increasingly emphasized education, counseling, cottage life, and rehabilitation.</td></tr>
+            <tr><td><strong>1967</strong></td><td>Institution renamed for Arthur G. Dozier</td><td>The new name reflected a philosophy of reeducation and graduated responsibility without eliminating custodial authority.</td></tr>
+            <tr><td><strong>2010</strong></td><td>DOJ announces federal investigation</td><td>The Civil Rights Division begins examining conditions at Dozier and the Jackson Juvenile Offender Center.</td></tr>
+            <tr><td><strong>June 30, 2011</strong></td><td>Marianna closes</td><td>Florida's facilities officially close while the federal investigation is underway; DOJ issues its findings in December.</td></tr>
+            <tr><td><strong>2012ΓÇô2016</strong></td><td>USF conducts burial research</td><td>Archaeological, historical, forensic, and identification work clarifies the record while preserving unresolved questions.</td></tr>
+            <tr><td><strong>2017</strong></td><td>Florida apologizes</td><td>The Legislature formally apologizes for abuse suffered by former students.</td></tr>
+            <tr><td><strong>2024</strong></td><td>Florida establishes compensation program</td><td>Chapter 2024-254 creates a $20 million program for qualifying living former students confined between 1940 and 1975.</td></tr>
+            <tr><td><strong>Present</strong></td><td>Research continues</td><td>Historical, genealogical, forensic, memorial, and archival work remains open.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>XV. Primary Sources in This Collection</h2>
+      <h3>The Yellow Jacket</h3>
+      <p>The digitized issues of <em>The Yellow Jacket</em> provide a view of institutional life from within the school's official publishing environment. Student activities, athletics, vocational programs, ceremonies, campus routines, and official priorities appear throughout the surviving issues. The newspaper documents what the school chose to publish about itself rather than providing an uncensored record.</p>
+
+      <h3>Institutional Handbooks</h3>
+      <p>School handbooks explain the rules under which boys were expected to live. They describe routines, cottage organization, privileges, discipline, educational expectations, personal property, work, recreation, and the standards through which administrators defined proper conduct.</p>
+
+      <h3>Forensic and Burial Research</h3>
+      <p>The University of South Florida investigation provides the most extensive archaeological and forensic examination of deaths and burials associated with the Marianna institution. Reports document archival research, cemetery mapping, excavation, biological analysis, DNA efforts, identification work, and the limitations researchers encountered.</p>
+
+      <h3>Government Investigations</h3>
+      <p>Federal and state reports permit researchers to examine how public authorities evaluated the institution during different periods. These materials should be compared chronologically because the conditions, administrators, legal standards, and juvenile justice policies under review changed over time.</p>
+
+      <h2>XVI. Editorial and Research Standard</h2>
+      <p><strong>Carceral Collections does not classify allegations as established fact merely because they appear in a newspaper, memoir, lawsuit, interview, or later retelling. Nor does the collection treat an official document as inherently complete because it was created by a government agency.</strong></p>
+
+      <p>The historical method used here compares sources according to origin, purpose, chronology, authorship, proximity to the event, internal consistency, corroboration, physical evidence, and known limitations. Where evidence supports a conclusion, the collection states it. Where evidence supports only a possibility, the collection identifies it as such. Where sources conflict, the conflict remains visible.</p>
+
+      <h2>XVII. Research Status</h2>
+      <p><strong>OPEN COLLECTION ΓÇó CONTINUING RESEARCH</strong></p>
+
+      <p>The collection remains an active archival study. Additional institutional files, commitment records, correspondence, photographs, newspapers, court records, death records, genealogical information, survivor accounts, and family materials will expand individual findings. Corrections supported by documentary evidence are welcome.</p>
+    </article>
+
+    <aside class="sidebar-panel">
+      <!-- Newspaper Collection Feature Box -->
+      <div class="newspaper-promo-box">
+        <span class="source-meta source-meta-light">Collection 05 / Primary Print Archive</span>
+        <h3>The Yellow Jacket Newspaper Archive</h3>
+        <p>Explore over 520 digitized primary issues of <em>The Yellow Jacket</em>, printed on campus between 1933 and 1960. View student articles, athletic schedules, and official institutional announcements.</p>
+        <a class="btn-promo-gold" href="DOZIER-NEWSPAPERS.html">Open Newspaper Collection Γåù</a>
+        <div class="yellow-jacket-random" aria-label="Chronological Yellow Jacket issue links">
+          <h4>Selected Issues, Oldest to Latest</h4>
+          <ul class="yellow-jacket-random-list" id="yellow-jacket-random-list"></ul>
+        </div>
+      </div>
+
+      <!-- Core Evidence & Primary Documents Box -->
+      <div class="panel-box">
+        <h3>Primary Source Dossier</h3>
+        <ul class="source-list">
+          <li class="source-item">
+            <span class="source-meta">Forensic Investigation</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FDozier%2FDozierArchives%2Fusf-final-dozier-summary-2016.pdf">USF 2016 Final Forensic Summary (Dr. Erin Kimmerle) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Investigative Journalism</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FFOR%20THEIR%20OWN%20GOOD.pdf">Tampa Bay Times: "For Their Own Good" Full Series &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">State Visiting Report</span>
+            <a href="DOZIER-1969-REPORT.html">1969 Visiting Committee Report (FSU &amp; State Dept. of Ed.) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Institutional Handbook</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FDozier%2FDozierArchives%2FDozier%20School%20Handbook%2Fhandbook1958.pdf">1958 Dozier School Handbook (Rules &amp; Routine) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Federal Findings</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2Fdozier_findltr_12-1-11.pdf">U.S. Dept. of Justice 2011 Civil Rights Findings Letter &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Federal Senate Hearing</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FDozier%2FDozierArchives%2FCongressional%20Report%20Juvenile%20Delinquency%20Report%20of%20the%20Committe.pdf">U.S. Senate Juvenile Delinquency Committee Report &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">1914 Fire Clippings</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2F1914%20Fire%2FNewspaper%20Clippings%201914%20Florida%20Industrial%20School%20Fire%201914-19.pdf">1914 Fire Press Reports &amp; Inquests &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Campus Architecture</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FDozier%2FDozierArchives%2FMap%20Campus%20Map%20Florida%20School%20for%20Boys%20at%20Marianna%20October%2028.pdf">Campus Map &amp; Architectural Blueprints &#8599;</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Photographic Component Box (24-Hour Rotating) -->
+      <div class="panel-box">
+        <h3>Archival Visual Evidence</h3>
+        <p class="daily-photo-note">Every 24 hours, the featured historical photograph rotates through the 10 curated Dozier School archival photographs.</p>
+        <div class="daily-photo-card">
+          <img class="daily-photo-image" data-dozier-photo="sidebar" src="01_Photos/02_By-State/Florida/1950s_African American boys gathered on grounds to see a Ross Allen Reptile Institute demonstration at the School for Boys in Marianna, Florida..jpg" alt="" />
+          <p class="daily-photo-caption" data-dozier-caption></p>
+        </div>
+        <div class="daily-photo-action">
+          <a class="dozier-photo-source-link daily-photo-source-link" data-dozier-source-link target="_blank">View full resolution photo Γåù</a>
+        </div>
+        <div class="archive-photo-stack" aria-label="Additional Dozier archival photographs">
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_African American boys gathering as guests arrive for Open House at the School for Boys in Marianna, Florida..jpg" alt="African American boys gathering as guests arrive for Open House at the School for Boys in Marianna, Florida" loading="lazy" />
+            <figcaption>1950s. African American boys gathering as guests arrive for Open House.</figcaption>
+          </figure>
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_Barbershop for African American boys at the School for Boys in Marianna, Florida..jpg" alt="Barbershop for African American boys at the School for Boys in Marianna, Florida" loading="lazy" />
+            <figcaption>1950s. Barbershop for African American boys.</figcaption>
+          </figure>
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_Boy playing bugle at the School for Boys in Marianna, Florida..jpg" alt="Boy playing bugle at the School for Boys in Marianna, Florida" loading="lazy" />
+            <figcaption>1950s. Boy playing bugle at the School for Boys.</figcaption>
+          </figure>
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_Fire at the School for Boys in Marianna, Florida..jpg" alt="Fire at the School for Boys in Marianna, Florida" loading="lazy" />
+            <figcaption>1950s. Fire at the School for Boys.</figcaption>
+          </figure>
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1957_Boys and bus from the Florida School for Boys at Marianna, Florida..jpg" alt="Boys and bus from the Florida School for Boys at Marianna, Florida" loading="lazy" />
+            <figcaption>1957. Boys and bus from the Florida School for Boys.</figcaption>
+          </figure>
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1957_Doctor examining a boy in the infirmary at the Florida Industrial School for Boys in Marianna..jpg" alt="Doctor examining a boy in the infirmary at the Florida Industrial School for Boys in Marianna" loading="lazy" />
+            <figcaption>1957. Doctor examining a boy in the infirmary.</figcaption>
+          </figure>
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/3rd Annual F.I.S. circus clowns posing with costumes in Marianna_Florida.jpg" alt="Circus clowns posing with costumes at the 3rd Annual Florida Industrial School circus in Marianna" loading="lazy" />
+            <figcaption>3rd Annual F.I.S. circus. Clowns posing with costumes.</figcaption>
+          </figure>
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1940s_African American boys in dining hall at the School for Boys in Marianna, Florida.jpg" alt="African American boys in the dining hall at the School for Boys in Marianna, Florida" loading="lazy" />
+            <figcaption>1940s. African American boys in the dining hall.</figcaption>
+          </figure>
+          <figure class="archive-photo">
+            <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1940s_Boys in boxing match at the School for Boys in Marianna, Florida..jpg" alt="Boys in a boxing match at the School for Boys in Marianna, Florida" loading="lazy" />
+            <figcaption>1940s. Boys in a boxing match.</figcaption>
+          </figure>
+          <figure class="archive-photo archive-credit-tile">
+            <a href="https://www.floridamemory.com/find?advanced%5B0%5D%5Bjoiner%5D=and&amp;advanced%5B0%5D%5Belement_id%5D=240&amp;advanced%5B0%5D%5Btype%5D=is+exactly&amp;advanced%5B0%5D%5Bterms%5D=11&amp;advanced%5B1%5D%5Bjoiner%5D=and&amp;advanced%5B1%5D%5Belement_id%5D=49&amp;advanced%5B1%5D%5Btype%5D=is+exactly&amp;advanced%5B1%5D%5Bterms%5D=Reformatories--Florida--Jackson%20County--Marianna&amp;layout=1" target="_blank" rel="noopener">
+              <img src="01_Photos/01_By-Collection/Historic/Juveniles/DozierSchool_Florida/1950s_African American boys gathering as guests arrive for Open House at the School for Boys in Marianna, Florida..jpg" alt="Florida Boys School students gathered for Open House, from Florida Memory" loading="lazy" />
+              <figcaption><strong>Image Credit: Florida Memory</strong>Thank you to the Florida State Archives for preserving and contributing the Florida Boys School images featured in this collection. View the Florida Memory record for the source collection.</figcaption>
+            </a>
+          </figure>
+        </div>
+      </div>
+
+      <div class="panel-box">
+        <h3>Continue the Archive</h3>
+        <ul class="source-list">
+          <li class="source-item">
+            <span class="source-meta">Research Guides</span>
+            <a href="RESEARCH-STARTERS.html">Begin with a research starter and a focused question &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Collections</span>
+            <a href="COLLECTIONS.html">Browse photography, manuscripts, and finding aids &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Books and Manuscripts</span>
+            <a href="BOOKS-AND-MANUSCRIPTS.html">Read primary texts and carceral scholarship &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Evidence Index</span>
+            <a href="EVIDENCE-INDEX.html">Open the catalogue of local primary sources &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Student Newspaper</span>
+            <a href="DOZIER-NEWSPAPERS.html">Explore The Yellow Jacket newspaper archive &#8599;</a>
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar-end-bar" aria-hidden="true"></div>
+    </aside>
+  </main>
+
+  <footer>
+    <p>The Cheesborough Carceral Collections | Arthur G. Dozier School for Boys Archival Study &copy; 2026</p>
+  </footer>
+
+  <script src="dozier-daily-photo.js"></script>
   <script>
-    const testQueries = [
-      'Dozier School',
-      'Fortune Ferguson',
-      'American Siberia',
-      'Powell',
-      'Convict Leasing',
-      'Newberry Six',
-      '1880 Census',
-      'Solitary Confinement',
-      'Law Library',
-      'Photography',
-      'San Quentin',
-      'Malachi Martin',
-      'Due Process',
-      'Books'
-    ];
-
-    const btnContainer = document.getElementById('query-buttons-list');
-    const testLog = document.getElementById('test-log');
-    const previewIframe = document.getElementById('preview-iframe');
-    const previewInput = document.getElementById('preview-url-input');
-
-    function initWorkbench() {
-      if (!window.CheesboroughSearch) {
-        testLog.textContent = 'ERROR: search-data.js not loaded.';
-        return;
-      }
-
-      btnContainer.innerHTML = testQueries.map(q => {
-        const results = window.CheesboroughSearch.search(q);
-        return `
-            <button class="btn-query" onclick="runQueryTest('${q}')">
-              <span>ðŸ”Ž "${q}"</span>
-              <span class="badge">${results.length} matches</span>
-            </button>
-          `;
-      }).join('');
-
-      runQueryTest('Dozier School');
-    }
-
-    function runQueryTest(query) {
-      if (!window.CheesboroughSearch) return;
-      const results = window.CheesboroughSearch.search(query);
-
-      let output = `[TEST EXECUTION: "${query}"]\n`;
-      output += `Status: OK (200)\n`;
-      output += `Total Matches: ${results.length}\n`;
-      output += `Top Score: ${results[0] ? results[0].score : 0} pts\n\n`;
-      output += `--- TOP 4 MATCHES ---\n`;
-
-      results.slice(0, 4).forEach((item, idx) => {
-        output += `${idx + 1}. [${item.category}] ${item.title}\n`;
-        output += `   URL: ${item.url}\n`;
-        output += `   Date: ${item.date || 'N/A'} | Tags: ${item.tags.slice(0, 3).join(', ')}\n\n`;
+    (() => {
+      const issues = [
+        ["February 25, 1933", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1933%2F1933-02-25.pdf"],
+        ["May 20, 1933", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1933%2F1933-05-20.pdf"],
+        ["July 1, 1933", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1933%2F1933-07-01.pdf"],
+        ["July 29, 1933", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1933%2F1933-07-29.pdf"],
+        ["December 2, 1933", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1933%2F1933-12-02.pdf"],
+        ["December 16, 1933", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1933%2F1933-12-16.pdf"],
+        ["December 30, 1933", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1933%2F1933-12-30.pdf"],
+        ["January 27, 1934", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1934%2F1934-01-27.pdf"],
+        ["February 10, 1934", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1934%2F1934-02-10.pdf"],
+        ["March 24, 1934", "PDF-READER.html?file=03_Research%2F03_Archival-Notes%2FDozierArchives%2FTheYellowjacket_DozierPaper%2F1930s%2F1934%2F1934-03-24.pdf"]
+      ];
+      const list = document.getElementById("yellow-jacket-random-list");
+      if (!list) return;
+      issues.forEach(([label, href]) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = href;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = `${label} issue Γåù`;
+        item.appendChild(link);
+        list.appendChild(item);
       });
-
-      testLog.textContent = output;
-      loadPreview(`SEARCH.html?q=${encodeURIComponent(query)}`);
-    }
-
-    function loadPreview(url) {
-      if (previewIframe) previewIframe.src = url;
-      if (previewInput) previewInput.value = url;
-    }
-
-    document.addEventListener('DOMContentLoaded', initWorkbench);
+    })();
   </script>
+  <script src="title-case.js"></script>
 </body>
-
 </html>
