@@ -412,6 +412,16 @@
       .topic-card p { color: #625f59; font-size: 0.92rem; line-height: 1.45; margin: 0 0 1rem; }
       .topic-card a { color: #9b7435; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; margin-top: auto; text-decoration: none; text-transform: uppercase; }
 
+      .explore-band { background: var(--paper); border-top: 1px solid #cfc5b5; padding: clamp(2.5rem, 5vw, 4rem) 1rem; }
+      .explore-inner { margin: 0 auto; max-width: 980px; }
+      .explore-kicker { color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; margin: 0 0 0.65rem; text-transform: uppercase; }
+      .explore-title { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.8rem, 3.2vw + 0.4rem, 2.7rem); line-height: 1.22; margin: 0 0 1.5rem; }
+      .explore-grid { display: grid; gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .explore-card { background: #fff; border-top: 4px solid var(--gold); padding: 1.1rem; }
+      .explore-card h3 { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: 1.1rem; line-height: 1.25; margin: 0 0 0.55rem; }
+      .explore-card p { color: #625f59; font-size: 0.92rem; line-height: 1.45; margin: 0 0 1rem; }
+      .explore-card a { color: #9b7435; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
       .state-band { background: var(--navy); color: #fff; }
       .state-inner {
         align-items: center;
@@ -521,6 +531,7 @@
         .map-mark { display: none; }
         select { flex: 1 1 100%; min-width: 0; }
         .topic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .explore-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
       @media (max-width: 480px) {
         .topbar { font-size: 0.78rem; }
@@ -534,6 +545,7 @@
         .prison-hero-copy h2 { font-size: clamp(1.55rem, 8.5vw, 2rem); }
         .prison-hero-image { aspect-ratio: 4 / 3; }
         .topic-grid { grid-template-columns: 1fr; }
+        .explore-grid { grid-template-columns: 1fr; }
         footer { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
       }
     </style>
@@ -663,6 +675,19 @@
             <article class="topic-card"><h3>Fortune Ferguson and Newberry</h3><p>Fortune's family record alongside the families of the Newberry Six, with genealogy questions kept separate from unsupported conclusions.</p><a href="NEWBERRY-AND-FORTUNE.html">Explore family history &rarr;</a></article>
             <article class="topic-card"><h3>Dozier School for Boys</h3><p>Institutional reports, forensic findings, maps, photographs, school records, and the gap between official language and lived experience.</p><a href="DOZIER-RESEARCH.html">Explore Dozier research &rarr;</a></article>
             <article class="topic-card"><h3>Evidence index</h3><p>Descriptive access to the relevant PDFs, spreadsheets, JPGs, PNGs, maps, court records, and archival scans used across the site.</p><a href="EVIDENCE-INDEX.html">Open source index &rarr;</a></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="explore-band" id="explore" aria-labelledby="explore-title">
+        <div class="explore-inner">
+          <p class="explore-kicker">More from the collection</p>
+          <h2 class="explore-title" id="explore-title">Read deeper. Follow the record further.</h2>
+          <div class="explore-grid">
+            <article class="explore-card"><h3>The American Siberia</h3><p>J. C. Powell's 1891 memoir, convict leasing, prison labor, and the language of camp administration.</p><a href="AmSiberUncovered.html">Explore the book study &rarr;</a></article>
+            <article class="explore-card"><h3>Books &amp; Manuscripts</h3><p>Browse primary texts, scholarship, and manuscripts gathered for sustained archival research.</p><a href="BOOKS-AND-MANUSCRIPTS.html">Browse the books &rarr;</a></article>
+            <article class="explore-card"><h3>About the archive</h3><p>Learn why the collection preserves source context, documents uncertainty, and keeps research accessible.</p><a href="ABOUT.html">About Cheesborough &rarr;</a></article>
+            <article class="explore-card"><h3>The Black and White</h3><p>Contemporary criminal cases, court-watch links, public records, and careful procedural timelines.</p><a href="NEWS.html">Open the case desk &rarr;</a></article>
           </div>
         </div>
       </section>
