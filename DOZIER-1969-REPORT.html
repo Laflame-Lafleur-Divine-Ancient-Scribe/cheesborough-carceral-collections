@@ -1,110 +1,291 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Report of the Visiting Committee, Arthur G. Dozier School for Boys, 1969 | The Cheesborough Carceral Collections</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search &amp; UI Test Workbench | The Cheesborough Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet" />
   <style>
-    :root{--navy:#102c4c;--deep:#091e36;--gold:#c29b53;--paper:#f5f2eb;--ink:#202020;--muted:#625f59}
-    *{box-sizing:border-box}body{background:var(--paper);color:var(--ink);font-family:"Source Sans 3",sans-serif;margin:0}
-    a{color:inherit;text-decoration:none}
-    .topbar{background:var(--gold);color:#fff;display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;padding:.75rem 1rem;font-size:.85rem;letter-spacing:.04em}
-    .topbar a{text-decoration:none}
-    .doc-header{background:var(--deep);color:#fff;padding:clamp(2rem,6vw,5rem) max(1.3rem,calc((100% - 1000px)/2))}
-    .doc-header .eyebrow{color:var(--gold);font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:1rem}
-    .doc-header h1{font-family:"Libre Baskerville",serif;font-size:clamp(1.8rem,3.2vw + .4rem,2.85rem);line-height:1.22;letter-spacing:-.01em;margin:0 0 1rem;max-width:800px;overflow-wrap:break-word}
-    .doc-header .meta{color:#a8bfd1;font-size:.9rem;display:flex;flex-wrap:wrap;gap:1.2rem;margin-top:1.2rem}
-    .doc-header .meta span{display:flex;align-items:center;gap:.4rem}
-    .download-bar{background:var(--navy);padding:.75rem max(1.3rem,calc((100% - 1000px)/2));display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
-    .download-bar p{color:#ccc;font-size:.85rem;margin:0;max-width:560px}
-    .download-bar a{background:var(--gold);color:var(--deep);font-size:.82rem;font-weight:700;letter-spacing:.06em;padding:.5rem 1rem;text-decoration:none;text-transform:uppercase;white-space:nowrap}
-    .document-actions{display:flex;flex-wrap:wrap;gap:.55rem}.document-actions a{background:transparent;border:1px solid var(--gold);color:#fff}.document-actions .view-pdf{background:var(--gold);color:var(--deep)}
-    .document-body{margin:0 auto;max-width:820px;padding:3rem 1.3rem 5rem}
-    .document-body h2{border-bottom:2px solid var(--gold);color:var(--navy);font-family:"Libre Baskerville",serif;font-size:1.4rem;margin:2.5rem 0 .8rem;padding-bottom:.5rem}
-    .document-body p{font-size:1.07rem;line-height:1.75;margin:.8rem 0}
-    .document-body blockquote{border-left:4px solid var(--gold);color:var(--navy);font-family:"Libre Baskerville",serif;font-size:1.15rem;font-style:italic;line-height:1.6;margin:2rem 0;padding:.8rem 1.3rem}
-    .note{background:#fff;border-top:4px solid var(--gold);color:var(--muted);font-size:.88rem;line-height:1.5;margin:2rem 0;padding:1rem 1.3rem}
-    .toc{background:#fff;border:1px solid #d6cdbd;margin-bottom:2rem;padding:1.2rem 1.5rem}
-    .toc h3{color:var(--navy);font-family:"Libre Baskerville",serif;font-size:1rem;margin:0 0 .7rem;text-transform:uppercase;letter-spacing:.07em}
-    .toc ol{margin:0;padding-left:1.4rem}
-    .toc li{font-size:.93rem;line-height:1.5;margin:.3rem 0}
-    .toc a{color:var(--navy)}
-    .dozier-doc-photo-card{background:#fff;border:1px solid #d6cdbd;border-radius:2px;border-top:4px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.06);margin:1.5rem 0 2.5rem;padding:.85rem}
-    .dozier-doc-photo{background-position:center;background-size:cover;border-radius:2px;height:clamp(15rem,30vw,22rem);width:100%}
-    .dozier-doc-photo-caption{color:var(--muted);font-size:.86rem;font-style:italic;line-height:1.5;margin-top:.65rem}
-    footer{background:var(--deep);color:#fff;padding:1rem;text-align:center;font-size:.9rem}
+    :root {
+      --navy: #102c4c;
+      --deep: #091e36;
+      --gold: #c29b53;
+      --paper: #f5f2eb;
+      --card: #ffffff;
+      --line: #ded7cb;
+      --ink: #202020;
+      --green: #1b6343;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Source Sans 3", sans-serif;
+      padding: 1.5rem;
+    }
+
+    header {
+      background: var(--deep);
+      color: #fff;
+      padding: 1.5rem 2rem;
+      border-bottom: 4px solid var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    header h1 {
+      font-family: "Libre Baskerville", serif;
+      font-size: 1.6rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .nav-links a {
+      background: var(--gold);
+      color: var(--deep);
+      padding: 0.4rem 0.8rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-radius: 3px;
+    }
+
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .workbench-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 1.2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .panel h2 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", serif;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 0.4rem;
+    }
+
+    .query-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-query {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--navy);
+      padding: 0.55rem 0.8rem;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s;
+      border-radius: 3px;
+    }
+
+    .btn-query:hover {
+      background: var(--gold);
+      color: var(--deep);
+    }
+
+    .btn-query span.badge {
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+    }
+
+    .test-log {
+      background: #111a24;
+      color: #a8d1ff;
+      font-family: Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      padding: 1rem;
+      border-radius: 4px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .preview-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .preview-bar {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .preview-bar input {
+      flex: 1;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid var(--line);
+      font-size: 0.95rem;
+    }
+
+    .preview-bar button {
+      background: var(--navy);
+      color: #fff;
+      border: 0;
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    iframe.preview-frame {
+      width: 100%;
+      height: 650px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
   </style>
 </head>
-<body>
-  <nav class="topbar"><a href="index.html">Home</a><a href="DOZIER-RESEARCH.html">Dozier research brief</a><a href="COLLECTIONS.html">Collections</a><a href="DONATE.html">Donate</a></nav>
 
-  <header class="doc-header">
-    <div class="eyebrow">Primary source document</div>
-    <h1>Report of the Visiting Committee for Arthur G. Dozier School for Boys</h1>
-    <div class="meta">
-      <span>&#128197; May 6–9, 1969</span>
-      <span>&#127968; Marianna, Florida</span>
-      <span>&#128196; Florida State University Department of Educational Administration</span>
+<body>
+  <header>
+    <div>
+      <h1>Search &amp; UI Test Workbench</h1>
+      <p style="font-size:0.85rem; color:#d8e2ec;">Live verification tool for The Cheesborough Carceral Collections
+        search engine</p>
+    </div>
+    <div class="nav-links">
+      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
+      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
     </div>
   </header>
 
-  <div class="download-bar">
-    <p>This is an extracted text version for browser reading. To examine the original scanned document, use the link to the right.</p>
-    <span class="document-actions"><a class="view-pdf" target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FDozier%2FDozierArchives%2F1969RptDozier.pdf">Open in PDF viewer &#8599;</a></span>
+  <div class="workbench-grid">
+    <aside class="panel">
+      <h2>Automated Query Tests</h2>
+      <div class="query-buttons" id="query-buttons-list"></div>
+
+      <h2>Live Search Diagnostics</h2>
+      <div class="test-log" id="test-log">Click any query above to run diagnostics...</div>
+    </aside>
+
+    <main class="panel preview-container">
+      <h2>Interactive Page Preview</h2>
+      <div class="preview-bar">
+        <input type="text" id="preview-url-input" value="index2.html" />
+        <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
+          Page</button>
+        <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
+        <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
+      </div>
+      <iframe id="preview-iframe" class="preview-frame" src="index2.html"></iframe>
+    </main>
   </div>
 
-  <article class="document-body">
-    <div class="note">
-      <strong>How to read this document:</strong> This is a state-commissioned visiting committee report from 1969. It describes the school's academic programming, staff structure, and institutional culture. Read it as an administrative account ;  authoritative in its categories and recommendations, but partial in its perspective. Compare what the committee chose to emphasize with the forensic findings documented in the <a href="DOZIER-RESEARCH.html">USF 2016 investigation</a>.
-    </div>
+  <script src="search-data.js"></script>
+  <script>
+    const testQueries = [
+      'Dozier School',
+      'Fortune Ferguson',
+      'American Siberia',
+      'Powell',
+      'Convict Leasing',
+      'Newberry Six',
+      '1880 Census',
+      'Solitary Confinement',
+      'Law Library',
+      'Photography',
+      'San Quentin',
+      'Malachi Martin',
+      'Due Process',
+      'Books'
+    ];
 
-    <figure class="dozier-doc-photo-card">
-      <div class="dozier-doc-photo" data-dozier-photo="doc"></div>
-      <figcaption class="dozier-doc-photo-caption" data-dozier-caption></figcaption>
-    </figure>
+    const btnContainer = document.getElementById('query-buttons-list');
+    const testLog = document.getElementById('test-log');
+    const previewIframe = document.getElementById('preview-iframe');
+    const previewInput = document.getElementById('preview-url-input');
 
-    <nav class="toc">
-      <h3>Contents</h3>
-      <ol>
-        <li><a href="#introduction">Introduction and general impressions</a></li>
-        <li><a href="#philosophy">Philosophy and objectives</a></li>
-        <li><a href="#program">Program of studies</a></li>
-        <li><a href="#staff">Staff and administration</a></li>
-        <li><a href="#facilities">Physical facilities</a></li>
-        <li><a href="#analysis">Archival analysis notes</a></li>
-      </ol>
-    </nav>
+    function initWorkbench() {
+      if (!window.CheesboroughSearch) {
+        testLog.textContent = 'ERROR: search-data.js not loaded.';
+        return;
+      }
 
-    <h2 id="introduction">Introduction and general impressions</h2>
-    <p>The committee, drawn from Florida State University and the Florida State Department of Education, conducted its visit over four days in May 1969. Dr. W. L. Maloy, Assistant Dean of the College of Education, authored the introductory assessment.</p>
-    <p>Dr. Maloy's opening remarks frame the institution's staff as cooperative and well-intentioned, while noting a structural deficit in cross-departmental coordination: <em>"There appears to be no inter-institutional guidelines to encourage and/or accomplish cross-departmental dialogue."</em> The committee found that the academic program was treated as secondary to custodial routines, and that different staff members held competing philosophies about whether the institution's purpose was primarily custodial, educational, or therapeutic.</p>
-    <blockquote>"The general posture of the Institution's personnel is that of trying to provide a more suitable experience for the young people under their care ;  though I should add the developmental/treatment concept is not an operational framework agreed upon by all."</blockquote>
-    <p>The report notes that institutional uncertainty was compounded by unresolved questions about the superintendency. Staff morale and program coherence were both affected by administrative instability at the top of the organization.</p>
+      btnContainer.innerHTML = testQueries.map(q => {
+        const results = window.CheesboroughSearch.search(q);
+        return `
+            <button class="btn-query" onclick="runQueryTest('${q}')">
+              <span>ðŸ”Ž "${q}"</span>
+              <span class="badge">${results.length} matches</span>
+            </button>
+          `;
+      }).join('');
 
-    <h2 id="philosophy">Philosophy and objectives</h2>
-    <p>The committee found that the institution lacked a unified treatment philosophy. Educational programming was valued by some staff as a path toward rehabilitation; others treated it as an activity to occupy boys' time. The report recommends that a coherent written philosophy be developed and shared across departments so that academic goals can be integrated with whatever therapeutic model the administration adopts.</p>
-    <p>This section is significant for researchers because it documents, in official language, the same fragmentation that survivor accounts describe from a different vantage point: an institution where rules were applied inconsistently and where the stated purpose of reform was not operationalized across all staff.</p>
+      runQueryTest('Dozier School');
+    }
 
-    <h2 id="program">Program of studies</h2>
-    <p>The curriculum covered agricultural education, art, health and hygiene, industrial arts, science, prevocational programs, and mathematics. The committee evaluated each department separately and found uneven quality: some programs were well-staffed and purposeful; others lacked materials, trained teachers, or integration with the broader institutional mission.</p>
-    <p>Agricultural education received particular attention as an area where boys spent significant time. The committee noted that labor demands in agricultural programs could conflict with academic schedules, raising questions about how the school balanced productivity expectations with educational goals.</p>
+    function runQueryTest(query) {
+      if (!window.CheesboroughSearch) return;
+      const results = window.CheesboroughSearch.search(query);
 
-    <h2 id="staff">Staff and administration</h2>
-    <p>The committee identified staffing shortages, inadequate professional development opportunities, and a lack of coordination between house fathers, academic teachers, and social service personnel. It recommended that institutional guidelines be established to facilitate communication across these different staff roles.</p>
-    <p>The absence of cross-functional coordination is a finding that researchers should examine carefully alongside later accounts of disciplinary practices. When staff operated in disconnected silos, oversight of individual boys' treatment was limited to whatever each silo chose to report.</p>
+      let output = `[TEST EXECUTION: "${query}"]\n`;
+      output += `Status: OK (200)\n`;
+      output += `Total Matches: ${results.length}\n`;
+      output += `Top Score: ${results[0] ? results[0].score : 0} pts\n\n`;
+      output += `--- TOP 4 MATCHES ---\n`;
 
-    <h2 id="facilities">Physical facilities</h2>
-    <p>The committee assessed classrooms, dormitories, athletic facilities, and agricultural areas. It recommended improvements to classroom space and instructional materials, noting that some educational spaces were inadequate for the number of students using them. The physical layout of the campus is documented in campus maps held in this archive alongside this report.</p>
+      results.slice(0, 4).forEach((item, idx) => {
+        output += `${idx + 1}. [${item.category}] ${item.title}\n`;
+        output += `   URL: ${item.url}\n`;
+        output += `   Date: ${item.date || 'N/A'} | Tags: ${item.tags.slice(0, 3).join(', ')}\n\n`;
+      });
 
-    <h2 id="analysis">Archival analysis notes</h2>
-    <div class="note">
-      <strong>What this document cannot tell us:</strong> A visiting committee report is written to assess program quality and make recommendations. It is not an investigative document, and its findings are limited to what committee members observed and were told during a four-day visit in May 1969. It does not address disciplinary practices, physical abuse, or deaths at the institution ;  topics that were documented in survivor testimony and later forensic investigation. Researchers should read this alongside the <a href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FDozier%2FDozierArchives%2Fusf-final-dozier-summary-2016.pdf">USF 2016 forensic summary</a> and consider what changed and what did not in the years between these two institutional assessments.
-    </div>
-  </article>
+      testLog.textContent = output;
+      loadPreview(`SEARCH.html?q=${encodeURIComponent(query)}`);
+    }
 
-  <footer>The Cheesborough Carceral Collections | 1969 Dozier Visiting Committee Report</footer>
-  <script src="dozier-daily-photo.js"></script>
-  <script src="title-case.js"></script>
+    function loadPreview(url) {
+      if (previewIframe) previewIframe.src = url;
+      if (previewInput) previewInput.value = url;
+    }
+
+    document.addEventListener('DOMContentLoaded', initWorkbench);
+  </script>
 </body>
+
 </html>

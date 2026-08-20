@@ -63,7 +63,7 @@ SEARCH_INDEX.push(
   {
     id: "brief-powell-siberia",
     title: "The Insider's Ghost: J. C. Powell's The American Siberia",
-    url: "AMERICAN-SIBERIA.html",
+    url: "MalachiMartin-Chattahoochee.html",
     category: "Research Brief",
     badge: "Research Brief",
     icon: "📖",

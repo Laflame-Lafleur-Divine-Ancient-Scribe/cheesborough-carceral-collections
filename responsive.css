@@ -1,0 +1,39 @@
+/* Shared responsive behavior for authored collection pages. */
+html{overflow-x:hidden}
+body{min-width:0;overflow-x:hidden}
+img,svg,video,canvas{max-width:100%;height:auto}
+.topbar{max-width:100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:thin}
+.topbar a{flex:0 0 auto;white-space:nowrap}
+.hero,.about-hero,.contact,.publication-grid,.prison-hero-inner,.layout,.content,.analytics-grid{min-width:0}
+article,main,section,aside,form,fieldset{min-width:0;max-width:100%}
+table{max-width:100%}
+.table-wrap,.table-scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+input,select,textarea,button{max-width:100%}
+@media (max-width:760px){
+  .topbar{gap:.15rem;padding:.6rem .7rem;justify-content:flex-start}
+  .topbar a{font-size:.82rem;padding:0 .55rem}
+  .topbar a+a{border-left:0}
+  .hero,.about-hero,.contact,.publication-grid,.prison-hero-inner,.layout,.content,.analytics-grid{grid-template-columns:1fr!important}
+  .hero{min-height:0!important}
+  .hero-copy,.about-hero>div:first-child,.contact-info,.contact-form,.prison-hero-copy{max-width:none!important;padding:2.4rem 1rem!important}
+  .hero-image{min-height:18rem!important;order:2}
+  .layout,.content{gap:1.5rem!important;padding:2.2rem 1rem 3rem!important}
+  .sidebar-panel{position:static!important}
+  h1{font-size:clamp(1.65rem,8vw,2.35rem)!important;line-height:1.2}
+  h2{font-size:clamp(1.35rem,6vw,1.8rem)!important;line-height:1.3}
+  article p,article li{font-size:1rem;line-height:1.65}
+  .photo-grid,.photo-grid.wide,.gallery,.state-photo-grid,.collection-grid,.topic-grid,.states,.kpi-grid{grid-template-columns:1fr!important}
+  .photo-grid img,.photo-grid.wide img{height:auto;max-height:none;aspect-ratio:4/3;object-fit:cover}
+  .photo-grid figure.portrait img{object-position:center top}
+  .panel-box,.credit-box{padding:1rem}
+  .sidebar-end-bar{min-height:8rem!important}
+  .sidebar-end-bar span{writing-mode:horizontal-tb;transform:none}
+  .search-layout{grid-template-columns:1fr!important}
+  .search-sidebar{position:static!important}
+  .modal,.viewer-box,.modal-content{margin:1rem!important;max-width:calc(100% - 2rem)!important;width:auto!important}
+  .modal-body,.modal-read-online{min-width:0!important}
+}
+@media (min-width:761px) and (max-width:1000px){
+  .layout{grid-template-columns:minmax(0,1fr) 16rem!important;gap:1.5rem!important}
+  .topic-grid,.states{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}

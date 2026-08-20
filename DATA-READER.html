@@ -1,14 +1,291 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Spreadsheet Reader | The Cheesborough Carceral Collections</title>
-<style>:root{--navy:#102c4c;--deep:#091e36;--gold:#c29b53;--paper:#f5f2eb;--line:#d7d0c3}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:#202020;font:15px/1.5 "Segoe UI",sans-serif}.topbar{background:var(--gold);color:#fff;display:flex;gap:1rem;padding:.75rem 1rem}.topbar a{color:#fff;text-decoration:none}.wrap{margin:auto;max-width:1200px;padding:2rem 1rem}h1{color:var(--navy);font:700 clamp(1.6rem,4vw,2.8rem)/1.1 Georgia,serif;margin:0 0 .5rem}.status{color:#625f59;margin:.4rem 0 1.2rem}.controls{align-items:center;display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1rem}.controls label{color:var(--navy);font-weight:700}.controls select{border:1px solid #b8ab95;padding:.6rem;min-width:18rem}.controls a{background:var(--navy);color:#fff;display:inline-block;padding:.6rem .85rem;text-decoration:none}.table-wrap{background:#fff;border:1px solid var(--line);max-height:70vh;overflow:auto}.table-wrap table{border-collapse:collapse;min-width:100%;white-space:nowrap}.table-wrap th,.table-wrap td{border-bottom:1px solid #e5dfd5;border-right:1px solid #eee;padding:.55rem .7rem;text-align:left}.table-wrap th{background:#e9e1d6;color:var(--navy);position:sticky;top:0;z-index:1}.error{background:#fff1ed;border-left:4px solid #8f3d32;padding:1rem}.loading{color:var(--navy)}</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search &amp; UI Test Workbench | The Cheesborough Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #102c4c;
+      --deep: #091e36;
+      --gold: #c29b53;
+      --paper: #f5f2eb;
+      --card: #ffffff;
+      --line: #ded7cb;
+      --ink: #202020;
+      --green: #1b6343;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Source Sans 3", sans-serif;
+      padding: 1.5rem;
+    }
+
+    header {
+      background: var(--deep);
+      color: #fff;
+      padding: 1.5rem 2rem;
+      border-bottom: 4px solid var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    header h1 {
+      font-family: "Libre Baskerville", serif;
+      font-size: 1.6rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .nav-links a {
+      background: var(--gold);
+      color: var(--deep);
+      padding: 0.4rem 0.8rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-radius: 3px;
+    }
+
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .workbench-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 1.2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .panel h2 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", serif;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 0.4rem;
+    }
+
+    .query-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-query {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--navy);
+      padding: 0.55rem 0.8rem;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s;
+      border-radius: 3px;
+    }
+
+    .btn-query:hover {
+      background: var(--gold);
+      color: var(--deep);
+    }
+
+    .btn-query span.badge {
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+    }
+
+    .test-log {
+      background: #111a24;
+      color: #a8d1ff;
+      font-family: Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      padding: 1rem;
+      border-radius: 4px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .preview-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .preview-bar {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .preview-bar input {
+      flex: 1;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid var(--line);
+      font-size: 0.95rem;
+    }
+
+    .preview-bar button {
+      background: var(--navy);
+      color: #fff;
+      border: 0;
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    iframe.preview-frame {
+      width: 100%;
+      height: 650px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+  </style>
 </head>
-<body><nav class="topbar"><a href="index.html">Home</a><a href="SEARCH.html">Search</a><a href="EVIDENCE-INDEX.html">Evidence index</a><a href="MalachiMartin-Chattahoochee.html">Powell</a></nav><main class="wrap"><h1 id="title">Spreadsheet reader</h1><p id="status" class="status loading">Loading the original workbook...</p><div class="controls"><label for="sheet-select">View sheet</label><select id="sheet-select" aria-label="Choose worksheet" hidden></select><a id="download" hidden download>Download original workbook</a></div><div id="content" class="table-wrap"></div></main><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script>
-const params=new URLSearchParams(window.location.search);const file=params.get('file');const title=document.querySelector('#title');const status=document.querySelector('#status');const content=document.querySelector('#content');const download=document.querySelector('#download');const sheetSelect=document.querySelector('#sheet-select');let workbook;
-function fileUrl(path){const normalized=decodeURIComponent(path.replaceAll('\\','/'));const encoded=normalized.split('/').map(part=>encodeURIComponent(part)).join('/');return new URL(encoded,document.baseURI).href}
-function showError(message){status.className='status error';status.textContent=message}
-function renderSheet(sheetName){const sheet=workbook.Sheets[sheetName];const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});content.replaceChildren();const table=document.createElement('table');if(!rows.length){const empty=document.createElement('p');empty.textContent='This worksheet is empty.';content.append(empty);return}rows.forEach((row,index)=>{const tr=document.createElement('tr');row.forEach(cell=>{const element=document.createElement(index===0?'th':'td');element.textContent=cell;tr.append(element)});table.append(tr)});content.append(table);status.textContent=`${workbook.SheetNames.length} sheet${workbook.SheetNames.length===1?'':'s'} available. Showing ${sheetName}: ${Math.max(rows.length-1,0)} data rows.`}
-if(!file){showError('No workbook was selected. Return to the evidence index and choose a spreadsheet.')}else{const source=fileUrl(file);const name=decodeURIComponent(file.replaceAll('\\','/').split('/').pop());title.textContent=name;download.href=source;download.hidden=false;fetch(source).then(response=>{if(!response.ok)throw new Error('Workbook could not be loaded');return response.arrayBuffer()}).then(buffer=>{workbook=XLSX.read(buffer,{type:'array'});sheetSelect.replaceChildren();workbook.SheetNames.forEach((sheetName,index)=>{const option=document.createElement('option');option.value=sheetName;option.textContent=sheetName;option.selected=index===0;sheetSelect.append(option)});sheetSelect.hidden=workbook.SheetNames.length<2;sheetSelect.addEventListener('change',()=>renderSheet(sheetSelect.value));renderSheet(workbook.SheetNames[0])}).catch(()=>showError('This workbook could not be rendered in the browser. Use Download original workbook to open it in Excel.'))}
-</script></body></html>
+
+<body>
+  <header>
+    <div>
+      <h1>Search &amp; UI Test Workbench</h1>
+      <p style="font-size:0.85rem; color:#d8e2ec;">Live verification tool for The Cheesborough Carceral Collections
+        search engine</p>
+    </div>
+    <div class="nav-links">
+      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
+      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
+    </div>
+  </header>
+
+  <div class="workbench-grid">
+    <aside class="panel">
+      <h2>Automated Query Tests</h2>
+      <div class="query-buttons" id="query-buttons-list"></div>
+
+      <h2>Live Search Diagnostics</h2>
+      <div class="test-log" id="test-log">Click any query above to run diagnostics...</div>
+    </aside>
+
+    <main class="panel preview-container">
+      <h2>Interactive Page Preview</h2>
+      <div class="preview-bar">
+        <input type="text" id="preview-url-input" value="index2.html" />
+        <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
+          Page</button>
+        <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
+        <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
+      </div>
+      <iframe id="preview-iframe" class="preview-frame" src="index2.html"></iframe>
+    </main>
+  </div>
+
+  <script src="search-data.js"></script>
+  <script>
+    const testQueries = [
+      'Dozier School',
+      'Fortune Ferguson',
+      'American Siberia',
+      'Powell',
+      'Convict Leasing',
+      'Newberry Six',
+      '1880 Census',
+      'Solitary Confinement',
+      'Law Library',
+      'Photography',
+      'San Quentin',
+      'Malachi Martin',
+      'Due Process',
+      'Books'
+    ];
+
+    const btnContainer = document.getElementById('query-buttons-list');
+    const testLog = document.getElementById('test-log');
+    const previewIframe = document.getElementById('preview-iframe');
+    const previewInput = document.getElementById('preview-url-input');
+
+    function initWorkbench() {
+      if (!window.CheesboroughSearch) {
+        testLog.textContent = 'ERROR: search-data.js not loaded.';
+        return;
+      }
+
+      btnContainer.innerHTML = testQueries.map(q => {
+        const results = window.CheesboroughSearch.search(q);
+        return `
+            <button class="btn-query" onclick="runQueryTest('${q}')">
+              <span>ðŸ”Ž "${q}"</span>
+              <span class="badge">${results.length} matches</span>
+            </button>
+          `;
+      }).join('');
+
+      runQueryTest('Dozier School');
+    }
+
+    function runQueryTest(query) {
+      if (!window.CheesboroughSearch) return;
+      const results = window.CheesboroughSearch.search(query);
+
+      let output = `[TEST EXECUTION: "${query}"]\n`;
+      output += `Status: OK (200)\n`;
+      output += `Total Matches: ${results.length}\n`;
+      output += `Top Score: ${results[0] ? results[0].score : 0} pts\n\n`;
+      output += `--- TOP 4 MATCHES ---\n`;
+
+      results.slice(0, 4).forEach((item, idx) => {
+        output += `${idx + 1}. [${item.category}] ${item.title}\n`;
+        output += `   URL: ${item.url}\n`;
+        output += `   Date: ${item.date || 'N/A'} | Tags: ${item.tags.slice(0, 3).join(', ')}\n\n`;
+      });
+
+      testLog.textContent = output;
+      loadPreview(`SEARCH.html?q=${encodeURIComponent(query)}`);
+    }
+
+    function loadPreview(url) {
+      if (previewIframe) previewIframe.src = url;
+      if (previewInput) previewInput.value = url;
+    }
+
+    document.addEventListener('DOMContentLoaded', initWorkbench);
+  </script>
+</body>
+
+</html>

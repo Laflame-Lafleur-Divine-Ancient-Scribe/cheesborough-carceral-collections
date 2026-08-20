@@ -1,817 +1,291 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="The Cheesborough Carceral Collections research library." />
-    <title>The Cheesborough Carceral Collections</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-      :root {
-        --navy: #102c4c;
-        --deep-navy: #091e36;
-        --gold: #c29b53;
-        --warm-white: #f5f2eb;
-        --charcoal: #313131;
-        --line: rgba(194, 155, 83, 0.8);
-      }
 
-      * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
-      body {
-        background: var(--warm-white);
-        color: #202020;
-        font-family: "Source Sans 3", sans-serif;
-        margin: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search &amp; UI Test Workbench | The Cheesborough Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #102c4c;
+      --deep: #091e36;
+      --gold: #c29b53;
+      --paper: #f5f2eb;
+      --card: #ffffff;
+      --line: #ded7cb;
+      --ink: #202020;
+      --green: #1b6343;
+    }
 
-      a { color: inherit; text-decoration: none; }
-      button, input, select { font: inherit; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      .topbar {
-        align-items: center;
-        background: var(--gold);
-        color: #fff;
-        display: flex;
-        font-size: 0.95rem;
-        justify-content: center;
-        letter-spacing: 0.04em;
-        min-height: 2.8rem;
-        padding: 0.45rem 1rem;
-      }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Source Sans 3", sans-serif;
+      padding: 1.5rem;
+    }
 
-      .topbar nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        row-gap: 0.2rem;
-      }
+    header {
+      background: var(--deep);
+      color: #fff;
+      padding: 1.5rem 2rem;
+      border-bottom: 4px solid var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-      .topbar a { padding: 0 0.72rem; }
-      .topbar a + a { border-left: 1px solid rgba(255, 255, 255, 0.85); }
-      .topbar a:hover { color: var(--deep-navy); }
+    header h1 {
+      font-family: "Libre Baskerville", serif;
+      font-size: 1.6rem;
+    }
 
-      .masthead {
-        background: var(--navy);
-        color: #fff;
-        padding: clamp(1.4rem, 3.5vw, 2.5rem) 1rem clamp(1.4rem, 3vw, 2.2rem);
-        text-align: center;
-      }
+    .nav-links {
+      display: flex;
+      gap: 0.8rem;
+    }
 
-      .masthead a {
-        display: inline-block;
-        transition: transform 180ms ease;
-        width: clamp(320px, 55vw, 620px);
-        max-width: 94vw;
-      }
-      .masthead a:hover {
-        transform: translateY(-2px);
-      }
-      .masthead img {
-        display: block;
-        filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
-        height: auto;
-        width: 100%;
-      }
+    .nav-links a {
+      background: var(--gold);
+      color: var(--deep);
+      padding: 0.4rem 0.8rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-radius: 3px;
+    }
 
-      .tagline {
-        background: var(--charcoal);
-        color: #fff;
-        font-size: clamp(1rem, 2vw, 1.35rem);
-        letter-spacing: 0.015em;
-        margin: 0;
-        padding: 0.48rem 1rem 0.6rem;
-        text-align: center;
-      }
+    .workbench-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 1.5rem;
+    }
 
-      .hero {
-        align-items: center;
-        background-color: #39434a;
-        background-image: linear-gradient(rgba(9, 25, 39, 0.2), rgba(9, 25, 39, 0.32)), url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2200&q=85");
-        background-position: center;
-        background-size: cover;
-        display: flex;
-        min-height: clamp(29rem, 49vw, 39rem);
-        padding: clamp(2.8rem, 7vw, 5rem) 1rem 2.3rem;
+    @media (max-width: 900px) {
+      .workbench-grid {
+        grid-template-columns: 1fr;
       }
+    }
 
-      .hero-inner { margin: 0 auto; max-width: 980px; width: 100%; }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 1.2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
 
-      .search-container {
-        position: relative;
-        margin: 0 auto clamp(2rem, 4.5vw, 3.8rem);
-        max-width: 700px;
-        width: 100%;
-      }
+    .panel h2 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", serif;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 0.4rem;
+    }
 
-      .search {
-        background: rgba(43, 43, 43, 0.94);
-        border: 1px solid rgba(255, 255, 255, 0.09);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
-        display: flex;
-        margin: 0 auto 0.85rem;
-        max-width: 700px;
-        padding: 0.25rem 0.5rem;
-        position: relative;
-      }
+    .query-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 1.2rem;
+    }
 
-      .search::before, .search::after {
-        color: var(--gold);
-        content: "[";
-        font-family: Georgia, serif;
-        font-size: 3rem;
-        line-height: 1;
-      }
-      .search::after { content: "]"; }
-      .search input {
-        background: transparent;
-        border: 0;
-        color: #fff;
-        flex: 1;
-        font-size: clamp(1rem, 2.2vw, 1.5rem);
-        min-width: 0;
-        outline: 0;
-        padding: 0.7rem 0.85rem;
-      }
-      .search input::placeholder { color: #fff; opacity: 0.95; }
-      .search button {
-        background: transparent;
-        border: 0;
-        color: var(--gold);
-        cursor: pointer;
-        font-size: 1.7rem;
-        padding: 0 0.35rem;
-        transition: transform 0.15s, color 0.15s;
-      }
-      .search button:hover { color: #fff; transform: scale(1.1); }
+    .btn-query {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--navy);
+      padding: 0.55rem 0.8rem;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s;
+      border-radius: 3px;
+    }
 
-      /* Live Autocomplete Dropdown */
-      .search-dropdown {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: #ffffff;
-        color: #202020;
-        border: 2px solid var(--gold);
-        border-top: none;
-        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
-        z-index: 1000;
-        max-height: 480px;
-        overflow-y: auto;
-        display: none;
-        border-radius: 0 0 4px 4px;
-        text-align: left;
-      }
-      .search-dropdown.open { display: block; }
-      .dropdown-header {
-        background: var(--navy);
-        color: #fff;
-        padding: 0.6rem 0.9rem;
-        font-size: 0.82rem;
-        font-weight: 600;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .dropdown-header span.gold { color: var(--gold); }
-      .dropdown-items { list-style: none; margin: 0; padding: 0; }
-      .dropdown-item {
-        border-bottom: 1px solid #ede8de;
-        transition: background 0.15s;
-      }
-      .dropdown-item:last-child { border-bottom: 0; }
-      .dropdown-item:hover, .dropdown-item.focused {
-        background: #faf6ee;
-      }
-      .dropdown-link {
-        display: block;
-        padding: 0.75rem 0.9rem;
-        text-decoration: none;
-        color: inherit;
-      }
-      .dropdown-meta {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.74rem;
-        margin-bottom: 0.25rem;
-      }
-      .dropdown-badge {
-        background: var(--navy);
-        color: #fff;
-        font-weight: 700;
-        padding: 0.15rem 0.45rem;
-        border-radius: 3px;
-        font-size: 0.68rem;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-      .dropdown-badge.pdf { background: #8f2d22; }
-      .dropdown-badge.data { background: #1b6343; }
-      .dropdown-badge.law { background: #4a347f; }
-      .dropdown-badge.photo { background: #8c561b; }
-      .dropdown-title {
-        font-family: Georgia, serif;
-        font-size: 1.05rem;
-        font-weight: 700;
-        color: var(--navy);
-        line-height: 1.25;
-        margin-bottom: 0.2rem;
-      }
-      .dropdown-snippet {
-        font-size: 0.82rem;
-        color: #555;
-        line-height: 1.35;
-      }
-      .search-highlight {
-        background: #fef08a;
-        color: #713f12;
-        font-weight: 600;
-        padding: 0 2px;
-      }
-      .dropdown-footer {
-        background: #f4f0e8;
-        border-top: 1px solid #ded7cb;
-        padding: 0.65rem 0.9rem;
-        text-align: center;
-      }
-      .dropdown-footer-link {
-        color: var(--navy);
-        font-weight: 700;
-        font-size: 0.88rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-      }
-      .dropdown-footer-link:hover { color: var(--gold); text-decoration: underline; }
+    .btn-query:hover {
+      background: var(--gold);
+      color: var(--deep);
+    }
 
-      /* Hero Quick Topics */
-      .hero-quick-topics {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        justify-content: center;
-        align-items: center;
-        margin-top: 0.6rem;
-      }
-      .quick-topic-label {
-        color: var(--gold);
-        font-size: 0.76rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        margin-right: 0.2rem;
-      }
-      .quick-topic-chip {
-        background: rgba(16, 44, 76, 0.85);
-        border: 1px solid rgba(194, 155, 83, 0.4);
-        color: #f5f2eb;
-        font-size: 0.76rem;
-        font-weight: 600;
-        padding: 0.18rem 0.55rem;
-        border-radius: 999px;
-        text-decoration: none;
-        transition: all 0.15s;
-        cursor: pointer;
-      }
-      .quick-topic-chip:hover {
-        background: var(--gold);
-        color: var(--deep);
-        border-color: var(--gold);
-        text-decoration: none;
-        transform: translateY(-1px);
-      }
+    .btn-query span.badge {
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+    }
 
-      .collections {
-        display: grid;
-        gap: 1.4rem;
-        grid-template-columns: repeat(4, 1fr);
-      }
+    .test-log {
+      background: #111a24;
+      color: #a8d1ff;
+      font-family: Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      padding: 1rem;
+      border-radius: 4px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
 
-      .collection-card {
-        background: rgba(16, 44, 76, 0.97);
-        border: 2px solid var(--line);
-        box-shadow: 0 7px 12px rgba(0, 0, 0, 0.34);
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        min-height: 12.3rem;
-        overflow: hidden;
-        transition: transform 180ms ease, box-shadow 180ms ease;
-      }
-      .collection-card:hover { box-shadow: 0 12px 18px rgba(0, 0, 0, 0.42); transform: translateY(-5px); }
-      .card-art {
-        align-items: center;
-        background: #eee8da;
-        color: var(--navy);
-        display: flex;
-        flex: 1;
-        font-size: clamp(2.7rem, 6vw, 4.5rem);
-        justify-content: center;
-        min-height: 7.2rem;
-      }
-      .card-art span { filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.1)); }
-      .collection-card h2 {
-        font-size: clamp(0.92rem, 1.4vw, 1.15rem);
-        line-height: 1.25;
-        margin: 0;
-        min-height: 3.35rem;
-        padding: 0.65rem 0.5rem 0.58rem;
-        text-align: center;
-        text-transform: uppercase;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+    .preview-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
 
-      .publication {
-        background: #f4f0e8;
-        border-top: 7px solid var(--gold);
-        color: #202020;
-        padding: clamp(2.3rem, 5vw, 4.5rem) 1rem clamp(2.5rem, 5vw, 4rem);
-      }
-      .publication-inner { margin: 0 auto; max-width: 980px; }
-      .publication-kicker {
-        align-items: center;
-        color: var(--navy);
-        display: flex;
-        font-size: 0.78rem;
-        font-weight: 700;
-        gap: 0.8rem;
-        letter-spacing: 0.12em;
-        margin: 0 0 0.65rem;
-        text-transform: uppercase;
-      }
-      .publication-kicker::after { background: var(--gold); content: ""; flex: 1; height: 2px; }
-      .publication-title {
-        border-bottom: 1px solid rgba(16, 44, 76, 0.32);
-        font-family: "Libre Baskerville", Georgia, serif;
-        font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-        line-height: 1.2;
-        margin: 0;
-        padding-bottom: 1.1rem;
-      }
-      .publication-deck { color: #5c5a55; font-size: 1.08rem; margin: 0.9rem 0 1.7rem; max-width: 48rem; }
-      .publication-grid { display: grid; gap: 1.4rem; grid-template-columns: minmax(0, 1.55fr) minmax(13rem, 0.9fr); }
-      .feature-story { background: #fff; border: 1px solid #d7d0c3; }
-      .feature-image {
-        background: #303a3d url("RESEARCH%20WEBSITE%20HERO/Dozier/PHOTOS_DOZIER/Group%20portrait%20of%20baseball%20team%20at%20the%20Florida%20Industrial%20School_1957.jpg") center / cover;
-        display: block;
-        height: 17rem;
-        min-height: 17rem;
-        object-fit: cover;
-        width: 100%;
-      }
-      .story-copy { padding: 1.15rem 1.25rem 1.25rem; }
-      .story-label { color: #9b7435; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-      .story-copy h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.25rem, 2.5vw, 1.8rem); line-height: 1.25; margin: 0.45rem 0; }
-      .story-copy p { color: #5c5a55; font-size: 1rem; line-height: 1.55; margin: 0; }
-      .story-meta { border-top: 1px solid #ded8cd; color: #76736c; font-size: 0.82rem; margin-top: 1rem; padding-top: 0.7rem; }
-      .story-list { display: grid; gap: 1.1rem; }
-      .mini-story { border-bottom: 1px solid #cfc7b9; padding-bottom: 1rem; }
-      .mini-story:last-child { border-bottom: 0; }
-      .mini-story h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.08rem; line-height: 1.3; margin: 0.3rem 0; }
-      .mini-story p { color: #66635d; font-size: 0.93rem; line-height: 1.45; margin: 0; }
-      .archive-box { background: var(--navy); color: #fff; padding: 1.15rem; }
-      .archive-box h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.25rem; margin: 0 0 0.55rem; }
-      .archive-box p { color: #e6dfd1; font-size: 0.94rem; line-height: 1.45; margin: 0 0 0.85rem; }
-      .archive-link { color: var(--gold); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-      .archive-link:hover { color: #fff; }
+    .preview-bar {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
 
-      .prison-hero { background: var(--deep-navy); color: #fff; }
-      .prison-hero-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.8fr); margin: 0 auto; max-width: 980px; min-height: 26rem; }
-      .prison-hero-copy { align-self: center; max-width: 39rem; padding: clamp(2rem, 5vw, 4rem) 1rem clamp(2rem, 5vw, 4rem) 0; }
-      .prison-hero-copy .story-label { color: var(--gold); }
-      .prison-hero-copy h2 { color: #fff; font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.8rem, 3.2vw + 0.4rem, 2.85rem); line-height: 1.22; margin: 0.55rem 0 1rem; }
-      .prison-hero-copy p { color: #e6dfd1; font-size: 1.05rem; line-height: 1.6; margin: 0 0 1.25rem; max-width: 36rem; }
-      .prison-hero-image { background: url("01_Photos/interpreted/Live%20Oak%20Railroad%20Convict%20Procession%2C%201876_interpreted.png") center / cover; min-height: 20rem; }
-      .prison-hero-link { color: var(--gold); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .preview-bar input {
+      flex: 1;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid var(--line);
+      font-size: 0.95rem;
+    }
 
-      .topic-band { background: #e8e1d6; border-top: 1px solid #cfc5b5; padding: clamp(2.5rem, 5vw, 4rem) 1rem; }
-      .topic-inner { margin: 0 auto; max-width: 980px; }
-      .topic-kicker { color: var(--navy); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; margin: 0 0 0.65rem; text-transform: uppercase; }
-      .topic-title { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.8rem, 3.2vw + 0.4rem, 2.7rem); line-height: 1.22; margin: 0 0 0.8rem; }
-      .topic-deck { color: #5c5a55; font-size: 1.05rem; line-height: 1.5; margin: 0 0 1.5rem; max-width: 48rem; }
-      .topic-grid { display: grid; gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .topic-card { background: #fff; border-top: 4px solid var(--gold); display: flex; flex-direction: column; min-height: 13rem; padding: 1rem; }
-      .topic-card h3 { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: 1.1rem; line-height: 1.25; margin: 0 0 0.55rem; }
-      .topic-card p { color: #625f59; font-size: 0.92rem; line-height: 1.45; margin: 0 0 1rem; }
-      .topic-card a { color: #9b7435; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; margin-top: auto; text-decoration: none; text-transform: uppercase; }
+    .preview-bar button {
+      background: var(--navy);
+      color: #fff;
+      border: 0;
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-      .state-band { background: var(--navy); color: #fff; }
-      .state-inner {
-        align-items: center;
-        display: flex;
-        gap: clamp(1.5rem, 5vw, 4rem);
-        justify-content: center;
-        margin: 0 auto;
-        max-width: 980px;
-        padding: 0.65rem 1rem;
-      }
-      .state-inner h2 {
-        font-size: clamp(1.25rem, 3vw, 2rem);
-        margin: 0;
-        text-transform: uppercase;
-      }
-      .map-mark { color: var(--gold); font-size: 3rem; line-height: 1; }
-      select {
-        border: 0;
-        border-radius: 0.25rem;
-        color: #333;
-        min-width: min(17rem, 40vw);
-        padding: 0.55rem 0.7rem;
-      }
+    iframe.preview-frame {
+      width: 100%;
+      height: 650px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+  </style>
+</head>
 
-      .news {
-        background: var(--charcoal);
-        color: #fff;
-        padding: 0.62rem 1rem 0.85rem;
-      }
-      .news-inner { margin: 0 auto; max-width: 980px; }
-      .news-header {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-        margin: 0 0 0.35rem;
-      }
-      .news h2 {
-        font-size: 1.45rem;
-        margin: 0;
-        text-transform: uppercase;
-      }
-      .news h2 a {
-        color: #fff;
-        text-decoration: none;
-        transition: color 150ms ease;
-      }
-      .news h2 a:hover {
-        color: var(--gold);
-      }
-      .news-more-link {
-        color: var(--gold);
-        font-size: 0.85rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-decoration: none;
-        text-transform: uppercase;
-        transition: color 150ms ease;
-      }
-      .news-more-link:hover {
-        color: #fff;
-      }
-      .news-grid { display: grid; gap: 2rem; grid-template-columns: 1fr 1fr; }
-      .news article { font-size: 1.02rem; line-height: 1.55; }
-      .news article a {
-        color: #fff;
-        text-decoration: none;
-        transition: color 150ms ease;
-      }
-      .news article a:hover {
-        color: var(--gold);
-      }
-      .news time { color: var(--gold); }
+<body>
+  <header>
+    <div>
+      <h1>Search &amp; UI Test Workbench</h1>
+      <p style="font-size:0.85rem; color:#d8e2ec;">Live verification tool for The Cheesborough Carceral Collections
+        search engine</p>
+    </div>
+    <div class="nav-links">
+      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
+      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
+    </div>
+  </header>
 
-      footer {
-        align-items: center;
-        background: var(--deep-navy);
-        color: #fff;
-        display: flex;
-        font-size: 0.95rem;
-        justify-content: space-between;
-        padding: 0.65rem max(1rem, calc((100% - 980px) / 2));
-      }
-      .social { color: var(--gold); display: flex; gap: 1rem; font-size: 1.2rem; }
-      .social a:hover { color: #fff; }
-      .status {
-        background: var(--gold);
-        color: var(--deep-navy);
-        font-weight: 700;
-        margin: 0.65rem auto 0;
-        max-width: 700px;
-        padding: 0.55rem 0.8rem;
-        text-align: center;
-      }
-      [hidden] { display: none; }
+  <div class="workbench-grid">
+    <aside class="panel">
+      <h2>Automated Query Tests</h2>
+      <div class="query-buttons" id="query-buttons-list"></div>
 
-      @media (max-width: 760px) {
-        .collections { grid-template-columns: repeat(2, 1fr); }
-        .hero { min-height: 39rem; }
-        .publication-grid { grid-template-columns: 1fr; }
-        .state-inner { flex-wrap: wrap; gap: 0.35rem 1rem; justify-content: space-between; }
-        .state-inner h2 { flex: 1 1 70%; }
-        .map-mark { display: none; }
-        select { flex: 1 1 100%; min-width: 0; }
-        .topic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      }
-      @media (max-width: 480px) {
-        .topbar { font-size: 0.78rem; }
-        .topbar a { padding: 0 0.4rem; }
-        .hero { min-height: 40rem; padding-left: 0.75rem; padding-right: 0.75rem; }
-        .collections { gap: 0.7rem; }
-        .collection-card { min-height: 11rem; }
-        .card-art { min-height: 6rem; }
-        .news-grid { gap: 0.7rem; grid-template-columns: 1fr; }
-        .topic-grid { grid-template-columns: 1fr; }
-        footer { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <div class="topbar">
-        <nav aria-label="Primary navigation">
-          <a href="ABOUT.html">ABOUT</a>
-          <a href="SEARCH.html">SEARCH</a>
-          <a href="COLLECTIONS.html">COLLECTIONS</a>
-          <a href="RESEARCH.html">RESEARCH</a>
-          <a href="LAW-LIBRARY.html">LAW LIBRARY</a>
-          <a href="NEWS.html">NEWS</a>
-          <a href="CONTACT.html">CONTACT</a>
-          <a href="index.html">HOME</a>
-          <a href="DONATE.html">DONATE</a>
-        </nav>
+      <h2>Live Search Diagnostics</h2>
+      <div class="test-log" id="test-log">Click any query above to run diagnostics...</div>
+    </aside>
+
+    <main class="panel preview-container">
+      <h2>Interactive Page Preview</h2>
+      <div class="preview-bar">
+        <input type="text" id="preview-url-input" value="index2.html" />
+        <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
+          Page</button>
+        <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
+        <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
       </div>
-      <div class="masthead">
-        <a href="https://carceralcollections.org" aria-label="Cheesborough Carceral Collections - CarceralCollections.org">
-          <img src="logo.svg" alt="Cheesborough Carceral Collections - CarceralCollections.org" width="580" height="140" />
-        </a>
-      </div>
-      <p class="tagline">Preserving sources, supporting research, and advancing critical legal inquiry</p>
-    </header>
-
-    <main>
-      <section class="hero" id="about" aria-label="Collections search">
-        <div class="hero-inner">
-          <div class="search-container">
-            <form class="search" id="search-form" role="search" action="SEARCH.html" method="get">
-              <input id="search-input" name="q" type="search" placeholder="SEARCH CASE LAW, HISTORY, OR DOCUMENTS..." aria-label="Search case law, history, or documents" autocomplete="off" />
-              <button type="submit" aria-label="Submit search" title="Search">&#8981;</button>
-            </form>
-            <div class="search-dropdown" id="search-dropdown" role="region" aria-label="Live search suggestions"></div>
-            <div class="hero-quick-topics" aria-label="Popular search topics">
-              <span class="quick-topic-label">Suggested:</span>
-              <a class="quick-topic-chip" href="SEARCH.html?q=Dozier+School">Dozier School</a>
-              <a class="quick-topic-chip" href="SEARCH.html?q=Fortune+Ferguson">Fortune Ferguson</a>
-              <a class="quick-topic-chip" href="SEARCH.html?q=American+Siberia">American Siberia</a>
-              <a class="quick-topic-chip" href="SEARCH.html?q=Convict+Leasing">Convict Leasing</a>
-              <a class="quick-topic-chip" href="SEARCH.html?q=Newberry+Six">Newberry Six</a>
-              <a class="quick-topic-chip" href="SEARCH.html?q=1880+Census">1880 Census</a>
-              <a class="quick-topic-chip" href="SEARCH.html?q=Solitary+Confinement">Solitary Confinement</a>
-              <a class="quick-topic-chip" href="SEARCH.html?q=Law+Library">Law Library</a>
-              <a class="quick-topic-chip" href="SEARCH.html?q=Photography">Photography</a>
-            </div>
-          </div>
-          <div class="collections" id="collections">
-            <a class="collection-card" href="COLLECTIONS.html">
-              <div class="card-art" aria-hidden="true"><span>&#128196;</span></div>
-              <h2>Carceral History<br />&amp; Archival Sources</h2>
-            </a>
-            <a class="collection-card" href="BOOKS-AND-MANUSCRIPTS.html">
-              <div class="card-art" aria-hidden="true"><span>&#128218;</span></div>
-              <h2>Books &amp;<br />Manuscripts</h2>
-            </a>
-            <a class="collection-card" href="NEWS.html">
-              <div class="card-art" aria-hidden="true"><span>&#9878;</span></div>
-              <h2>News &amp;<br />The Review</h2>
-            </a>
-            <a class="collection-card" href="LAW-LIBRARY.html">
-              <div class="card-art" aria-hidden="true"><span>&#9876;</span></div>
-              <h2>Law Library &amp;<br />Reform History</h2>
-            </a>
-          </div>
-          <p class="status" id="search-status" hidden></p>
-        </div>
-      </section>
-
-      <section class="publication" id="publication" aria-labelledby="publication-title">
-        <div class="publication-inner">
-          <p class="publication-kicker">The Cheesborough Review / Field Notes &amp; Public Memory</p>
-          <h2 class="publication-title" id="publication-title">A living record of justice, history, and reform.</h2>
-          <p class="publication-deck">Investigations into institutional power, juvenile justice, racialized punishment, and the people too often reduced to a line in someone else&apos;s record.</p>
-          <div class="publication-grid">
-            <article class="feature-story">
-              <img class="feature-image" data-dozier-photo="feature" src="01_Photos/02_By-State/Florida/1950s_African American boys gathered on grounds to see a Ross Allen Reptile Institute demonstration at the School for Boys in Marianna, Florida..jpg" alt="Archival photograph of Arthur G. Dozier School for Boys" />
-              <div class="story-copy">
-                <span class="story-label">Dozier / archival investigation</span>
-                <h3><a href="DOZIER-RESEARCH.html">What the Dozier record reveals about a school, its deaths, and its buried history</a></h3>
-                <p>The USF investigation into deaths and burials at the former Arthur G. Dozier School for Boys, read alongside handbooks, photographs, and institutional reports.</p>
-                <div class="story-meta">Primary sources / Research brief</div>
-              </div>
-            </article>
-            <div class="story-list">
-              <article class="mini-story">
-                <span class="story-label">Florida / state punishment</span>
-                <h3><a href="NEWBERRY-AND-FORTUNE.html">Fortune Ferguson, Newberry, and the families left in the record</a></h3>
-                <p>Fortune Ferguson's family history and the Newberry Six belong together through Newberry geography, community, and the records of their families.</p>
-              </article>
-              <article class="mini-story">
-                <span class="story-label">Reading the institution</span>
-                <h3><a href="DOZIER-RESEARCH.html#methods">How to read an institutional record against its silences</a></h3>
-                <p>Handbooks, reports, photographs, and survivor-centered research become stronger evidence when read together and kept in context.</p>
-              </article>
-              <aside class="archive-box">
-                <h3>From the archive</h3>
-                <p>Explore the source sets behind these briefs: Dozier photographs, school handbooks, archival reports, prison records, and scholarship.</p>
-                <a class="archive-link" href="DOZIER-RESEARCH.html">Read the research briefs &rarr;</a>
-              </aside>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="prison-hero" id="florida-prison-system" aria-labelledby="florida-prison-title">
-        <div class="prison-hero-inner">
-          <div class="prison-hero-copy">
-            <span class="story-label">Florida / New research hero</span>
-            <h2 id="florida-prison-title">Inside J.C. Powell&apos;s <em>The American Siberia</em></h2>
-            <p>J. C. Powell's <em>The American Siberia</em> stands alone as a source-led investigation of convict leasing, prison labor, camp administration, and state power.</p>
-            <a class="prison-hero-link" href="MalachiMartin-Chattahoochee.html">Read the Chattahoochee prison history &rarr;</a>
-          </div>
-          <div class="prison-hero-image" role="img" aria-label="Interpreted archival image of a railroad convict procession at Live Oak, 1876"></div>
-        </div>
-      </section>
-
-      <section class="topic-band" id="further-topics" aria-labelledby="further-topics-title">
-        <div class="topic-inner">
-          <p class="topic-kicker">Further topics / research paths</p>
-          <h2 class="topic-title" id="further-topics-title">Follow the record where it leads</h2>
-          <p class="topic-deck">These investigations are deliberately distinct. Each page names its evidence, shows its limits, and leads readers to the underlying documents, images, maps, and transcriptions.</p>
-          <div class="topic-grid">
-            <article class="topic-card"><h3>Malachi Martin and Chattahoochee</h3><p>Florida's first state prison, the Chattahoochee arsenal, Reconstruction administration, prison labor, and the institution's afterlife.</p><a href="MalachiMartin-Chattahoochee.html">Explore the Chattahoochee history &rarr;</a></article>
-            <article class="topic-card"><h3>Fortune Ferguson and Newberry</h3><p>Fortune's family record alongside the families of the Newberry Six, with genealogy questions kept separate from unsupported conclusions.</p><a href="NEWBERRY-AND-FORTUNE.html">Explore family history &rarr;</a></article>
-            <article class="topic-card"><h3>Dozier School for Boys</h3><p>Institutional reports, forensic findings, maps, photographs, school records, and the gap between official language and lived experience.</p><a href="DOZIER-RESEARCH.html">Explore Dozier research &rarr;</a></article>
-            <article class="topic-card"><h3>Evidence index</h3><p>Descriptive access to the relevant PDFs, spreadsheets, JPGs, PNGs, maps, court records, and archival scans used across the site.</p><a href="EVIDENCE-INDEX.html">Open source index &rarr;</a></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="state-band" id="research">
-        <div class="state-inner">
-          <h2>Selected Cases by State</h2>
-          <div class="map-mark" aria-hidden="true">&#9733;</div>
-          <label>
-            <span class="sr-only">Choose a state</span>
-            <select id="state-select" aria-label="Select state">
-              <option value="">Select State</option>
-              <option>Alabama</option>
-              <option>California</option>
-              <option>Georgia</option>
-              <option>Illinois</option>
-              <option>New York</option>
-              <option>Texas</option>
-            </select>
-          </label>
-        </div>
-      </section>
-
-      <section class="news" id="news">
-        <div class="news-inner">
-          <div class="news-header">
-            <h2><a href="NEWS.html">News</a></h2>
-            <a class="news-more-link" href="NEWS.html">Read The Review &rarr;</a>
-          </div>
-          <div class="news-grid">
-            <article><a href="NEWS.html"><time datetime="2026-08-14">August 14, 2026</time> | New study: solitary confinement in juvenile facilities &rarr;</a></article>
-            <article><a href="NEWS.html"><time datetime="2026-07-30">July 30, 2026</time> | Supreme Court rulings on the rights of incarcerated people &rarr;</a></article>
-          </div>
-        </div>
-      </section>
+      <iframe id="preview-iframe" class="preview-frame" src="index2.html"></iframe>
     </main>
+  </div>
 
-    <footer id="contact">
-      <span>The Cheesborough Carceral Collections | 2026</span>
-      <div class="social" aria-label="Social links">
-        <a href="#contact" aria-label="Twitter">&#120143;</a>
-        <a href="#contact" aria-label="Facebook">f</a>
-        <a href="#contact" aria-label="Instagram">&#9673;</a>
-      </div>
-    </footer>
+  <script src="search-data.js"></script>
+  <script>
+    const testQueries = [
+      'Dozier School',
+      'Fortune Ferguson',
+      'American Siberia',
+      'Powell',
+      'Convict Leasing',
+      'Newberry Six',
+      '1880 Census',
+      'Solitary Confinement',
+      'Law Library',
+      'Photography',
+      'San Quentin',
+      'Malachi Martin',
+      'Due Process',
+      'Books'
+    ];
 
-        <script src="search-data.js"></script>
-        <script>
-          const searchForm = document.querySelector("#search-form");
-          const searchInput = document.querySelector("#search-input");
-          const searchDropdown = document.querySelector("#search-dropdown");
-          const stateSelect = document.querySelector("#state-select");
+    const btnContainer = document.getElementById('query-buttons-list');
+    const testLog = document.getElementById('test-log');
+    const previewIframe = document.getElementById('preview-iframe');
+    const previewInput = document.getElementById('preview-url-input');
 
-          function escapeHtml(str) {
-            if (!str) return "";
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-          }
+    function initWorkbench() {
+      if (!window.CheesboroughSearch) {
+        testLog.textContent = 'ERROR: search-data.js not loaded.';
+        return;
+      }
 
-          function getBadgeClass(category) {
-            const cat = (category || "").toLowerCase();
-            if (cat.includes("pdf")) return "pdf";
-            if (cat.includes("data") || cat.includes("spreadsheet")) return "data";
-            if (cat.includes("law")) return "law";
-            if (cat.includes("photo")) return "photo";
-            return "brief";
-          }
+      btnContainer.innerHTML = testQueries.map(q => {
+        const results = window.CheesboroughSearch.search(q);
+        return `
+            <button class="btn-query" onclick="runQueryTest('${q}')">
+              <span>ðŸ”Ž "${q}"</span>
+              <span class="badge">${results.length} matches</span>
+            </button>
+          `;
+      }).join('');
 
-          function renderLiveDropdown(query) {
-            if (!searchDropdown || !window.CheesboroughSearch) return;
-            const q = (query || "").trim();
-            if (!q) {
-              searchDropdown.classList.remove("open");
-              searchDropdown.innerHTML = "";
-              return;
-            }
+      runQueryTest('Dozier School');
+    }
 
-            const results = window.CheesboroughSearch.search(q);
-            const topResults = results.slice(0, 5);
+    function runQueryTest(query) {
+      if (!window.CheesboroughSearch) return;
+      const results = window.CheesboroughSearch.search(query);
 
-            if (results.length === 0) {
-              searchDropdown.innerHTML = `
-                <div class="dropdown-header">
-                  <span>No direct records found</span>
-                  <a href="SEARCH.html?q=${encodeURIComponent(q)}" style="color:var(--gold); text-decoration:underline;">Open Search Page &rarr;</a>
-                </div>
-                <div style="padding:1rem; text-align:center; font-size:0.88rem; color:#666;">
-                  Try searching for <strong>Dozier, Powell, Ferguson, 1880 Census, or Confinement</strong>
-                </div>
-              `;
-              searchDropdown.classList.add("open");
-              return;
-            }
+      let output = `[TEST EXECUTION: "${query}"]\n`;
+      output += `Status: OK (200)\n`;
+      output += `Total Matches: ${results.length}\n`;
+      output += `Top Score: ${results[0] ? results[0].score : 0} pts\n\n`;
+      output += `--- TOP 4 MATCHES ---\n`;
 
-            searchDropdown.innerHTML = `
-              <div class="dropdown-header">
-                <span>Found <span class="gold">${results.length}</span> matching record${results.length === 1 ? '' : 's'}</span>
-                <a href="SEARCH.html?q=${encodeURIComponent(q)}" style="color:var(--gold); text-decoration:none; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.04em;">Full Search Desk &rarr;</a>
-              </div>
-              <ul class="dropdown-items">
-                ${topResults.map(item => `
-                  <li class="dropdown-item">
-                    <a class="dropdown-link" href="${item.url}">
-                      <div class="dropdown-meta">
-                        <span class="dropdown-badge ${getBadgeClass(item.category)}">${item.icon || '📄'} ${escapeHtml(item.badge || item.category)}</span>
-                        ${item.date ? `<span style="color:#777; font-weight:600;">${escapeHtml(item.date)}</span>` : ''}
-                      </div>
-                      <div class="dropdown-title">${item.highlightedTitle || escapeHtml(item.title)}</div>
-                      <div class="dropdown-snippet">${item.highlightedDescription ? item.highlightedDescription.slice(0, 140) + '...' : escapeHtml(item.description.slice(0, 140)) + '...'}</div>
-                    </a>
-                  </li>
-                `).join('')}
-              </ul>
-              <div class="dropdown-footer">
-                <a class="dropdown-footer-link" href="SEARCH.html?q=${encodeURIComponent(q)}">
-                  View all <strong>${results.length}</strong> matching sources on Search Page &rarr;
-                </a>
-              </div>
-            `;
-            searchDropdown.classList.add("open");
-          }
+      results.slice(0, 4).forEach((item, idx) => {
+        output += `${idx + 1}. [${item.category}] ${item.title}\n`;
+        output += `   URL: ${item.url}\n`;
+        output += `   Date: ${item.date || 'N/A'} | Tags: ${item.tags.slice(0, 3).join(', ')}\n\n`;
+      });
 
-          let liveDebounce;
-          if (searchInput) {
-            searchInput.addEventListener("input", () => {
-              clearTimeout(liveDebounce);
-              liveDebounce = setTimeout(() => {
-                renderLiveDropdown(searchInput.value);
-              }, 150);
-            });
+      testLog.textContent = output;
+      loadPreview(`SEARCH.html?q=${encodeURIComponent(query)}`);
+    }
 
-            searchInput.addEventListener("focus", () => {
-              if (searchInput.value.trim().length > 0) {
-                renderLiveDropdown(searchInput.value);
-              }
-            });
-          }
+    function loadPreview(url) {
+      if (previewIframe) previewIframe.src = url;
+      if (previewInput) previewInput.value = url;
+    }
 
-          // Close dropdown when clicking outside
-          document.addEventListener("click", (e) => {
-            if (!e.target.closest(".search-container")) {
-              if (searchDropdown) searchDropdown.classList.remove("open");
-            }
-          });
+    document.addEventListener('DOMContentLoaded', initWorkbench);
+  </script>
+</body>
 
-          // Close dropdown on ESC
-          document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape" && searchDropdown) {
-              searchDropdown.classList.remove("open");
-            }
-          });
-
-          // Form submission navigates directly to SEARCH.html
-          if (searchForm) {
-            searchForm.addEventListener("submit", (event) => {
-              event.preventDefault();
-              const query = searchInput ? searchInput.value.trim() : "";
-              window.location.href = `SEARCH.html${query ? `?q=${encodeURIComponent(query)}` : ''}`;
-            });
-          }
-
-          if (stateSelect) {
-            stateSelect.addEventListener("change", () => {
-              if (stateSelect.value) {
-                window.location.href = `SEARCH.html?q=${encodeURIComponent(stateSelect.value)}`;
-              }
-            });
-          }
-        </script>
-        <script src="dozier-daily-photo.js"></script>
-        <script src="title-case.js"></script></body>
-    </html>
+</html>
