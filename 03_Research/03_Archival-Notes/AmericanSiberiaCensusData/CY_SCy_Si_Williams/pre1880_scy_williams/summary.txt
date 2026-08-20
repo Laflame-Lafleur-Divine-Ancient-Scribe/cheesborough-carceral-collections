@@ -1,0 +1,6 @@
+Target phrase: scy williams
+Criteria: begin_year < 1880
+Books found total: 770
+Books scanned: 44
+Pages scanned: 21975
+Matches found: 0

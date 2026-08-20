@@ -1,0 +1,5 @@
+Filter: exact phrase 'Scy Williams'
+Scanned pages: 6
+Matched pages: 1
+
+DID=799	https://alachuaclerk.org/archive/Clerk/Ancient/FrontPage.cfm?DID=799&BID=207&Trans=799
