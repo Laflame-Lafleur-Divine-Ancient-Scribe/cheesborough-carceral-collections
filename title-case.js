@@ -39,15 +39,21 @@
   }
 
   const normalizeNavigationLabel = (value) => value.split(/(\s+)/).map((word) => {
-    if (!/[A-Za-z]/.test(word) || word === "CCC") return word;
+    if (!/[A-Za-z]/.test(word) || word === "CCC" || /^(?:[A-Z]\.)+$/.test(word)) return word;
     const firstLetter = word.search(/[A-Za-z]/);
     return word.slice(0, firstLetter) + word[firstLetter].toUpperCase() + word.slice(firstLetter + 1).toLowerCase();
   }).join("");
 
   const titleCaseSelectors = "h1, h2, h3, h4, h5, nav a, button, .archive-link, .explore-card a, .news-more-link, .prison-hero-link, .topic-card a, .source";
   document.querySelectorAll(titleCaseSelectors).forEach((element) => {
-    if (element.dataset.titleCaseApplied === "true" || element.children.length > 0) return;
-    element.textContent = normalizeNavigationLabel(element.textContent.trim());
+    if (element.dataset.titleCaseApplied === "true") return;
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    let node;
+    while ((node = walker.nextNode())) textNodes.push(node);
+    textNodes.forEach((textNode) => {
+      textNode.nodeValue = normalizeNavigationLabel(textNode.nodeValue);
+    });
     element.dataset.titleCaseApplied = "true";
   });
 
