@@ -1,291 +1,78 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search &amp; UI Test Workbench | The Cheesborough Collections</title>
+  <title>About | The Cheesborough Carceral Collections</title>
+  <meta name="description" content="About The Cheesborough Carceral Collections: an open civic archive preserving carceral history, legal records, testimonies, and photographs." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --navy: #102c4c;
-      --deep: #091e36;
-      --gold: #c29b53;
-      --paper: #f5f2eb;
-      --card: #ffffff;
-      --line: #ded7cb;
-      --ink: #202020;
-      --green: #1b6343;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: var(--paper);
-      color: var(--ink);
-      font-family: "Source Sans 3", sans-serif;
-      padding: 1.5rem;
-    }
-
-    header {
-      background: var(--deep);
-      color: #fff;
-      padding: 1.5rem 2rem;
-      border-bottom: 4px solid var(--gold);
-      margin-bottom: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    header h1 {
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.6rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 0.8rem;
-    }
-
-    .nav-links a {
-      background: var(--gold);
-      color: var(--deep);
-      padding: 0.4rem 0.8rem;
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-decoration: none;
-      border-radius: 3px;
-    }
-
-    .workbench-grid {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 900px) {
-      .workbench-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      padding: 1.2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .panel h2 {
-      color: var(--navy);
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--gold);
-      padding-bottom: 0.4rem;
-    }
-
-    .query-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .btn-query {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      color: var(--navy);
-      padding: 0.55rem 0.8rem;
-      text-align: left;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.15s;
-      border-radius: 3px;
-    }
-
-    .btn-query:hover {
-      background: var(--gold);
-      color: var(--deep);
-    }
-
-    .btn-query span.badge {
-      background: var(--navy);
-      color: #fff;
-      font-size: 0.72rem;
-      padding: 0.15rem 0.45rem;
-      border-radius: 999px;
-    }
-
-    .test-log {
-      background: #111a24;
-      color: #a8d1ff;
-      font-family: Consolas, monospace;
-      font-size: 0.82rem;
-      line-height: 1.45;
-      padding: 1rem;
-      border-radius: 4px;
-      max-height: 350px;
-      overflow-y: auto;
-    }
-
-    .preview-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .preview-bar {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .preview-bar input {
-      flex: 1;
-      padding: 0.5rem 0.8rem;
-      border: 1px solid var(--line);
-      font-size: 0.95rem;
-    }
-
-    .preview-bar button {
-      background: var(--navy);
-      color: #fff;
-      border: 0;
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    iframe.preview-frame {
-      width: 100%;
-      height: 650px;
-      border: 1px solid var(--line);
-      background: #fff;
-    }
+    :root { --navy:#102c4c; --deep:#091e36; --gold:#c29b53; --paper:#f5f2eb; --ink:#202020; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:"Source Sans 3",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    .topbar { background:var(--gold); color:#fff; text-align:center; padding:.7rem 1rem; font-size:.9rem; letter-spacing:.04em; }
+    .topbar a { padding:0 .7rem; }
+    .topbar a + a { border-left:1px solid #fff; }
+    .topbar .active { color:var(--navy); font-weight:700; }
+    .brand { align-items:end; background:var(--navy); color:#fff; display:flex; gap:1rem; justify-content:space-between; padding:1.1rem clamp(1rem,6vw,6rem); }
+    .brand strong { font:700 clamp(1.3rem,3vw,2.2rem) "Libre Baskerville",serif; }
+    .brand small { font-size:.45em; margin-left:.12em; vertical-align:super; }
+    .brand span { color:var(--gold); letter-spacing:.14em; text-transform:uppercase; }
+    .about-hero { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); min-height:28rem; }
+    .about-hero > div:first-child { background:var(--deep); color:#fff; padding:clamp(2.5rem,5vw,5rem) clamp(1.5rem,5vw,4.5rem); }
+    .about-hero h1 { font:700 clamp(2rem,3.5vw + .5rem,3.4rem)/1.22 "Libre Baskerville",serif; margin:0 0 1.2rem; }
+    .about-hero p { color:#e6dfd1; font-size:clamp(1.02rem,.4vw + .85rem,1.18rem); line-height:1.65; max-width:42rem; }
+    .portrait { background:linear-gradient(135deg,rgba(16,44,76,.1),rgba(9,30,54,.7)),url("https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=85") center/cover; }
+    .about-content { margin:0 auto; max-width:1200px; padding:4rem clamp(1.5rem,4vw,3.5rem); }
+    .about-copy { max-width:72rem; }
+    .about-content h2 { color:var(--navy); font:700 1.8rem "Libre Baskerville",serif; margin:2.5rem 0 .8rem; }
+    .about-content h2:first-child { margin-top:0; }
+    .about-content p { font-size:1.08rem; line-height:1.65; margin:0 0 1.1rem; }
+    footer { background:var(--deep); color:#fff; padding:1rem; text-align:center; }
+    @media(max-width:850px) { .brand { display:block; } .brand span { display:block; margin-top:.4rem; } .about-hero { grid-template-columns:1fr; } .portrait { min-height:18rem; } }
   </style>
 </head>
-
 <body>
   <header>
-    <div>
-      <h1>Search &amp; UI Test Workbench</h1>
-      <p class="verification-caption">Live verification tool for The Cheesborough Carceral Collections
-        search engine</p>
-    </div>
-    <div class="nav-links">
-      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
-      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
-    </div>
+    <nav class="topbar" aria-label="Primary navigation">
+      <a href="index.html">HOME</a><a class="active" href="ABOUT.html">ABOUT</a><a href="SEARCH.html">SEARCH</a><a href="COLLECTIONS.html">COLLECTIONS</a><a href="RESEARCH.html">RESEARCH</a><a href="LAW-LIBRARY.html">LAW LIBRARY</a><a href="NEWS.html">NEWS</a><a href="CONTACT.html">CONTACT</a>
+    </nav>
+    <div class="brand"><strong><a href="index.html">The Cheesborough Carceral Collections<small>&reg;</small></a></strong><span>Institutional purpose / archival record</span></div>
   </header>
-
-  <div class="workbench-grid">
-    <aside class="panel">
-      <h2>Automated Query Tests</h2>
-      <div class="query-buttons" id="query-buttons-list"></div>
-
-      <h2>Live Search Diagnostics</h2>
-      <div class="test-log" id="test-log">Click any query above to run diagnostics...</div>
-    </aside>
-
-    <main class="panel preview-container">
-      <h2>Interactive Page Preview</h2>
-      <div class="preview-bar">
-        <label class="sr-only" for="preview-url-input">Preview page URL</label><input type="text" id="preview-url-input" value="index2.html" aria-label="Preview page URL" placeholder="Enter a page filename" />
-        <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
-          Page</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
-      </div>
-      <iframe id="preview-iframe" class="preview-frame" src="index2.html" title="Live page preview"></iframe>
-    </main>
-  </div>
-
-  <script src="search-data.js"></script>
-  <script>
-    const testQueries = [
-      'Dozier School',
-      'Fortune Ferguson',
-      'American Siberia',
-      'Powell',
-      'Convict Leasing',
-      'Newberry Six',
-      '1880 Census',
-      'Solitary Confinement',
-      'Law Library',
-      'Photography',
-      'San Quentin',
-      'Malachi Martin',
-      'Due Process',
-      'Books'
-    ];
-
-    const btnContainer = document.getElementById('query-buttons-list');
-    const testLog = document.getElementById('test-log');
-    const previewIframe = document.getElementById('preview-iframe');
-    const previewInput = document.getElementById('preview-url-input');
-
-    function initWorkbench() {
-      if (!window.CheesboroughSearch) {
-        testLog.textContent = 'ERROR: search-data.js not loaded.';
-        return;
-      }
-
-      btnContainer.innerHTML = testQueries.map(q => {
-        const results = window.CheesboroughSearch.search(q);
-        return `
-            <button class="btn-query" onclick="runQueryTest('${q}')">
-              <span>ðŸ”Ž "${q}"</span>
-              <span class="badge">${results.length} matches</span>
-            </button>
-          `;
-      }).join('');
-
-      runQueryTest('Dozier School');
-    }
-
-    function runQueryTest(query) {
-      if (!window.CheesboroughSearch) return;
-      const results = window.CheesboroughSearch.search(query);
-
-      let output = `[TEST EXECUTION: "${query}"]\n`;
-      output += `Status: OK (200)\n`;
-      output += `Total Matches: ${results.length}\n`;
-      output += `Top Score: ${results[0] ? results[0].score : 0} pts\n\n`;
-      output += `--- TOP 4 MATCHES ---\n`;
-
-      results.slice(0, 4).forEach((item, idx) => {
-        output += `${idx + 1}. [${item.category}] ${item.title}\n`;
-        output += `   URL: ${item.url}\n`;
-        output += `   Date: ${item.date || 'N/A'} | Tags: ${item.tags.slice(0, 3).join(', ')}\n\n`;
-      });
-
-      testLog.textContent = output;
-      loadPreview(`SEARCH.html?q=${encodeURIComponent(query)}`);
-    }
-
-    function loadPreview(url) {
-      if (previewIframe) previewIframe.src = url;
-      if (previewInput) previewInput.value = url;
-    }
-
-    document.addEventListener('DOMContentLoaded', initWorkbench);
-  </script>
+  <main>
+    <section class="about-hero"><div><h1>Memory as historical evidence.</h1><p>The Cheesborough Carceral Collections is a digital research and public history project devoted to preserving, organizing, interpreting, and expanding access to historical materials concerning incarceration, criminal punishment, juvenile justice, capital punishment, institutional life, law, and the people whose experiences are preserved within those records.</p></div><div class="portrait" role="img" aria-label="Books in a historic library"></div></section>
+    <section class="about-content"><div class="about-copy">
+      <h2>Memory as Historical Evidence</h2>
+      <p>The collection brings together legal documents, government records, institutional publications, photographs, newspapers, census schedules, oral histories, scholarly research, archival material, and other forms of historical evidence so they can be examined together rather than as isolated fragments.</p>
+      <p>The collection approaches these materials as evidence. A court judgment records what a court decided. A prison register records what an institution entered into its books. A newspaper preserves contemporary reporting. An oral history preserves remembered experience. A photograph records what appeared within its frame. Scholarly research interprets evidence through argument and comparison. Each source contributes something different and carries limitations.</p>
+      <h2>Our Mission</h2>
+      <p>The mission is to expand responsible public access to the documentary history of incarceration and criminal justice while preserving the identities, experiences, records, and contexts that give those materials meaning. The archive seeks sources that are difficult to locate, dispersed among institutions, poorly indexed, or separated from related records by geography and administrative history.</p>
+      <p>Historical materials become more useful when readers can determine where they originated, who created them, when and why they were produced, and how they relate to surviving evidence. The archive connects documents with chronology, provenance, institutional history, legal developments, scholarly interpretation, and related primary sources.</p>
+      <h2>Our Vision</h2>
+      <p>The long-term vision is a respected digital research environment where primary sources, archival collections, historical scholarship, public history, and emerging research can be studied together. Visitors should be able to begin with a person, institution, court case, photograph, newspaper, prison record, or event and follow the documentary relationships surrounding it.</p>
+      <h2>Education and Public Scholarship</h2>
+      <p>Education is central to Carceral Collections. The materials support classroom teaching, independent study, student research, scholarly inquiry, public history, genealogy, journalism, community education, and informed discussion about criminal justice and incarceration.</p>
+      <p>Primary sources often disagree. Government records may contain errors. Newspapers may reproduce rumor or prejudice. Administrative records may preserve institutional perspectives while omitting the experiences of people subjected to authority. Oral histories may preserve information unavailable elsewhere while reflecting memory and perspective. Recognizing these differences is part of historical education.</p>
+      <h2>Citation, Attribution, and Intellectual Responsibility</h2>
+      <p>The collection credits the scholars, archivists, institutions, families, journalists, researchers, photographers, preservationists, and community members whose work made its materials available. It identifies original repositories, creators, publications, scholars, and archival collections whenever that information can reasonably be determined. When an omission is identified, the record should be corrected or expanded.</p>
+      <h2>Use of Materials</h2>
+      <p>Materials originate from many sources and may be governed by copyright, ownership, reproduction, privacy, or repository policies. Their appearance here does not transfer ownership of an underlying work. Users should consult original sources before republication or commercial reuse and cite the original document and holding repository whenever details are available.</p>
+      <h2>Acknowledgment of Contributors</h2>
+      <p>The project gratefully acknowledges archivists, librarians, scholars, journalists, genealogists, public employees, archaeologists, forensic researchers, oral historians, community historians, descendants, universities, archives, libraries, historical societies, government repositories, digital collections, and special collections departments whose stewardship makes these sources accessible.</p>
+      <h2>Supporting the Collection</h2>
+      <p>Continued development requires archival access, digitization, acquisition, preservation, transcription, database development, hosting, research travel, licensing, scanning, metadata creation, genealogical investigation, technical infrastructure, and time to examine and contextualize records.</p>
+      <p>Donors and institutional partners can support digitization, archival research, transcription, preservation, educational resources, partnerships, collection access, and public programming. Financial support must serve the scholarly and educational purpose. The credibility of the historical record remains independent of preferred interpretations.</p>
+      <h2>Ways to Participate</h2>
+      <p>Visitors can identify records, photographs, family histories, archival collections, or corrections. Educators, scholars, libraries, archives, volunteers, donors, and descendants can help expand the collection. Letters, photographs, institutional publications, court papers, prison documents, newspapers, family records, scrapbooks, and audio recordings may provide evidence unavailable in formal repositories.</p>
+      <h2>An Open Civic Archive</h2>
+      <p>The Cheesborough Carceral Collections was established on the principle that historical evidence becomes more valuable when it can be examined. Public access increases the responsibility for scholarly care.</p>
+      <p>The archive will continue to develop as records are located, materials are reexamined, partnerships expand, and researchers contribute knowledge. Its objective is to preserve documentary evidence, establish connections among records, credit the people and institutions responsible for preserving knowledge, and provide future researchers with a stronger foundation for continuing the work.</p>
+    </div></section>
+  </main>
+  <footer>The Cheesborough Carceral Collections | ABOUT</footer>
+  <script src="title-case.js"></script>
 </body>
-
 </html>

@@ -1,291 +1,493 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search &amp; UI Test Workbench | The Cheesborough Collections</title>
+  <title>Document Reader | The Cheesborough Carceral Collections</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --navy: #102c4c;
       --deep: #091e36;
       --gold: #c29b53;
+      --gold-light: #dfc287;
       --paper: #f5f2eb;
-      --card: #ffffff;
-      --line: #ded7cb;
       --ink: #202020;
-      --green: #1b6343;
+      --muted: #625f59;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--paper);
-      color: var(--ink);
+      background: #1e242b;
+      color: #e5ded2;
       font-family: "Source Sans 3", sans-serif;
-      padding: 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-user-select: none;
+      user-select: none;
     }
+    a { color: inherit; text-decoration: none; }
 
-    header {
+    /* Top Header */
+    .reader-header {
       background: var(--deep);
+      border-bottom: 2px solid var(--gold);
       color: #fff;
-      padding: 1.5rem 2rem;
-      border-bottom: 4px solid var(--gold);
-      margin-bottom: 1.5rem;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      padding: 0.75rem clamp(1rem, 4vw, 2.5rem);
+      font-size: 0.88rem;
+      z-index: 10;
     }
-
-    header h1 {
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.6rem;
+    .brand-link {
+      color: var(--gold-light);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
     }
-
-    .nav-links {
+    .brand-link:hover { color: #fff; }
+    .header-nav {
       display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .header-nav a {
+      color: #d2c8b8;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+    .header-nav a:hover { color: var(--gold); }
+    .header-badge {
+      background: rgba(194, 155, 83, 0.2);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+    }
+
+    /* Document Title & Control Toolbar */
+    .toolbar-bar {
+      background: #141a22;
+      border-bottom: 1px solid #2d3846;
+      padding: 0.7rem clamp(1rem, 4vw, 2.5rem);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
       gap: 0.8rem;
     }
-
-    .nav-links a {
-      background: var(--gold);
-      color: var(--deep);
-      padding: 0.4rem 0.8rem;
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-decoration: none;
-      border-radius: 3px;
-    }
-
-    .workbench-grid {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 900px) {
-      .workbench-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      padding: 1.2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .panel h2 {
-      color: var(--navy);
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--gold);
-      padding-bottom: 0.4rem;
-    }
-
-    .query-buttons {
+    .doc-info {
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.15rem;
+      max-width: 650px;
+    }
+    .doc-kicker {
+      color: var(--gold);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .doc-title {
+      color: #fff;
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-weight: 700;
+      line-height: 1.25;
+      overflow-wrap: break-word;
+    }
+
+    /* Reader Controls */
+    .controls-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn-control {
+      background: #252f3d;
+      border: 1px solid #3d4b5c;
+      color: #e5ded2;
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 0.4rem 0.75rem;
+      border-radius: 3px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .btn-control:hover {
+      background: var(--navy);
+      border-color: var(--gold);
+      color: #fff;
+    }
+    .btn-control:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+    .page-counter {
+      color: #a8b6c5;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .page-input {
+      background: #0d1218;
+      border: 1px solid #3d4b5c;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: 3.5rem;
+      padding: 0.25rem 0.4rem;
+      text-align: center;
+      border-radius: 3px;
+    }
+    .toolbar-divider {
+      color: #4a5568;
+      margin: 0 0.2rem;
+    }
+
+    /* Document Viewport */
+    .reader-container {
+      flex: 1;
+      overflow: auto;
+      padding: 1.5rem 1rem 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #181d24;
+      position: relative;
+    }
+    .pdf-pages-canvas-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 960px;
+    }
+    .pdf-page-card {
+      background: #fff;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+      max-width: 960px;
+      width: 100%;
+      position: relative;
+      border-radius: 2px;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .pdf-page-card canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+    }
+    .page-label-tag {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      background: rgba(16, 44, 76, 0.85);
+      color: var(--gold-light);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      letter-spacing: 0.04em;
+    }
+    .pdf-fallback-card {
+      background: #fff;
+      border-radius: 3px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+      max-width: 960px;
+      overflow: hidden;
+      width: 100%;
+    }
+    .pdf-fallback-embed {
+      border: 0;
+      display: block;
+      height: 82vh;
+      width: 100%;
+    }
+
+    /* Loading and Status */
+    .reader-status-overlay {
+      position: absolute;
+      inset: 0;
+      background: #181d24;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      z-index: 5;
+    }
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(194, 155, 83, 0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
       margin-bottom: 1.2rem;
     }
-
-    .btn-query {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      color: var(--navy);
-      padding: 0.55rem 0.8rem;
-      text-align: left;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.15s;
-      border-radius: 3px;
-    }
-
-    .btn-query:hover {
-      background: var(--gold);
-      color: var(--deep);
-    }
-
-    .btn-query span.badge {
-      background: var(--navy);
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status-title {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.3rem;
       color: #fff;
-      font-size: 0.72rem;
-      padding: 0.15rem 0.45rem;
-      border-radius: 999px;
+      margin-bottom: 0.4rem;
     }
-
-    .test-log {
-      background: #111a24;
-      color: #a8d1ff;
-      font-family: Consolas, monospace;
-      font-size: 0.82rem;
-      line-height: 1.45;
-      padding: 1rem;
-      border-radius: 4px;
-      max-height: 350px;
-      overflow-y: auto;
-    }
-
-    .preview-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .preview-bar {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .preview-bar input {
-      flex: 1;
-      padding: 0.5rem 0.8rem;
-      border: 1px solid var(--line);
+    .status-text {
+      color: #a0aec0;
       font-size: 0.95rem;
+      max-width: 450px;
     }
 
-    .preview-bar button {
-      background: var(--navy);
-      color: #fff;
-      border: 0;
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      cursor: pointer;
+    /* Footer Notice */
+    .reader-footer-note {
+      background: #0e1318;
+      border-top: 1px solid #232c38;
+      color: #7b8896;
+      font-size: 0.78rem;
+      text-align: center;
+      padding: 0.65rem 1rem;
+      letter-spacing: 0.02em;
     }
-
-    iframe.preview-frame {
-      width: 100%;
-      height: 650px;
-      border: 1px solid var(--line);
-      background: #fff;
-    }
+    [hidden] { display: none !important; }
   </style>
 </head>
-
-<body>
-  <header>
-    <div>
-      <h1>Search &amp; UI Test Workbench</h1>
-      <p class="verification-caption">Live verification tool for The Cheesborough Carceral Collections
-        search engine</p>
-    </div>
-    <div class="nav-links">
-      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
-      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
-    </div>
+<body oncontextmenu="return false;">
+  <header class="reader-header">
+    <a class="brand-link" href="index.html">The Cheesborough Carceral Collections</a>
+    <nav class="header-nav">
+      <a href="BOOKS-AND-MANUSCRIPTS.html">Books &amp; Manuscripts</a>
+      <a href="SEARCH.html">Search Archive</a>
+      <a href="COLLECTIONS.html">Collections</a>
+      <a href="javascript:history.back()">← Return</a>
+    </nav>
+    <span class="header-badge">View-Only Reader</span>
   </header>
 
-  <div class="workbench-grid">
-    <aside class="panel">
-      <h2>Automated Query Tests</h2>
-      <div class="query-buttons" id="query-buttons-list"></div>
-
-      <h2>Live Search Diagnostics</h2>
-      <div class="test-log" id="test-log">Click any query above to run diagnostics...</div>
-    </aside>
-
-    <main class="panel preview-container">
-      <h2>Interactive Page Preview</h2>
-      <div class="preview-bar">
-        <label class="sr-only" for="preview-url-input">Preview page URL</label><input type="text" id="preview-url-input" value="index2.html" aria-label="Preview page URL" placeholder="Enter a page filename" />
-        <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
-          Page</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
+  <div class="toolbar-bar">
+    <div class="doc-info">
+      <span class="doc-kicker" id="doc-kicker">Archival Document</span>
+      <h1 class="doc-title" id="doc-title">Loading Document...</h1>
+    </div>
+    <div class="controls-wrap" id="controls-wrap">
+      <button type="button" class="btn-control" id="btn-prev-page" title="Previous Page">◀ Prev</button>
+      <div class="page-counter">
+        Page <input type="number" id="page-jump-input" class="page-input" min="1" value="1" aria-label="Current page" /> of <span id="total-pages-count">1</span>
       </div>
-      <iframe id="preview-iframe" class="preview-frame" src="index2.html" title="Live page preview"></iframe>
-    </main>
+      <button type="button" class="btn-control" id="btn-next-page" title="Next Page">Next ▶</button>
+      <span class="toolbar-divider" aria-hidden="true">|</span>
+      <button type="button" class="btn-control" id="btn-zoom-out" title="Zoom Out">🔍 −</button>
+      <button type="button" class="btn-control" id="btn-zoom-in" title="Zoom In">🔍 +</button>
+      <button type="button" class="btn-control" id="btn-fit-width" title="Fit Width">↔ Fit</button>
+    </div>
   </div>
 
-  <script src="search-data.js"></script>
-  <script>
-    const testQueries = [
-      'Dozier School',
-      'Fortune Ferguson',
-      'American Siberia',
-      'Powell',
-      'Convict Leasing',
-      'Newberry Six',
-      '1880 Census',
-      'Solitary Confinement',
-      'Law Library',
-      'Photography',
-      'San Quentin',
-      'Malachi Martin',
-      'Due Process',
-      'Books'
-    ];
+  <main class="reader-container" id="reader-container">
+    <div id="status-overlay" class="reader-status-overlay">
+      <div class="spinner" id="spinner"></div>
+      <h2 class="status-title" id="status-heading">Loading Archival Text...</h2>
+      <p class="status-text" id="status-desc">Rendering pages for in-browser scholarly review.</p>
+    </div>
 
-    const btnContainer = document.getElementById('query-buttons-list');
-    const testLog = document.getElementById('test-log');
-    const previewIframe = document.getElementById('preview-iframe');
-    const previewInput = document.getElementById('preview-url-input');
+    <div class="pdf-pages-canvas-list" id="pdf-pages-list"></div>
+  </main>
 
-    function initWorkbench() {
-      if (!window.CheesboroughSearch) {
-        testLog.textContent = 'ERROR: search-data.js not loaded.';
+  <footer class="reader-footer-note">
+    The Cheesborough Carceral Collections | In-Browser Archival Reading Room • View-Only Preservation Access
+  </footer>
+
+  <script type="module">
+    import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+
+    const params = new URLSearchParams(window.location.search);
+    const rawFile = params.get("file");
+    const docTitle = document.getElementById("doc-title");
+    const docKicker = document.getElementById("doc-kicker");
+    const pagesContainer = document.getElementById("pdf-pages-list");
+    const statusOverlay = document.getElementById("status-overlay");
+    const spinner = document.getElementById("spinner");
+    const statusHeading = document.getElementById("status-heading");
+    const statusDesc = document.getElementById("status-desc");
+    const totalPagesCount = document.getElementById("total-pages-count");
+    const pageJumpInput = document.getElementById("page-jump-input");
+    const btnPrev = document.getElementById("btn-prev-page");
+    const btnNext = document.getElementById("btn-next-page");
+    const btnZoomIn = document.getElementById("btn-zoom-in");
+    const btnZoomOut = document.getElementById("btn-zoom-out");
+    const btnFit = document.getElementById("btn-fit-width");
+    const controlsWrap = document.getElementById("controls-wrap");
+    const readerContainer = document.getElementById("reader-container");
+
+    let currentPdf = null;
+    let totalPages = 0;
+    let currentPage = 1;
+    let currentScale = 1.35;
+    let renderRequestId = 0;
+
+    function formatTitleFromPath(path) {
+      if (!path) return "Document Reader";
+      const filename = path.replaceAll("\\", "/").split("/").pop();
+      return decodeURIComponent(filename)
+        .replace(/\.pdf$/i, "")
+        .replace(/_CompleteBook(s)?/i, "")
+        .replace(/_19\d\d/i, "")
+        .replace(/p\.\d+/i, "")
+        .replace(/_/g, " ");
+    }
+
+    function toFileUrl(path) {
+      const normalized = path.replaceAll("\\", "/");
+      if (/^https?:\/\//i.test(normalized)) return normalized;
+      const encodedPath = normalized.split("/").map(part => encodeURIComponent(part)).join("/");
+      return new URL(encodedPath, document.baseURI).href;
+    }
+
+    async function loadDocument() {
+      if (!rawFile) {
+        spinner.hidden = true;
+        statusHeading.textContent = "No Document Selected";
+        statusDesc.textContent = "Please select a book or archival document from the library catalog to view it here.";
+        docTitle.textContent = "No Document Selected";
         return;
       }
 
-      btnContainer.innerHTML = testQueries.map(q => {
-        const results = window.CheesboroughSearch.search(q);
-        return `
-            <button class="btn-query" onclick="runQueryTest('${q}')">
-              <span>ðŸ”Ž "${q}"</span>
-              <span class="badge">${results.length} matches</span>
-            </button>
-          `;
-      }).join('');
+      const cleanTitle = formatTitleFromPath(rawFile);
+      docTitle.textContent = cleanTitle;
+      document.title = `${cleanTitle} | Document Reader`;
 
-      runQueryTest('Dozier School');
+      if (rawFile.includes("02_Books-and-Manuscripts") || rawFile.includes("Books") || rawFile.includes("CompleteBook")) {
+        docKicker.textContent = "Books & Manuscripts • Complete Text";
+      } else if (rawFile.includes("Dozier")) {
+        docKicker.textContent = "Dozier School Collection • Primary Record";
+      } else if (rawFile.includes("Census")) {
+        docKicker.textContent = "Census & Demographic Record • Primary Source";
+      } else if (rawFile.includes("FORTUNE")) {
+        docKicker.textContent = "Fortune Ferguson Collection • Legal Archive";
+      }
+
+      try {
+        const fileUrl = toFileUrl(rawFile);
+        const loadingTask = pdfjsLib.getDocument(fileUrl);
+        currentPdf = await loadingTask.promise;
+        totalPages = currentPdf.numPages;
+        totalPagesCount.textContent = totalPages;
+        pageJumpInput.max = totalPages;
+
+        statusOverlay.hidden = true;
+        await renderPage(1);
+      } catch (err) {
+        console.warn("PDF.js direct fetch notice (falling back to embedded canvas/object reader):", err);
+        const fileUrl = toFileUrl(rawFile);
+        statusOverlay.hidden = true;
+        controlsWrap.hidden = true;
+        const fallbackCard = document.createElement("div");
+        fallbackCard.className = "pdf-fallback-card";
+        const embeddedPdf = document.createElement("embed");
+        embeddedPdf.className = "pdf-fallback-embed";
+        embeddedPdf.src = `${fileUrl}#toolbar=0&navpanes=0&scrollbar=1`;
+        embeddedPdf.type = "application/pdf";
+        fallbackCard.appendChild(embeddedPdf);
+        pagesContainer.replaceChildren(fallbackCard);
+      }
     }
 
-    function runQueryTest(query) {
-      if (!window.CheesboroughSearch) return;
-      const results = window.CheesboroughSearch.search(query);
-
-      let output = `[TEST EXECUTION: "${query}"]\n`;
-      output += `Status: OK (200)\n`;
-      output += `Total Matches: ${results.length}\n`;
-      output += `Top Score: ${results[0] ? results[0].score : 0} pts\n\n`;
-      output += `--- TOP 4 MATCHES ---\n`;
-
-      results.slice(0, 4).forEach((item, idx) => {
-        output += `${idx + 1}. [${item.category}] ${item.title}\n`;
-        output += `   URL: ${item.url}\n`;
-        output += `   Date: ${item.date || 'N/A'} | Tags: ${item.tags.slice(0, 3).join(', ')}\n\n`;
-      });
-
-      testLog.textContent = output;
-      loadPreview(`SEARCH.html?q=${encodeURIComponent(query)}`);
+    function updateControls() {
+      pageJumpInput.value = currentPage;
+      btnPrev.disabled = currentPage <= 1;
+      btnNext.disabled = currentPage >= totalPages;
     }
 
-    function loadPreview(url) {
-      if (previewIframe) previewIframe.src = url;
-      if (previewInput) previewInput.value = url;
+    async function renderPage(pageNumber) {
+      if (!currentPdf) return;
+      currentPage = Math.max(1, Math.min(pageNumber, totalPages));
+      updateControls();
+      const requestId = ++renderRequestId;
+      const page = await currentPdf.getPage(currentPage);
+      const viewport = page.getViewport({ scale: currentScale });
+      if (requestId !== renderRequestId) return;
+
+      const card = document.createElement("div");
+      card.className = "pdf-page-card";
+      card.id = `pdf-page-num-${currentPage}`;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      canvas.setAttribute("aria-label", `Page ${currentPage} of ${totalPages}`);
+
+      const label = document.createElement("span");
+      label.className = "page-label-tag";
+      label.textContent = `Page ${currentPage} / ${totalPages}`;
+
+      card.append(canvas, label);
+      pagesContainer.replaceChildren(card);
+      readerContainer.scrollTo({ top: 0, behavior: "smooth" });
+
+      const context = canvas.getContext("2d");
+      await page.render({ canvasContext: context, viewport }).promise;
     }
 
-    document.addEventListener('DOMContentLoaded', initWorkbench);
+    // Interactive Controls
+    btnPrev?.addEventListener("click", () => {
+      renderPage(currentPage - 1);
+    });
+
+    btnNext?.addEventListener("click", () => {
+      renderPage(currentPage + 1);
+    });
+
+    pageJumpInput?.addEventListener("change", (e) => {
+      let val = parseInt(e.target.value, 10) || 1;
+      val = Math.max(1, Math.min(val, totalPages));
+      renderPage(val);
+    });
+
+    btnZoomIn?.addEventListener("click", async () => {
+      if (currentScale < 2.5) {
+        currentScale += 0.2;
+        await renderPage(currentPage);
+      }
+    });
+
+    btnZoomOut?.addEventListener("click", async () => {
+      if (currentScale > 0.7) {
+        currentScale -= 0.2;
+        await renderPage(currentPage);
+      }
+    });
+
+    btnFit?.addEventListener("click", async () => {
+      currentScale = 1.25;
+      await renderPage(currentPage);
+    });
+
+    loadDocument();
   </script>
 </body>
-
 </html>

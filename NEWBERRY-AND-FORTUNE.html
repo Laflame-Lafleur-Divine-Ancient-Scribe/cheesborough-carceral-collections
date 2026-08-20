@@ -1,291 +1,728 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search &amp; UI Test Workbench | The Cheesborough Collections</title>
+  <title>The Newberry Six, Fortune Ferguson, and Racial Reckoning in Alachua County | The Cheesborough Carceral Collections</title>
+  <meta name="description" content="A comprehensive historical and archival investigation into the 1916 Newberry Six lynchings, Fortune 'Jew' Ferguson Jr., the centralization of Florida's death penalty, and ongoing truth and reconciliation in Alachua County." />
+  <meta name="keywords" content="newberry six, fortune ferguson, fortune jew ferguson, alachua county, boisey long, newberry florida, 1916 lynching, electric chair, brandon jett, dudley farm, soil collection, equal justice initiative, pleasant plain, truth and reconciliation" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
       --navy: #102c4c;
       --deep: #091e36;
       --gold: #c29b53;
+      --gold-light: #dfc287;
       --paper: #f5f2eb;
-      --card: #ffffff;
+      --paper-card: #ffffff;
       --line: #ded7cb;
+      --line-dark: #c4baa9;
       --ink: #202020;
-      --green: #1b6343;
+      --muted: #65615a;
+      --red: #8f3d32;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--paper);
       color: var(--ink);
       font-family: "Source Sans 3", sans-serif;
-      padding: 1.5rem;
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0;
     }
+    a { color: var(--navy); text-decoration: none; }
+    a:hover { text-decoration: underline; color: var(--gold); }
 
-    header {
+    /* Topbar Navigation */
+    .topbar {
+      background: var(--gold);
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem 1.4rem;
+      justify-content: center;
+      padding: 0.65rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .topbar a { color: #fff; transition: opacity 0.15s; }
+    .topbar a:hover { opacity: 0.82; text-decoration: none; }
+    .topbar a.active { border-bottom: 2px solid #fff; }
+
+    /* Hero Section */
+    .hero {
       background: var(--deep);
       color: #fff;
-      padding: 1.5rem 2rem;
-      border-bottom: 4px solid var(--gold);
-      margin-bottom: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      min-height: 34rem;
+      border-bottom: 5px solid var(--gold);
+    }
+    .hero-copy {
+      align-self: center;
+      max-width: 44rem;
+      padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4rem);
+      box-sizing: border-box;
+    }
+    .hero-image {
+      background: url("RESEARCH%20WEBSITE%20HERO/FORTUNE%20FERGUSON%20JR/Fortune%20Ferguson%2C%20FL%2C%201927%20April%2027%20-%20M.E.%20Grenander%20Department%20of%20Special%20Collections%20%26%20Archives_files/thumbnail.jpg") center/cover;
+      min-height: 22rem;
+    }
+    .eyebrow {
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: clamp(1.85rem, 2.3vw + 0.5rem, 2.85rem);
+      line-height: 1.22;
+      letter-spacing: -0.01em;
+      margin: 0.85rem 0 1.15rem;
+      
+      word-break: normal;
+      overflow-wrap: break-word;
+    }
+    .hero p {
+      color: #e6dfd1;
+      font-size: clamp(1.02rem, 0.4vw + 0.85rem, 1.15rem);
+      line-height: 1.65;
+      max-width: 38rem;
+    }
+
+    /* Main Layout Grid */
+    .layout {
+      display: grid;
+      gap: 3.5rem;
+      grid-template-columns: minmax(0, 1fr) 21rem;
+      margin: auto;
+      max-width: 1200px;
+      padding: 3.5rem 1.3rem 5rem;
+    }
+    article { min-width: 0; }
+    article h2 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.75rem;
+      line-height: 1.3;
+      margin: 2.8rem 0 1rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 2px solid var(--line);
+    }
+    article h2:first-of-type { margin-top: 0; }
+    article h3 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.25rem;
+      line-height: 1.35;
+      margin: 1.8rem 0 0.6rem;
+    }
+    article p {
+      color: #383531;
+      font-size: 1.06rem;
+      line-height: 1.75;
+      margin: 1rem 0;
+    }
+    article ul, article ol {
+      margin: 1rem 0 1.5rem 1.5rem;
+      color: #383531;
+      font-size: 1.04rem;
+      line-height: 1.7;
+    }
+    article li { margin-bottom: 0.5rem; }
+
+    /* Callouts & Quotes */
+    .pullquote {
+      border-left: 5px solid var(--gold);
+      background: #faf7f0;
+      color: var(--navy);
+      font: italic 700 1.2rem/1.6 "Libre Baskerville", Georgia, serif;
+      margin: 2rem 0;
+      padding: 1.2rem 1.6rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .warning-box {
+      background: #fff;
+      border-left: 5px solid var(--red);
+      padding: 1.2rem 1.4rem;
+      margin: 1.8rem 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .warning-box strong {
+      color: var(--red);
+      display: block;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .warning-box p {
+      font-size: 0.98rem;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .reconciliation-card {
+      background: #fdfbf7;
+      border: 1px solid var(--gold);
+      border-left: 6px solid var(--gold);
+      padding: 1.4rem 1.6rem;
+      margin: 2rem 0;
+      border-radius: 2px;
+      box-shadow: 0 4px 16px rgba(194, 155, 83, 0.12);
+    }
+    .reconciliation-card h3 {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    /* Stat Cards */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1rem;
+      margin: 2rem 0;
     }
-
-    header h1 {
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.6rem;
-    }
-
-    .nav-links {
+    .stat-card {
+      background: var(--navy);
+      color: #fff;
+      padding: 1.2rem;
+      border-top: 4px solid var(--gold);
+      border-radius: 2px;
       display: flex;
-      gap: 0.8rem;
+      flex-direction: column;
+    }
+    .stat-number {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .stat-label {
+      font-size: 0.84rem;
+      line-height: 1.4;
+      color: #dce5ec;
     }
 
-    .nav-links a {
+    /* Comparative Data Matrix */
+    .matrix-table-wrap {
+      overflow-x: auto;
+      margin: 2rem 0;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .matrix-table th {
+      background: #eee8de;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Timeline */
+    .timeline-list {
+      border-left: 3px solid var(--gold);
+      margin: 2rem 0 2rem 0.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline-event {
+      margin-bottom: 1.6rem;
+      position: relative;
+    }
+    .timeline-event::before {
+      content: "";
+      position: absolute;
+      left: -1.96rem;
+      top: 0.35rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
       background: var(--gold);
-      color: var(--deep);
-      padding: 0.4rem 0.8rem;
+      border: 2px solid var(--deep);
+    }
+    .timeline-date {
+      color: var(--gold);
       font-weight: 700;
       font-size: 0.85rem;
-      text-decoration: none;
-      border-radius: 3px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .timeline-title {
+      color: var(--navy);
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0.15rem 0 0.35rem;
     }
 
-    .workbench-grid {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 1.5rem;
+    /* Sidebar Panels */
+    .sidebar-panel {
+      height: 100%;
+      position: sticky;
+      top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    .panel-box {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--gold);
+      padding: 1.4rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      border-radius: 2px;
+    }
+    .sidebar-end-bar {
+      background: var(--gold);
+      border-left: 1px solid rgba(16, 44, 76, 0.35);
+      box-shadow: -10px 0 22px rgba(9, 30, 54, 0.2), 0 10px 24px rgba(9, 30, 54, 0.12);
+      flex: 1 1 auto;
+      margin-top: 1rem;
+      min-height: 12rem;
+      width: 100%;
+    }
+    .panel-box h3 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.15rem;
+      color: var(--navy);
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .source-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .source-item a {
+      color: var(--navy);
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: block;
+    }
+    .source-item a:hover {
+      color: var(--gold);
+      text-decoration: underline;
+    }
+    .source-meta {
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .source-meta-light { color: var(--gold-light); }
+
+    .community-action-box {
+      background: #102c4c;
+      color: #fff;
+      border-top: 5px solid var(--gold);
+      padding: 1.4rem;
+      border-radius: 2px;
+    }
+    .community-action-box h3 {
+      font-family: "Libre Baskerville", Georgia, serif;
+      color: #fff;
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+    .community-action-box p {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #dce5ec;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background: var(--deep);
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 4px solid var(--gold);
     }
 
     @media (max-width: 900px) {
-      .workbench-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      padding: 1.2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .panel h2 {
-      color: var(--navy);
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--gold);
-      padding-bottom: 0.4rem;
-    }
-
-    .query-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .btn-query {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      color: var(--navy);
-      padding: 0.55rem 0.8rem;
-      text-align: left;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.15s;
-      border-radius: 3px;
-    }
-
-    .btn-query:hover {
-      background: var(--gold);
-      color: var(--deep);
-    }
-
-    .btn-query span.badge {
-      background: var(--navy);
-      color: #fff;
-      font-size: 0.72rem;
-      padding: 0.15rem 0.45rem;
-      border-radius: 999px;
-    }
-
-    .test-log {
-      background: #111a24;
-      color: #a8d1ff;
-      font-family: Consolas, monospace;
-      font-size: 0.82rem;
-      line-height: 1.45;
-      padding: 1rem;
-      border-radius: 4px;
-      max-height: 350px;
-      overflow-y: auto;
-    }
-
-    .preview-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .preview-bar {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .preview-bar input {
-      flex: 1;
-      padding: 0.5rem 0.8rem;
-      border: 1px solid var(--line);
-      font-size: 0.95rem;
-    }
-
-    .preview-bar button {
-      background: var(--navy);
-      color: #fff;
-      border: 0;
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    iframe.preview-frame {
-      width: 100%;
-      height: 650px;
-      border: 1px solid var(--line);
-      background: #fff;
+      .hero { grid-template-columns: 1fr; }
+      .hero-image { min-height: 18rem; }
+      .hero-copy { max-width: 100%; padding: clamp(2rem, 5vw, 3rem) clamp(1.2rem, 4vw, 2rem); }
+      .layout { grid-template-columns: 1fr; padding-top: 2rem; }
+      .sidebar-panel { position: static; }
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <div>
-      <h1>Search &amp; UI Test Workbench</h1>
-      <p class="verification-caption">Live verification tool for The Cheesborough Carceral Collections
-        search engine</p>
+  <nav class="topbar" aria-label="Primary navigation">
+    <a href="index.html">HOME</a>
+    <a href="ABOUT.html">ABOUT</a>
+    <a href="SEARCH.html">SEARCH</a>
+    <a href="COLLECTIONS.html">COLLECTIONS</a>
+    <a class="active" href="NEWBERRY-AND-FORTUNE.html">NEWBERRY &amp; FORTUNE</a>
+    <a href="DOZIER-RESEARCH.html">DOZIER RESEARCH</a>
+    <a href="DOZIER-NEWSPAPERS.html">DOZIER NEWSPAPERS</a>
+    <a href="BOOKS-AND-MANUSCRIPTS.html">BOOKS &amp; MANUSCRIPTS</a>
+    <a href="EVIDENCE-INDEX.html">EVIDENCE INDEX</a>
+    <a href="DONATE.html">DONATE</a>
+    <a href="CONTACT.html">CONTACT</a>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Alachua County, Florida / Racial Violence, Capital Punishment, and State Authority, 1916 to 1927</div>
+      <h1>The Newberry Lynchings and Fortune Ferguson Jr.: Race, Capital Punishment, and the Transformation of State Authority in Florida</h1>
+      <p>This archival study examines the 1916 Newberry lynchings, the prosecution and execution of Boisey Long, and the later capital case of Fortune Ferguson Jr. as distinct but historically related episodes within the development of criminal punishment in Alachua County and the State of Florida. Between Long's execution in Gainesville in 1916 and Ferguson's execution at Florida State Prison in 1927, Florida transferred the administration of capital punishment from county sheriffs to the state prison system and replaced hanging with electrocution. The records assembled here document that transformation while preserving the legal distinction between racial terror carried out outside judicial process and executions imposed through formal criminal proceedings.</p>
     </div>
-    <div class="nav-links">
-      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
-      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
-    </div>
+    <div class="hero-image" role="img" aria-label="Archival record card and primary census ledger of Fortune Ferguson Jr."></div>
   </header>
 
-  <div class="workbench-grid">
-    <aside class="panel">
-      <h2>Automated Query Tests</h2>
-      <div class="query-buttons" id="query-buttons-list"></div>
+  <main class="layout">
+    <article>
+      <h2>I. Newberry and the Changing Administration of Death in Florida</h2>
+      <p>The events that unfolded in western Alachua County during August 1916 began with an attempted arrest and developed into one of the most consequential episodes of racial violence in the region's history. Constable George Wynne and Dr. L. G. Harris went to the property of Boisey Long near Newberry and Jonesville in connection with an accusation involving stolen hogs. Gunfire followed. Wynne received fatal wounds, Harris was wounded, and Long fled. The search for Long rapidly expanded beyond an effort to locate a single suspect as armed white residents and law enforcement personnel moved through the surrounding Black farming communities.</p>
 
-      <h2>Live Search Diagnostics</h2>
-      <div class="test-log" id="test-log">Click any query above to run diagnostics...</div>
-    </aside>
+      <p>At least six Black residents were killed during the violence associated with the manhunt. James Dennis was killed during the search. Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, and Reverend Joshua Baskin were detained and held in the Newberry jail before a mob removed them from custody and lynched them. Mary Dennis was pregnant. The detention of five victims before their deaths places the episode directly within the history of public authority because the violence did not occur entirely outside governmental structures. The victims had entered official custody and nevertheless received no effective protection from the mob that seized them.</p>
 
-    <main class="panel preview-container">
-      <h2>Interactive Page Preview</h2>
-      <div class="preview-bar">
-        <label class="sr-only" for="preview-url-input">Preview page URL</label><input type="text" id="preview-url-input" value="index2.html" aria-label="Preview page URL" placeholder="Enter a page filename" />
-        <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
-          Page</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
+      <p>The historical record surrounding Newberry has continued to develop. The six victims traditionally associated with the mass lynching remain central to the episode, but subsequent research and community remembrance projects have documented a broader history of racial terror in Newberry. In 2021, the Alachua County Community Remembrance Project and the Equal Justice Initiative dedicated a historical marker at Freddie Warmack Park commemorating nine documented victims of racial terror lynching associated with Newberry. The broader memorial record includes victims from other years and must not be conflated with the six people conventionally identified with the August 1916 killings.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-number">1916</div>
+          <div class="stat-label">August violence in Newberry and western Alachua County</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">6</div>
+          <div class="stat-label">Conventionally identified victims of the August 1916 Newberry mass lynching</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1923</div>
+          <div class="stat-label">Florida centralizes executions at the state prison</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">1927</div>
+          <div class="stat-label">Fortune Ferguson Jr. executed at Florida State Prison</div>
+        </div>
       </div>
-      <iframe id="preview-iframe" class="preview-frame" src="index2.html" title="Live page preview"></iframe>
-    </main>
-  </div>
 
-  <script src="search-data.js"></script>
-  <script>
-    const testQueries = [
-      'Dozier School',
-      'Fortune Ferguson',
-      'American Siberia',
-      'Powell',
-      'Convict Leasing',
-      'Newberry Six',
-      '1880 Census',
-      'Solitary Confinement',
-      'Law Library',
-      'Photography',
-      'San Quentin',
-      'Malachi Martin',
-      'Due Process',
-      'Books'
-    ];
+      <h2>II. The Newberry Lynchings of August 1916</h2>
+      <p>On August 17, 1916, authorities attempted to arrest Boisey Long near Newberry. The resulting exchange of gunfire left Constable George Wynne mortally wounded and Dr. L. G. Harris injured. Long escaped, and the effort to capture him drew armed men from the surrounding region into western Alachua County. Contemporary reporting, later historical research, and descendant testimony document a climate in which the search for Long expanded into violence against Black residents suspected of assisting him or connected to him through family and community relationships.</p>
 
-    const btnContainer = document.getElementById('query-buttons-list');
-    const testLog = document.getElementById('test-log');
-    const previewIframe = document.getElementById('preview-iframe');
-    const previewInput = document.getElementById('preview-url-input');
+      <p>James Dennis was killed on August 18 during the manhunt. Five additional Black residents were taken into custody: Bert Dennis, his pregnant wife Mary Dennis, Stella Young, Andrew McHenry, and Reverend Joshua Baskin. During the early hours of August 19, a white mob removed the five prisoners from the Newberry jail and carried them to a site outside town, where they were lynched. The killings demonstrated the inability or unwillingness of local institutions to protect Black prisoners who had already been placed under official control.</p>
 
-    function initWorkbench() {
-      if (!window.CheesboroughSearch) {
-        testLog.textContent = 'ERROR: search-data.js not loaded.';
-        return;
-      }
+      <h2>III. Boisey Long, Criminal Prosecution, and County Execution</h2>
+      <p>Boisey Long escaped the immediate manhunt and subsequently entered official custody outside Alachua County. Authorities transferred him to Jacksonville because confinement in Gainesville could expose him to mob violence before trial. His removal from the county illustrates a contradiction in the administration of justice after the Newberry killings. Officials acted to preserve Long for prosecution while five Black prisoners previously held at Newberry had been taken from custody and killed.</p>
 
-      btnContainer.innerHTML = testQueries.map(q => {
-        const results = window.CheesboroughSearch.search(q);
-        return `
-            <button class="btn-query" onclick="runQueryTest('${q}')">
-              <span>ðŸ”Ž "${q}"</span>
-              <span class="badge">${results.length} matches</span>
-            </button>
-          `;
-      }).join('');
+      <p>Long was returned to Gainesville for trial in September 1916. An all-white jury convicted him of first-degree murder in the death of George Wynne after a proceeding that moved with extraordinary speed. Contemporary accounts report that the jury deliberated for approximately seven minutes before returning its verdict. Long received no recommendation of mercy and was sentenced to death.</p>
 
-      runQueryTest('Dozier School');
-    }
+      <p>On October 27, 1916, officials hanged Long at the Alachua County Jail. His execution occurred under Florida's older decentralized system of capital punishment, under which county authorities retained responsibility for carrying out death sentences. Florida successfully prosecuted Long for the death of a white law enforcement officer, while no comparable criminal prosecution produced accountability for the Black residents killed during the Newberry violence.</p>
 
-    function runQueryTest(query) {
-      if (!window.CheesboroughSearch) return;
-      const results = window.CheesboroughSearch.search(query);
+      <div class="warning-box">
+        <strong>The Imbalance of Southern Justice</strong>
+        <p>While the State of Florida expended maximum resources to convict and hang Boisey Long in sixty days, a subsequent coroner's inquest and grand jury concluded that the Newberry Six were killed "at the hands of persons unknown." No white person was ever arrested, charged, or prosecuted for the murders of James Dennis, Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, or Joshua Baskin.</p>
+      </div>
 
-      let output = `[TEST EXECUTION: "${query}"]\n`;
-      output += `Status: OK (200)\n`;
-      output += `Total Matches: ${results.length}\n`;
-      output += `Top Score: ${results[0] ? results[0].score : 0} pts\n\n`;
-      output += `--- TOP 4 MATCHES ---\n`;
+      <h2>IV. Fortune Ferguson Jr. and Florida's New System of Capital Punishment</h2>
+      <p>Florida reorganized the administration of capital punishment in 1923. The legislature transferred executions from county authorities to the state prison system and adopted electrocution as the state's method of execution. A capital prosecution could still originate in a local courthouse, but the final stages increasingly involved statewide institutions, including the governor, appellate courts, the state prison warden, and the administrative machinery of Florida State Prison.</p>
 
-      results.slice(0, 4).forEach((item, idx) => {
-        output += `${idx + 1}. [${item.category}] ${item.title}\n`;
-        output += `   URL: ${item.url}\n`;
-        output += `   Date: ${item.date || 'N/A'} | Tags: ${item.tags.slice(0, 3).join(', ')}\n\n`;
-      });
+      <p>Ferguson was a Black teenager from the Newberry area who was sixteen when authorities accused him of raping a white child in 1924. Federal census schedules preserved within this collection document the Ferguson family in western Alachua County before the criminal prosecution, providing evidence of family residence, household composition, and agricultural life that predates the legal record by which Ferguson later became known.</p>
 
-      testLog.textContent = output;
-      loadPreview(`SEARCH.html?q=${encodeURIComponent(query)}`);
-    }
+      <p>Ferguson was prosecuted in the Circuit Court of Alachua County and sentenced to death. Legal historian Brandon T. Jett identifies Ferguson as the first person sentenced to die in Florida's newly created electric chair. His case occurred while Florida was establishing a centralized system in which local courts and law enforcement remained important participants even as state institutions assumed responsibility for imprisonment, appellate administration, executive action, and execution.</p>
 
-    function loadPreview(url) {
-      if (previewIframe) previewIframe.src = url;
-      if (previewInput) previewInput.value = url;
-    }
+      <p>Ferguson did not proceed immediately from sentence to execution. His case remained active for approximately three years as lawyers pursued appellate remedies and executive reprieves delayed the sentence. The surviving legal and prison records document interactions among the Alachua County sheriff, the courts, the governor, and state prison officials. On April 27, 1927, Florida executed Ferguson in the electric chair at Florida State Prison. He was eighteen years old.</p>
 
-    document.addEventListener('DOMContentLoaded', initWorkbench);
-  </script>
+      <h2>V. From County Execution to State Administration</h2>
+      <p>The institutional significance of Ferguson's case lies in the changing distribution of authority within Florida's criminal justice system. Before 1923, execution remained closely associated with county government. Sheriffs maintained custody of condemned prisoners and carried out hangings within their jurisdictions. The system tied capital punishment to the courthouse, jail, sheriff, and local political community in which the prosecution originated.</p>
+
+      <p>Centralization altered that arrangement without removing local officials from the process. Jett's study of Ferguson argues that Florida's new system developed through cooperation between state and local criminal justice officials. County authorities continued to investigate offenses, arrest defendants, assemble prosecutions, participate in trials, and exercise custodial responsibilities. State institutions increasingly governed imprisonment, appellate review, executive warrants, reprieves, and execution.</p>
+
+      <p>The Newberry lynchings and Ferguson's execution require a precise comparison. The 1916 lynchings were extrajudicial killings without judicial process. Ferguson's death followed indictment, trial, sentence, appellate litigation, executive action, and formal execution by the State of Florida. The legal distinction is fundamental. The episodes nevertheless belong to the same regional history of race, local authority, criminal accusation, state power, and capital punishment.</p>
+
+      <h2>VI. Institutional Comparison: 1916 and 1927</h2>
+      <div class="matrix-table-wrap">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Analytical Dimension</th>
+              <th>Newberry Lynchings, 1916</th>
+              <th>Fortune Ferguson Jr., 1924 to 1927</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Nature of lethal action</td>
+              <td>Extrajudicial mob violence</td>
+              <td>Execution pursuant to a criminal judgment</td>
+            </tr>
+            <tr>
+              <td>Primary jurisdiction</td>
+              <td>Newberry and western Alachua County</td>
+              <td>Alachua County prosecution followed by state custody at Raiford</td>
+            </tr>
+            <tr>
+              <td>Legal adjudication</td>
+              <td>No criminal adjudication preceded the victims' deaths</td>
+              <td>Trial, conviction, sentence, appellate litigation, reprieves, and execution</td>
+            </tr>
+            <tr>
+              <td>Institutional actors</td>
+              <td>Local law enforcement, jail officials, posse members, and private mob participants</td>
+              <td>Circuit court, county sheriff, appellate courts, governor, prison officials, and state warden</td>
+            </tr>
+            <tr>
+              <td>Method of death</td>
+              <td>Shooting and lynching by hanging</td>
+              <td>State-administered electrocution</td>
+            </tr>
+            <tr>
+              <td>Geography of punishment</td>
+              <td>Local community and surrounding rural landscape</td>
+              <td>Local prosecution followed by execution at Florida State Prison</td>
+            </tr>
+            <tr>
+              <td>Documentary record</td>
+              <td>Newspapers, inquest and grand jury material, oral history, genealogical research, and public memory</td>
+              <td>Court records, prison records, execution documentation, census schedules, appellate material, and archival research files</td>
+            </tr>
+            <tr>
+              <td>Principal historical question</td>
+              <td>How did extrajudicial violence operate alongside local governmental authority?</td>
+              <td>How did local and statewide institutions cooperate within Florida's centralized capital punishment system?</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The comparison does not establish that Ferguson's prosecution resulted from the 1916 lynchings or that state execution represented a direct institutional continuation of mob violence. The surviving evidence supports a narrower comparison. Both histories developed within Alachua County while Florida was redefining the relationship between local criminal justice institutions and centralized state authority.</p>
+
+      <h2>VII. Historical Memory and Public Commemoration</h2>
+      <p>Public understanding of the Newberry killings developed gradually after the events themselves. Family memory, local historical research, journalism, oral history, community organizations, and archival work preserved information that did not occupy a prominent place in conventional accounts of Alachua County history.</p>
+
+      <div class="reconciliation-card">
+        <h3>1. Alachua County Soil Collection Project</h3>
+        <p>The Alachua County Community Remembrance Project worked with the Equal Justice Initiative on historical research, public education, oral history, soil collection, and memorial projects. Soil gathered from sites associated with lynching preserves a material connection to the landscape in which the killings occurred.</p>
+      </div>
+
+      <div class="reconciliation-card">
+        <h3>2. Newberry Historical Marker</h3>
+        <p>In August 2021, the Alachua County Community Remembrance Project and Equal Justice Initiative dedicated a historical marker at Freddie Warmack Park commemorating nine documented victims of racial terror lynching associated with Newberry. The marker distinguishes the broader history of racial terror from the six victims traditionally identified with the August 1916 mass lynching.</p>
+      </div>
+
+      <div class="reconciliation-card">
+        <h3>3. Descendant Memory and Oral History</h3>
+        <p>Descendant testimony remains significant because families maintained names, relationships, locations, and recollections across generations when official records provided incomplete accounts of the violence. Oral history and public commemoration operate alongside documentary research rather than replacing it.</p>
+      </div>
+
+      <div class="reconciliation-card">
+        <h3>4. Public History</h3>
+        <p>Historical markers, soil collections, journalism, memorial services, and community education demonstrate how the history has been researched and commemorated long after the original events.</p>
+      </div>
+
+      <h2>VIII. Historical Chronology</h2>
+      <div class="timeline-list">
+        <div class="timeline-event">
+          <div class="timeline-date">1910 Federal Census</div>
+          <div class="timeline-title">Ferguson Family Enumerated in Newberry</div>
+          <p>Federal census schedules document the Ferguson household in the Newberry area before Fortune Ferguson Jr. entered the criminal justice system.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">August 17, 1916</div>
+          <div class="timeline-title">The Attempted Arrest of Boisey Long</div>
+          <p>Constable George Wynne and Dr. L. G. Harris encounter Long near Newberry in connection with an accusation involving stolen hogs. Gunfire leaves Wynne mortally wounded and Harris injured. Long escapes.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">August 18–19, 1916</div>
+          <div class="timeline-title">The Newberry Six Lynchings</div>
+          <p>James Dennis is killed during the manhunt. Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, and Reverend Joshua Baskin are detained before being removed from custody and lynched.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">October 27, 1916</div>
+          <div class="timeline-title">Public Hanging of Boisey Long</div>
+          <p>Alachua County officials hang Long at the county jail under Florida's decentralized system of capital punishment.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">1923</div>
+          <div class="timeline-title">Florida Centralizes the Death Penalty</div>
+          <p>The Florida Legislature transfers the administration of executions from county authorities to the state prison system and adopts electrocution.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">1924</div>
+          <div class="timeline-title">Fortune Ferguson Jr. Sentenced to Death</div>
+          <p>Ferguson, sixteen years old at the time of the alleged offense, is prosecuted in Alachua County and becomes the first person sentenced to die in Florida's newly established electric chair.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">April 27, 1927</div>
+          <div class="timeline-title">Execution of Fortune Ferguson Jr.</div>
+          <p>Florida executes Ferguson in the electric chair at Florida State Prison. He is eighteen years old.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">2018 to 2019</div>
+          <div class="timeline-title">Alachua County Truth and Reconciliation Work Expands</div>
+          <p>County discussions concerning racial injustice contribute to the formation of the Alachua County Community Remembrance Project and subsequent public-history initiatives.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-date">August 21, 2021</div>
+          <div class="timeline-title">Newberry Historical Marker Dedicated</div>
+          <p>The Alachua County Community Remembrance Project and Equal Justice Initiative dedicate a historical marker at Freddie Warmack Park honoring nine documented victims of racial terror lynching associated with Newberry.</p>
+        </div>
+      </div>
+
+      <h2>IX. Archival Foundation: The Victor L. Streib Papers</h2>
+      <p>The primary-source foundation of the Fortune Ferguson research owes a substantial debt to the M. E. Grenander Department of Special Collections and Archives at the University at Albany, State University of New York. The department preserves the National Death Penalty Archive, including the Victor L. Streib Papers, an extensive research collection documenting capital punishment and the execution of juveniles and women in the United States.</p>
+
+      <p>The Streib Papers contain a dedicated case file identified by the archive as <strong>"Florida: Fortune Ferguson, executed 1927-04-27."</strong> The file forms part of Collection APAP-330 and preserves research material concerning Ferguson within a larger body of documentation assembled by legal scholar Victor L. Streib.</p>
+
+      <p>Carceral Collections acknowledges the M. E. Grenander Department of Special Collections and Archives for preserving and providing access to these materials. The preservation of the Streib Papers allows Ferguson's case to be examined as more than an execution date by placing it within the longer documentary history of juvenile capital punishment.</p>
+
+      <table>
+        <thead><tr><th>Archival Element</th><th>Identification</th></tr></thead>
+        <tbody>
+          <tr><td>Repository</td><td>M. E. Grenander Department of Special Collections and Archives, University at Albany, SUNY</td></tr>
+          <tr><td>Archive</td><td>National Death Penalty Archive</td></tr>
+          <tr><td>Collection</td><td>Victor L. Streib Papers, APAP-330</td></tr>
+          <tr><td>Ferguson file</td><td>Florida: Fortune Ferguson, executed 1927-04-27</td></tr>
+          <tr><td>Research significance</td><td>Documentation concerning Ferguson and the history of juvenile capital punishment</td></tr>
+        </tbody>
+      </table>
+      <p><a href="https://archives.albany.edu/description/catalog/apap330aspace_a0cdbdf8aa2e558d37c28e0b0e96fbb9" target="_blank" rel="noopener noreferrer">View the Fortune Ferguson finding aid at the University at Albany</a></p>
+
+      <h2>X. Research and Archival Use</h2>
+      <p>The Newberry and Fortune Ferguson collection brings together sources created for different purposes and at different moments in time. Court judgments document judicial action. Prison records document state custody and administration. Census schedules preserve household and demographic information. Newspapers record contemporary reporting as well as the assumptions and limitations of their period. Oral histories and descendant accounts preserve experiences and family knowledge that official institutions did not always record.</p>
+
+      <p>The collection yields its historical significance through relationships among sources, including agreements, discrepancies, omissions, chronology, and institutional provenance. Researchers should consult original documents, identify the creators and purposes of each record, and distinguish contemporary evidence from later interpretation.</p>
+    </article>
+
+    <aside class="sidebar-panel">
+      <!-- Primary Source Dossier Box -->
+      <div class="panel-box">
+        <h3>Primary Source Dossier</h3>
+        <ul class="source-list">
+          <li class="source-item">
+            <span class="source-meta">Oral History Transcript</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FNewberry_Six_1916_Memorial_Service_Transcript_AAHP.pdf">Newberry Six Memorial Transcript (AAHP) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Scholarly Legal History</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FBrandon_Jett_State_of_Florida_v_Fortune_Ferguson_Jr_2024.pdf">Brandon Jett: State v. Fortune Ferguson (2024) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Execution Record</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFortune_Ferguson_1927_Execution_Record_Card_Grenander_Archives.pdf">Ferguson Execution Card (Grenander Archives) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">State Prison Register</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FFlorida_State_Prison_Register_Fortune_Ferguson_1924_1927.pdf">Florida Prison Register (1924–1927) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Federal Census Record</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2F1910_Federal_Census_Fortune_Ferguson_Sr_Newberry_Alachua.pdf">1910 Census: Ferguson Family Farm &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Federal Census Record</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2F1920_Federal_Census_Fortune_Ferguson_Family_Farm_Newberry.pdf">1920 Census: Ferguson Household &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Legal Jurisprudence</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FDeath_Penalty_for_Children_Victor_Streib_Oklahoma_Law_Review_1983.pdf">Victor Streib: Death Penalty for Children (1983) &#8599;</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Historical Context</span>
+            <a target="_blank" rel="noopener" href="PDF-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FFORTUNE%20FERGUSON%20JR%2FJudge_Herbert_Rider_and_the_Lynching_at_LaBelle_Shofner_1980.pdf">Lynching at LaBelle (Shofner, 1980) &#8599;</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- External Investigative & Truth-Seeking Links -->
+      <div class="panel-box">
+        <h3>Truth &amp; Reconciliation Links</h3>
+        <ul class="source-list">
+          <li class="source-item">
+            <span class="source-meta">Investigative Journalism</span>
+            <a href="https://www.gainesville.com/story/news/2005/09/04/the-newberry-six/31702953007/" target="_blank" rel="noopener">Gainesville Sun: "The Newberry Six" (2005) ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Historical Memorial</span>
+            <a href="https://sites.lib.jmu.edu/lynchingmarkers/fl1902090101/" target="_blank" rel="noopener">JMU Lynching Sites Project: Newberry Marker ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Community Remembrance</span>
+            <a href="https://www.mainstreetdailynews.com/news/local/alachua-soil-exhibit-lynching-victims" target="_blank" rel="noopener">Mainstreet News: Alachua Soil Exhibit ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Civic Acknowledgment</span>
+            <a href="https://www.wcjb.com/content/news/City-of-Newberry6-493918581.html" target="_blank" rel="noopener">WCJB News: City of Newberry Proclamation ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Historical Center</span>
+            <a href="https://miamicenterforracialjustice.org/newberry/" target="_blank" rel="noopener">Miami Center for Racial Justice: Newberry ↗</a>
+          </li>
+          <li class="source-item">
+            <span class="source-meta">Public History</span>
+            <a href="https://www.theneighborlyfl.com/p/whats-done-is-done-at-dudley-farm" target="_blank" rel="noopener">The Neighborly: Reckoning at Dudley Farm ↗</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Community Remembrance Box -->
+      <div class="community-action-box">
+        <span class="source-meta source-meta-light">Alachua County Remembrance</span>
+        <h3>Soil Collection Project</h3>
+        <p>Soil gathered from Lynch's Hammock in Newberry rests permanently in the Alachua County Administration Building in Gainesville and at the Legacy Museum in Montgomery, Alabama.</p>
+        <a class="btn-promo-gold" href="EVIDENCE-INDEX.html">View Evidence Index ↗</a>
+      </div>
+      <div class="panel-box">
+        <span class="source-meta">Archival Credit</span>
+        <h3>Victor L. Streib Papers</h3>
+        <p>The University at Albany's M. E. Grenander Department of Special Collections and Archives preserves the Fortune Ferguson research file in the National Death Penalty Archive.</p>
+        <a class="source-item" href="https://archives.albany.edu/description/catalog/apap330aspace_a0cdbdf8aa2e558d37c28e0b0e96fbb9" target="_blank" rel="noopener noreferrer">View the University at Albany finding aid ↗</a>
+      </div>
+      <div class="panel-box">
+        <span class="source-meta">Primary Text</span>
+        <h3>The American Siberia</h3>
+        <p>J. C. Powell's account of Florida convict leasing, prison labor, and camp administration.</p>
+        <a class="source-item" href="BOOKS-AND-MANUSCRIPTS.html">Open the book page ↗</a>
+      </div>
+      <div class="panel-box">
+        <span class="source-meta">Primary Text</span>
+        <h3>Six Years in a Georgia Prison</h3>
+        <p>Lewis W. Paine's account of imprisonment and the antebellum penitentiary.</p>
+        <a class="source-item" href="BOOKS-AND-MANUSCRIPTS.html">Open the book page ↗</a>
+      </div>
+      <div class="panel-box">
+        <span class="source-meta">Institutional History</span>
+        <h3>Coxsackie Reformatory</h3>
+        <p>A study of youth, reform, and mass incarceration in upstate New York.</p>
+        <a class="source-item" href="BOOKS-AND-MANUSCRIPTS.html">Open the book page ↗</a>
+      </div>
+      <div class="sidebar-end-bar" aria-hidden="true"></div>
+    </aside>
+  </main>
+
+  <footer>
+    <p>The Cheesborough Carceral Collections | The Newberry Six and Fortune Ferguson Archival Brief &copy; 2026</p>
+  </footer>
+
+  <script src="title-case.js"></script>
 </body>
-
 </html>

@@ -1,291 +1,922 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search &amp; UI Test Workbench | The Cheesborough Collections</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap"
-    rel="stylesheet" />
-  <style>
-    :root {
-      --navy: #102c4c;
-      --deep: #091e36;
-      --gold: #c29b53;
-      --paper: #f5f2eb;
-      --card: #ffffff;
-      --line: #ded7cb;
-      --ink: #202020;
-      --green: #1b6343;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: var(--paper);
-      color: var(--ink);
-      font-family: "Source Sans 3", sans-serif;
-      padding: 1.5rem;
-    }
-
-    header {
-      background: var(--deep);
-      color: #fff;
-      padding: 1.5rem 2rem;
-      border-bottom: 4px solid var(--gold);
-      margin-bottom: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    header h1 {
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.6rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 0.8rem;
-    }
-
-    .nav-links a {
-      background: var(--gold);
-      color: var(--deep);
-      padding: 0.4rem 0.8rem;
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-decoration: none;
-      border-radius: 3px;
-    }
-
-    .workbench-grid {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 900px) {
-      .workbench-grid {
-        grid-template-columns: 1fr;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Archive | The Cheesborough Carceral Collections</title>
+    <meta name="description" content="Search the Cheesborough Carceral Collections: primary documents, forensic reports, census spreadsheets, case law, photographs, and research briefs." />
+    <meta name="keywords" content="search archive, carceral history search, dozier search, powell search, ferguson search, prison census data, law library search, criminal justice archive" />
+    <meta name="tags" content="search, archive, research, primary sources, pdfs, datasets, case law" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --navy: #102c4c;
+        --deep: #091e36;
+        --gold: #c29b53;
+        --gold-light: #d8b776;
+        --gold-bg: rgba(194, 155, 83, 0.12);
+        --paper: #f5f2eb;
+        --paper-card: #ffffff;
+        --paper-hover: #faf7f0;
+        --line: #ded7cb;
+        --line-dark: #c4baa9;
+        --ink: #202020;
+        --ink-light: #3d3b37;
+        --muted: #65615a;
+        --highlight: #fef08a;
+        --highlight-ink: #713f12;
       }
-    }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Source Sans 3", sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      a { color: var(--navy); text-decoration: none; }
+      a:hover { text-decoration: underline; }
 
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      padding: 1.2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
+      .topbar {
+        background: var(--gold);
+        color: #fff;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem 1.4rem;
+        justify-content: center;
+        padding: 0.65rem 1rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .topbar a { color: #fff; transition: opacity 0.15s; }
+      .topbar a:hover { color: #fff; opacity: 0.82; text-decoration: none; }
+      .topbar a.active { border-bottom: 2px solid #fff; }
 
-    .panel h2 {
-      color: var(--navy);
-      font-family: "Libre Baskerville", serif;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--gold);
-      padding-bottom: 0.4rem;
-    }
+      .hero {
+        background: linear-gradient(rgba(9, 30, 54, 0.92), rgba(9, 30, 54, 0.96)), url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2200&q=85") center/cover no-repeat;
+        color: #fff;
+        padding: clamp(2.5rem, 5vw, 4.5rem) 1.2rem 3rem;
+        border-bottom: 5px solid var(--gold);
+      }
+      .hero-inner {
+        margin: 0 auto;
+        max-width: 960px;
+        text-align: center;
+      }
+      .eyebrow {
+        color: var(--gold-light);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+      h1.search-title {
+        color: #fff;
+        font-family: "Libre Baskerville", Georgia, serif;
+        font-size: clamp(1.8rem, 4.2vw, 2.8rem);
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 0.75rem;
+      }
+      .hero-desc {
+        color: #dce5ec;
+        font-size: 1.05rem;
+        max-width: 680px;
+        margin: 0 auto 1.8rem;
+      }
 
-    .query-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      margin-bottom: 1.2rem;
-    }
+      .search-box-wrap {
+        background: rgba(20, 20, 20, 0.88);
+        border: 2px solid var(--gold);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        display: flex;
+        align-items: center;
+        max-width: 780px;
+        margin: 0 auto 1.4rem;
+        padding: 0.35rem 0.6rem;
+        position: relative;
+        border-radius: 2px;
+      }
+      .search-box-wrap::before, .search-box-wrap::after {
+        color: var(--gold);
+        content: "[";
+        font-family: Georgia, serif;
+        font-size: 2.8rem;
+        line-height: 1;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      .search-box-wrap::after { content: "]"; }
+      .search-box-wrap input {
+        background: transparent;
+        border: 0;
+        color: #fff;
+        flex: 1;
+        font-family: inherit;
+        font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+        outline: 0;
+        padding: 0.65rem 0.85rem;
+        min-width: 0;
+      }
+      .search-box-wrap input::placeholder {
+        color: #e5ded2;
+        opacity: 0.85;
+      }
+      .clear-btn {
+        background: transparent;
+        border: 0;
+        color: #b0a89a;
+        cursor: pointer;
+        font-size: 1.35rem;
+        line-height: 1;
+        padding: 0.4rem 0.6rem;
+        transition: color 0.15s;
+        display: none;
+      }
+      .clear-btn:hover { color: #fff; }
+      .clear-btn.visible { display: block; }
+      .search-submit-btn {
+        background: var(--gold);
+        border: 0;
+        color: #091e36;
+        cursor: pointer;
+        font-size: 1.4rem;
+        font-weight: bold;
+        line-height: 1;
+        padding: 0.55rem 1.1rem;
+        border-radius: 2px;
+        transition: background 0.15s, transform 0.15s;
+        margin-left: 0.3rem;
+      }
+      .search-submit-btn:hover {
+        background: #e2bc68;
+        transform: scale(1.03);
+      }
+      .quick-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        justify-content: center;
+        align-items: center;
+        max-width: 820px;
+        margin: 0 auto;
+      }
+      .quick-tags-label {
+        color: var(--gold-light);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-right: 0.3rem;
+      }
+      .tag-chip {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        color: #f5f0e6;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.22rem 0.65rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        text-decoration: none;
+      }
+      .tag-chip:hover, .tag-chip.active {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: var(--deep);
+        text-decoration: none;
+        transform: translateY(-1px);
+      }
 
-    .btn-query {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      color: var(--navy);
-      padding: 0.55rem 0.8rem;
-      text-align: left;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: all 0.15s;
-      border-radius: 3px;
-    }
+      .main-layout {
+        display: grid;
+        grid-template-columns: 270px minmax(0, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 2.5rem 1.2rem 4rem;
+        flex: 1;
+      }
+      @media (max-width: 880px) {
+        .main-layout { grid-template-columns: 1fr; padding-top: 1.5rem; }
+      }
 
-    .btn-query:hover {
-      background: var(--gold);
-      color: var(--deep);
-    }
+      /* Sidebar Filters */
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .filter-box {
+        background: var(--paper-card);
+        border: 1px solid var(--line);
+        border-top: 4px solid var(--navy);
+        padding: 1.2rem;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+      }
+      .filter-box h3 {
+        color: var(--navy);
+        font-family: "Libre Baskerville", Georgia, serif;
+        font-size: 1.05rem;
+        margin-bottom: 0.85rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .total-count-badge { color: var(--muted); font-family: sans-serif; font-size: 0.8rem; font-weight: normal; }
+      .category-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .category-item button {
+        background: transparent;
+        border: 0;
+        width: 100%;
+        text-align: left;
+        padding: 0.45rem 0.6rem;
+        font-family: inherit;
+        font-size: 0.9rem;
+        color: var(--ink);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+      }
+      .category-item button:hover {
+        background: var(--paper);
+        color: var(--navy);
+      }
+      .category-item button.active {
+        background: var(--navy);
+        color: #fff;
+        font-weight: 600;
+      }
+      .category-item .count-badge {
+        background: rgba(0, 0, 0, 0.08);
+        color: inherit;
+        font-size: 0.75rem;
+        padding: 0.15rem 0.45rem;
+        border-radius: 999px;
+      }
+      .category-item button.active .count-badge {
+        background: var(--gold);
+        color: var(--deep);
+      }
 
-    .btn-query span.badge {
-      background: var(--navy);
-      color: #fff;
-      font-size: 0.72rem;
-      padding: 0.15rem 0.45rem;
-      border-radius: 999px;
-    }
+      .tag-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .sidebar-tag {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        color: var(--ink-light);
+        padding: 0.2rem 0.55rem;
+        font-size: 0.78rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .sidebar-tag:hover, .sidebar-tag.active {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: var(--deep);
+        font-weight: 600;
+      }
+      .sidebar-tag-count { font-size: 0.7rem; opacity: 0.75; }
 
-    .test-log {
-      background: #111a24;
-      color: #a8d1ff;
-      font-family: Consolas, monospace;
-      font-size: 0.82rem;
-      line-height: 1.45;
-      padding: 1rem;
-      border-radius: 4px;
-      max-height: 350px;
-      overflow-y: auto;
-    }
+      .tools-links a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 0;
+        color: var(--navy);
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-bottom: 1px dashed var(--line);
+      }
+      .tools-links a:last-child { border-bottom: 0; }
+      .tools-links a:hover { color: var(--gold); text-decoration: none; }
+      /* Results Area */
+      .results-area {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      .results-header {
+        background: var(--paper-card);
+        border: 1px solid var(--line);
+        padding: 0.9rem 1.2rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.8rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+      }
+      .results-count {
+        font-size: 1rem;
+        color: var(--navy);
+        font-weight: 600;
+      }
+      .results-count strong {
+        color: var(--navy);
+        font-family: "Libre Baskerville", Georgia, serif;
+      }
+      .query-pill-active {
+        background: var(--gold-bg);
+        border: 1px solid var(--gold);
+        color: var(--navy);
+        font-size: 0.82rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-left: 0.5rem;
+      }
+      .query-pill-active button {
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        font-weight: bold;
+        color: var(--navy);
+      }
+      .sort-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+      .sort-select {
+        background: #fff;
+        border: 1px solid var(--line-dark);
+        padding: 0.35rem 0.6rem;
+        font-family: inherit;
+        font-size: 0.85rem;
+        color: var(--ink);
+        border-radius: 3px;
+        cursor: pointer;
+      }
 
-    .preview-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
+      /* Results Cards */
+      .results-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+      }
+      .result-card {
+        background: var(--paper-card);
+        border: 1px solid var(--line);
+        border-left: 5px solid var(--navy);
+        padding: 1.35rem 1.4rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+        transition: transform 0.16s ease, box-shadow 0.16s ease, border-left-color 0.16s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+      .result-card:hover {
+        box-shadow: 0 7px 18px rgba(0, 0, 0, 0.08);
+        border-left-color: var(--gold);
+        transform: translateY(-2px);
+      }
 
-    .preview-bar {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
+      .card-header-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+      }
+      .badge-category {
+        background: var(--navy);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.22rem 0.55rem;
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      .badge-category.pdf { background: #8f2d22; }
+      .badge-category.data { background: #1b6343; }
+      .badge-category.brief { background: #102c4c; }
+      .badge-category.law { background: #4a347f; }
+      .badge-category.photo { background: #8c561b; }
+      .badge-category.manuscript { background: #475569; }
 
-    .preview-bar input {
-      flex: 1;
-      padding: 0.5rem 0.8rem;
-      border: 1px solid var(--line);
-      font-size: 0.95rem;
-    }
+      .card-date, .card-author {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .card-dot { color: var(--line-dark); }
 
-    .preview-bar button {
-      background: var(--navy);
-      color: #fff;
-      border: 0;
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
+      .card-title {
+        font-family: "Libre Baskerville", Georgia, serif;
+        font-size: 1.28rem;
+        font-weight: 700;
+        line-height: 1.32;
+      }
+      .card-title a {
+        color: var(--navy);
+      }
+      .card-title a:hover {
+        color: var(--gold);
+        text-decoration: underline;
+      }
 
-    iframe.preview-frame {
-      width: 100%;
-      height: 650px;
-      border: 1px solid var(--line);
-      background: #fff;
-    }
-  </style>
-</head>
+      .card-desc {
+        color: var(--ink-light);
+        font-size: 0.95rem;
+        line-height: 1.55;
+      }
 
-<body>
-  <header>
-    <div>
-      <h1>Search &amp; UI Test Workbench</h1>
-      <p class="verification-caption">Live verification tool for The Cheesborough Carceral Collections
-        search engine</p>
-    </div>
-    <div class="nav-links">
-      <a href="index2.html" target="_blank">Open Homepage (index2.html) â†—</a>
-      <a href="SEARCH.html" target="_blank">Open Search Desk (SEARCH.html) â†—</a>
-    </div>
-  </header>
+      mark.search-highlight {
+        background: var(--highlight);
+        color: var(--highlight-ink);
+        padding: 0.05rem 0.2rem;
+        border-radius: 2px;
+        font-weight: 600;
+      }
 
-  <div class="workbench-grid">
-    <aside class="panel">
-      <h2>Automated Query Tests</h2>
-      <div class="query-buttons" id="query-buttons-list"></div>
+      .card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-top: 0.2rem;
+      }
+      .card-tag {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.74rem;
+        font-weight: 600;
+        padding: 0.15rem 0.45rem;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.12s;
+      }
+      .card-tag:hover {
+        background: var(--gold);
+        color: var(--deep);
+        border-color: var(--gold);
+      }
 
-      <h2>Live Search Diagnostics</h2>
-      <div class="test-log" id="test-log">Click any query above to run diagnostics...</div>
-    </aside>
+      .card-footer-action {
+        margin-top: 0.4rem;
+        display: flex;
+        justify-content: flex-end;
+      }
+      .action-link {
+        background: var(--navy);
+        color: #fff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.45rem 0.9rem;
+        border-radius: 3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: background 0.15s, transform 0.15s;
+        text-decoration: none;
+      }
+      .action-link:hover {
+        background: var(--gold);
+        color: var(--deep);
+        text-decoration: none;
+        transform: translateY(-1px);
+      }
 
-    <main class="panel preview-container">
-      <h2>Interactive Page Preview</h2>
-      <div class="preview-bar">
-        <label class="sr-only" for="preview-url-input">Preview page URL</label><input type="text" id="preview-url-input" value="index2.html" aria-label="Preview page URL" placeholder="Enter a page filename" />
-        <button type="button" onclick="loadPreview(document.getElementById('preview-url-input').value)">Load
-          Page</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Dozier+School')">Test Dozier Search</button>
-        <button type="button" onclick="loadPreview('SEARCH.html?q=Fortune+Ferguson')">Test Ferguson Search</button>
+      /* Empty State */
+      .empty-state {
+        background: var(--paper-card);
+        border: 1px dashed var(--line-dark);
+        padding: 3rem 1.5rem;
+        text-align: center;
+        border-radius: 4px;
+      }
+      .empty-icon {
+        font-size: 3rem;
+        color: var(--gold);
+        margin-bottom: 0.8rem;
+      }
+      .empty-title {
+        color: var(--navy);
+        font-family: "Libre Baskerville", Georgia, serif;
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      .empty-desc {
+        color: var(--muted);
+        max-width: 500px;
+        margin: 0 auto 1.5rem;
+        font-size: 0.98rem;
+      }
+      .empty-suggestions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      footer {
+        background: var(--deep);
+        color: #e5ded2;
+        padding: 2rem 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+        border-top: 4px solid var(--gold);
+        margin-top: auto;
+      }
+      footer a { color: var(--gold-light); }
+    </style>
+  </head>
+  <body>
+    <nav class="topbar" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="SEARCH.html" class="active">Search</a>
+      <a href="COLLECTIONS.html">Collections</a>
+      <a href="RESEARCH.html">Research</a>
+      <a href="LAW-LIBRARY.html">Law Library</a>
+      <a href="NEWS.html">News</a>
+      <a href="EVIDENCE-INDEX.html">Evidence Index</a>
+      <a href="ABOUT.html">About</a>
+      <a href="DONATE.html">Donate</a>
+      <a href="CONTACT.html">Contact</a>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow">The Cheesborough Carceral Collections / Search Desk</p>
+        <h1 class="search-title">Archival Search &amp; Evidence Query</h1>
+        <p class="hero-desc">Search primary documents, forensic reports, census spreadsheets, case law, photographs, and research briefs across the entire repository.</p>
+
+        <form class="search-box-wrap" id="main-search-form" role="search" onsubmit="event.preventDefault(); handleSearchSubmit();">
+          <input id="page-search-input" type="search" placeholder="SEARCH DOZIER, POWELL, CENSUS, LAW, OR EVIDENCE..." aria-label="Search archive records and case studies" autocomplete="off" />
+          <button type="button" class="clear-btn" id="clear-search-btn" aria-label="Clear search input" title="Clear">✕</button>
+          <button type="submit" class="search-submit-btn" aria-label="Submit search" title="Execute Search">⌕</button>
+        </form>
+
+        <div class="quick-tags" aria-label="Popular search topics">
+          <span class="quick-tags-label">Popular Topics:</span>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('Dozier School')">Dozier School</button>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('Fortune Ferguson')">Fortune Ferguson</button>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('American Siberia')">American Siberia</button>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('Convict Leasing')">Convict Leasing</button>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('Newberry Six')">Newberry Six</button>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('1880 Census')">1880 Census</button>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('Solitary Confinement')">Solitary Confinement</button>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('Due Process')">Due Process</button>
+          <button type="button" class="tag-chip" onclick="executeQuickSearch('Photography')">Photography</button>
+        </div>
       </div>
-      <iframe id="preview-iframe" class="preview-frame" src="index2.html" title="Live page preview"></iframe>
-    </main>
-  </div>
+    </header>
 
-  <script src="search-data.js"></script>
-  <script>
-    const testQueries = [
-      'Dozier School',
-      'Fortune Ferguson',
-      'American Siberia',
-      'Powell',
-      'Convict Leasing',
-      'Newberry Six',
-      '1880 Census',
-      'Solitary Confinement',
-      'Law Library',
-      'Photography',
-      'San Quentin',
-      'Malachi Martin',
-      'Due Process',
-      'Books'
-    ];
+    <div class="main-layout">
+      <!-- Sidebar Filters -->
+      <aside class="sidebar">
+        <div class="filter-box">
+          <h3>Categories <span class="total-count-badge" id="total-count-badge"></span></h3>
+          <ul class="category-list" id="category-filter-list">
+            <li class="category-item"><button type="button" class="active" data-category="all" onclick="setCategoryFilter('all')"><span>All Collections</span> <span class="count-badge" id="cat-count-all">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Research Brief" onclick="setCategoryFilter('Research Brief')"><span>📖 Research Briefs</span> <span class="count-badge" id="cat-count-brief">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Primary PDF" onclick="setCategoryFilter('Primary PDF')"><span>📄 Primary PDFs</span> <span class="count-badge" id="cat-count-pdf">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Data & Spreadsheet" onclick="setCategoryFilter('Data & Spreadsheet')"><span>📊 Data &amp; Spreadsheets</span> <span class="count-badge" id="cat-count-data">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Primary Document" onclick="setCategoryFilter('Primary Document')"><span>📑 Primary Documents</span> <span class="count-badge" id="cat-count-doc">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Law Library" onclick="setCategoryFilter('Law Library')"><span>⚖️ Law Library</span> <span class="count-badge" id="cat-count-law">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Photo Archive" onclick="setCategoryFilter('Photo Archive')"><span>📷 Photography</span> <span class="count-badge" id="cat-count-photo">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Manuscript & Book" onclick="setCategoryFilter('Manuscript & Book')"><span>📚 Books &amp; Manuscripts</span> <span class="count-badge" id="cat-count-books">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Personal Papers" onclick="setCategoryFilter('Personal Papers')"><span>✉️ Personal Papers</span> <span class="count-badge" id="cat-count-personal">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="News & Review" onclick="setCategoryFilter('News & Review')"><span>📰 News &amp; The Review</span> <span class="count-badge" id="cat-count-news">0</span></button></li>
+          </ul>
+        </div>
 
-    const btnContainer = document.getElementById('query-buttons-list');
-    const testLog = document.getElementById('test-log');
-    const previewIframe = document.getElementById('preview-iframe');
-    const previewInput = document.getElementById('preview-url-input');
+        <div class="filter-box">
+          <h3>Filter by Tag</h3>
+          <div class="tag-cloud" id="sidebar-tags-cloud"></div>
+        </div>
 
-    function initWorkbench() {
-      if (!window.CheesboroughSearch) {
-        testLog.textContent = 'ERROR: search-data.js not loaded.';
-        return;
+        <div class="filter-box">
+          <h3>Interactive Tools</h3>
+          <div class="tools-links">
+            <a href="PDF-READER.html?file=02_Books-and-Manuscripts%2FBooks%2F01_Primary-Texts%2FThe%20American%20Siberia%20p.1891_CompleteBook.pdf"><span>📄</span> Open PDF Reader</a>
+            <a href="DATA-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FCensus%20Data%2F1880_State_Prison_Staff_Census.xlsx"><span>📊</span> Open Spreadsheet Reader</a>
+            <a href="EVIDENCE-INDEX.html"><span>🗂️</span> Master Evidence Index</a>
+            <a href="PHOTOGRAPHY-BY-STATE.html"><span>🗺️</span> 50-State Photography Index</a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Results Column -->
+      <main class="results-area">
+        <div class="results-header">
+          <div class="results-count" id="results-count-text">Loading repository items...</div>
+          <div class="sort-wrap">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select" class="sort-select" onchange="handleSortChange(this.value)">
+              <option value="relevance">Most Relevant</option>
+              <option value="title">Title (A–Z)</option>
+              <option value="date">Date / Era</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="results-list" id="results-list" role="region" aria-live="polite"></div>
+      </main>
+    </div>
+
+    <footer>
+      <p>The Cheesborough Carceral Collections | Public Memory, Law &amp; Archival Evidence &copy; 2026</p>
+    </footer>
+
+    <script src="search-data.js"></script>
+    <script>
+      let currentQuery = "";
+      let currentCategory = "all";
+      let currentTag = null;
+      let currentSort = "relevance";
+
+      const searchInput = document.getElementById("page-search-input");
+      const clearBtn = document.getElementById("clear-search-btn");
+      const resultsList = document.getElementById("results-list");
+      const resultsCountText = document.getElementById("results-count-text");
+      const sidebarTagsCloud = document.getElementById("sidebar-tags-cloud");
+
+      function initSearchPage() {
+        // Read URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const qParam = urlParams.get("q") || urlParams.get("query") || "";
+        const catParam = urlParams.get("category") || "all";
+        const tagParam = urlParams.get("tag") || null;
+
+        currentQuery = qParam;
+        currentCategory = catParam;
+        currentTag = tagParam;
+
+        if (searchInput) {
+          searchInput.value = currentQuery;
+          toggleClearButton();
+        }
+
+        renderCategoryCounts();
+        renderSidebarTags();
+        updateCategoryActiveUI();
+        performSearch();
+
+        // Real-time debounced search input
+        if (searchInput) {
+          let debounceTimer;
+          searchInput.addEventListener("input", (e) => {
+            clearTimeout(debounceTimer);
+            toggleClearButton();
+            debounceTimer = setTimeout(() => {
+              currentQuery = searchInput.value.trim();
+              currentTag = null; // reset specific tag filter when typing
+              updateUrlParams();
+              performSearch();
+            }, 180);
+          });
+        }
+
+        if (clearBtn) {
+          clearBtn.addEventListener("click", () => {
+            searchInput.value = "";
+            currentQuery = "";
+            currentTag = null;
+            toggleClearButton();
+            updateUrlParams();
+            performSearch();
+            searchInput.focus();
+          });
+        }
       }
 
-      btnContainer.innerHTML = testQueries.map(q => {
-        const results = window.CheesboroughSearch.search(q);
-        return `
-            <button class="btn-query" onclick="runQueryTest('${q}')">
-              <span>ðŸ”Ž "${q}"</span>
-              <span class="badge">${results.length} matches</span>
-            </button>
+      function toggleClearButton() {
+        if (!clearBtn || !searchInput) return;
+        if (searchInput.value.length > 0) {
+          clearBtn.classList.add("visible");
+        } else {
+          clearBtn.classList.remove("visible");
+        }
+      }
+
+      function handleSearchSubmit() {
+        if (!searchInput) return;
+        currentQuery = searchInput.value.trim();
+        currentTag = null;
+        updateUrlParams();
+        performSearch();
+      }
+
+      function executeQuickSearch(term) {
+        if (searchInput) searchInput.value = term;
+        currentQuery = term;
+        currentTag = null;
+        toggleClearButton();
+        updateUrlParams();
+        performSearch();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function setCategoryFilter(cat) {
+        currentCategory = cat;
+        updateCategoryActiveUI();
+        updateUrlParams();
+        performSearch();
+      }
+
+      function setTagFilter(tag) {
+        if (currentTag === tag) {
+          currentTag = null; // toggle off
+        } else {
+          currentTag = tag;
+        }
+        renderSidebarTags();
+        updateUrlParams();
+        performSearch();
+      }
+
+      function handleSortChange(sortVal) {
+        currentSort = sortVal;
+        performSearch();
+      }
+
+      function updateCategoryActiveUI() {
+        document.querySelectorAll("#category-filter-list button").forEach(btn => {
+          if (btn.dataset.category.toLowerCase() === currentCategory.toLowerCase()) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+
+      function updateUrlParams() {
+        const params = new URLSearchParams();
+        if (currentQuery) params.set("q", currentQuery);
+        if (currentCategory && currentCategory !== "all") params.set("category", currentCategory);
+        if (currentTag) params.set("tag", currentTag);
+
+        const newUrl = window.location.pathname + (params.toString() ? "?" + params.toString() : "");
+        window.history.replaceState({}, "", newUrl);
+      }
+
+      function renderCategoryCounts() {
+        if (!window.CheesboroughSearch) return;
+        const allItems = window.CheesboroughSearch.index;
+        const totalCountEl = document.getElementById("total-count-badge");
+        if (totalCountEl) totalCountEl.textContent = `(${allItems.length} total sources)`;
+
+        const allCountEl = document.getElementById("cat-count-all");
+        if (allCountEl) allCountEl.textContent = allItems.length;
+
+        const catMap = {
+          "Research Brief": "cat-count-brief",
+          "Primary PDF": "cat-count-pdf",
+          "Data & Spreadsheet": "cat-count-data",
+          "Primary Document": "cat-count-doc",
+          "Law Library": "cat-count-law",
+          "Photo Archive": "cat-count-photo",
+          "Manuscript & Book": "cat-count-books",
+          "Personal Papers": "cat-count-personal",
+          "News & Review": "cat-count-news"
+        };
+
+        const cats = window.CheesboroughSearch.getCategories();
+        cats.forEach(c => {
+          const elId = catMap[c.name];
+          if (elId) {
+            const el = document.getElementById(elId);
+            if (el) el.textContent = c.count;
+          }
+        });
+      }
+
+      function renderSidebarTags() {
+        if (!window.CheesboroughSearch || !sidebarTagsCloud) return;
+        const tags = window.CheesboroughSearch.getTags().slice(0, 24);
+        sidebarTagsCloud.innerHTML = tags.map(t => `
+          <button type="button" class="sidebar-tag ${currentTag === t.name ? 'active' : ''}" onclick="setTagFilter('${escapeHtml(t.name)}')">
+            ${escapeHtml(t.name)} <span class="sidebar-tag-count">(${t.count})</span>
+          </button>
+        `).join("");
+      }
+
+      function getBadgeClass(category) {
+        const cat = (category || "").toLowerCase();
+        if (cat.includes("pdf")) return "pdf";
+        if (cat.includes("data") || cat.includes("spreadsheet")) return "data";
+        if (cat.includes("brief")) return "brief";
+        if (cat.includes("law")) return "law";
+        if (cat.includes("photo")) return "photo";
+        if (cat.includes("manuscript") || cat.includes("book")) return "manuscript";
+        return "brief";
+      }
+
+      function performSearch() {
+        if (!window.CheesboroughSearch || !resultsList) return;
+
+        const results = window.CheesboroughSearch.search(currentQuery, {
+          category: currentCategory,
+          tag: currentTag,
+          sortBy: currentSort
+        });
+
+        // Update header counter
+        let countText = "";
+        if (currentQuery) {
+          countText = `Found <strong>${results.length}</strong> matching source${results.length === 1 ? '' : 's'} for &ldquo;<strong>${escapeHtml(currentQuery)}</strong>&rdquo;`;
+        } else if (currentTag) {
+          countText = `Showing <strong>${results.length}</strong> source${results.length === 1 ? '' : 's'} tagged with &ldquo;<strong>${escapeHtml(currentTag)}</strong>&rdquo;`;
+        } else if (currentCategory !== "all") {
+          countText = `Showing <strong>${results.length}</strong> source${results.length === 1 ? '' : 's'} in <strong>${escapeHtml(currentCategory)}</strong>`;
+        } else {
+          countText = `Showing all <strong>${results.length}</strong> cataloged primary sources and research items`;
+        }
+
+        if (currentTag) {
+          countText += ` <span class="query-pill-active">Tag: ${escapeHtml(currentTag)} <button onclick="setTagFilter(null)" title="Remove tag filter">✕</button></span>`;
+        }
+        resultsCountText.innerHTML = countText;
+
+        // Render Cards or Empty State
+        if (results.length === 0) {
+          resultsList.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">📂</div>
+              <h2 class="empty-title">No matching records found</h2>
+              <p class="empty-desc">We couldn't find any documents, data, or research briefs matching "<strong>${escapeHtml(currentQuery || currentTag || currentCategory)}</strong>". Try checking your spelling or explore the suggested topics below:</p>
+              <div class="empty-suggestions">
+                <button type="button" class="tag-chip" onclick="executeQuickSearch('Dozier School')">Dozier School</button>
+                <button type="button" class="tag-chip" onclick="executeQuickSearch('American Siberia')">American Siberia</button>
+                <button type="button" class="tag-chip" onclick="executeQuickSearch('Fortune Ferguson')">Fortune Ferguson</button>
+                <button type="button" class="tag-chip" onclick="executeQuickSearch('1880 Census')">1880 Census</button>
+                <button type="button" class="tag-chip" onclick="executeQuickSearch('Solitary Confinement')">Solitary Confinement</button>
+                <button type="button" class="tag-chip" onclick="setCategoryFilter('all'); executeQuickSearch('');">View All Sources</button>
+              </div>
+            </div>
           `;
-      }).join('');
+          return;
+        }
 
-      runQueryTest('Dozier School');
-    }
+        resultsList.innerHTML = results.map(item => `
+          <article class="result-card" data-id="${item.id}">
+            <div class="card-header-meta">
+              <span class="badge-category ${getBadgeClass(item.category)}">${item.icon || '📄'} ${escapeHtml(item.badge || item.category)}</span>
+              ${item.date ? `<span class="card-date">📅 ${escapeHtml(item.date)}</span>` : ''}
+              ${item.author ? `<span class="card-dot">•</span><span class="card-author">🏛️ ${escapeHtml(item.author)}</span>` : ''}
+            </div>
 
-    function runQueryTest(query) {
-      if (!window.CheesboroughSearch) return;
-      const results = window.CheesboroughSearch.search(query);
+            <h2 class="card-title">
+              <a href="${item.url}">${item.highlightedTitle || escapeHtml(item.title)}</a>
+            </h2>
 
-      let output = `[TEST EXECUTION: "${query}"]\n`;
-      output += `Status: OK (200)\n`;
-      output += `Total Matches: ${results.length}\n`;
-      output += `Top Score: ${results[0] ? results[0].score : 0} pts\n\n`;
-      output += `--- TOP 4 MATCHES ---\n`;
+            <p class="card-desc">${item.highlightedDescription || escapeHtml(item.description)}</p>
 
-      results.slice(0, 4).forEach((item, idx) => {
-        output += `${idx + 1}. [${item.category}] ${item.title}\n`;
-        output += `   URL: ${item.url}\n`;
-        output += `   Date: ${item.date || 'N/A'} | Tags: ${item.tags.slice(0, 3).join(', ')}\n\n`;
-      });
+            ${item.tags && item.tags.length ? `
+              <div class="card-tags" aria-label="Tags">
+                ${item.tags.map(t => `<button type="button" class="card-tag" onclick="setTagFilter('${escapeHtml(t)}')">#${escapeHtml(t)}</button>`).join('')}
+              </div>
+            ` : ''}
 
-      testLog.textContent = output;
-      loadPreview(`SEARCH.html?q=${encodeURIComponent(query)}`);
-    }
+            <div class="card-footer-action">
+              <a class="action-link" href="${item.url}">${escapeHtml(item.actionLabel || 'View Resource →')}</a>
+            </div>
+          </article>
+        `).join('');
+      }
 
-    function loadPreview(url) {
-      if (previewIframe) previewIframe.src = url;
-      if (previewInput) previewInput.value = url;
-    }
+      function escapeHtml(str) {
+        if (!str) return "";
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+      }
 
-    document.addEventListener('DOMContentLoaded', initWorkbench);
-  </script>
-</body>
-
+      document.addEventListener("DOMContentLoaded", initSearchPage);
+    </script>
+    <script src="title-case.js"></script>
+  </body>
 </html>
