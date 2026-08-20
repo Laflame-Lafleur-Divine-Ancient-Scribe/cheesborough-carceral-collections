@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -84,7 +84,7 @@
             <span class="drawer-kicker">State Photographic Finding Aid</span>
             <h2 id="drawer-state-title">Florida Archival Photographs</h2>
           </div>
-          <button class="drawer-close" type="button" onclick="closeStateDrawer()">✕ Close Gallery</button>
+          <button class="drawer-close" type="button" onclick="closeStateDrawer()">âœ• Close Gallery</button>
         </div>
         <p class="drawer-description" id="drawer-desc">Photographs documenting juvenile institutions, reform schools, prison administration, and institutional life in Florida.</p>
         <div class="state-photo-grid" id="state-photo-grid"></div>
@@ -95,7 +95,7 @@
 
     <div class="viewer" id="viewer" hidden>
       <div class="viewer-box">
-        <button class="close" id="close-viewer-btn" onclick="closeViewer()" aria-label="Close viewer">✕</button>
+        <button class="close" id="close-viewer-btn" onclick="closeViewer()" aria-label="Close viewer">âœ•</button>
         <img id="viewer-image" alt="" />
         <h3 class="viewer-title" id="viewer-title"></h3>
         <p class="viewer-caption" id="viewer-caption"></p>
@@ -221,7 +221,7 @@
             <strong>${state}</strong>
             <span>${hasPhotos ? `${photoList.length} archival photos indexed` : 'Finding aid index'}</span>
           </div>
-          ${hasPhotos ? `<span class="badge-photo-count">📷 ${photoList.length} Photos</span>` : '<span class="badge-photo-count badge-photo-count-empty">0 Photos</span>'}
+          ${hasPhotos ? `<span class="badge-photo-count">ðŸ“· ${photoList.length} Photos</span>` : '<span class="badge-photo-count badge-photo-count-empty">0 Photos</span>'}
         `;
         card.addEventListener("click", () => {
           openStateDrawer(state);
@@ -258,10 +258,10 @@
         drawerTitle.textContent = `${stateName} Archival Photographs (${photos.length} items)`;
         photoGrid.innerHTML = photos.map((p, idx) => `
           <article class="photo-card" onclick="openViewer('${stateName}', ${idx})">
-            <img src="${p.src}" alt="${p.title}" loading="lazy" />
+            <img src="${p.src}" alt="${p.title}" />
             <div class="photo-card-body">
               <div>
-                <span class="photo-card-kicker">${p.category} • ${p.year}</span>
+                <span class="photo-card-kicker">${p.category} â€¢ ${p.year}</span>
                 <p class="photo-card-caption">${p.caption}</p>
               </div>
             </div>
