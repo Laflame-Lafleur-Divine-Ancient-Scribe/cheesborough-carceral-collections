@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,4 +20,4 @@
 </main><footer>Evidence Index | Primary records, images, and research sources</footer>
 <script>document.querySelectorAll('a').forEach(link=>{if(link.textContent.includes('1880 Florida state-prison census scan'))link.remove();});document.querySelectorAll('a[href],img[src]').forEach(element=>{const attribute=element.tagName==='IMG'?'src':'href';const value=element.getAttribute(attribute);if(!value)return;if(value.includes('PDF-READER.html'))return;const normalized=value.replaceAll('%2F','/');if(/\.xlsx?$/i.test(normalized)){element.setAttribute('href',`DATA-READER.html?file=${encodeURIComponent(decodeURIComponent(normalized))}`);return}element.setAttribute(attribute,normalized);});</script>
 <script src="dozier-daily-photo.js"></script>
-</body></html>
+<script src="title-case.js"></script></body></html>

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -283,7 +283,7 @@
       <a href="BOOKS-AND-MANUSCRIPTS.html">Books &amp; Manuscripts</a>
       <a href="SEARCH.html">Search Archive</a>
       <a href="COLLECTIONS.html">Collections</a>
-      <a href="javascript:history.back()">← Return</a>
+      <a href="javascript:history.back()">â† Return</a>
     </nav>
     <span class="header-badge">View-Only Reader</span>
   </header>
@@ -294,15 +294,15 @@
       <h1 class="doc-title" id="doc-title">Loading Document...</h1>
     </div>
     <div class="controls-wrap" id="controls-wrap">
-      <button type="button" class="btn-control" id="btn-prev-page" title="Previous Page">◀ Prev</button>
+      <button type="button" class="btn-control" id="btn-prev-page" title="Previous Page">â—€ Prev</button>
       <div class="page-counter">
         Page <input type="number" id="page-jump-input" class="page-input" min="1" value="1" aria-label="Current page" /> of <span id="total-pages-count">1</span>
       </div>
-      <button type="button" class="btn-control" id="btn-next-page" title="Next Page">Next ▶</button>
+      <button type="button" class="btn-control" id="btn-next-page" title="Next Page">Next â–¶</button>
       <span class="toolbar-divider" aria-hidden="true">|</span>
-      <button type="button" class="btn-control" id="btn-zoom-out" title="Zoom Out">🔍 −</button>
-      <button type="button" class="btn-control" id="btn-zoom-in" title="Zoom In">🔍 +</button>
-      <button type="button" class="btn-control" id="btn-fit-width" title="Fit Width">↔ Fit</button>
+      <button type="button" class="btn-control" id="btn-zoom-out" title="Zoom Out">ðŸ” âˆ’</button>
+      <button type="button" class="btn-control" id="btn-zoom-in" title="Zoom In">ðŸ” +</button>
+      <button type="button" class="btn-control" id="btn-fit-width" title="Fit Width">â†” Fit</button>
     </div>
   </div>
 
@@ -317,7 +317,7 @@
   </main>
 
   <footer class="reader-footer-note">
-    The Cheesborough Carceral Collections | In-Browser Archival Reading Room • View-Only Preservation Access
+    The Cheesborough Carceral Collections | In-Browser Archival Reading Room â€¢ View-Only Preservation Access
   </footer>
 
   <script type="module">
@@ -382,13 +382,13 @@
       document.title = `${cleanTitle} | Document Reader`;
 
       if (rawFile.includes("02_Books-and-Manuscripts") || rawFile.includes("Books") || rawFile.includes("CompleteBook")) {
-        docKicker.textContent = "Books & Manuscripts • Complete Text";
+        docKicker.textContent = "Books & Manuscripts â€¢ Complete Text";
       } else if (rawFile.includes("Dozier")) {
-        docKicker.textContent = "Dozier School Collection • Primary Record";
+        docKicker.textContent = "Dozier School Collection â€¢ Primary Record";
       } else if (rawFile.includes("Census")) {
-        docKicker.textContent = "Census & Demographic Record • Primary Source";
+        docKicker.textContent = "Census & Demographic Record â€¢ Primary Source";
       } else if (rawFile.includes("FORTUNE")) {
-        docKicker.textContent = "Fortune Ferguson Collection • Legal Archive";
+        docKicker.textContent = "Fortune Ferguson Collection â€¢ Legal Archive";
       }
 
       try {
@@ -489,5 +489,5 @@
 
     loadDocument();
   </script>
-</body>
+<script src="title-case.js"></script></body>
 </html>

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -221,7 +221,7 @@
       </div>
       <div class="masthead-status" aria-label="Dashboard status">
         <div class="status-line"><span class="status-dot" aria-hidden="true"></span><strong>Demo adapter connected</strong></div>
-        <div class="refresh-note">Updated 19 Aug 2026 · 09:42 UTC</div>
+        <div class="refresh-note">Updated 19 Aug 2026 Â· 09:42 UTC</div>
       </div>
     </header>
 
@@ -232,7 +232,7 @@
           <button class="range-button" data-range="7" type="button">7 days</button>
           <button class="range-button active" data-range="30" type="button">30 days</button>
           <button class="range-button" data-range="90" type="button">90 days</button>
-          <span class="panel-meta" id="range-label">22 Jul – 19 Aug 2026</span>
+          <span class="panel-meta" id="range-label">22 Jul â€“ 19 Aug 2026</span>
         </div>
         <div class="toolbar-actions">
           <label class="compare-control"><input id="compare-toggle" type="checkbox"> Compare prior period</label>
@@ -242,14 +242,14 @@
 
       <div class="section-label reveal delay-1">At a glance</div>
       <section class="kpi-grid reveal delay-1" aria-label="Key performance indicators">
-        <article class="kpi"><div class="kpi-label">Page views</div><div class="kpi-value" id="kpi-views">48,392</div><div class="kpi-change" id="change-views">↑ 12.8% <span class="compare-copy">vs. prior period</span></div></article>
-        <article class="kpi"><div class="kpi-label">Unique visitors</div><div class="kpi-value" id="kpi-visitors">16,804</div><div class="kpi-change" id="change-visitors">↑ 8.4% <span class="compare-copy">vs. prior period</span></div></article>
-        <article class="kpi"><div class="kpi-label">Engaged sessions</div><div class="kpi-value" id="kpi-sessions">9,721</div><div class="kpi-change" id="change-sessions">↑ 16.2% <span class="compare-copy">vs. prior period</span></div></article>
-        <article class="kpi"><div class="kpi-label">Average time</div><div class="kpi-value" id="kpi-time">04:18</div><div class="kpi-change down" id="change-time">↓ 0:12 <span class="compare-copy">vs. prior period</span></div></article>
+        <article class="kpi"><div class="kpi-label">Page views</div><div class="kpi-value" id="kpi-views">48,392</div><div class="kpi-change" id="change-views">â†‘ 12.8% <span class="compare-copy">vs. prior period</span></div></article>
+        <article class="kpi"><div class="kpi-label">Unique visitors</div><div class="kpi-value" id="kpi-visitors">16,804</div><div class="kpi-change" id="change-visitors">â†‘ 8.4% <span class="compare-copy">vs. prior period</span></div></article>
+        <article class="kpi"><div class="kpi-label">Engaged sessions</div><div class="kpi-value" id="kpi-sessions">9,721</div><div class="kpi-change" id="change-sessions">â†‘ 16.2% <span class="compare-copy">vs. prior period</span></div></article>
+        <article class="kpi"><div class="kpi-label">Average time</div><div class="kpi-value" id="kpi-time">04:18</div><div class="kpi-change down" id="change-time">â†“ 0:12 <span class="compare-copy">vs. prior period</span></div></article>
       </section>
 
       <section class="panel trend-panel reveal delay-2" aria-labelledby="trend-title">
-        <div class="panel-heading"><h2 id="trend-title">Traffic trend</h2><span class="panel-meta" id="trend-meta">Daily totals · 30 day window</span></div>
+        <div class="panel-heading"><h2 id="trend-title">Traffic trend</h2><span class="panel-meta" id="trend-meta">Daily totals Â· 30 day window</span></div>
         <div class="trend-wrap">
           <div class="legend" aria-label="Chart legend"><span class="legend-item"><span class="legend-swatch"></span>Page views</span><span class="legend-item"><span class="legend-swatch visitors"></span>Unique visitors</span><span class="legend-item" id="chart-compare-note">Current period</span></div>
           <svg class="chart" id="trend-chart" viewBox="0 0 1000 255" role="img" aria-labelledby="chart-title chart-desc" preserveAspectRatio="none">
@@ -268,7 +268,7 @@
         </div>
       </section>
 
-      <section class="panel events-panel reveal" aria-labelledby="events-title"><div class="panel-heading"><h2 id="events-title">Engagement events</h2><span class="panel-meta">Selected actions · current window</span></div><div class="table-scroll"><table id="events-table"><thead><tr><th>Event</th><th class="number">Count</th><th class="number">Change</th><th>Signal</th></tr></thead><tbody></tbody></table></div></section>
+      <section class="panel events-panel reveal" aria-labelledby="events-title"><div class="panel-heading"><h2 id="events-title">Engagement events</h2><span class="panel-meta">Selected actions Â· current window</span></div><div class="table-scroll"><table id="events-table"><thead><tr><th>Event</th><th class="number">Count</th><th class="number">Change</th><th>Signal</th></tr></thead><tbody></tbody></table></div></section>
 
       <section class="footer-grid"><article class="source-panel reveal"><h2>Data source</h2><p class="source-copy">This dashboard currently reads from a local demo adapter. A production integration can replace the sample payload with GA4, Matomo, or Azure Application Insights data without changing the view layer.</p><div class="source-status"><span class="badge">Demo data</span><code>window.CarceralAnalyticsAdapter</code><span>Last refresh: 09:42 UTC</span></div></article><article class="panel notes-panel reveal delay-1"><h2>Operator notes</h2><p>Values are intentionally illustrative. No tracking IDs, secrets, or external analytics calls are present in this page.</p></article></section>
     </main>
@@ -277,9 +277,9 @@
   <script>
     (function () {
       const analyticsData = {
-        7: { label: "13 Aug – 19 Aug 2026", views: "12,814", visitors: "4,674", sessions: "2,871", time: "04:26", changes: ["↑ 4.9%", "↑ 3.1%", "↑ 8.7%", "↓ 0:05"], peak: "Peak: 2,184 views on 18 Aug, following the Dozier daily photo feature.", points: [42, 48, 46, 57, 51, 67, 76, 71], visitorPoints: [30, 34, 33, 42, 38, 49, 56, 53] },
-        30: { label: "22 Jul – 19 Aug 2026", views: "48,392", visitors: "16,804", sessions: "9,721", time: "04:18", changes: ["↑ 12.8%", "↑ 8.4%", "↑ 16.2%", "↓ 0:12"], peak: "Peak: 2,184 views on 12 Aug, following the Dozier daily photo feature.", points: [31, 38, 35, 44, 41, 49, 45, 56, 51, 60, 55, 63, 58, 70, 67, 75, 69, 81, 72, 88, 77, 73, 84, 79, 94, 87, 91, 100], visitorPoints: [22, 27, 25, 31, 29, 36, 34, 40, 38, 44, 41, 47, 43, 52, 49, 58, 53, 61, 56, 65, 60, 57, 63, 61, 70, 65, 68, 75] },
-        90: { label: "21 May – 19 Aug 2026", views: "142,768", visitors: "42,691", sessions: "25,119", time: "04:05", changes: ["↑ 18.6%", "↑ 11.2%", "↑ 20.4%", "↓ 0:19"], peak: "Peak: 2,936 views on 12 Aug, following the Dozier daily photo feature.", points: [27, 31, 29, 36, 34, 40, 38, 45, 41, 48, 46, 54, 50, 59, 56, 63, 60, 68, 65, 72, 69, 77, 73, 82, 79, 86, 82, 91, 88, 94], visitorPoints: [18, 22, 20, 26, 25, 29, 28, 34, 31, 37, 35, 40, 38, 44, 42, 48, 46, 51, 49, 55, 53, 59, 56, 62, 60, 65, 63, 68, 66, 71] }
+        7: { label: "13 Aug â€“ 19 Aug 2026", views: "12,814", visitors: "4,674", sessions: "2,871", time: "04:26", changes: ["â†‘ 4.9%", "â†‘ 3.1%", "â†‘ 8.7%", "â†“ 0:05"], peak: "Peak: 2,184 views on 18 Aug, following the Dozier daily photo feature.", points: [42, 48, 46, 57, 51, 67, 76, 71], visitorPoints: [30, 34, 33, 42, 38, 49, 56, 53] },
+        30: { label: "22 Jul â€“ 19 Aug 2026", views: "48,392", visitors: "16,804", sessions: "9,721", time: "04:18", changes: ["â†‘ 12.8%", "â†‘ 8.4%", "â†‘ 16.2%", "â†“ 0:12"], peak: "Peak: 2,184 views on 12 Aug, following the Dozier daily photo feature.", points: [31, 38, 35, 44, 41, 49, 45, 56, 51, 60, 55, 63, 58, 70, 67, 75, 69, 81, 72, 88, 77, 73, 84, 79, 94, 87, 91, 100], visitorPoints: [22, 27, 25, 31, 29, 36, 34, 40, 38, 44, 41, 47, 43, 52, 49, 58, 53, 61, 56, 65, 60, 57, 63, 61, 70, 65, 68, 75] },
+        90: { label: "21 May â€“ 19 Aug 2026", views: "142,768", visitors: "42,691", sessions: "25,119", time: "04:05", changes: ["â†‘ 18.6%", "â†‘ 11.2%", "â†‘ 20.4%", "â†“ 0:19"], peak: "Peak: 2,936 views on 12 Aug, following the Dozier daily photo feature.", points: [27, 31, 29, 36, 34, 40, 38, 45, 41, 48, 46, 54, 50, 59, 56, 63, 60, 68, 65, 72, 69, 77, 73, 82, 79, 86, 82, 91, 88, 94], visitorPoints: [18, 22, 20, 26, 25, 29, 28, 34, 31, 37, 35, 40, 38, 44, 42, 48, 46, 51, 49, 55, 53, 59, 56, 62, 60, 65, 63, 68, 66, 71] }
       };
       const pages = [
         ["Dozier Research", "Research guide", "12,804", "06:44", "18.6%"],
@@ -289,11 +289,11 @@
         ["Photography by State", "Browse collection", "4,887", "03:38", "8.1%"]
       ];
       const events = [
-        ["Search submitted", "search", "3,812", "↑ 21.4%", "Discovery intent"],
-        ["PDF opened", "pdf", "1,964", "↑ 14.7%", "Deep reading"],
-        ["Spreadsheet opened", "data", "842", "↑ 32.5%", "Data reuse"],
-        ["State selector used", "state", "611", "↑ 8.9%", "Collection browse"],
-        ["Outbound click", "outbound", "294", "↑ 5.1%", "Research handoff"]
+        ["Search submitted", "search", "3,812", "â†‘ 21.4%", "Discovery intent"],
+        ["PDF opened", "pdf", "1,964", "â†‘ 14.7%", "Deep reading"],
+        ["Spreadsheet opened", "data", "842", "â†‘ 32.5%", "Data reuse"],
+        ["State selector used", "state", "611", "â†‘ 8.9%", "Collection browse"],
+        ["Outbound click", "outbound", "294", "â†‘ 5.1%", "Research handoff"]
       ];
       const regions = [["United States", "9,826", 58], ["United Kingdom", "1,926", 11], ["Canada", "1,504", 9], ["Germany", "1,012", 6], ["Other regions", "2,536", 16]];
       const devices = [["Desktop", 61, "desktop"], ["Mobile", 31, "mobile"], ["Tablet", 8, "tablet"]];
@@ -304,7 +304,7 @@
       function renderTables() {
         document.querySelector("#pages-table tbody").innerHTML = pages.map((row) => `<tr><td><span class="page-name">${row[0]}</span><span class="page-type">${row[1]}</span></td><td class="number">${row[2]}</td><td class="number">${row[3]}</td><td class="number metric-up">${row[4]}</td></tr>`).join("");
         document.querySelector("#events-table tbody").innerHTML = events.map((row) => `<tr><td><span class="event-label event-${row[1]}"><span class="event-mark" aria-hidden="true"></span>${row[0]}</span></td><td class="number">${row[2]}</td><td class="number metric-up">${row[3]}</td><td>${row[4]}</td></tr>`).join("");
-        document.getElementById("region-list").innerHTML = regions.map((row) => `<li class="region-row"><span class="region-name">${row[0]}</span><span class="region-value">${row[1]} · ${row[2]}%</span><span class="bar-track"><span class="bar-fill" style="width:${row[2]}%"></span></span></li>`).join("");
+        document.getElementById("region-list").innerHTML = regions.map((row) => `<li class="region-row"><span class="region-name">${row[0]}</span><span class="region-value">${row[1]} Â· ${row[2]}%</span><span class="bar-track"><span class="bar-fill" style="width:${row[2]}%"></span></span></li>`).join("");
         document.getElementById("device-mix").innerHTML = devices.map((row) => `<div class="device-row"><span class="device-label">${row[0]}</span><span class="device-track"><span class="device-fill ${row[2]}" style="width:${row[1]}%"></span></span><span class="device-value">${row[1]}%</span></div>`).join("");
       }
       function linePath(values, width, top, height) { return values.map((value, i) => `${i ? "L" : "M"} ${(i * width / (values.length - 1)).toFixed(1)} ${(top + height - value * height / 100).toFixed(1)}`).join(" "); }
@@ -328,7 +328,7 @@
         ["views", "visitors", "sessions", "time"].forEach((key) => setText(`kpi-${key}`, snapshot[key]));
         ["views", "visitors", "sessions", "time"].forEach((key, i) => { document.getElementById(`change-${key}`).innerHTML = `${snapshot.changes[i]} <span class="compare-copy">vs. prior period</span>`; });
         setText("range-label", snapshot.label);
-        setText("trend-meta", `Daily totals · ${range} day window`);
+        setText("trend-meta", `Daily totals Â· ${range} day window`);
         setText("peak-caption", snapshot.peak);
         renderChart(snapshot);
         document.querySelectorAll(".range-button").forEach((button) => button.classList.toggle("active", button.dataset.range === String(range)));
@@ -345,5 +345,5 @@
       renderTables(); render(currentRange);
     }());
   </script>
-</body>
+<script src="title-case.js"></script></body>
 </html>

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -118,7 +118,7 @@
       box-shadow: 0 4px 14px rgba(0,0,0,0.2);
     }
     .search-input-wrap::before {
-      content: "⌕";
+      content: "âŒ•";
       position: absolute;
       left: 0.85rem;
       top: 50%;
@@ -419,8 +419,8 @@
           <input type="search" id="catalog-search-input" placeholder="Search books by title, author, era, or subject..." aria-label="Search books catalog" autocomplete="off" />
         </div>
         <div class="view-toggle-btns" role="radiogroup" aria-label="Catalog layout view">
-          <button type="button" class="view-btn active" id="view-shelf-btn" onclick="setViewMode('shelf')">🏛️ Bookshelf</button>
-          <button type="button" class="view-btn" id="view-grid-btn" onclick="setViewMode('grid')">📑 Grid View</button>
+          <button type="button" class="view-btn active" id="view-shelf-btn" onclick="setViewMode('shelf')">ðŸ›ï¸ Bookshelf</button>
+          <button type="button" class="view-btn" id="view-grid-btn" onclick="setViewMode('grid')">ðŸ“‘ Grid View</button>
         </div>
       </div>
     </div>
@@ -430,7 +430,7 @@
     <div class="filter-inner">
       <div class="filter-pills" id="filter-pills-wrap">
         <button type="button" class="filter-pill active" data-cat="all" onclick="filterCategory('all')">All Works <span class="pill-count" id="count-all">13</span></button>
-        <button type="button" class="filter-pill" data-cat="primary" onclick="filterCategory('primary')">Primary Texts (1851–1916) <span class="pill-count" id="count-primary">4</span></button>
+        <button type="button" class="filter-pill" data-cat="primary" onclick="filterCategory('primary')">Primary Texts (1851â€“1916) <span class="pill-count" id="count-primary">4</span></button>
         <button type="button" class="filter-pill" data-cat="secondary" onclick="filterCategory('secondary')">Secondary Scholarship <span class="pill-count" id="count-secondary">6</span></button>
         <button type="button" class="filter-pill" data-cat="culture" onclick="filterCategory('culture')">Cultural &amp; Legal Studies <span class="pill-count" id="count-culture">2</span></button>
         <button type="button" class="filter-pill" data-cat="reference" onclick="filterCategory('reference')">Reference <span class="pill-count" id="count-reference">1</span></button>
@@ -456,11 +456,11 @@
   <!-- Interactive Book Inspector Modal -->
   <div class="modal-overlay" id="book-modal-overlay" onclick="handleOverlayClick(event)">
     <div class="modal-card" id="book-modal-card" role="dialog" aria-modal="true">
-      <button type="button" class="modal-close-btn" onclick="closeBookModal()" aria-label="Close dialog">✕</button>
+      <button type="button" class="modal-close-btn" onclick="closeBookModal()" aria-label="Close dialog">âœ•</button>
       <div class="modal-body-grid">
         <div class="modal-cover-wrap">
           <div class="book-cover-3d modal-cover" id="modal-cover-box"></div>
-          <a class="btn-read-online modal-read-online" id="modal-read-online-btn" href="#">📖 Read Book Online ↗</a>
+          <a class="btn-read-online modal-read-online" id="modal-read-online-btn" href="#">ðŸ“– Read Book Online â†—</a>
         </div>
         <div class="modal-details-wrap">
           <span class="card-badge" id="modal-badge">Primary Text</span>
@@ -471,10 +471,10 @@
 
           <table class="modal-meta-table">
             <tbody>
-              <tr><th>Publication Date</th><td id="modal-date">—</td></tr>
-              <tr><th>Historical Era</th><td id="modal-era">—</td></tr>
-              <tr><th>Document Format</th><td id="modal-format">—</td></tr>
-              <tr><th>Pagination</th><td id="modal-pages">—</td></tr>
+              <tr><th>Publication Date</th><td id="modal-date">â€”</td></tr>
+              <tr><th>Historical Era</th><td id="modal-era">â€”</td></tr>
+              <tr><th>Document Format</th><td id="modal-format">â€”</td></tr>
+              <tr><th>Pagination</th><td id="modal-pages">â€”</td></tr>
               <tr><th>Reader Access</th><td><strong>View-Only (In-Browser Canvas Reader)</strong></td></tr>
             </tbody>
           </table>
@@ -611,7 +611,7 @@
           </div>
           <p class="card-desc">${escapeHtml(b.summary)}</p>
           <div class="card-actions-row">
-            <a class="btn-read-online" href="PDF-READER.html?file=${encodeURIComponent(b.file)}">📖 Read Online ↗</a>
+            <a class="btn-read-online" href="PDF-READER.html?file=${encodeURIComponent(b.file)}">ðŸ“– Read Online â†—</a>
             <button type="button" class="btn-inspect" onclick="openBookModal('${b.id}')">Details &amp; Citation</button>
           </div>
         </article>
@@ -647,7 +647,7 @@
       badge.textContent = book.badge;
       badge.className = `card-badge ${book.category}`;
       title.textContent = book.title;
-      author.textContent = `By ${book.author} — ${book.authorRole}`;
+      author.textContent = `By ${book.author} â€” ${book.authorRole}`;
       summary.textContent = book.summary;
       dateEl.textContent = book.year;
       eraEl.textContent = book.era;
@@ -682,5 +682,5 @@
 
     document.addEventListener("DOMContentLoaded", initPage);
   </script>
-</body>
+<script src="title-case.js"></script></body>
 </html>

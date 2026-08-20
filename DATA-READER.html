@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,4 +11,4 @@ function fileUrl(path){const normalized=decodeURIComponent(path.replaceAll('\\',
 function showError(message){status.className='status error';status.textContent=message}
 function renderSheet(sheetName){const sheet=workbook.Sheets[sheetName];const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});content.replaceChildren();const table=document.createElement('table');if(!rows.length){const empty=document.createElement('p');empty.textContent='This worksheet is empty.';content.append(empty);return}rows.forEach((row,index)=>{const tr=document.createElement('tr');row.forEach(cell=>{const element=document.createElement(index===0?'th':'td');element.textContent=cell;tr.append(element)});table.append(tr)});content.append(table);status.textContent=`${workbook.SheetNames.length} sheet${workbook.SheetNames.length===1?'':'s'} available. Showing ${sheetName}: ${Math.max(rows.length-1,0)} data rows.`}
 if(!file){showError('No workbook was selected. Return to the evidence index and choose a spreadsheet.')}else{const source=fileUrl(file);const name=decodeURIComponent(file.replaceAll('\\','/').split('/').pop());title.textContent=name;download.href=source;download.hidden=false;fetch(source).then(response=>{if(!response.ok)throw new Error('Workbook could not be loaded');return response.arrayBuffer()}).then(buffer=>{workbook=XLSX.read(buffer,{type:'array'});sheetSelect.replaceChildren();workbook.SheetNames.forEach((sheetName,index)=>{const option=document.createElement('option');option.value=sheetName;option.textContent=sheetName;option.selected=index===0;sheetSelect.append(option)});sheetSelect.hidden=workbook.SheetNames.length<2;sheetSelect.addEventListener('change',()=>renderSheet(sheetSelect.value));renderSheet(workbook.SheetNames[0])}).catch(()=>showError('This workbook could not be rendered in the browser. Use Download original workbook to open it in Excel.'))}
-</script></body></html>
+</script><script src="title-case.js"></script></body></html>

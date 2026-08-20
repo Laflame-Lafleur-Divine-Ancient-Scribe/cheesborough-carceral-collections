@@ -38,14 +38,20 @@
     body.style.cssText = "color: #e6dfd1; font-size: 1.1rem; line-height: 1.7; margin: 0; max-width: 760px;";
   }
 
-  const normalizeNavigationLabel = (value) => value.split(" ").map((word) => {
-    if (word === "CCC") return word;
-    return word ? word[0] + word.slice(1).toLowerCase() : word;
-  }).join(" ");
+  const normalizeNavigationLabel = (value) => value.split(/(\s+)/).map((word) => {
+    if (!/[A-Za-z]/.test(word) || word === "CCC") return word;
+    const firstLetter = word.search(/[A-Za-z]/);
+    return word.slice(0, firstLetter) + word[firstLetter].toUpperCase() + word.slice(firstLetter + 1).toLowerCase();
+  }).join("");
+
+  const titleCaseSelectors = "h1, h2, h3, h4, h5, nav a, button, .archive-link, .explore-card a, .news-more-link, .prison-hero-link, .topic-card a, .source";
+  document.querySelectorAll(titleCaseSelectors).forEach((element) => {
+    if (element.dataset.titleCaseApplied === "true" || element.children.length > 0) return;
+    element.textContent = normalizeNavigationLabel(element.textContent.trim());
+    element.dataset.titleCaseApplied = "true";
+  });
 
   document.querySelectorAll("nav a").forEach((link) => {
-    if (link.textContent === link.textContent.toUpperCase() && /[A-Z]/.test(link.textContent)) {
-      link.textContent = normalizeNavigationLabel(link.textContent);
-    }
+    link.textContent = normalizeNavigationLabel(link.textContent.trim());
   });
 })();
