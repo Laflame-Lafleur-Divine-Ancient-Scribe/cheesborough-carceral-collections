@@ -86,7 +86,7 @@
       line-height: 1.22;
       letter-spacing: -0.01em;
       margin: 0.85rem 0 1.15rem;
-      text-wrap: balance;
+      
       word-break: normal;
       overflow-wrap: break-word;
     }
@@ -280,6 +280,7 @@
 
     /* Sidebar Panels */
     .sidebar-panel {
+      height: 100%;
       position: sticky;
       top: 1.5rem;
       display: flex;
@@ -293,6 +294,15 @@
       padding: 1.4rem;
       box-shadow: 0 4px 14px rgba(0,0,0,0.05);
       border-radius: 2px;
+    }
+    .sidebar-end-bar {
+      background: var(--gold);
+      border-left: 1px solid rgba(16, 44, 76, 0.35);
+      box-shadow: -10px 0 22px rgba(9, 30, 54, 0.2), 0 10px 24px rgba(9, 30, 54, 0.12);
+      flex: 1 1 auto;
+      margin-top: 1rem;
+      min-height: 12rem;
+      width: 100%;
     }
     .panel-box h3 {
       font-family: "Libre Baskerville", Georgia, serif;
@@ -325,6 +335,7 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
+    .source-meta-light { color: var(--gold-light); }
 
     .community-action-box {
       background: #102c4c;
@@ -381,202 +392,225 @@
 
   <header class="hero">
     <div class="hero-copy">
-      <div class="eyebrow">Alachua County, Florida / Racial Terror &amp; State Centralization (1916–1927)</div>
-      <h1>The Newberry Six and Fortune "Jew" Ferguson: Racial Terror, State Centralization, and the Work of Historical Reconciliation in Alachua County</h1>
-      <p>A comprehensive archival investigation connecting the August 1916 Newberry mob lynchings with the 1927 state electrocution of Fortune Ferguson Jr., exploring how county-level violence transitioned into centralized criminal punishment and how community truth-seeking projects preserve public memory today.</p>
+      <div class="eyebrow">Alachua County, Florida / Racial Violence, Capital Punishment, and State Authority, 1916 to 1927</div>
+      <h1>The Newberry Lynchings and Fortune Ferguson Jr.: Race, Capital Punishment, and the Transformation of State Authority in Florida</h1>
+      <p>This archival study examines the 1916 Newberry lynchings, the prosecution and execution of Boisey Long, and the later capital case of Fortune Ferguson Jr. as distinct but historically related episodes within the development of criminal punishment in Alachua County and the State of Florida. Between Long's execution in Gainesville in 1916 and Ferguson's execution at Florida State Prison in 1927, Florida transferred the administration of capital punishment from county sheriffs to the state prison system and replaced hanging with electrocution. The records assembled here document that transformation while preserving the legal distinction between racial terror carried out outside judicial process and executions imposed through formal criminal proceedings.</p>
     </div>
     <div class="hero-image" role="img" aria-label="Archival record card and primary census ledger of Fortune Ferguson Jr."></div>
   </header>
 
   <main class="layout">
     <article>
-      <h2>I. Executive Overview: Two Epochs of Violence in Alachua County</h2>
-      <p>Between 1916 and 1927, Alachua County, Florida, stood at the epicenter of two defining moments in the history of American racial violence and criminal punishment. The first was the <strong>Newberry Lynchings of August 1916</strong>, in which a white mob murdered at least six African American residents following an attempted arrest over stolen hogs. The second was the prosecution and execution of <strong>Fortune "Jew" Ferguson Jr.</strong>, an African American teenager from Newberry who, in 1924, became the first person in Florida history sentenced to die in the state's newly constructed electric chair at Raiford.</p>
+      <h2>I. Newberry and the Changing Administration of Death in Florida</h2>
+      <p>The events that unfolded in western Alachua County during August 1916 began with an attempted arrest and developed into one of the most consequential episodes of racial violence in the region's history. Constable George Wynne and Dr. L. G. Harris went to the property of Boisey Long near Newberry and Jonesville in connection with an accusation involving stolen hogs. Gunfire followed. Wynne received fatal wounds, Harris was wounded, and Long fled. The search for Long rapidly expanded beyond an effort to locate a single suspect as armed white residents and law enforcement personnel moved through the surrounding Black farming communities.</p>
 
-      <p>These two events are traditionally treated as separate episodes: one an extralegal atrocity committed by a local mob, the other a formal judicial proceeding carried out inside a state prison. This research brief reads them as <strong>one continuous political and institutional history</strong>. They reveal how white political authority in Florida evolved from decentralized county mob terror during World War I into a centralized, bureaucratic apparatus of state-administered capital punishment during the 1920s.</p>
+      <p>At least six Black residents were killed during the violence associated with the manhunt. James Dennis was killed during the search. Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, and Reverend Joshua Baskin were detained and held in the Newberry jail before a mob removed them from custody and lynched them. Mary Dennis was pregnant. The detention of five victims before their deaths places the episode directly within the history of public authority because the violence did not occur entirely outside governmental structures. The victims had entered official custody and nevertheless received no effective protection from the mob that seized them.</p>
+
+      <p>The historical record surrounding Newberry has continued to develop. The six victims traditionally associated with the mass lynching remain central to the episode, but subsequent research and community remembrance projects have documented a broader history of racial terror in Newberry. In 2021, the Alachua County Community Remembrance Project and the Equal Justice Initiative dedicated a historical marker at Freddie Warmack Park commemorating nine documented victims of racial terror lynching associated with Newberry. The broader memorial record includes victims from other years and must not be conflated with the six people conventionally identified with the August 1916 killings.</p>
 
       <div class="stat-grid">
         <div class="stat-card">
-          <div class="stat-number">6+</div>
-          <div class="stat-label">Black residents lynched in Newberry in August 1916</div>
+          <div class="stat-number">1916</div>
+          <div class="stat-label">August violence in Newberry and western Alachua County</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number">7 Min</div>
-          <div class="stat-label">All-white jury deliberation time to sentence Boisey Long to death</div>
+          <div class="stat-number">6</div>
+          <div class="stat-label">Conventionally identified victims of the August 1916 Newberry mass lynching</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number">#1</div>
-          <div class="stat-label">Fortune Ferguson Jr.: 1st person sentenced to Florida's electric chair</div>
+          <div class="stat-number">1923</div>
+          <div class="stat-label">Florida centralizes executions at the state prison</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number">40+</div>
-          <div class="stat-label">Documented racial terror lynchings in Alachua County history</div>
+          <div class="stat-number">1927</div>
+          <div class="stat-label">Fortune Ferguson Jr. executed at Florida State Prison</div>
         </div>
       </div>
 
-      <h2>II. The Newberry Lynchings of August 1916: Mob Terror and Official Collusion</h2>
-      <p>On the evening of Thursday, August 17, 1916, Constable George Wynne and Dr. L. G. Harris went to the rural home of <strong>Boisey Long</strong>, an industrious Black farmer living near Newberry and Jonesville, to execute a warrant for alleged hog theft. Accounts of the encounter vary, but gunfire was exchanged. Wynne was mortally wounded, Harris was shot, and Long fled into the dense pine flatwoods.</p>
+      <h2>II. The Newberry Lynchings of August 1916</h2>
+      <p>On August 17, 1916, authorities attempted to arrest Boisey Long near Newberry. The resulting exchange of gunfire left Constable George Wynne mortally wounded and Dr. L. G. Harris injured. Long escaped, and the effort to capture him drew armed men from the surrounding region into western Alachua County. Contemporary reporting, later historical research, and descendant testimony document a climate in which the search for Long expanded into violence against Black residents suspected of assisting him or connected to him through family and community relationships.</p>
 
-      <p>What followed was not a lawful police search, but an armed mobilization of hundreds of white men from Alachua, Levy, and Marion counties. Over the next forty-eight hours, official law enforcement and private vigilantes merged into a single punitive force that terrorized the Black community of western Alachua County:</p>
+      <p>James Dennis was killed on August 18 during the manhunt. Five additional Black residents were taken into custody: Bert Dennis, his pregnant wife Mary Dennis, Stella Young, Andrew McHenry, and Reverend Joshua Baskin. During the early hours of August 19, a white mob removed the five prisoners from the Newberry jail and carried them to a site outside town, where they were lynched. The killings demonstrated the inability or unwillingness of local institutions to protect Black prisoners who had already been placed under official control.</p>
 
-      <ul>
-        <li><strong>James Dennis:</strong> An innocent Black farmer and brother-in-law of Long, James Dennis was shot and killed in his agricultural field on August 18 by posse members during the initial manhunt.</li>
-        <li><strong>The Jail Seizure:</strong> Seeking leverage and vengeance, the mob arrested five Black citizens with personal or familial ties to Long and confined them in the small Newberry municipal jail:
-          <ul>
-            <li><strong>Bert Dennis</strong> (brother of James Dennis)</li>
-            <li><strong>Mary Dennis</strong> (the pregnant wife of Bert Dennis)</li>
-            <li><strong>Stella Young</strong> (sister of Bert and James Dennis)</li>
-            <li><strong>Andrew McHenry</strong> (local resident)</li>
-            <li><strong>Reverend Joshua Baskin</strong> (respected local African Methodist Episcopal pastor)</li>
-          </ul>
-        </li>
-        <li><strong>The Hangings at Lynch's Hammock:</strong> In the early morning hours of Saturday, <strong>August 19, 1916</strong>, a mob of white citizens stormed the Newberry jail, seized the five prisoners without resistance from local constables, and transported them two miles outside town to a large live oak tree near Watermelon Pond Road (Lynch's Hammock). All five—including the pregnant Mary Dennis—were hanged from a single tree limb.</li>
-      </ul>
+      <h2>III. Boisey Long, Criminal Prosecution, and County Execution</h2>
+      <p>Boisey Long escaped the immediate manhunt and subsequently entered official custody outside Alachua County. Authorities transferred him to Jacksonville because confinement in Gainesville could expose him to mob violence before trial. His removal from the county illustrates a contradiction in the administration of justice after the Newberry killings. Officials acted to preserve Long for prosecution while five Black prisoners previously held at Newberry had been taken from custody and killed.</p>
 
-      <div class="pullquote">
-        “Local government was present throughout the episode. Authorities organized the posse, detained people suspected of assisting Long, and maintained prisoners in the county's custody. The mob's seizure represented a complete collapse of official protection, demonstrating that violence against Black residents carried no expectation of punishment.”
-      </div>
+      <p>Long was returned to Gainesville for trial in September 1916. An all-white jury convicted him of first-degree murder in the death of George Wynne after a proceeding that moved with extraordinary speed. Contemporary accounts report that the jury deliberated for approximately seven minutes before returning its verdict. Long received no recommendation of mercy and was sentenced to death.</p>
 
-      <h2>III. The Capture, Trial, and Public Execution of Boisey Long</h2>
-      <p>Boisey Long avoided the mob and surrendered to authorities in Marion County two days later. Recognizing that keeping him in Gainesville invited an immediate lynching that would challenge the court's authority, officials secretly conveyed Long to the Duval County Jail in Jacksonville for safekeeping.</p>
-
-      <p>Returned to Gainesville under heavy guard on <strong>September 7, 1916</strong>, Long stood trial before an all-white jury in the Alachua County Courthouse. In a proceeding lasting less than two hours, the jury deliberated for just <strong>seven minutes</strong> before returning a guilty verdict of first-degree murder with no recommendation for mercy. On <strong>October 27, 1916</strong>—less than ten weeks after the initial shootout—Long was publicly hanged in the enclosed yard of the Alachua County Jail.</p>
+      <p>On October 27, 1916, officials hanged Long at the Alachua County Jail. His execution occurred under Florida's older decentralized system of capital punishment, under which county authorities retained responsibility for carrying out death sentences. Florida successfully prosecuted Long for the death of a white law enforcement officer, while no comparable criminal prosecution produced accountability for the Black residents killed during the Newberry violence.</p>
 
       <div class="warning-box">
         <strong>The Imbalance of Southern Justice</strong>
         <p>While the State of Florida expended maximum resources to convict and hang Boisey Long in sixty days, a subsequent coroner's inquest and grand jury concluded that the Newberry Six were killed "at the hands of persons unknown." No white person was ever arrested, charged, or prosecuted for the murders of James Dennis, Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, or Joshua Baskin.</p>
       </div>
 
-      <h2>IV. Fortune "Jew" Ferguson Jr. and the New Machinery of the Electric Chair (1923–1927)</h2>
-      <p>The institutional landscape of capital punishment in Florida underwent a profound structural transformation in the decade following World War I. Prior to 1923, executions in Florida were entirely decentralized: each county sheriff constructed wooden gallows and administered public hangings within local jail yards. In 1923, the Florida Legislature enacted legislation abolishing county hangings and centralizing all state executions at the newly expanded <strong>Florida State Prison at Raiford</strong> using a state-of-the-art electric chair.</p>
+      <h2>IV. Fortune Ferguson Jr. and Florida's New System of Capital Punishment</h2>
+      <p>Florida reorganized the administration of capital punishment in 1923. The legislature transferred executions from county authorities to the state prison system and adopted electrocution as the state's method of execution. A capital prosecution could still originate in a local courthouse, but the final stages increasingly involved statewide institutions, including the governor, appellate courts, the state prison warden, and the administrative machinery of Florida State Prison.</p>
 
-      <p>The first person sentenced to die in Florida's new electric chair was <strong>Fortune Ferguson Jr.</strong> (known to his family and community as "Jew"), a 16-year-old African American teenager from Newberry. Federal census records preserved in this archive (the 1910 and 1920 Population Schedules) document that the Ferguson family were established landowners and agricultural farmers in the Newberry district, headed by Fortune Ferguson Sr. and his wife Sarah.</p>
+      <p>Ferguson was a Black teenager from the Newberry area who was sixteen when authorities accused him of raping a white child in 1924. Federal census schedules preserved within this collection document the Ferguson family in western Alachua County before the criminal prosecution, providing evidence of family residence, household composition, and agricultural life that predates the legal record by which Ferguson later became known.</p>
 
-      <p>In 1924, Fortune Ferguson Jr. was accused of sexually assaulting an eight-year-old white girl in rural Alachua County. In an atmosphere fraught with the memories of 1916, local authorities swiftly arrested Ferguson and secured a capital conviction in the Circuit Court of Alachua County. The judgment ordered that he be transferred from the Alachua County Sheriff's custody directly to the state prison at Raiford to await the governor's death warrant.</p>
+      <p>Ferguson was prosecuted in the Circuit Court of Alachua County and sentenced to death. Legal historian Brandon T. Jett identifies Ferguson as the first person sentenced to die in Florida's newly created electric chair. His case occurred while Florida was establishing a centralized system in which local courts and law enforcement remained important participants even as state institutions assumed responsibility for imprisonment, appellate administration, executive action, and execution.</p>
 
-      <p>Ferguson's case did not end swiftly. His defense counsel mounted an extraordinary three-year appellate battle, challenging jurisdictional defects, racial bias in jury selection, and the constitutionality of executing a juvenile. The Governor of Florida issued temporary reprieves, and legal custody reverted between the Alachua County Sheriff and the state prison warden. However, on <strong>April 27, 1927</strong>, after all legal appeals were exhausted, the State of Florida executed eighteen-year-old Fortune Ferguson Jr. in the electric chair.</p>
+      <p>Ferguson did not proceed immediately from sentence to execution. His case remained active for approximately three years as lawyers pursued appellate remedies and executive reprieves delayed the sentence. The surviving legal and prison records document interactions among the Alachua County sheriff, the courts, the governor, and state prison officials. On April 27, 1927, Florida executed Ferguson in the electric chair at Florida State Prison. He was eighteen years old.</p>
 
-      <h2>V. Centralization as "Preservation Through Transformation"</h2>
-      <p>As legal historian <strong>Dr. Brandon T. Jett</strong> argues in his landmark 2024 study in the <em>American Journal of Legal History</em>, the case of Fortune Ferguson Jr. illustrates that the centralization of capital punishment was not a progressive victory that eradicated racial terror. Instead, it functioned as what legal scholar Reva Siegel terms <strong>"preservation through transformation."</strong></p>
+      <h2>V. From County Execution to State Administration</h2>
+      <p>The institutional significance of Ferguson's case lies in the changing distribution of authority within Florida's criminal justice system. Before 1923, execution remained closely associated with county government. Sheriffs maintained custody of condemned prisoners and carried out hangings within their jurisdictions. The system tied capital punishment to the courthouse, jail, sheriff, and local political community in which the prosecution originated.</p>
 
-      <p>By moving executions behind prison walls at Raiford and replacing public hangings with electrocution, the state sanitized the spectacle of racialized punishment. It removed lethal violence from unpredictable local mobs and transferred it into an orderly, bureaucratic state procedure. Yet the underlying racial disparities remained intact: between 1890 and 1965, the State of Florida executed 194 African Americans out of 277 total executions, demonstrating that state-administered death reinforced the same racial hierarchy that had previously driven mob violence in Newberry.</p>
+      <p>Centralization altered that arrangement without removing local officials from the process. Jett's study of Ferguson argues that Florida's new system developed through cooperation between state and local criminal justice officials. County authorities continued to investigate offenses, arrest defendants, assemble prosecutions, participate in trials, and exercise custodial responsibilities. State institutions increasingly governed imprisonment, appellate review, executive warrants, reprieves, and execution.</p>
 
-      <h2>VI. Comparative Institutional Matrix: 1916 vs. 1927</h2>
+      <p>The Newberry lynchings and Ferguson's execution require a precise comparison. The 1916 lynchings were extrajudicial killings without judicial process. Ferguson's death followed indictment, trial, sentence, appellate litigation, executive action, and formal execution by the State of Florida. The legal distinction is fundamental. The episodes nevertheless belong to the same regional history of race, local authority, criminal accusation, state power, and capital punishment.</p>
+
+      <h2>VI. Institutional Comparison: 1916 and 1927</h2>
       <div class="matrix-table-wrap">
         <table class="matrix-table">
           <thead>
             <tr>
               <th>Analytical Dimension</th>
-              <th>The Newberry Six (August 1916)</th>
-              <th>Fortune Ferguson Jr. (April 1927)</th>
+              <th>Newberry Lynchings, 1916</th>
+              <th>Fortune Ferguson Jr., 1924 to 1927</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Primary Location</strong></td>
-              <td>Newberry &amp; Lynch's Hammock (Alachua County)</td>
-              <td>Gainesville (Trial) / Raiford State Prison (Execution)</td>
+              <td>Nature of lethal action</td>
+              <td>Extrajudicial mob violence</td>
+              <td>Execution pursuant to a criminal judgment</td>
             </tr>
             <tr>
-              <td><strong>Lethal Mechanism</strong></td>
-              <td>Extralegal hanging by mob &amp; county gallows (Boisey Long)</td>
-              <td>State-administered electrocution ("Old Sparky")</td>
+              <td>Primary jurisdiction</td>
+              <td>Newberry and western Alachua County</td>
+              <td>Alachua County prosecution followed by state custody at Raiford</td>
             </tr>
             <tr>
-              <td><strong>Institutional Authority</strong></td>
-              <td>Decentralized county sheriff, posse, and local jail</td>
-              <td>Florida Supreme Court, Governor death warrant, State Warden</td>
+              <td>Legal adjudication</td>
+              <td>No criminal adjudication preceded the victims' deaths</td>
+              <td>Trial, conviction, sentence, appellate litigation, reprieves, and execution</td>
             </tr>
             <tr>
-              <td><strong>Victims / Condemned</strong></td>
-              <td>6 Black residents (James, Bert, Mary, Stella, Andrew, Joshua)</td>
-              <td>Fortune Ferguson Jr. (16-year-old juvenile at offense)</td>
+              <td>Institutional actors</td>
+              <td>Local law enforcement, jail officials, posse members, and private mob participants</td>
+              <td>Circuit court, county sheriff, appellate courts, governor, prison officials, and state warden</td>
             </tr>
             <tr>
-              <td><strong>Official Accountability</strong></td>
-              <td>Total impunity; grand jury found "persons unknown"</td>
-              <td>Formalized legal review; procedural legitimacy without equity</td>
+              <td>Method of death</td>
+              <td>Shooting and lynching by hanging</td>
+              <td>State-administered electrocution</td>
             </tr>
             <tr>
-              <td><strong>Historical Function</strong></td>
-              <td>Terroristic community enforcement of racial subordination</td>
-              <td>Centralized state monopoly over racialized capital punishment</td>
+              <td>Geography of punishment</td>
+              <td>Local community and surrounding rural landscape</td>
+              <td>Local prosecution followed by execution at Florida State Prison</td>
+            </tr>
+            <tr>
+              <td>Documentary record</td>
+              <td>Newspapers, inquest and grand jury material, oral history, genealogical research, and public memory</td>
+              <td>Court records, prison records, execution documentation, census schedules, appellate material, and archival research files</td>
+            </tr>
+            <tr>
+              <td>Principal historical question</td>
+              <td>How did extrajudicial violence operate alongside local governmental authority?</td>
+              <td>How did local and statewide institutions cooperate within Florida's centralized capital punishment system?</td>
             </tr>
           </tbody>
         </table>
       </div>
+      <p>The comparison does not establish that Ferguson's prosecution resulted from the 1916 lynchings or that state execution represented a direct institutional continuation of mob violence. The surviving evidence supports a narrower comparison. Both histories developed within Alachua County while Florida was redefining the relationship between local criminal justice institutions and centralized state authority.</p>
 
-      <h2>VII. Memory, Truth, and Reconciliation in Alachua County</h2>
-      <p>For decades after 1916 and 1927, official public history in Alachua County maintained a conspiracy of silence. Textbooks, historical markers, and civic celebrations celebrated white pioneer heritage while completely omitting racial terror lynchings and capital injustice. In recent years, a powerful coalition of descendant families, local historians, public institutions, and civil rights advocates has pioneered restorative measures to confront this buried past:</p>
+      <h2>VII. Historical Memory and Public Commemoration</h2>
+      <p>Public understanding of the Newberry killings developed gradually after the events themselves. Family memory, local historical research, journalism, oral history, community organizations, and archival work preserved information that did not occupy a prominent place in conventional accounts of Alachua County history.</p>
 
       <div class="reconciliation-card">
-        <h3>1. The Alachua County Soil Collection Project (Equal Justice Initiative)</h3>
-        <p>In partnership with Bryan Stevenson's Equal Justice Initiative (EJI), the <strong>Alachua County Community Remembrance Project</strong> organized public soil collection ceremonies at Lynch's Hammock and other county lynching sites. Community members and descendants gathered soil from the exact ground where the victims were killed. Large glass jars containing this soil—each bearing the names of the Newberry Six—are permanently exhibited in the foyer of the <strong>Alachua County Administration Building in Gainesville</strong> and at the <strong>Legacy Museum in Montgomery, Alabama</strong>, providing an undeniable physical presence of truth in the halls of civic government.</p>
+        <h3>1. Alachua County Soil Collection Project</h3>
+        <p>The Alachua County Community Remembrance Project worked with the Equal Justice Initiative on historical research, public education, oral history, soil collection, and memorial projects. Soil gathered from sites associated with lynching preserves a material connection to the landscape in which the killings occurred.</p>
       </div>
 
       <div class="reconciliation-card">
-        <h3>2. The City of Newberry Historical Marker &amp; Official Proclamation (2018)</h3>
-        <p>On <strong>September 21, 2018</strong>, after over a century of official denial, the City of Newberry took an extraordinary step toward historical reconciliation. The Newberry City Commission unanimously passed an official resolution publicly acknowledging the 1916 lynchings and issuing a formal municipal apology. A permanent bronze historical marker sponsored by the JMU Lynching Sites Project and community leaders was unveiled in downtown Newberry, ensuring that future generations learn the names of Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, Rev. Joshua Baskin, and James Dennis.</p>
+        <h3>2. Newberry Historical Marker</h3>
+        <p>In August 2021, the Alachua County Community Remembrance Project and Equal Justice Initiative dedicated a historical marker at Freddie Warmack Park commemorating nine documented victims of racial terror lynching associated with Newberry. The marker distinguishes the broader history of racial terror from the six victims traditionally identified with the August 1916 mass lynching.</p>
       </div>
 
       <div class="reconciliation-card">
-        <h3>3. Dudley Farm State Historic Site: Confronting Plantation History</h3>
-        <p>Located just east of Newberry, the <strong>Dudley Farm State Historic Site</strong> preserves an authentic Florida farm from the 1880s through the 1920s. Historically, the park presented an idyllic narrative of white agrarian pioneer life while ignoring the racial terror occurring in the surrounding landscape. In 2021, investigative reporting and community advocacy prompted state park historians to re-evaluate Dudley Farm's interpretive programming, incorporating the stories of enslaved laborers, Black tenant farmers, and the proximity of the 1916 Newberry killings into the official educational tour.</p>
+        <h3>3. Descendant Memory and Oral History</h3>
+        <p>Descendant testimony remains significant because families maintained names, relationships, locations, and recollections across generations when official records provided incomplete accounts of the violence. Oral history and public commemoration operate alongside documentary research rather than replacing it.</p>
       </div>
 
       <div class="reconciliation-card">
-        <h3>4. Oral History &amp; Descendant Memory (Samuel Proctor Archive &amp; Miami Center)</h3>
-        <p>Through the <strong>Samuel Proctor Oral History Program (SPOHP)</strong> at the University of Florida and the <strong>Miami Center for Racial Justice</strong>, researchers have recorded dozens of oral histories with descendants of the Newberry Six and Fortune Ferguson. Transcripts—such as the 2019 memorial service transcript held in this archive—ensure that family recollections, spiritual resistance, and genealogical lineages are preserved as unvarnished historical evidence.</p>
+        <h3>4. Public History</h3>
+        <p>Historical markers, soil collections, journalism, memorial services, and community education demonstrate how the history has been researched and commemorated long after the original events.</p>
       </div>
 
-      <h2>VIII. Chronological Timeline (1910–2025)</h2>
+      <h2>VIII. Historical Chronology</h2>
       <div class="timeline-list">
         <div class="timeline-event">
           <div class="timeline-date">1910 Federal Census</div>
           <div class="timeline-title">Ferguson Family Enumerated in Newberry</div>
-          <p>Federal census schedules record Fortune Ferguson Sr. and his family operating their agricultural farm in western Alachua County.</p>
+          <p>Federal census schedules document the Ferguson household in the Newberry area before Fortune Ferguson Jr. entered the criminal justice system.</p>
         </div>
         <div class="timeline-event">
           <div class="timeline-date">August 17, 1916</div>
           <div class="timeline-title">The Attempted Arrest of Boisey Long</div>
-          <p>Constable George Wynne is killed and Dr. L. G. Harris wounded at Long's homestead near Newberry; Long flees into the flatwoods.</p>
+          <p>Constable George Wynne and Dr. L. G. Harris encounter Long near Newberry in connection with an accusation involving stolen hogs. Gunfire leaves Wynne mortally wounded and Harris injured. Long escapes.</p>
         </div>
         <div class="timeline-event">
           <div class="timeline-date">August 18–19, 1916</div>
           <div class="timeline-title">The Newberry Six Lynchings</div>
-          <p>James Dennis is shot; Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, and Rev. Joshua Baskin are taken from the Newberry jail and hanged at Lynch's Hammock.</p>
+          <p>James Dennis is killed during the manhunt. Bert Dennis, Mary Dennis, Stella Young, Andrew McHenry, and Reverend Joshua Baskin are detained before being removed from custody and lynched.</p>
         </div>
         <div class="timeline-event">
           <div class="timeline-date">October 27, 1916</div>
           <div class="timeline-title">Public Hanging of Boisey Long</div>
-          <p>After a seven-minute jury deliberation in Gainesville, Long is executed in the yard of the Alachua County Jail.</p>
+          <p>Alachua County officials hang Long at the county jail under Florida's decentralized system of capital punishment.</p>
         </div>
         <div class="timeline-event">
           <div class="timeline-date">1923</div>
           <div class="timeline-title">Florida Centralizes the Death Penalty</div>
-          <p>State legislature abolishes county hangings and establishes the permanent electric chair at Florida State Prison (Raiford).</p>
+          <p>The Florida Legislature transfers the administration of executions from county authorities to the state prison system and adopts electrocution.</p>
         </div>
         <div class="timeline-event">
           <div class="timeline-date">1924</div>
           <div class="timeline-title">Fortune Ferguson Jr. Sentenced to Death</div>
-          <p>Ferguson, an African American teenager from Newberry, becomes the first person sentenced to Florida's new electric chair.</p>
+          <p>Ferguson, sixteen years old at the time of the alleged offense, is prosecuted in Alachua County and becomes the first person sentenced to die in Florida's newly established electric chair.</p>
         </div>
         <div class="timeline-event">
           <div class="timeline-date">April 27, 1927</div>
           <div class="timeline-title">Execution of Fortune Ferguson Jr.</div>
-          <p>After three years of stays and appellate litigation, eighteen-year-old Ferguson is electrocuted at Raiford.</p>
+          <p>Florida executes Ferguson in the electric chair at Florida State Prison. He is eighteen years old.</p>
         </div>
         <div class="timeline-event">
-          <div class="timeline-date">September 21, 2018</div>
-          <div class="timeline-title">Newberry City Apology &amp; Memorial Marker</div>
-          <p>City of Newberry officially apologizes for the 1916 killings and dedicates a permanent historical marker commemorating the victims.</p>
+          <div class="timeline-date">2018 to 2019</div>
+          <div class="timeline-title">Alachua County Truth and Reconciliation Work Expands</div>
+          <p>County discussions concerning racial injustice contribute to the formation of the Alachua County Community Remembrance Project and subsequent public-history initiatives.</p>
         </div>
         <div class="timeline-event">
-          <div class="timeline-date">2021–2025</div>
-          <div class="timeline-title">Soil Exhibit &amp; Dudley Farm Historical Reckoning</div>
-          <p>Alachua County installs permanent soil collection jars in the county building, while public historians integrate racial terror history at Dudley Farm.</p>
+          <div class="timeline-date">August 21, 2021</div>
+          <div class="timeline-title">Newberry Historical Marker Dedicated</div>
+          <p>The Alachua County Community Remembrance Project and Equal Justice Initiative dedicate a historical marker at Freddie Warmack Park honoring nine documented victims of racial terror lynching associated with Newberry.</p>
         </div>
       </div>
+
+      <h2>IX. Archival Foundation: The Victor L. Streib Papers</h2>
+      <p>The primary-source foundation of the Fortune Ferguson research owes a substantial debt to the M. E. Grenander Department of Special Collections and Archives at the University at Albany, State University of New York. The department preserves the National Death Penalty Archive, including the Victor L. Streib Papers, an extensive research collection documenting capital punishment and the execution of juveniles and women in the United States.</p>
+
+      <p>The Streib Papers contain a dedicated case file identified by the archive as <strong>"Florida: Fortune Ferguson, executed 1927-04-27."</strong> The file forms part of Collection APAP-330 and preserves research material concerning Ferguson within a larger body of documentation assembled by legal scholar Victor L. Streib.</p>
+
+      <p>Carceral Collections acknowledges the M. E. Grenander Department of Special Collections and Archives for preserving and providing access to these materials. The preservation of the Streib Papers allows Ferguson's case to be examined as more than an execution date by placing it within the longer documentary history of juvenile capital punishment.</p>
+
+      <table>
+        <thead><tr><th>Archival Element</th><th>Identification</th></tr></thead>
+        <tbody>
+          <tr><td>Repository</td><td>M. E. Grenander Department of Special Collections and Archives, University at Albany, SUNY</td></tr>
+          <tr><td>Archive</td><td>National Death Penalty Archive</td></tr>
+          <tr><td>Collection</td><td>Victor L. Streib Papers, APAP-330</td></tr>
+          <tr><td>Ferguson file</td><td>Florida: Fortune Ferguson, executed 1927-04-27</td></tr>
+          <tr><td>Research significance</td><td>Documentation concerning Ferguson and the history of juvenile capital punishment</td></tr>
+        </tbody>
+      </table>
+      <p><a href="https://archives.albany.edu/description/catalog/apap330aspace_a0cdbdf8aa2e558d37c28e0b0e96fbb9" target="_blank" rel="noopener noreferrer">View the Fortune Ferguson finding aid at the University at Albany</a></p>
+
+      <h2>X. Research and Archival Use</h2>
+      <p>The Newberry and Fortune Ferguson collection brings together sources created for different purposes and at different moments in time. Court judgments document judicial action. Prison records document state custody and administration. Census schedules preserve household and demographic information. Newspapers record contemporary reporting as well as the assumptions and limitations of their period. Oral histories and descendant accounts preserve experiences and family knowledge that official institutions did not always record.</p>
+
+      <p>The collection yields its historical significance through relationships among sources, including agreements, discrepancies, omissions, chronology, and institutional provenance. Researchers should consult original documents, identify the creators and purposes of each record, and distinguish contemporary evidence from later interpretation.</p>
     </article>
 
     <aside class="sidebar-panel">
@@ -652,11 +686,36 @@
 
       <!-- Community Remembrance Box -->
       <div class="community-action-box">
-        <span class="source-meta" style="color:var(--gold-light);">Alachua County Remembrance</span>
+        <span class="source-meta source-meta-light">Alachua County Remembrance</span>
         <h3>Soil Collection Project</h3>
         <p>Soil gathered from Lynch's Hammock in Newberry rests permanently in the Alachua County Administration Building in Gainesville and at the Legacy Museum in Montgomery, Alabama.</p>
         <a class="btn-promo-gold" href="EVIDENCE-INDEX.html">View Evidence Index ↗</a>
       </div>
+      <div class="panel-box">
+        <span class="source-meta">Archival Credit</span>
+        <h3>Victor L. Streib Papers</h3>
+        <p>The University at Albany's M. E. Grenander Department of Special Collections and Archives preserves the Fortune Ferguson research file in the National Death Penalty Archive.</p>
+        <a class="source-item" href="https://archives.albany.edu/description/catalog/apap330aspace_a0cdbdf8aa2e558d37c28e0b0e96fbb9" target="_blank" rel="noopener noreferrer">View the University at Albany finding aid ↗</a>
+      </div>
+      <div class="panel-box">
+        <span class="source-meta">Primary Text</span>
+        <h3>The American Siberia</h3>
+        <p>J. C. Powell's account of Florida convict leasing, prison labor, and camp administration.</p>
+        <a class="source-item" href="BOOKS-AND-MANUSCRIPTS.html">Open the book page ↗</a>
+      </div>
+      <div class="panel-box">
+        <span class="source-meta">Primary Text</span>
+        <h3>Six Years in a Georgia Prison</h3>
+        <p>Lewis W. Paine's account of imprisonment and the antebellum penitentiary.</p>
+        <a class="source-item" href="BOOKS-AND-MANUSCRIPTS.html">Open the book page ↗</a>
+      </div>
+      <div class="panel-box">
+        <span class="source-meta">Institutional History</span>
+        <h3>Coxsackie Reformatory</h3>
+        <p>A study of youth, reform, and mass incarceration in upstate New York.</p>
+        <a class="source-item" href="BOOKS-AND-MANUSCRIPTS.html">Open the book page ↗</a>
+      </div>
+      <div class="sidebar-end-bar" aria-hidden="true"></div>
     </aside>
   </main>
 
