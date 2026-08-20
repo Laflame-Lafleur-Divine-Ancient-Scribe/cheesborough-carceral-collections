@@ -499,6 +499,11 @@
         .collections { grid-template-columns: repeat(2, 1fr); }
         .hero { min-height: 39rem; }
         .publication-grid { grid-template-columns: 1fr; }
+        .prison-hero-inner { grid-template-columns: 1fr; min-height: 0; }
+        .prison-hero-copy { max-width: none; padding: 2.25rem 1rem 1.75rem; }
+        .prison-hero-copy h2 { font-size: clamp(1.65rem, 8vw, 2.25rem); line-height: 1.18; }
+        .prison-hero-copy p { font-size: 1rem; line-height: 1.5; max-width: none; }
+        .prison-hero-image { aspect-ratio: 16 / 10; min-height: 0; width: 100%; }
         .state-inner { flex-wrap: wrap; gap: 0.35rem 1rem; justify-content: space-between; }
         .state-inner h2 { flex: 1 1 70%; }
         .map-mark { display: none; }
@@ -513,6 +518,9 @@
         .collection-card { min-height: 11rem; }
         .card-art { min-height: 6rem; }
         .news-grid { gap: 0.7rem; grid-template-columns: 1fr; }
+        .prison-hero-copy { padding: 1.9rem 1rem 1.5rem; }
+        .prison-hero-copy h2 { font-size: clamp(1.55rem, 8.5vw, 2rem); }
+        .prison-hero-image { aspect-ratio: 4 / 3; }
         .topic-grid { grid-template-columns: 1fr; }
         footer { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
       }
