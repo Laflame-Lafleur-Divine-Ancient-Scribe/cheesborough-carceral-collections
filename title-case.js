@@ -38,11 +38,42 @@
     body.style.cssText = "color: #e6dfd1; font-size: 1.1rem; line-height: 1.7; margin: 0; max-width: 760px;";
   }
 
-  const normalizeNavigationLabel = (value) => value.split(/(\s+)/).map((word) => {
+  const romanValues = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+  const isRomanNumeral = (value) => {
+    const letters = value.toUpperCase();
+    if (!/^[IVXLCDM]+$/.test(letters)) return false;
+    let total = 0;
+    for (let index = 0; index < letters.length; index += 1) {
+      const current = romanValues[letters[index]];
+      const next = romanValues[letters[index + 1]] || 0;
+      total += current < next ? -current : current;
+    }
+    return total > 0 && total <= 3999 && toRoman(total) === letters;
+  };
+
+  function toRoman(number) {
+    const values = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
+    let result = "";
+    values.forEach(([value, numeral]) => {
+      while (number >= value) {
+        result += numeral;
+        number -= value;
+      }
+    });
+    return result;
+  }
+
+  const normalizeToken = (word) => {
     if (!/[A-Za-z]/.test(word) || word === "CCC" || /^(?:[A-Z]\.)+$/.test(word)) return word;
-    const firstLetter = word.search(/[A-Za-z]/);
-    return word.slice(0, firstLetter) + word[firstLetter].toUpperCase() + word.slice(firstLetter + 1).toLowerCase();
-  }).join("");
+    const match = word.match(/^([^A-Za-z]*)([A-Za-z]+)([^A-Za-z]*)$/);
+    if (!match) return word;
+    const [, prefix, letters, suffix] = match;
+    if (isRomanNumeral(letters)) return prefix + letters.toUpperCase() + suffix;
+    if (/\d/.test(word)) return word;
+    return prefix + letters[0].toUpperCase() + letters.slice(1).toLowerCase() + suffix;
+  };
+
+  const normalizeNavigationLabel = (value) => value.split(/(\s+)/).map(normalizeToken).join("");
 
   const titleCaseSelectors = "h1, h2, h3, h4, h5, nav a, button, .archive-link, .explore-card a, .news-more-link, .prison-hero-link, .topic-card a, .source";
   document.querySelectorAll(titleCaseSelectors).forEach((element) => {
