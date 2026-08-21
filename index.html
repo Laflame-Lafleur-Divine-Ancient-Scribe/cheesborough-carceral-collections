@@ -554,11 +554,7 @@
       .video-modal.open { opacity: 1; pointer-events: auto; }
       .video-modal-card { background: #0a1725; border-top: 5px solid var(--gold); box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55); max-width: 900px; padding: 2.6rem 1rem 1rem; position: relative; width: min(100%, 900px); }
       .video-modal-direct { align-items: center; aspect-ratio: 16 / 9; background: #182b3d center / cover; display: flex; justify-content: center; overflow: hidden; position: relative; }
-      .video-modal-direct::before { background: rgba(9, 30, 54, 0.72); content: ""; inset: 0; position: absolute; }
-      .video-modal-direct-content { color: #fff; padding: 1rem; position: relative; text-align: center; }
-      .video-modal-direct-content p { font-size: 1rem; margin: 0 0 1rem; }
-      .video-modal-watch { background: var(--gold); color: var(--deep-navy); display: inline-block; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-transform: uppercase; }
-      .video-modal-watch:hover { background: #d2ad68; }
+      .video-modal-direct iframe { border: 0; height: 100%; width: 100%; }
       .video-modal-close { background: var(--gold); border: 0; color: var(--deep-navy); cursor: pointer; font-size: 1.35rem; font-weight: 700; height: 2.2rem; line-height: 1; position: absolute; right: 0.65rem; top: 0.45rem; width: 2.2rem; }
       .video-modal-close:hover { background: #d2ad68; }
       .video-modal-credit { color: #d7d0c3; font-size: 0.78rem; margin: 0.65rem 0 0; }
@@ -959,19 +955,13 @@
           <div class="video-modal-card">
             <button class="video-modal-close" id="video-modal-close" type="button" aria-label="Close video viewer">&times;</button>
             <h2 id="video-modal-title" class="sr-only">Video viewer</h2>
-            <div class="video-modal-direct" id="video-modal-direct">
-              <div class="video-modal-direct-content">
-                <p>This livestream is hosted by YouTube.</p>
-                <a class="video-modal-watch" id="video-modal-watch" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
-              </div>
-            </div>
+            <div class="video-modal-direct" id="video-modal-direct"></div>
             <p class="video-modal-credit">Video source: <a id="video-modal-source" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></p>
           </div>
         </div>
         <script>
           const videoModal = document.querySelector("#video-modal");
           const videoDirect = document.querySelector("#video-modal-direct");
-          const videoWatch = document.querySelector("#video-modal-watch");
           const videoModalTitle = document.querySelector("#video-modal-title");
           const videoModalSource = document.querySelector("#video-modal-source");
           const videoModalClose = document.querySelector("#video-modal-close");
@@ -979,6 +969,7 @@
           let activeTrialCard = null;
           function closeVideoModal() {
             if (!videoModal) return;
+            videoDirect?.replaceChildren();
             activeTrialCard?.focus();
             videoModal.classList.remove("open");
             videoModal.setAttribute("aria-hidden", "true");
@@ -988,13 +979,17 @@
             card.addEventListener("click", () => {
               const videoId = card.dataset.videoId;
               const title = card.dataset.videoTitle || "Selected courtroom video";
-              if (!videoModal || !videoDirect || !videoWatch || !videoId) return;
+              if (!videoModal || !videoDirect || !/^[A-Za-z0-9_-]{11}$/.test(videoId)) return;
               activeTrialCard = card;
               videoModalTitle.textContent = title;
               const sourceUrl = card.dataset.videoUrl || `https://www.youtube.com/watch?v=${videoId}`;
               videoModalSource.href = sourceUrl;
-              videoWatch.href = sourceUrl;
-              videoDirect.style.backgroundImage = `url("https://img.youtube.com/vi/${videoId}/hqdefault.jpg")`;
+              videoDirect.replaceChildren(Object.assign(document.createElement("iframe"), {
+                src: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`,
+                title,
+                allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+                allowFullscreen: true,
+              }));
               videoModal.classList.add("open");
               videoModal.setAttribute("aria-hidden", "false");
               document.body.style.overflow = "hidden";
