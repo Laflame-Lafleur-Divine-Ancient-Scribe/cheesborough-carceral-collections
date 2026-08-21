@@ -577,6 +577,10 @@
       .online-result-title:hover { color: var(--gold); }
       .online-result-desc { color: var(--ink-light); font-size: 0.9rem; line-height: 1.45; margin-top: 0.25rem; }
       .online-result-meta { color: var(--muted); font-size: 0.76rem; margin-top: 0.35rem; }
+      .online-pagination { align-items: center; display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin-top: 1.2rem; }
+      .online-page-button { background: var(--paper); border: 1px solid var(--line-dark); color: var(--navy); cursor: pointer; font: inherit; font-size: 0.82rem; min-width: 2.2rem; padding: 0.4rem 0.6rem; }
+      .online-page-button:hover, .online-page-button.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+      .online-page-button:disabled { cursor: not-allowed; opacity: 0.45; }
       .online-results-fallback { border-top: 1px solid var(--line); padding-top: 0.9rem; }
       .online-results-fallback[hidden] { display: none; }
       body.search-loading > *:not(#page-loader) { visibility: hidden; }
@@ -719,6 +723,9 @@
       let currentCategory = "all";
       let currentTag = null;
       let currentSort = "relevance";
+      let onlineResults = [];
+      let onlinePage = 1;
+      const onlinePageSize = 50;
 
       const searchInput = document.getElementById("page-search-input");
       const clearBtn = document.getElementById("clear-search-btn");
@@ -919,19 +926,13 @@
 
       function renderOnlineSources(query) {
         if (!query) return "";
-        const sourceLinks = getOnlineSourceLinks(query);
         return `
           <section class="online-results" aria-labelledby="online-results-title">
             <h2 class="online-results-title" id="online-results-title">Search Online Legal Sources</h2>
             <p class="online-results-desc">Searching <strong>${escapeHtml(query)}</strong> across free public repositories and web sources.</p>
             <div class="online-live-results" id="online-live-results" aria-live="polite">Loading up to 300 online results...</div>
             <div class="online-results-fallback" id="online-results-fallback" hidden>
-              <p class="online-results-desc">The local SearXNG service is unavailable. Continue with a direct provider search:</p>
-              <ul class="online-source-list">
-                ${sourceLinks.map(([label, url]) => `
-                  <li><a class="online-source-link" href="${url}" target="_blank" rel="noopener noreferrer"><span>${label}</span><span aria-hidden="true">&rarr;</span></a></li>
-                `).join("")}
-              </ul>
+              <p class="online-results-desc">The online service is unavailable. No search-engine landing pages are shown; please try again shortly.</p>
             </div>
           </section>
         `;
@@ -948,23 +949,52 @@
           if (!response.ok) throw new Error("Online search service unavailable");
           const payload = await response.json();
           if (!payload.results || payload.results.length === 0) throw new Error("No online results returned");
-
-          liveResults.innerHTML = `
-            <p class="online-results-desc"><strong>${payload.count}</strong> online result${payload.count === 1 ? '' : 's'} returned by the self-hosted search service.</p>
-            ${payload.results.map(item => `
-              <article class="online-result-card">
-                <a class="online-result-title" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
-                <p class="online-result-desc">${escapeHtml(item.content)}</p>
-                <p class="online-result-meta">${escapeHtml(item.engine)}${item.publishedDate ? ` &middot; ${escapeHtml(item.publishedDate)}` : ''}</p>
-              </article>
-            `).join('')}
-          `;
+          onlineResults = payload.results;
+          onlinePage = 1;
+          renderOnlineResultsPage();
           return true;
         } catch (error) {
           liveResults.innerHTML = `<p class="online-results-desc">${escapeHtml(error.message)} Use the direct provider searches below.</p>`;
           fallback.hidden = false;
           return false;
         }
+      }
+
+      function renderOnlineResultsPage() {
+        const liveResults = document.getElementById("online-live-results");
+        if (!liveResults || !onlineResults.length) return;
+        const totalPages = Math.ceil(onlineResults.length / onlinePageSize);
+        onlinePage = Math.min(Math.max(onlinePage, 1), totalPages);
+        const start = (onlinePage - 1) * onlinePageSize;
+        const pageItems = onlineResults.slice(start, start + onlinePageSize);
+        const pageButtons = Array.from({ length: totalPages }, (_, index) => {
+          const page = index + 1;
+          return `<button type="button" class="online-page-button ${page === onlinePage ? 'active' : ''}" data-online-page="${page}" aria-label="Online results page ${page}" ${page === onlinePage ? 'aria-current="page"' : ''}>${page}</button>`;
+        }).join('');
+
+        liveResults.innerHTML = `
+          <p class="online-results-desc"><strong>${onlineResults.length}</strong> online results, showing ${start + 1}&ndash;${Math.min(start + onlinePageSize, onlineResults.length)}.</p>
+          ${pageItems.map(item => `
+            <article class="online-result-card">
+              <a class="online-result-title" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
+              <p class="online-result-desc">${escapeHtml(item.content)}</p>
+              <p class="online-result-meta">${escapeHtml(item.profile || item.engine)} &middot; ${escapeHtml(item.engine)}${item.publishedDate ? ` &middot; ${escapeHtml(item.publishedDate)}` : ''}</p>
+            </article>
+          `).join('')}
+          <nav class="online-pagination" aria-label="Online search result pages">
+            <button type="button" class="online-page-button" data-online-page="${onlinePage - 1}" ${onlinePage === 1 ? 'disabled' : ''}>Previous</button>
+            ${pageButtons}
+            <button type="button" class="online-page-button" data-online-page="${onlinePage + 1}" ${onlinePage === totalPages ? 'disabled' : ''}>Next</button>
+          </nav>
+        `;
+        liveResults.querySelectorAll("[data-online-page]").forEach(button => {
+          button.addEventListener("click", () => {
+            if (button.disabled) return;
+            onlinePage = Number(button.dataset.onlinePage);
+            renderOnlineResultsPage();
+            liveResults.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        });
       }
 
       function setSearchLoading(isLoading) {

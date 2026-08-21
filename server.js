@@ -47,10 +47,18 @@ async function handleOnlineSearch(requestUrl, response) {
         return;
     }
 
-    const pages = Array.from({ length: 30 }, (_, index) => index + 1);
-    const pageResults = await Promise.all(pages.map(async (page) => {
+    const profiles = [
+        { label: 'Academic & Scholarly', suffix: 'site:jstor.org OR site:books.google.com OR site:scholar.google.com OR site:ssrn.com filetype:pdf' },
+        { label: 'Government & FBI', suffix: 'site:fbi.gov OR site:archives.gov OR site:justice.gov filetype:pdf' },
+        { label: 'State, County & Municipal', suffix: 'state law OR county records OR municipal ordinance OR local government' },
+        { label: 'Courts, Inmate & Public Records', suffix: 'court records OR inmate search OR corrections records OR docket' },
+        { label: 'Legal Publications & Firms', suffix: 'law firm OR legal publication OR legal journal OR case law OR statute' },
+        { label: 'General Web', suffix: '' },
+    ];
+    const requests = profiles.flatMap(profile => Array.from({ length: 5 }, (_, index) => ({ profile, page: index + 1 })));
+    const pageResults = await Promise.all(requests.map(async ({ profile, page }) => {
         const params = new URLSearchParams({
-            q: query,
+            q: [query, profile.suffix].filter(Boolean).join(' '),
             format: 'json',
             pageno: String(page),
             safesearch: '0',
@@ -63,7 +71,7 @@ async function handleOnlineSearch(requestUrl, response) {
             const result = await fetch(`${searxngUrl}/search?${params}`, { signal: controller.signal });
             if (!result.ok) return [];
             const payload = await result.json();
-            return Array.isArray(payload.results) ? payload.results : [];
+            return Array.isArray(payload.results) ? payload.results.map(item => ({ ...item, searchProfile: profile.label })) : [];
         } catch {
             return [];
         } finally {
@@ -73,7 +81,7 @@ async function handleOnlineSearch(requestUrl, response) {
 
     const seen = new Set();
     let results = pageResults.flat().filter((item) => {
-        if (!item?.url || seen.has(item.url)) return false;
+        if (!item?.url || isSearchEngineLandingPage(item) || seen.has(item.url)) return false;
         seen.add(item.url);
         return true;
     }).slice(0, 300).map((item) => ({
@@ -81,6 +89,7 @@ async function handleOnlineSearch(requestUrl, response) {
         url: item.url,
         content: item.content || '',
         engine: item.engine_name || 'SearXNG result',
+        profile: item.searchProfile || 'General Web',
         category: item.category || 'general',
         publishedDate: item.publishedDate || null,
     }));
@@ -90,7 +99,7 @@ async function handleOnlineSearch(requestUrl, response) {
     }
 
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    response.end(JSON.stringify({ query, count: results.length, results }));
+    response.end(JSON.stringify({ query, count: results.length, profiles: profiles.map(profile => profile.label), results }));
 }
 
 async function fetchJson(url) {
@@ -134,7 +143,7 @@ function decodeXml(value) {
         .trim();
 }
 
-function parseRssItems(xml, engine) {
+function parseRssItems(xml, engine, profile = 'General Web') {
     return [...String(xml || '').matchAll(/<item>([\s\S]*?)<\/item>/gi)].map((match) => {
         const item = match[1];
         const read = (tag) => decodeXml(item.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))?.[1]);
@@ -146,28 +155,45 @@ function parseRssItems(xml, engine) {
             url,
             content: read('description'),
             engine,
+            profile,
             category: 'web search',
             publishedDate: read('pubDate') || null,
         };
     }).filter(Boolean);
 }
 
+function isSearchEngineLandingPage(item) {
+    const url = String(item?.url || '').toLowerCase();
+    const title = String(item?.title || '').toLowerCase();
+    return /(^|\/\/)(www\.)?(google\.com|google\.com\.[a-z.]+|bing\.com|yahoo\.com|search\.yahoo\.com|search\.brave\.com)(\/|$)/.test(url)
+        || /^(google|bing|yahoo|brave search|search - microsoft bing)/i.test(title);
+}
+
 async function getKeylessFallbackResults(query) {
     const encodedQuery = encodeURIComponent(query);
-    const bingRssUrl = `https://www.bing.com/search?format=rss&q=${encodedQuery}`;
+    const profiles = [
+        ['Academic & Scholarly', 'site:jstor.org OR site:books.google.com OR site:scholar.google.com OR site:ssrn.com filetype:pdf'],
+        ['Government & FBI', 'site:fbi.gov OR site:archives.gov OR site:justice.gov filetype:pdf'],
+        ['State, County & Municipal', 'state law OR county records OR municipal ordinance OR local government'],
+        ['Courts, Inmate & Public Records', 'court records OR inmate search OR corrections records OR docket'],
+        ['Legal Publications & Firms', 'law firm OR legal publication OR legal journal OR case law OR statute'],
+        ['General Web', ''],
+    ];
+    const bingUrls = profiles.map(([, suffix]) => `https://www.bing.com/search?format=rss&q=${encodeURIComponent([query, suffix].filter(Boolean).join(' '))}`);
+    const bingRss = await Promise.all(bingUrls.map(fetchText));
     const googleNewsRssUrl = `https://news.google.com/rss/search?q=${encodedQuery}`;
     const openAlexUrl = `https://api.openalex.org/works?search=${encodedQuery}&per-page=50`;
     const crossrefUrl = `https://api.crossref.org/works?query=${encodedQuery}&rows=50`;
     const archiveUrl = `https://archive.org/advancedsearch.php?q=${encodedQuery}&fl%5B%5D=identifier&fl%5B%5D=title&fl%5B%5D=description&fl%5B%5D=year&rows=50&page=1&output=json`;
-    const [bingRss, googleNewsRss, openAlex, crossref, archive] = await Promise.all([
-        fetchText(bingRssUrl),
+    const [googleNewsRss, openAlex, crossref, archive] = await Promise.all([
         fetchText(googleNewsRssUrl),
         fetchJson(openAlexUrl),
         fetchJson(crossrefUrl),
         fetchJson(archiveUrl),
     ]);
 
-    const fallback = [...parseRssItems(bingRss, 'Bing Web') , ...parseRssItems(googleNewsRss, 'Google News')];
+    const fallback = bingRss.flatMap((xml, index) => parseRssItems(xml, 'Bing Web', profiles[index][0]));
+    fallback.push(...parseRssItems(googleNewsRss, 'Google News', 'News & Current Coverage'));
     (openAlex?.results || []).forEach((item) => fallback.push({
         title: item.title || 'OpenAlex work',
         url: item.primary_location?.landing_page_url || item.doi || `https://openalex.org/${item.id?.split('/').pop() || ''}`,
@@ -198,7 +224,7 @@ async function getKeylessFallbackResults(query) {
 
     const seen = new Set();
     return fallback.filter((item) => {
-        if (!item.url || /(?:^|\.)wikipedia\.org(?:\/|$)/i.test(item.url) || /wikipedia/i.test(item.engine || '') || seen.has(item.url)) return false;
+        if (!item.url || isSearchEngineLandingPage(item) || /(?:^|\.)wikipedia\.org(?:\/|$)/i.test(item.url) || /wikipedia/i.test(item.engine || '') || seen.has(item.url)) return false;
         seen.add(item.url);
         return true;
     }).slice(0, 300);
