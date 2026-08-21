@@ -98,16 +98,15 @@
       }
 
       .hero {
-        align-items: center;
         background-color: #39434a;
         background-image: linear-gradient(rgba(9, 25, 39, 0.2), rgba(9, 25, 39, 0.32)), url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2200&q=85");
         background-position: center;
         background-size: cover;
+        color: #fff;
         display: flex;
         min-height: clamp(29rem, 49vw, 39rem);
         padding: clamp(2.8rem, 7vw, 5rem) 1rem 2.3rem;
       }
-
       .hero-inner { margin: 0 auto; max-width: 980px; width: 100%; }
 
       .search-container {
@@ -156,7 +155,11 @@
         padding: 0 0.35rem;
         transition: transform 0.15s, color 0.15s;
       }
-      .search button:hover { color: #fff; transform: scale(1.1); }
+      .search button:hover { background: transparent; color: #fff; transform: scale(1.1); }
+      .search input:focus-visible, .search button:focus-visible, a:focus-visible, select:focus-visible {
+        outline: 3px solid #f5d58d;
+        outline-offset: 3px;
+      }
 
       /* Live Autocomplete Dropdown */
       .search-dropdown {
@@ -258,6 +261,13 @@
         gap: 0.35rem;
       }
       .dropdown-footer-link:hover { color: var(--gold); text-decoration: underline; }
+      .external-sources { background: #fbf8f2; border-top: 1px solid #ded7cb; padding: 0.8rem 0.9rem; text-align: left; }
+      .external-sources-heading { color: var(--navy); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; margin: 0 0 0.35rem; text-transform: uppercase; }
+      .external-sources-note { color: #66635d; font-size: 0.78rem; margin: 0 0 0.55rem; }
+      .external-source-list { display: grid; gap: 0.35rem; grid-template-columns: repeat(2, minmax(0, 1fr)); list-style: none; margin: 0; padding: 0; }
+      .external-source-link { color: var(--navy); display: block; font-size: 0.82rem; font-weight: 700; padding: 0.35rem 0.45rem; }
+      .external-source-link:hover { background: #eee8da; color: #9b7435; }
+      @media (max-width: 480px) { .external-source-list { grid-template-columns: 1fr; } }
 
       /* Hero Quick Topics */
       .hero-quick-topics {
@@ -418,7 +428,7 @@
       .explore-title { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.8rem, 3.2vw + 0.4rem, 2.7rem); line-height: 1.22; margin: 0 0 1.5rem; }
       .explore-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .explore-card { align-items: end; background-position: center; background-size: cover; color: #fff; display: flex; min-height: 17rem; overflow: hidden; padding: 0; position: relative; }
-      .explore-card::before { background: linear-gradient(180deg, rgba(9, 30, 54, 0.05), rgba(9, 30, 54, 0.92)); content: ""; inset: 0; position: absolute; }
+      .explore-card::before { background: rgba(9, 30, 54, 0.82); content: ""; inset: 0; position: absolute; }
       .explore-card-content { padding: 1.25rem; position: relative; width: 100%; }
       .explore-card h3 { color: #fff; font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.2rem, 2vw, 1.55rem); line-height: 1.2; margin: 0 0 0.55rem; }
       .explore-card p { color: #f4eee3; font-size: 0.95rem; line-height: 1.45; margin: 0 0 1rem; max-width: 30rem; }
@@ -521,11 +531,46 @@
         padding: 0.55rem 0.8rem;
         text-align: center;
       }
+      .courtroom { background: #f4f0e8; border-top: 7px solid var(--gold); padding: clamp(2.5rem, 5vw, 4rem) 1rem; }
+      .courtroom-inner { margin: 0 auto; max-width: 980px; }
+      .courtroom-kicker { color: var(--navy); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; margin: 0 0 0.65rem; text-transform: uppercase; }
+      .courtroom-title { border-bottom: 1px solid rgba(16, 44, 76, 0.32); color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); line-height: 1.2; margin: 0; padding-bottom: 1.1rem; }
+      .courtroom-deck { color: #5c5a55; font-size: 1.05rem; line-height: 1.55; margin: 0.9rem 0 1.6rem; max-width: 48rem; }
+      .trial-grid { display: grid; gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .trial-card { background: var(--navy); border: 2px solid var(--line); box-shadow: 0 7px 12px rgba(0, 0, 0, 0.22); color: #fff; cursor: pointer; display: flex; flex-direction: column; min-width: 0; padding: 0; text-align: left; transition: box-shadow 180ms ease, transform 180ms ease; }
+      .trial-card:hover { box-shadow: 0 12px 18px rgba(0, 0, 0, 0.3); transform: translateY(-4px); }
+      .trial-card:focus-visible { outline: 3px solid #9b7435; outline-offset: 3px; }
+      .trial-thumbnail { aspect-ratio: 16 / 9; background: #303a3d center / cover; position: relative; }
+      .trial-card[data-video-id="qVIGG28hCco"] .trial-thumbnail { background-image: url("https://img.youtube.com/vi/qVIGG28hCco/hqdefault.jpg"); }
+      .trial-card[data-video-id="O4n7dElz4B0"] .trial-thumbnail { background-image: url("https://img.youtube.com/vi/O4n7dElz4B0/hqdefault.jpg"); }
+      .trial-card[data-video-id="NUdSZ6au9q4"] .trial-thumbnail { background-image: url("https://img.youtube.com/vi/NUdSZ6au9q4/hqdefault.jpg"); }
+      .trial-card[data-video-id="BoxHgGlg-I4"] .trial-thumbnail { background-image: url("https://img.youtube.com/vi/BoxHgGlg-I4/hqdefault.jpg"); }
+      .trial-thumbnail::after { align-items: center; background: rgba(9, 30, 54, 0.88); border: 2px solid var(--gold); border-radius: 50%; color: #fff; content: "▶"; display: flex; font-size: 1.05rem; height: 3rem; justify-content: center; left: 50%; padding-left: 0.15rem; position: absolute; top: 50%; transform: translate(-50%, -50%); width: 3rem; }
+      .trial-card h3 { font-size: 0.9rem; line-height: 1.25; margin: 0; min-height: 3.1rem; padding: 0.7rem 0.65rem 0.35rem; text-align: center; text-transform: uppercase; }
+      .trial-card p { color: #d7d0c3; font-size: 0.78rem; line-height: 1.35; margin: 0; min-height: 3.25rem; padding: 0 0.65rem 0.55rem; text-align: center; }
+      .trial-action { color: var(--gold); display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; padding: 0 0.55rem 0.75rem; text-align: center; text-transform: uppercase; }
+      .courtroom-note { border-top: 1px solid #cfc5b5; color: #6b675f; font-size: 0.82rem; line-height: 1.45; margin: 1.4rem 0 0; padding-top: 0.8rem; }
+      .video-modal { align-items: center; background: rgba(9, 30, 54, 0.9); display: flex; inset: 0; justify-content: center; opacity: 0; padding: 1.5rem; pointer-events: none; position: fixed; transition: opacity 180ms ease; z-index: 1200; }
+      .video-modal.open { opacity: 1; pointer-events: auto; }
+      .video-modal-card { background: #0a1725; border-top: 5px solid var(--gold); box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55); max-width: 900px; padding: 2.6rem 1rem 1rem; position: relative; width: min(100%, 900px); }
+      .video-modal-direct { align-items: center; aspect-ratio: 16 / 9; background: #182b3d center / cover; display: flex; justify-content: center; overflow: hidden; position: relative; }
+      .video-modal-direct::before { background: rgba(9, 30, 54, 0.72); content: ""; inset: 0; position: absolute; }
+      .video-modal-direct-content { color: #fff; padding: 1rem; position: relative; text-align: center; }
+      .video-modal-direct-content p { font-size: 1rem; margin: 0 0 1rem; }
+      .video-modal-watch { background: var(--gold); color: var(--deep-navy); display: inline-block; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; padding: 0.75rem 1rem; text-transform: uppercase; }
+      .video-modal-watch:hover { background: #d2ad68; }
+      .video-modal-close { background: var(--gold); border: 0; color: var(--deep-navy); cursor: pointer; font-size: 1.35rem; font-weight: 700; height: 2.2rem; line-height: 1; position: absolute; right: 0.65rem; top: 0.45rem; width: 2.2rem; }
+      .video-modal-close:hover { background: #d2ad68; }
+      .video-modal-credit { color: #d7d0c3; font-size: 0.78rem; margin: 0.65rem 0 0; }
+      .video-modal-credit a { color: var(--gold); text-decoration: underline; }
       [hidden] { display: none; }
 
       @media (max-width: 760px) {
         .collections { grid-template-columns: repeat(2, 1fr); }
-        .hero { min-height: 39rem; }
+        .trial-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+        .hero-copy { max-width: 38rem; padding-bottom: 0; }
+        .hero::after { inset: 0; opacity: 0.1; }
         .publication-grid { grid-template-columns: 1fr; }
         .prison-hero-inner { grid-template-columns: 1fr; min-height: 0; }
         .prison-hero-copy { max-width: none; padding: 2.25rem 1rem 1.75rem; }
@@ -542,8 +587,10 @@
       @media (max-width: 480px) {
         .topbar { font-size: 0.78rem; }
         .topbar a { padding: 0 0.4rem; }
-        .hero { min-height: 40rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+        .hero { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .courtroom { padding-left: 0.75rem; padding-right: 0.75rem; }
         .collections { gap: 0.7rem; }
+        .trial-grid { gap: 0.7rem; }
         .collection-card { min-height: 11rem; }
         .card-art { min-height: 6rem; }
         .news-grid { gap: 0.7rem; grid-template-columns: 1fr; }
@@ -553,6 +600,11 @@
         .topic-grid { grid-template-columns: 1fr; }
         .explore-grid { grid-template-columns: 1fr; }
         footer { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
+      }
+      @media (max-width: 480px) {
+        .video-modal { padding: 0; }
+        .video-modal-card { border-top: 0; min-height: 100dvh; padding: 3.2rem 0.65rem 0.65rem; width: 100%; }
+        .video-modal-direct { aspect-ratio: 9 / 16; max-height: calc(100dvh - 5rem); }
       }
     </style>
   </head>
@@ -576,7 +628,7 @@
           <img src="01_Photos/Logos/Carceral%20Collections%20Banner.png" alt="Cheesborough Carceral Collections - CarceralCollections.org" />
         </a>
       </div>
-      <p class="tagline">Preserving sources, supporting research, and advancing critical legal inquiry</p>
+      <p class="tagline">Connecting Sources, Scholarship, And Critical Examination Of The Law</p>
     </header>
 
     <main>
@@ -620,6 +672,21 @@
             </a>
           </div>
           <p class="status" id="search-status" hidden></p>
+        </div>
+      </section>
+
+      <section class="courtroom" id="inside-the-courtroom" aria-labelledby="courtroom-title">
+        <div class="courtroom-inner">
+          <p class="courtroom-kicker">Courtroom Watch / Live Proceedings</p>
+          <h2 class="courtroom-title" id="courtroom-title" data-title-case-applied="true">Watch the Cases Unfold</h2>
+          <p class="courtroom-deck">Trials are more than verdicts. They are arguments, testimony, evidence, procedure, and moments that can alter the course of a case. Carceral Collections brings together selected live courtroom proceedings so readers can watch the judicial process directly and examine the record as it develops.</p>
+          <div class="trial-grid">
+            <button class="trial-card" type="button" data-title-case-applied="true" data-video-id="qVIGG28hCco" data-video-title="Tupac Shakur Murder Trial" data-video-url="https://www.youtube.com/watch?v=qVIGG28hCco" aria-label="Watch Tupac Shakur Murder Trial"><span class="trial-thumbnail" aria-hidden="true"></span><h3>Tupac Shakur Murder Trial</h3><p>Inside the long-awaited prosecution</p><span class="trial-action">Watch the Trial</span></button>
+            <button class="trial-card" type="button" data-title-case-applied="true" data-video-id="O4n7dElz4B0" data-video-title="Donna Clancy Murder Trial" data-video-url="https://www.youtube.com/watch?v=O4n7dElz4B0" aria-label="Follow Donna Clancy Murder Trial"><span class="trial-thumbnail" aria-hidden="true"></span><h3>Donna Clancy Murder Trial</h3><p>A closely watched case enters the courtroom</p><span class="trial-action">Follow the Proceedings</span></button>
+            <button class="trial-card" type="button" data-title-case-applied="true" data-video-id="NUdSZ6au9q4" data-video-title="Fernandez-Saldana Murder Trial" data-video-url="https://www.youtube.com/watch?v=NUdSZ6au9q4" aria-label="Enter Fernandez-Saldana Murder Trial"><span class="trial-thumbnail" aria-hidden="true"></span><h3>Fernandez-Saldana Murder Trial</h3><p>Evidence. Testimony. Judgment.</p><span class="trial-action">Enter the Courtroom</span></button>
+            <button class="trial-card" type="button" data-title-case-applied="true" data-video-id="BoxHgGlg-I4" data-video-title="Murdaugh Court Hearing" data-video-url="https://www.youtube.com/watch?v=BoxHgGlg-I4" aria-label="Watch Murdaugh Court Hearing"><span class="trial-thumbnail" aria-hidden="true"></span><h3>Murdaugh Court Hearing</h3><p>The legal proceedings continue</p><span class="trial-action">Watch the Hearing</span></button>
+          </div>
+          <p class="courtroom-note">Livestreams are provided by third-party news and courtroom media organizations. Availability, scheduling, and coverage are controlled by the original broadcasters.</p>
         </div>
       </section>
 
@@ -674,8 +741,8 @@
       <section class="topic-band" id="further-topics" aria-labelledby="further-topics-title">
         <div class="topic-inner">
           <p class="topic-kicker">Further topics / research paths</p>
-          <h2 class="topic-title" id="further-topics-title">Follow the record where it leads</h2>
-          <p class="topic-deck">These investigations are deliberately distinct. Each page names its evidence, shows its limits, and leads readers to the underlying documents, images, maps, and transcriptions.</p>
+          <h2 class="topic-title" id="further-topics-title" data-title-case-applied="true">Trace the Case Through the Record</h2>
+          <p class="topic-deck">Each page reconstructs its subject from surviving evidence and directs readers to the original documents, images, maps, and transcriptions that support the inquiry.</p>
           <div class="topic-grid">
             <article class="topic-card"><h3>Powell and American Siberia</h3><p>1891 prison memoir, convict labor, Black guards, prisoner identities, census authentication, and the Sy Wilson/Cyrus Williams date chain.</p><a href="AmSiberUncovered.html">Explore Powell research &rarr;</a></article>
             <article class="topic-card"><h3>Fortune Ferguson and Newberry</h3><p>Fortune's family record alongside the families of the Newberry Six, with genealogy questions kept separate from unsupported conclusions.</p><a href="NEWBERRY-AND-FORTUNE.html">Explore family history &rarr;</a></article>
@@ -761,6 +828,30 @@
             return "brief";
           }
 
+          function renderExternalSources(query) {
+            const encodedQuery = encodeURIComponent(query);
+            const governmentQuery = encodeURIComponent(`site:gov ${query} (statute OR code) filetype:pdf`);
+            const sources = [
+              ["CourtListener opinions & dockets", `https://www.courtlistener.com/?q=${encodedQuery}`],
+              ["GovInfo statutes & PDFs", `https://www.govinfo.gov/app/search?q=${encodedQuery}`],
+              ["Google Scholar case law", `https://scholar.google.com/scholar?q=${encodedQuery}`],
+              ["Justia cases & statutes", `https://www.justia.com/search/?q=${encodedQuery}`],
+              ["Official government PDFs", `https://www.google.com/search?q=${governmentQuery}`]
+            ];
+
+            return `
+              <div class="external-sources">
+                <p class="external-sources-heading">Online Legal Sources</p>
+                <p class="external-sources-note">Search these free public repositories and follow the result to its original source.</p>
+                <ul class="external-source-list">
+                  ${sources.map(([label, url]) => `
+                    <li><a class="external-source-link" href="${url}" target="_blank" rel="noopener noreferrer">${label} &rarr;</a></li>
+                  `).join('')}
+                </ul>
+              </div>
+            `;
+          }
+
           function renderLiveDropdown(query) {
             if (!searchDropdown || !window.CheesboroughSearch) return;
             const q = (query || "").trim();
@@ -782,6 +873,7 @@
                 <div style="padding:1rem; text-align:center; font-size:0.88rem; color:#666;">
                   Try searching for <strong>Dozier, Powell, Ferguson, 1880 Census, or Confinement</strong>
                 </div>
+                ${renderExternalSources(q)}
               `;
               searchDropdown.classList.add("open");
               return;
@@ -811,6 +903,7 @@
                   View all <strong>${results.length}</strong> matching sources on Search Page &rarr;
                 </a>
               </div>
+              ${renderExternalSources(q)}
             `;
             searchDropdown.classList.add("open");
           }
@@ -861,6 +954,56 @@
               }
             });
           }
+        </script>
+        <div class="video-modal" id="video-modal" role="dialog" aria-modal="true" aria-labelledby="video-modal-title" aria-hidden="true">
+          <div class="video-modal-card">
+            <button class="video-modal-close" id="video-modal-close" type="button" aria-label="Close video viewer">&times;</button>
+            <h2 id="video-modal-title" class="sr-only">Video viewer</h2>
+            <div class="video-modal-direct" id="video-modal-direct">
+              <div class="video-modal-direct-content">
+                <p>This livestream is hosted by YouTube.</p>
+                <a class="video-modal-watch" id="video-modal-watch" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Watch on YouTube</a>
+              </div>
+            </div>
+            <p class="video-modal-credit">Video source: <a id="video-modal-source" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></p>
+          </div>
+        </div>
+        <script>
+          const videoModal = document.querySelector("#video-modal");
+          const videoDirect = document.querySelector("#video-modal-direct");
+          const videoWatch = document.querySelector("#video-modal-watch");
+          const videoModalTitle = document.querySelector("#video-modal-title");
+          const videoModalSource = document.querySelector("#video-modal-source");
+          const videoModalClose = document.querySelector("#video-modal-close");
+          const trialCards = document.querySelectorAll(".trial-card");
+          let activeTrialCard = null;
+          function closeVideoModal() {
+            if (!videoModal) return;
+            activeTrialCard?.focus();
+            videoModal.classList.remove("open");
+            videoModal.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+          }
+          trialCards.forEach((card) => {
+            card.addEventListener("click", () => {
+              const videoId = card.dataset.videoId;
+              const title = card.dataset.videoTitle || "Selected courtroom video";
+              if (!videoModal || !videoDirect || !videoWatch || !videoId) return;
+              activeTrialCard = card;
+              videoModalTitle.textContent = title;
+              const sourceUrl = card.dataset.videoUrl || `https://www.youtube.com/watch?v=${videoId}`;
+              videoModalSource.href = sourceUrl;
+              videoWatch.href = sourceUrl;
+              videoDirect.style.backgroundImage = `url("https://img.youtube.com/vi/${videoId}/hqdefault.jpg")`;
+              videoModal.classList.add("open");
+              videoModal.setAttribute("aria-hidden", "false");
+              document.body.style.overflow = "hidden";
+              videoModalClose.focus();
+            });
+          });
+          videoModalClose?.addEventListener("click", closeVideoModal);
+          videoModal?.addEventListener("click", (event) => { if (event.target === videoModal) closeVideoModal(); });
+          document.addEventListener("keydown", (event) => { if (event.key === "Escape" && videoModal?.classList.contains("open")) closeVideoModal(); });
         </script>
         <script src="dozier-daily-photo.js"></script>
         <script src="american-siberia-rotation.js"></script>

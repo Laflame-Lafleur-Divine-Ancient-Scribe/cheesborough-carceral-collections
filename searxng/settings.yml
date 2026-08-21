@@ -1,0 +1,34 @@
+use_default_settings: true
+
+server:
+  bind_address: "0.0.0.0"
+  port: 8080
+  secret_key: "local-development-secret-change-me"
+  limiter: false
+  image_proxy: false
+
+redis:
+  url: redis://redis:6379/0
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  formats:
+    - html
+    - json
+
+ui:
+  static_use_hash: true
+  query_in_title: true
+
+engines:
+  - name: google
+    disabled: false
+  - name: bing
+    disabled: false
+  - name: duckduckgo
+    disabled: false
+  - name: brave
+    disabled: false
+  - name: wikipedia
+    disabled: false

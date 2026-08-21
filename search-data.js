@@ -726,7 +726,19 @@
 
     pool.forEach(item => {
       const score = scoreItem(item, q, tokens);
-      if (score > 0) {
+      const matchedTokens = tokens.filter(token => {
+        const searchableText = normalizeText([
+          item.title,
+          item.description,
+          item.category,
+          item.badge,
+          item.author,
+          ...(item.tags || []),
+          ...(item.keywords || [])
+        ].join(" "));
+        return searchableText.includes(token);
+      }).length;
+      if (score > 0 && (tokens.length === 1 || matchedTokens === tokens.length)) {
         scored.push({
           ...item,
           score,
