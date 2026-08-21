@@ -537,28 +537,13 @@
       .courtroom-title { border-bottom: 1px solid rgba(16, 44, 76, 0.32); color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); line-height: 1.2; margin: 0; padding-bottom: 1.1rem; }
       .courtroom-deck { color: #5c5a55; font-size: 1.05rem; line-height: 1.55; margin: 0.9rem 0 1.6rem; max-width: 48rem; }
       .trial-grid { display: grid; gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .trial-card { background: var(--navy); border: 2px solid var(--line); box-shadow: 0 7px 12px rgba(0, 0, 0, 0.22); color: #fff; cursor: pointer; display: flex; flex-direction: column; min-width: 0; padding: 0; text-align: left; transition: box-shadow 180ms ease, transform 180ms ease; }
-      .trial-card:hover { box-shadow: 0 12px 18px rgba(0, 0, 0, 0.3); transform: translateY(-4px); }
-      .trial-card:focus-visible { outline: 3px solid #9b7435; outline-offset: 3px; }
-      .trial-thumbnail { aspect-ratio: 16 / 9; background: #303a3d center / cover; position: relative; }
-      .trial-card[data-video-id="qVIGG28hCco"] .trial-thumbnail { background-image: url("https://img.youtube.com/vi/qVIGG28hCco/hqdefault.jpg"); }
-      .trial-card[data-video-id="O4n7dElz4B0"] .trial-thumbnail { background-image: url("https://img.youtube.com/vi/O4n7dElz4B0/hqdefault.jpg"); }
-      .trial-card[data-video-id="NUdSZ6au9q4"] .trial-thumbnail { background-image: url("https://img.youtube.com/vi/NUdSZ6au9q4/hqdefault.jpg"); }
-      .trial-card[data-video-id="BoxHgGlg-I4"] .trial-thumbnail { background-image: url("https://img.youtube.com/vi/BoxHgGlg-I4/hqdefault.jpg"); }
-      .trial-thumbnail::after { align-items: center; background: rgba(9, 30, 54, 0.88); border: 2px solid var(--gold); border-radius: 50%; color: #fff; content: "▶"; display: flex; font-size: 1.05rem; height: 3rem; justify-content: center; left: 50%; padding-left: 0.15rem; position: absolute; top: 50%; transform: translate(-50%, -50%); width: 3rem; }
+      .trial-card { background: var(--navy); border: 2px solid var(--line); box-shadow: 0 7px 12px rgba(0, 0, 0, 0.22); color: #fff; min-width: 0; overflow: hidden; }
+      .trial-player { aspect-ratio: 16 / 9; background: #303a3d; }
+      .trial-player iframe { border: 0; height: 100%; width: 100%; }
       .trial-card h3 { font-size: 0.9rem; line-height: 1.25; margin: 0; min-height: 3.1rem; padding: 0.7rem 0.65rem 0.35rem; text-align: center; text-transform: uppercase; }
       .trial-card p { color: #d7d0c3; font-size: 0.78rem; line-height: 1.35; margin: 0; min-height: 3.25rem; padding: 0 0.65rem 0.55rem; text-align: center; }
       .trial-action { color: var(--gold); display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; padding: 0 0.55rem 0.75rem; text-align: center; text-transform: uppercase; }
       .courtroom-note { border-top: 1px solid #cfc5b5; color: #6b675f; font-size: 0.82rem; line-height: 1.45; margin: 1.4rem 0 0; padding-top: 0.8rem; }
-      .video-modal { align-items: center; background: rgba(9, 30, 54, 0.9); display: flex; inset: 0; justify-content: center; opacity: 0; padding: 1.5rem; pointer-events: none; position: fixed; transition: opacity 180ms ease; z-index: 1200; }
-      .video-modal.open { opacity: 1; pointer-events: auto; }
-      .video-modal-card { background: #0a1725; border-top: 5px solid var(--gold); box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55); max-width: 900px; padding: 2.6rem 1rem 1rem; position: relative; width: min(100%, 900px); }
-      .video-modal-direct { align-items: center; aspect-ratio: 16 / 9; background: #182b3d center / cover; display: flex; justify-content: center; overflow: hidden; position: relative; }
-      .video-modal-direct iframe { border: 0; height: 100%; width: 100%; }
-      .video-modal-close { background: var(--gold); border: 0; color: var(--deep-navy); cursor: pointer; font-size: 1.35rem; font-weight: 700; height: 2.2rem; line-height: 1; position: absolute; right: 0.65rem; top: 0.45rem; width: 2.2rem; }
-      .video-modal-close:hover { background: #d2ad68; }
-      .video-modal-credit { color: #d7d0c3; font-size: 0.78rem; margin: 0.65rem 0 0; }
-      .video-modal-credit a { color: var(--gold); text-decoration: underline; }
       [hidden] { display: none; }
 
       @media (max-width: 760px) {
@@ -596,11 +581,6 @@
         .topic-grid { grid-template-columns: 1fr; }
         .explore-grid { grid-template-columns: 1fr; }
         footer { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
-      }
-      @media (max-width: 480px) {
-        .video-modal { padding: 0; }
-        .video-modal-card { border-top: 0; min-height: 100dvh; padding: 3.2rem 0.65rem 0.65rem; width: 100%; }
-        .video-modal-direct { aspect-ratio: 9 / 16; max-height: calc(100dvh - 5rem); }
       }
     </style>
   </head>
@@ -677,10 +657,10 @@
           <h2 class="courtroom-title" id="courtroom-title" data-title-case-applied="true">Watch the Cases Unfold</h2>
           <p class="courtroom-deck">Trials are more than verdicts. They are arguments, testimony, evidence, procedure, and moments that can alter the course of a case. Carceral Collections brings together selected live courtroom proceedings so readers can watch the judicial process directly and examine the record as it develops.</p>
           <div class="trial-grid">
-            <button class="trial-card" type="button" data-title-case-applied="true" data-video-id="qVIGG28hCco" data-video-title="Tupac Shakur Murder Trial" data-video-url="https://www.youtube.com/watch?v=qVIGG28hCco" aria-label="Watch Tupac Shakur Murder Trial"><span class="trial-thumbnail" aria-hidden="true"></span><h3>Tupac Shakur Murder Trial</h3><p>Inside the long-awaited prosecution</p><span class="trial-action">Watch the Trial</span></button>
-            <button class="trial-card" type="button" data-title-case-applied="true" data-video-id="O4n7dElz4B0" data-video-title="Donna Clancy Murder Trial" data-video-url="https://www.youtube.com/watch?v=O4n7dElz4B0" aria-label="Follow Donna Clancy Murder Trial"><span class="trial-thumbnail" aria-hidden="true"></span><h3>Donna Clancy Murder Trial</h3><p>A closely watched case enters the courtroom</p><span class="trial-action">Follow the Proceedings</span></button>
-            <button class="trial-card" type="button" data-title-case-applied="true" data-video-id="NUdSZ6au9q4" data-video-title="Fernandez-Saldana Murder Trial" data-video-url="https://www.youtube.com/watch?v=NUdSZ6au9q4" aria-label="Enter Fernandez-Saldana Murder Trial"><span class="trial-thumbnail" aria-hidden="true"></span><h3>Fernandez-Saldana Murder Trial</h3><p>Evidence. Testimony. Judgment.</p><span class="trial-action">Enter the Courtroom</span></button>
-            <button class="trial-card" type="button" data-title-case-applied="true" data-video-id="BoxHgGlg-I4" data-video-title="Murdaugh Court Hearing" data-video-url="https://www.youtube.com/watch?v=BoxHgGlg-I4" aria-label="Watch Murdaugh Court Hearing"><span class="trial-thumbnail" aria-hidden="true"></span><h3>Murdaugh Court Hearing</h3><p>The legal proceedings continue</p><span class="trial-action">Watch the Hearing</span></button>
+            <article class="trial-card"><div class="trial-player"><iframe src="https://www.youtube.com/embed/qVIGG28hCco?rel=0" title="Tupac Shakur Murder Trial" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><h3>Tupac Shakur Murder Trial</h3><p>Inside the long-awaited prosecution</p><span class="trial-action">Watch the Trial</span></article>
+            <article class="trial-card"><div class="trial-player"><iframe src="https://www.youtube.com/embed/O4n7dElz4B0?rel=0" title="Donna Clancy Murder Trial" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><h3>Donna Clancy Murder Trial</h3><p>A closely watched case enters the courtroom</p><span class="trial-action">Follow the Proceedings</span></article>
+            <article class="trial-card"><div class="trial-player"><iframe src="https://www.youtube.com/embed/NUdSZ6au9q4?rel=0" title="Fernandez-Saldana Murder Trial" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><h3>Fernandez-Saldana Murder Trial</h3><p>Evidence. Testimony. Judgment.</p><span class="trial-action">Enter the Courtroom</span></article>
+            <article class="trial-card"><div class="trial-player"><iframe src="https://www.youtube.com/embed/BoxHgGlg-I4?rel=0" title="Murdaugh Court Hearing" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><h3>Murdaugh Court Hearing</h3><p>The legal proceedings continue</p><span class="trial-action">Watch the Hearing</span></article>
           </div>
           <p class="courtroom-note">Livestreams are provided by third-party news and courtroom media organizations. Availability, scheduling, and coverage are controlled by the original broadcasters.</p>
         </div>
@@ -950,55 +930,6 @@
               }
             });
           }
-        </script>
-        <div class="video-modal" id="video-modal" role="dialog" aria-modal="true" aria-labelledby="video-modal-title" aria-hidden="true">
-          <div class="video-modal-card">
-            <button class="video-modal-close" id="video-modal-close" type="button" aria-label="Close video viewer">&times;</button>
-            <h2 id="video-modal-title" class="sr-only">Video viewer</h2>
-            <div class="video-modal-direct" id="video-modal-direct"></div>
-            <p class="video-modal-credit">Video source: <a id="video-modal-source" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></p>
-          </div>
-        </div>
-        <script>
-          const videoModal = document.querySelector("#video-modal");
-          const videoDirect = document.querySelector("#video-modal-direct");
-          const videoModalTitle = document.querySelector("#video-modal-title");
-          const videoModalSource = document.querySelector("#video-modal-source");
-          const videoModalClose = document.querySelector("#video-modal-close");
-          const trialCards = document.querySelectorAll(".trial-card");
-          let activeTrialCard = null;
-          function closeVideoModal() {
-            if (!videoModal) return;
-            videoDirect?.replaceChildren();
-            activeTrialCard?.focus();
-            videoModal.classList.remove("open");
-            videoModal.setAttribute("aria-hidden", "true");
-            document.body.style.overflow = "";
-          }
-          trialCards.forEach((card) => {
-            card.addEventListener("click", () => {
-              const videoId = card.dataset.videoId;
-              const title = card.dataset.videoTitle || "Selected courtroom video";
-              if (!videoModal || !videoDirect || !/^[A-Za-z0-9_-]{11}$/.test(videoId)) return;
-              activeTrialCard = card;
-              videoModalTitle.textContent = title;
-              const sourceUrl = card.dataset.videoUrl || `https://www.youtube.com/watch?v=${videoId}`;
-              videoModalSource.href = sourceUrl;
-              videoDirect.replaceChildren(Object.assign(document.createElement("iframe"), {
-                src: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`,
-                title,
-                allow: "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
-                allowFullscreen: true,
-              }));
-              videoModal.classList.add("open");
-              videoModal.setAttribute("aria-hidden", "false");
-              document.body.style.overflow = "hidden";
-              videoModalClose.focus();
-            });
-          });
-          videoModalClose?.addEventListener("click", closeVideoModal);
-          videoModal?.addEventListener("click", (event) => { if (event.target === videoModal) closeVideoModal(); });
-          document.addEventListener("keydown", (event) => { if (event.key === "Escape" && videoModal?.classList.contains("open")) closeVideoModal(); });
         </script>
         <script src="dozier-daily-photo.js"></script>
         <script src="american-siberia-rotation.js"></script>
