@@ -74,6 +74,20 @@
       actionLabel: "Read Research Brief →"
     },
     {
+      id: "feature-milledgeville-pine-woods",
+      title: "The Day Prison Had an Address: From Milledgeville to the Pine Woods",
+      url: "MILLEDGEVILLE-TO-PINE-WOODS.html",
+      category: "Feature Story",
+      badge: "Feature",
+      icon: "Feature",
+      date: "1845-1891",
+      author: "Jehlani C.",
+      description: "A story-led feature following Lewis W. Paine's arrival at Georgia's Milledgeville penitentiary and J. C. Powell's later Florida convict camp world of railroad labor, turpentine work, contractors, guards, and scattered records.",
+      tags: ["Lewis W. Paine", "Six Years in a Georgia Prison", "Milledgeville Penitentiary", "J.C. Powell", "The American Siberia", "Convict Leasing", "Georgia Prison", "Florida Prison Camps", "Prison Labor", "Railroad Labor", "Turpentine Camps"],
+      keywords: ["lewis paine", "lewis w paine", "payne lewis w", "six years in a georgia prison", "milledgeville", "georgia penitentiary", "georgia state prison", "j c powell", "american siberia", "pine woods", "convict leasing", "convict camps", "railroad labor", "turpentine", "prison memoir", "prison labor", "andrew patterson", "benjamin tuggle"],
+      actionLabel: "Read Feature ->"
+    },
+    {
       id: "brief-powell-siberia",
       title: "The Insider's Ghost: J. C. Powell's The American Siberia",
       url: "MalachiMartin-Chattahoochee.html",
@@ -793,4 +807,3 @@
 };
 
 }));
-
