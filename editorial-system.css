@@ -1,0 +1,59 @@
+/* Shared presentation layer for long-form editorial and research pages.
+   It deliberately leaves document content and page-specific imagery untouched. */
+:root {
+  --navy: #102c4c;
+  --deep: #091e36;
+  --gold: #c29b53;
+  --gold-light: #dfc287;
+  --paper: #f5f2eb;
+  --paper-card: #fff;
+  --ink: #202020;
+  --muted: #65615a;
+  --line: #ded7cb;
+  --red: #8f3d32;
+}
+html { background: var(--paper); }
+body { background: var(--paper); color: var(--ink); font-family: "Source Sans 3", sans-serif; line-height: 1.6; }
+a { color: var(--navy); text-decoration-thickness: 1px; text-underline-offset: .16em; }
+a:hover { color: var(--gold); }
+a:focus-visible { outline: 3px solid var(--gold-light); outline-offset: 3px; }
+.topbar { background: var(--gold); border: 0; color: #fff; font-weight: 600; letter-spacing: .04em; padding: .68rem 1rem; text-transform: uppercase; }
+.topbar a, .topbar a:hover, .topbar a:focus-visible { color: #fff; }
+.topbar a:hover { opacity: .82; text-decoration: none; }
+.hero, .doc-header { background: var(--deep); border-bottom: 5px solid var(--gold); }
+.hero { min-height: 32rem; }
+.hero-copy, .doc-header { position: relative; }
+.hero-copy::before, .doc-header::before { background: var(--gold); content: ""; height: 3px; left: 0; opacity: .9; position: absolute; top: 0; width: min(8rem, 22%); }
+.hero-image { filter: saturate(.82) contrast(1.04); }
+.eyebrow, .kicker, .label, .section-label { color: var(--gold-light); }
+.hero h1, .doc-header h1 { color: #fff; }
+.hero p, .doc-header .subtitle, .doc-header .meta { color: #e6dfd1; }
+.layout, .grid { gap: clamp(2.2rem, 5vw, 3.5rem); max-width: 1200px; }
+article { min-width: 0; }
+article h2, .document-body h2, h2 { border-bottom: 2px solid var(--line); color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; line-height: 1.3; margin-top: 2.8rem; padding-bottom: .45rem; }
+article h3, .document-body h3, h3 { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; line-height: 1.35; }
+article p, .document-body p { color: #383531; line-height: 1.75; }
+.pullquote, article blockquote { background: #faf7f0; border-left: 5px solid var(--gold); color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; }
+.note, .standard, .toc, .citation, .panel-box, .sources, .sidebar, .credit-box { background: var(--paper-card); border-color: var(--line); box-shadow: 0 4px 14px rgba(9, 30, 54, .05); }
+.note, .standard, .toc, .panel-box, .sources, .sidebar, .credit-box { border-top: 4px solid var(--gold); }
+.callout, .warning-box { border-left-color: var(--red); }
+.callout h3, .warning-box strong, .tag { color: var(--red); }
+.document-body, .layout, main { padding-bottom: clamp(3.5rem, 7vw, 5.5rem); }
+.download-bar { background: var(--navy); border-bottom: 1px solid rgba(223, 194, 135, .55); }
+.download-bar a, .document-actions .view-pdf { background: var(--gold); color: var(--deep); }
+.document-actions a { border-color: var(--gold); }
+.matrix-table-wrap, .table-wrap { background: #fff; border-color: var(--line); }
+th, .matrix-table th { background: #eee8de; color: var(--navy); }
+td, th, .matrix-table td, .matrix-table th { border-color: var(--line); }
+.timeline, .timeline-list { border-left-color: var(--gold); }
+.timeline li::before, .timeline-event::before, .event::before { background: var(--gold); }
+.event.highlight { border-left-color: var(--red); }
+.sidebar-panel, aside.sidebar { align-self: start; }
+.panel-box, .sources { border-top-color: var(--gold); }
+.panel-box h3, .sources h2, .sidebar h2 { border-bottom-color: var(--line); color: var(--navy); }
+.sidebar-end-bar { background: var(--gold); }
+.series { background: #fff; border-top-color: var(--line); }
+.series a { border-left-color: var(--gold); color: var(--navy); }
+footer { background: var(--deep); border-top: 4px solid var(--gold); color: #fff; }
+@media (max-width: 900px) { .hero { min-height: 0; } .layout, .grid { gap: 2rem; } .sidebar-panel, aside.sidebar { position: static; } .document-body, .layout, main { padding-bottom: 3.5rem; } }
+@media (max-width: 620px) { .topbar { gap: .5rem .8rem; font-size: .76rem; } .hero-copy::before, .doc-header::before { width: 5rem; } article p, .document-body p { font-size: 1rem; } .download-bar { align-items: flex-start; } .download-bar p { max-width: 100%; } }
