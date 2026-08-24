@@ -116,19 +116,19 @@ async function handleOnlineSearch(requestUrl, response) {
 }
 
 const newsDesks = {
-    national: { label: 'United States', query: 'United States courts justice public records' },
-    europe: { label: 'Europe', query: 'Europe courts justice investigation public records' },
-    mexico: { label: 'Mexico', query: 'Mexico courts justice investigation public records' },
-    federal: { label: 'Federal & Intelligence Desk', query: 'FBI CIA Mossad official investigation public records' },
-    florida: { label: 'Florida', query: 'Florida courts justice public records' },
-    georgia: { label: 'Georgia', query: 'Georgia courts justice public records' },
-    louisiana: { label: 'Louisiana', query: 'Louisiana courts justice public records' },
-    newyork: { label: 'New York', query: 'New York courts justice public records' },
-    california: { label: 'California', query: 'California courts justice public records' },
-    michigan: { label: 'Michigan', query: 'Michigan courts justice public records' },
-    ohio: { label: 'Ohio', query: 'Ohio courts justice public records' },
-    colorado: { label: 'Colorado', query: 'Colorado courts justice public records' },
-    world: { label: 'World', query: 'international courts justice investigation public records' },
+    national: { label: 'United States', query: 'United States courts justice public records', gdeltQuery: 'court OR justice OR investigation', matchTerms: ['court', 'justice', 'investigation'] },
+    europe: { label: 'Europe', query: 'Europe courts justice investigation public records', gdeltQuery: 'Europe (court OR justice OR investigation)', matchTerms: ['europe', 'court', 'justice', 'investigation'] },
+    mexico: { label: 'Mexico', query: 'Mexico courts justice investigation public records', gdeltQuery: 'Mexico (court OR justice OR investigation)', matchTerms: ['mexico', 'court', 'justice', 'investigation'] },
+    federal: { label: 'Federal & Intelligence Desk', query: 'FBI CIA Mossad official investigation public records', gdeltQuery: 'FBI OR CIA OR Mossad', matchTerms: ['fbi', 'cia', 'mossad'] },
+    florida: { label: 'Florida', query: 'Florida courts justice public records', gdeltQuery: 'Florida (court OR justice OR investigation)', matchTerms: ['florida', 'court', 'justice', 'investigation'] },
+    georgia: { label: 'Georgia', query: 'Georgia courts justice public records', gdeltQuery: 'Georgia (court OR justice OR investigation)', matchTerms: ['georgia', 'court', 'justice', 'investigation'] },
+    louisiana: { label: 'Louisiana', query: 'Louisiana courts justice public records', gdeltQuery: 'Louisiana (court OR justice OR investigation)', matchTerms: ['louisiana', 'court', 'justice', 'investigation'] },
+    newyork: { label: 'New York', query: 'New York courts justice public records', gdeltQuery: 'New York (court OR justice OR investigation)', matchTerms: ['new york', 'court', 'justice', 'investigation'] },
+    california: { label: 'California', query: 'California courts justice public records', gdeltQuery: 'California (court OR justice OR investigation)', matchTerms: ['california', 'court', 'justice', 'investigation'] },
+    michigan: { label: 'Michigan', query: 'Michigan courts justice public records', gdeltQuery: 'Michigan (court OR justice OR investigation)', matchTerms: ['michigan', 'court', 'justice', 'investigation'] },
+    ohio: { label: 'Ohio', query: 'Ohio courts justice public records', gdeltQuery: 'Ohio (court OR justice OR investigation)', matchTerms: ['ohio', 'court', 'justice', 'investigation'] },
+    colorado: { label: 'Colorado', query: 'Colorado courts justice public records', gdeltQuery: 'Colorado (court OR justice OR investigation)', matchTerms: ['colorado', 'court', 'justice', 'investigation'] },
+    world: { label: 'World', query: 'international courts justice investigation public records', gdeltQuery: 'international (court OR justice OR investigation)', matchTerms: ['court', 'justice', 'investigation'] },
 };
 
 const newsDeskAliases = {
@@ -136,6 +136,7 @@ const newsDeskAliases = {
     'federal-agencies': 'federal',
     'new-york': 'newyork',
 };
+const newsCache = new Map();
 
 async function handleNews(requestUrl, response) {
     const requestedDesk = requestUrl.searchParams.get('desk') || requestUrl.searchParams.get('section') || 'national';
@@ -144,11 +145,18 @@ async function handleNews(requestUrl, response) {
     const requestedOffset = Number(requestUrl.searchParams.get('offset') || '0');
     const requestedPage = Number(requestUrl.searchParams.get('page') || (Number.isFinite(requestedOffset) ? Math.floor(Math.max(requestedOffset, 0) / 9) + 1 : '1'));
     const page = Number.isInteger(requestedPage) ? Math.min(Math.max(requestedPage, 1), 4) : 1;
+    const cacheKey = `${deskKey}:${page}`;
+    const cached = newsCache.get(cacheKey);
+    if (cached && Date.now() - cached.createdAt < 5 * 60 * 1000) {
+        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify(cached.payload));
+        return;
+    }
     const params = new URLSearchParams({
-        q: desk.query,
+        q: `${desk.query} latest news`,
         format: 'json',
         pageno: String(page),
-        categories: 'news',
+        categories: 'general',
         language: 'en-US',
         time_range: 'month',
         safesearch: '1',
@@ -160,7 +168,7 @@ async function handleNews(requestUrl, response) {
         const result = await fetch(`${searxngUrl}/search?${params}`, { signal: controller.signal });
         if (result.ok) {
             const payload = await result.json();
-            stories = rankRelevantResults(Array.isArray(payload.results) ? payload.results : [], desk.query).slice(0, 9).map((item) => ({
+            stories = rankNewsStories(Array.isArray(payload.results) ? payload.results : [], desk).slice(0, 9).map((item) => ({
                 title: item.title || item.url,
                 url: item.url,
                 content: item.content || '',
@@ -175,8 +183,58 @@ async function handleNews(requestUrl, response) {
     } finally {
         clearTimeout(timeout);
     }
+    if (stories.length === 0) {
+        const fallbackController = new AbortController();
+        const fallbackTimeout = setTimeout(() => fallbackController.abort(), 15000);
+        try {
+            const fallbackParams = new URLSearchParams({
+                q: `${desk.query} current reporting`,
+                format: 'json',
+                pageno: String(page),
+                categories: 'general',
+                language: 'en-US',
+                safesearch: '1',
+            });
+            const fallbackResult = await fetch(`${searxngUrl}/search?${fallbackParams}`, { signal: fallbackController.signal });
+            if (fallbackResult.ok) {
+                const fallbackPayload = await fallbackResult.json();
+                stories = rankNewsStories(Array.isArray(fallbackPayload.results) ? fallbackPayload.results : [], desk).slice(0, 9).map((item) => ({
+                    title: item.title || item.url,
+                    url: item.url,
+                    content: item.content || '',
+                    publisher: item.engine_name || 'Original publisher',
+                    publishedDate: item.publishedDate || null,
+                    sourcePriority: item.sourcePriority || 'General source',
+                    desk: desk.label,
+                }));
+            }
+        } catch {
+            stories = [];
+        } finally {
+            clearTimeout(fallbackTimeout);
+        }
+    }
+    const payload = { desk: deskKey, label: desk.label, page, count: stories.length, stories, results: stories };
+    newsCache.set(cacheKey, { createdAt: Date.now(), payload });
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
-    response.end(JSON.stringify({ desk: deskKey, label: desk.label, page, count: stories.length, stories, results: stories }));
+    response.end(JSON.stringify(payload));
+}
+
+function rankNewsStories(items, desk) {
+    const seen = new Set();
+    const terms = desk.matchTerms || [];
+    return items.map((item) => {
+        const title = String(item.title || '').toLowerCase();
+        const url = String(item.url || '').toLowerCase();
+        const content = String(item.content || '').toLowerCase();
+        const combined = `${title} ${url} ${content}`;
+        const matches = terms.filter((term) => combined.includes(term));
+        const quality = classifySourceQuality(item);
+        const key = `${title.replace(/[^a-z0-9]+/g, ' ').trim()}|${url.replace(/[?#].*$/, '')}`;
+        if (quality.suppress || !matches.length || seen.has(key)) return null;
+        seen.add(key);
+        return { ...item, sourcePriority: quality.label, relevanceScore: quality.score + (matches.length * 20) };
+    }).filter(Boolean).sort((first, second) => second.relevanceScore - first.relevanceScore);
 }
 
 async function fetchJson(url) {
