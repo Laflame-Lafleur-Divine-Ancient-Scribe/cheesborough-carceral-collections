@@ -81,7 +81,7 @@
       const image=safeUrl(item.image||item.thumbnail||item.img_src||'');
       if(image)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${image}" alt="" loading="${lead?'eager':'lazy'}" referrerpolicy="no-referrer"></a>`;
       const variant=[...href].reduce((total,character)=>total+character.charCodeAt(0),0)%12;
-      return `<a class="story-art story-sketch ${kind} variant-${variant}" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this illustrated ${kind} report"><span class="illustration-note">Illustrated</span></a>`;
+      return `<a class="story-art story-sketch ${kind} variant-${variant}" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this ${kind} report"></a>`;
     }
     function storyMarkup(item,lead=false){
       const href=resultUrl(item);if(!href)return '';
