@@ -575,6 +575,7 @@
       .online-result-card:hover { background: var(--paper-hover); }
       .online-result-title { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: 1.05rem; line-height: 1.35; }
       .online-result-title:hover { color: var(--gold); }
+      .online-result-url { color: #1b6343; font-size: 0.8rem; margin-top: 0.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .online-result-desc { color: var(--ink-light); font-size: 0.9rem; line-height: 1.45; margin-top: 0.25rem; }
       .online-result-meta { color: var(--muted); font-size: 0.76rem; margin-top: 0.35rem; }
       .online-pagination { align-items: center; display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin-top: 1.2rem; }
@@ -752,21 +753,12 @@
         renderCategoryCounts();
         renderSidebarTags();
         updateCategoryActiveUI();
-        performSearch();
+        performSearch({ includeOnline: Boolean(currentQuery) });
 
-        // Real-time debounced search input
+        // Keep typing isolated from result rendering so mobile keyboards retain focus.
         if (searchInput) {
-          let debounceTimer;
-          searchInput.addEventListener("input", (e) => {
-            clearTimeout(debounceTimer);
+          searchInput.addEventListener("input", () => {
             toggleClearButton();
-            debounceTimer = setTimeout(() => {
-              currentQuery = searchInput.value.trim();
-              currentTag = null; // reset specific tag filter when typing
-              updateUrlParams();
-              setSearchLoading(true);
-              performSearch();
-            }, 180);
           });
         }
 
@@ -777,7 +769,6 @@
             currentTag = null;
             toggleClearButton();
             updateUrlParams();
-            setSearchLoading(true);
             performSearch();
             searchInput.focus();
           });
@@ -798,7 +789,8 @@
         currentQuery = searchInput.value.trim();
         currentTag = null;
         updateUrlParams();
-        performSearch();
+        performSearch({ includeOnline: Boolean(currentQuery) });
+        resultsList?.scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
       function executeQuickSearch(term) {
@@ -807,8 +799,7 @@
         currentTag = null;
         toggleClearButton();
         updateUrlParams();
-        setSearchLoading(true);
-        performSearch();
+        performSearch({ includeOnline: Boolean(currentQuery) });
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
@@ -816,8 +807,7 @@
         currentCategory = cat;
         updateCategoryActiveUI();
         updateUrlParams();
-        setSearchLoading(true);
-        performSearch();
+        performSearch({ includeOnline: Boolean(currentQuery) });
       }
 
       function setTagFilter(tag) {
@@ -828,14 +818,12 @@
         }
         renderSidebarTags();
         updateUrlParams();
-        setSearchLoading(true);
-        performSearch();
+        performSearch({ includeOnline: Boolean(currentQuery) });
       }
 
       function handleSortChange(sortVal) {
         currentSort = sortVal;
-        setSearchLoading(true);
-        performSearch();
+        performSearch({ includeOnline: Boolean(currentQuery) });
       }
 
       function updateCategoryActiveUI() {
@@ -932,7 +920,10 @@
             <p class="online-results-desc">Searching <strong>${escapeHtml(query)}</strong> across free public repositories and web sources.</p>
             <div class="online-live-results" id="online-live-results" aria-live="polite">Loading up to 300 online results...</div>
             <div class="online-results-fallback" id="online-results-fallback" hidden>
-              <p class="online-results-desc">The online service is unavailable. No search-engine landing pages are shown; please try again shortly.</p>
+              <p class="online-results-desc">Live online results are unavailable right now. Continue your search with one of these public sources:</p>
+              <div class="online-source-list">
+                ${getOnlineSourceLinks(query).map(([label, url]) => `<a class="online-source-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)} <span aria-hidden="true">↗</span></a>`).join("")}
+              </div>
             </div>
           </section>
         `;
@@ -943,20 +934,27 @@
         const liveResults = document.getElementById("online-live-results");
         const fallback = document.getElementById("online-results-fallback");
         if (!liveResults || !fallback) return false;
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 12000);
 
         try {
-          const response = await fetch(`/api/online-search?q=${encodeURIComponent(query)}`);
+          const apiBaseUrl = String(window.CHEESBOROUGH_SEARCH_API_URL || '').replace(/\/$/, '');
+          const endpoint = `${apiBaseUrl}/api/online-search?q=${encodeURIComponent(query)}`;
+          const response = await fetch(endpoint, { signal: controller.signal });
           if (!response.ok) throw new Error("Online search service unavailable");
           const payload = await response.json();
-          if (!payload.results || payload.results.length === 0) throw new Error("No online results returned");
-          onlineResults = payload.results;
+          onlineResults = (payload.results || []).filter(item => !/(?:^|\.)wikipedia\.org(?:\/|$)/i.test(item.url || ''));
+          if (!onlineResults.length) throw new Error("No online results returned");
           onlinePage = 1;
           renderOnlineResultsPage();
           return true;
         } catch (error) {
-          liveResults.innerHTML = `<p class="online-results-desc">${escapeHtml(error.message)} Use the direct provider searches below.</p>`;
+          const message = error.name === "AbortError" ? "Online search timed out." : error.message;
+          liveResults.innerHTML = `<p class="online-results-desc">${escapeHtml(message)} Use the direct provider searches below.</p>`;
           fallback.hidden = false;
           return false;
+        } finally {
+          window.clearTimeout(timeout);
         }
       }
 
@@ -977,6 +975,7 @@
           ${pageItems.map(item => `
             <article class="online-result-card">
               <a class="online-result-title" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
+              <p class="online-result-url">${escapeHtml(getOnlineResultUrl(item.url))}</p>
               <p class="online-result-desc">${escapeHtml(item.content)}</p>
               <p class="online-result-meta">${escapeHtml(item.profile || item.engine)} &middot; ${escapeHtml(item.engine)}${item.publishedDate ? ` &middot; ${escapeHtml(item.publishedDate)}` : ''}</p>
             </article>
@@ -997,11 +996,20 @@
         });
       }
 
+      function getOnlineResultUrl(value) {
+        try {
+          const url = new URL(value);
+          return `${url.hostname.replace(/^www\./, '')}${url.pathname === '/' ? '' : url.pathname}`;
+        } catch {
+          return value || '';
+        }
+      }
+
       function setSearchLoading(isLoading) {
         document.body.classList.toggle("search-loading", isLoading);
       }
 
-      async function performSearch() {
+      async function performSearch({ includeOnline = false } = {}) {
         if (!window.CheesboroughSearch || !resultsList) return;
 
         const results = window.CheesboroughSearch.search(currentQuery, {
@@ -1043,9 +1051,9 @@
                 <button type="button" class="tag-chip" onclick="setCategoryFilter('all'); executeQuickSearch('');">View All Sources</button>
               </div>
             </div>
-            ${renderOnlineSources(currentQuery)}
+            ${includeOnline ? renderOnlineSources(currentQuery) : ''}
           `;
-          await loadOnlineResults(currentQuery);
+          if (includeOnline) await loadOnlineResults(currentQuery);
           setSearchLoading(false);
           return;
         }
@@ -1074,8 +1082,8 @@
               <a class="action-link" href="${item.url}">${escapeHtml(item.actionLabel || 'View Resource →')}</a>
             </div>
           </article>
-        `).join('') + renderOnlineSources(currentQuery);
-        await loadOnlineResults(currentQuery);
+        `).join('') + (includeOnline ? renderOnlineSources(currentQuery) : '');
+        if (includeOnline) await loadOnlineResults(currentQuery);
         setSearchLoading(false);
       }
 

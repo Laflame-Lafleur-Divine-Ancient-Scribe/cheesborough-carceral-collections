@@ -6,6 +6,7 @@ const { URL } = require('node:url');
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
 const searxngUrl = process.env.SEARXNG_URL || 'http://localhost:8888';
+const allowedOrigins = new Set((process.env.ALLOWED_ORIGINS || 'https://carceralcollections.org,https://www.carceralcollections.org,http://localhost:8080').split(',').map((origin) => origin.trim()).filter(Boolean));
 const jsonHeaders = { 'User-Agent': 'CheesboroughCarceralCollections/1.0 (local research search)' };
 const contentTypes = {
     '.css': 'text/css; charset=utf-8',
@@ -20,6 +21,14 @@ const contentTypes = {
     '.svg': 'image/svg+xml',
     '.webp': 'image/webp',
 };
+
+function applyApiCors(request, response) {
+    const origin = request.headers.origin;
+    if (origin && allowedOrigins.has(origin)) {
+        response.setHeader('Access-Control-Allow-Origin', origin);
+        response.setHeader('Vary', 'Origin');
+    }
+}
 
 function resolveFile(requestPath) {
     const decodedPath = decodeURIComponent(requestPath);
@@ -49,10 +58,10 @@ async function handleOnlineSearch(requestUrl, response) {
 
     const profiles = [
         { label: 'Academic & Scholarly', suffix: 'site:jstor.org OR site:books.google.com OR site:scholar.google.com OR site:ssrn.com filetype:pdf' },
-        { label: 'Government & FBI', suffix: 'site:fbi.gov OR site:archives.gov OR site:justice.gov filetype:pdf' },
-        { label: 'State, County & Municipal', suffix: 'state law OR county records OR municipal ordinance OR local government' },
-        { label: 'Courts, Inmate & Public Records', suffix: 'court records OR inmate search OR corrections records OR docket' },
-        { label: 'Legal Publications & Firms', suffix: 'law firm OR legal publication OR legal journal OR case law OR statute' },
+        { label: 'Federal Law & Government', suffix: 'site:congress.gov OR site:govinfo.gov OR site:justice.gov OR site:uscode.house.gov OR site:archives.gov statute OR regulation OR filetype:pdf' },
+        { label: 'Courts & Case Law', suffix: 'site:law.cornell.edu OR site:courtlistener.com OR site:oyez.org OR site:law.justia.com case law OR opinion OR docket' },
+        { label: 'State & Local Law', suffix: 'site:.gov state law OR county court OR municipal code OR legal aid' },
+        { label: 'Attorneys, Bars & Legal Briefs', suffix: 'site:americanbar.org OR site:floridabar.org OR attorney OR lawyer OR legal brief filetype:pdf' },
         { label: 'General Web', suffix: '' },
     ];
     const requests = profiles.flatMap(profile => Array.from({ length: 5 }, (_, index) => ({ profile, page: index + 1 })));
@@ -165,7 +174,7 @@ function parseRssItems(xml, engine, profile = 'General Web') {
 function isSearchEngineLandingPage(item) {
     const url = String(item?.url || '').toLowerCase();
     const title = String(item?.title || '').toLowerCase();
-    return /(^|\/\/)(www\.)?(google\.com|google\.com\.[a-z.]+|bing\.com|yahoo\.com|search\.yahoo\.com|search\.brave\.com)(\/|$)/.test(url)
+    return /(^|\/\/)(www\.)?(google\.com|google\.com\.[a-z.]+|bing\.com|yahoo\.com|search\.yahoo\.com|search\.brave\.com|wikipedia\.org)(\/|$)/.test(url)
         || /^(google|bing|yahoo|brave search|search - microsoft bing)/i.test(title);
 }
 
@@ -173,10 +182,10 @@ async function getKeylessFallbackResults(query) {
     const encodedQuery = encodeURIComponent(query);
     const profiles = [
         ['Academic & Scholarly', 'site:jstor.org OR site:books.google.com OR site:scholar.google.com OR site:ssrn.com filetype:pdf'],
-        ['Government & FBI', 'site:fbi.gov OR site:archives.gov OR site:justice.gov filetype:pdf'],
-        ['State, County & Municipal', 'state law OR county records OR municipal ordinance OR local government'],
-        ['Courts, Inmate & Public Records', 'court records OR inmate search OR corrections records OR docket'],
-        ['Legal Publications & Firms', 'law firm OR legal publication OR legal journal OR case law OR statute'],
+        ['Federal Law & Government', 'site:congress.gov OR site:govinfo.gov OR site:justice.gov OR site:uscode.house.gov OR site:archives.gov statute OR regulation OR filetype:pdf'],
+        ['Courts & Case Law', 'site:law.cornell.edu OR site:courtlistener.com OR site:oyez.org OR site:law.justia.com case law OR opinion OR docket'],
+        ['State & Local Law', 'site:.gov state law OR county court OR municipal code OR legal aid'],
+        ['Attorneys, Bars & Legal Briefs', 'site:americanbar.org OR site:floridabar.org OR attorney OR lawyer OR legal brief filetype:pdf'],
         ['General Web', ''],
     ];
     const bingUrls = profiles.map(([, suffix]) => `https://www.bing.com/search?format=rss&q=${encodeURIComponent([query, suffix].filter(Boolean).join(' '))}`);
@@ -240,7 +249,14 @@ const server = http.createServer((request, response) => {
     let filePath;
     try {
         const requestUrl = new URL(request.url, `http://${request.headers.host}`);
+        if (requestUrl.pathname === '/api/health') {
+            applyApiCors(request, response);
+            response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+            response.end(JSON.stringify({ status: 'ok', service: 'cheesborough-search-api' }));
+            return;
+        }
         if (requestUrl.pathname === '/api/online-search') {
+            applyApiCors(request, response);
             handleOnlineSearch(requestUrl, response).catch(() => {
                 response.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
                 response.end(JSON.stringify({ error: 'The self-hosted search service is unavailable.' }));
@@ -267,8 +283,10 @@ const server = http.createServer((request, response) => {
             return;
         }
 
+        const extension = path.extname(filePath).toLowerCase();
         response.writeHead(200, {
-            'Content-Type': contentTypes[path.extname(filePath).toLowerCase()] || 'application/octet-stream',
+            'Content-Type': contentTypes[extension] || 'application/octet-stream',
+            'Cache-Control': extension === '.html' || extension === '.js' ? 'no-store, max-age=0' : 'public, max-age=3600',
         });
 
         if (request.method === 'HEAD') {
