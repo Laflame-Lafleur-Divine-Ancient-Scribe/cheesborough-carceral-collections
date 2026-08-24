@@ -6,7 +6,10 @@ const { URL } = require('node:url');
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
 const searxngUrl = process.env.SEARXNG_URL || 'http://localhost:8888';
-const allowedOrigins = new Set((process.env.ALLOWED_ORIGINS || 'https://carceralcollections.org,https://www.carceralcollections.org,http://localhost:8080').split(',').map((origin) => origin.trim()).filter(Boolean));
+const allowedOrigins = new Set([
+    ...(process.env.ALLOWED_ORIGINS || 'https://carceralcollections.org,https://www.carceralcollections.org').split(',').map((origin) => origin.trim()).filter(Boolean),
+    'http://localhost:8080',
+]);
 const jsonHeaders = { 'User-Agent': 'CheesboroughCarceralCollections/1.0 (local research search)' };
 const contentTypes = {
     '.css': 'text/css; charset=utf-8',
