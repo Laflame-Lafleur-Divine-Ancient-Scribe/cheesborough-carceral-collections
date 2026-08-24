@@ -1,6 +1,7 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const { execFile } = require('node:child_process');
 const { URL } = require('node:url');
 
 const rootDirectory = __dirname;
@@ -10,7 +11,10 @@ const allowedOrigins = new Set([
     ...(process.env.ALLOWED_ORIGINS || 'https://carceralcollections.org,https://www.carceralcollections.org').split(',').map((origin) => origin.trim()).filter(Boolean),
     'http://localhost:8080',
 ]);
-const jsonHeaders = { 'User-Agent': 'CheesboroughCarceralCollections/1.0 (local research search)' };
+const jsonHeaders = {
+    'User-Agent': 'Mozilla/5.0 (compatible; CheesboroughCarceralCollections/1.0; +https://carceralcollections.org/)',
+    Accept: 'application/rss+xml, application/xml, text/xml, text/html, application/json;q=0.9, */*;q=0.8',
+};
 const contentTypes = {
     '.css': 'text/css; charset=utf-8',
     '.html': 'text/html; charset=utf-8',
@@ -118,8 +122,8 @@ async function handleOnlineSearch(requestUrl, response) {
 const crimeBeatTerms = 'court OR trial OR arrest OR prison OR jail OR policing OR sheriff OR indictment OR sentencing OR investigation';
 const fbiOffice = (office, name) => ({
     domain: 'fbi.gov',
-    path: `/contact-us/field-offices/${office}/news/press-releases`,
-    search: `site:fbi.gov/contact-us/field-offices/${office}/news/press-releases`,
+    path: `/contact-us/field-offices/${office}/news`,
+    search: `site:fbi.gov/contact-us/field-offices/${office}/news`,
     name,
     syndication: 'official',
 });
@@ -248,11 +252,41 @@ function formatNewsStories(items, desk, limit = 9) {
     });
 }
 
+function formatNewsStoriesInOrder(items, desk, limit = 9) {
+    const seen = new Set();
+    return (items || []).filter((item) => {
+        const url = item?.url;
+        const key = String(url || '').replace(/[?#].*$/, '');
+        if (!url || seen.has(key) || classifySourceQuality(item).suppress || !isNewsSource(item) || !isAllowedDeskSource(item, desk)) return false;
+        seen.add(key);
+        return true;
+    }).slice(0, limit).map((item) => {
+        const source = sourceSyndicationFor(item, desk);
+        return {
+            title: item.title || item.url,
+            url: item.url,
+            content: shortNewsContent(item.content || item.description || '', source),
+            publisher: source?.name || newsPublisher(item),
+            publishedDate: item.publishedDate || null,
+            image: safeNewsImage(item.img_src || item.image || item.thumbnail || ''),
+            imageType: newsImageType(item),
+            sourcePriority: item.sourcePriority || 'General source',
+            desk: desk.label,
+        };
+    });
+}
+
 async function searchOfficialFbiReleases() {
     // Directly consume the FBI's published RSS 1.0 release feed. This is not
     // SearXNG discovery and keeps the title, direct link, release date, and
     // location language supplied by the Bureau intact.
-    const xml = await fetchText('https://www.fbi.gov/feeds/national-press-releases/rss.xml') || await fetchText('https://www.fbi.gov/feeds/national-press-releases/RSS');
+    const fbiFeedUrl = 'https://www.fbi.gov/feeds/national-press-releases/RSS';
+    let xml = await fetchText(fbiFeedUrl);
+    // Do not treat a Cloudflare challenge page as a valid listing. FBI's
+    // published RSS URL is available to curl, which the deployment includes.
+    if (!/<(?:rdf:RDF|rss)\b/i.test(xml) || !/<item\b/i.test(xml)) {
+        xml = await fetchTextWithCurl(fbiFeedUrl);
+    }
     return parseFeedItems(xml, 'FBI', 'Official FBI press release');
 }
 
@@ -329,7 +363,7 @@ async function selectNationalDeskStories(page) {
         }
     }));
     const fbiDesk = { label: 'United States', query: 'FBI releases', matchTerms: ['fbi', 'press release', 'arrest', 'court', 'investigation'], jurisdictionTerms: [], sources: [{ domain: 'fbi.gov', name: 'FBI Press Releases', syndication: 'official' }] };
-    const fbiStories = formatNewsStories(await searchOfficialFbiReleases(), fbiDesk, 10);
+    const fbiStories = formatNewsStoriesInOrder(await searchOfficialFbiReleases(), fbiDesk, 10);
     const seen = new Set();
     return [...fbiStories, ...localSelections.flat()].filter((story) => {
         if (seen.has(story.url)) return false;
@@ -353,9 +387,12 @@ function rankNewsStories(items, desk) {
         const quality = classifySourceQuality(item);
         const key = `${title.replace(/[^a-z0-9]+/g, ' ').trim()}|${url.replace(/[?#].*$/, '')}`;
         const hasExcludedJurisdiction = (desk.excludedTerms || []).some((term) => combined.includes(term));
-        if (quality.suppress || !isNewsSource(item) || !isAllowedDeskSource(item, desk) || hasExcludedJurisdiction || (desk.jurisdictionTerms && !jurisdictionMatches.length) || (!matches.length && !reportingMatches.length) || seen.has(key)) return null;
+        const allowedSource = sourceSyndicationFor(item, desk);
+        const officialSource = allowedSource?.syndication === 'official';
+        const hasDeskSignal = matches.length || reportingMatches.length || officialSource;
+        if (quality.suppress || !isNewsSource(item) || (!allowedSource && !isAllowedDeskSource(item, desk)) || hasExcludedJurisdiction || (desk.jurisdictionTerms && !jurisdictionMatches.length && !officialSource) || !hasDeskSignal || seen.has(key)) return null;
         seen.add(key);
-        return { ...item, sourcePriority: quality.label, relevanceScore: quality.score + (matches.length * 25) + (jurisdictionMatches.length * 42) + (reportingMatches.length * 16) };
+        return { ...item, sourcePriority: quality.label, relevanceScore: quality.score + (officialSource ? 80 : 0) + (matches.length * 25) + (jurisdictionMatches.length * 42) + (reportingMatches.length * 16) };
     }).filter(Boolean).sort((first, second) => second.relevanceScore - first.relevanceScore);
 }
 
@@ -399,6 +436,7 @@ function newsPublisher(item) {
 
 function shortNewsContent(value, source) {
     const clean = String(value || '').replace(/\s+/g, ' ').trim();
+    if (source?.domain === 'fbi.gov') return `Read the official release at ${source.name}.`;
     if (!clean) return source ? `Read the report at ${source.name}.` : 'Read the original report at the publisher.';
     if (source?.syndication === 'link-only') return `Read the report at ${source.name}.`;
     return clean.length > 220 ? `${clean.slice(0, 217).trim()}...` : clean;
@@ -450,6 +488,20 @@ async function fetchText(url) {
     }
 }
 
+function fetchTextWithCurl(url) {
+    return new Promise((resolve) => {
+        let parsed;
+        try { parsed = new URL(url); } catch { resolve(''); return; }
+        if (parsed.protocol !== 'https:' || parsed.hostname !== 'www.fbi.gov') {
+            resolve('');
+            return;
+        }
+        execFile('curl', ['-L', '-sS', '--max-time', '12', parsed.href], { timeout: 15000, maxBuffer: 2 * 1024 * 1024 }, (error, stdout) => {
+            resolve(error ? '' : String(stdout || ''));
+        });
+    });
+}
+
 function decodeXml(value) {
     return String(value || '')
         .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
@@ -465,10 +517,12 @@ function decodeXml(value) {
 
 function parseRssItems(xml, engine, profile = 'General Web') {
     return [...String(xml || '').matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)].map((match) => {
+        const openingTag = match[0].match(/^<item\b[^>]*>/i)?.[0] || '';
         const item = match[1];
         const read = (tag) => decodeXml(item.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))?.[1]);
         const title = read('title');
-        const url = read('link');
+        const rdfAbout = decodeXml(openingTag.match(/\brdf:about\s*=\s*["']([^"']+)["']/i)?.[1]);
+        const url = read('link') || read('guid') || rdfAbout;
         if (!title || !url || !/^https?:\/\//i.test(url)) return null;
         return {
             title,
