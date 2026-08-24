@@ -73,13 +73,39 @@
     const escapeHtml=value=>String(value||'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
     const safeUrl=value=>{try{const parsed=new URL(value);return /^https?:$/.test(parsed.protocol)?parsed.href:''}catch{return''}};
     const resultUrl=item=>safeUrl(item.url||item.link||item.href||'');
+    const mugshotPath='01_Photos/Illustrations/';
+    const maleMugshots=[
+      ...Array.from({length:8},(_,index)=>`${mugshotPath}mugshot-black-man-${String(index+1).padStart(2,'0')}.png`),
+      ...Array.from({length:15},(_,index)=>`${mugshotPath}mugshot-white-man-${String(index+1).padStart(2,'0')}.png`)
+    ];
+    const femaleMugshots=[
+      ...Array.from({length:5},(_,index)=>`${mugshotPath}mugshot-black-woman-${String(index+1).padStart(2,'0')}.png`),
+      ...Array.from({length:12},(_,index)=>`${mugshotPath}mugshot-white-woman-${String(index+1).padStart(2,'0')}.png`)
+    ];
+    let usedMugshots=new Set();
+    const storyText=item=>`${item.title||''} ${item.snippet||item.content||item.description||''}`.toLowerCase();
+    function mugshotForStory(item,href){
+      const text=storyText(item);
+      const isFemale=/\b(?:woman|women|female)\b/.test(text);
+      const isMale=/\b(?:man|men|male)\b/.test(text);
+      const pool=isFemale&&!isMale?femaleMugshots:isMale&&!isFemale?maleMugshots:[];
+      if(!pool.length)return '';
+      const start=[...href].reduce((total,character)=>total+character.charCodeAt(0),0)%pool.length;
+      for(let offset=0;offset<pool.length;offset++){
+        const portrait=pool[(start+offset)%pool.length];
+        if(!usedMugshots.has(portrait)){usedMugshots.add(portrait);return portrait;}
+      }
+      return '';
+    }
     const publisher=item=>{
       const value=String(item.publisher||item.source||item.engine||new URL(resultUrl(item)).hostname.replace(/^www\./,''));
       return escapeHtml(/^(?:crossref|openalex|doi|scholarly|academic)/i.test(value)?'Read More':value);
     };
     function storyArt(item,lead,href,storyIndex){
       const kind=['court','prison','police','records','investigation'].includes(item.imageType)?item.imageType:'court';
+      const mugshot=mugshotForStory(item,href);
       const image=safeUrl(item.image||item.thumbnail||item.img_src||'');
+      if(mugshot)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${mugshot}" alt="" loading="${lead?'eager':'lazy'}"></a>`;
       if(image)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${image}" alt="" loading="${lead?'eager':'lazy'}" referrerpolicy="no-referrer"></a>`;
       const variant=storyIndex%12;
       return `<a class="story-art story-sketch ${kind} variant-${variant}" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this ${kind} report"></a>`;
@@ -99,6 +125,7 @@
     function renderStories(){
       const valid=stories.filter(item=>resultUrl(item));
       if(!valid.length){showState('No current selection','No source-verified reports are available for this desk at the moment. Choose another desk or return shortly.');return;}
+      usedMugshots=new Set();
       const lead=valid[0],deskItems=valid.slice(1,5),gridItems=valid.slice(5);
       content.innerHTML=`<div class="news-layout">${storyMarkup(lead,true,0)}<div class="desk-list">${deskItems.map((item,index)=>storyMarkup(item,false,index+1)).join('')}</div></div>${gridItems.length?`<div class="news-grid">${gridItems.map((item,index)=>storyMarkup(item,false,index+5)).join('')}</div>`:''}`;
     }
