@@ -1,0 +1,19 @@
+/* Shared safeguards for the desktop publication pages.  This file intentionally
+   protects layout and interaction without replacing individual page designs. */
+:root { color-scheme: light; }
+*, *::before, *::after { box-sizing: border-box; }
+html { min-width: 320px; overflow-x: clip; }
+body { min-width: 0; overflow-x: clip; }
+main, header, footer, section, article, aside, nav, form, fieldset, figure { min-width: 0; }
+img, picture, svg, video, canvas, iframe { display: block; height: auto; max-width: 100%; }
+table { border-collapse: collapse; max-width: 100%; }
+pre, code, kbd, samp { max-width: 100%; overflow-wrap: anywhere; }
+a[href] { overflow-wrap: anywhere; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid #c29b53;
+  outline-offset: 3px;
+}
+@media (min-width: 1024px) {
+  .topbar, .section-rail { max-width: 100%; }
+  .table-wrap, .table-scroll, .overflow-scroll { max-width: 100%; overflow-x: auto; }
+}

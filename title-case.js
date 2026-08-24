@@ -1,4 +1,11 @@
 (() => {
+  if (!document.querySelector('link[href="desktop-integrity.css"]')) {
+    const desktopIntegrity = document.createElement("link");
+    desktopIntegrity.rel = "stylesheet";
+    desktopIntegrity.href = "desktop-integrity.css";
+    document.head.append(desktopIntegrity);
+  }
+
   const rotatingQuotes = [
     ["Justice is the constant and perpetual will to render to each his due.", "Justinian"],
     ["It is better that ten guilty persons escape than that one innocent suffer.", "William Blackstone"],

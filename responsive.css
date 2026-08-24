@@ -1,4 +1,6 @@
-/* Shared responsive behavior for authored collection pages. */`n.sr-only{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;white-space:nowrap}`n.verification-caption{color:#d8e2ec;font-size:.85rem}
+/* Shared responsive behavior for authored collection pages. */
+.sr-only{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;white-space:nowrap}
+.verification-caption{color:#d8e2ec;font-size:.85rem}
 html{overflow-x:hidden}
 body{min-width:0;overflow-x:hidden}
 img,svg,video,canvas{max-width:100%;height:auto}
