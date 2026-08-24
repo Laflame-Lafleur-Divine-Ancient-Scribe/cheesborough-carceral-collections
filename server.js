@@ -201,6 +201,12 @@ async function handleNews(requestUrl, response) {
     if (stories.length === 0) {
         stories = formatNewsStories(await getKeylessFallbackResults(desk.query), desk);
     }
+    // Use the proven live-search route as the final resilience path. It has the
+    // same relevance and source-quality protections as the site's Search page.
+    if (stories.length === 0) {
+        const localSearch = await fetchJson(`http://127.0.0.1:${port}/api/online-search?q=${encodeURIComponent(desk.query)}`);
+        stories = formatNewsStories(Array.isArray(localSearch?.results) ? localSearch.results : [], desk);
+    }
     const payload = { desk: deskKey, label: desk.label, page, count: stories.length, stories, results: stories };
     newsCache.set(cacheKey, { createdAt: Date.now(), payload });
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
