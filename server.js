@@ -143,7 +143,7 @@ const newsDesks = {
         ],
     },
     europe: { label: 'Europe', query: `Europe ${crimeBeatTerms}`, matchTerms: ['europe', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: europeLocationTerms, excludedTerms: mexicoLocationTerms, sources: [{ domain: 'europol.europa.eu', listingUrl: 'https://www.europol.europa.eu/media-press/newsroom', articlePathPattern: /\/media-press\/newsroom\/(?:news|press-release)\//i, name: 'Europol', syndication: 'official' }, { domain: 'eurojust.europa.eu', listingUrl: 'https://www.eurojust.europa.eu/media-and-events/press-releases-and-news', articlePathPattern: /\/news\//i, name: 'Eurojust', syndication: 'official' }] },
-    mexico: { label: 'Mexico', query: `Mexico ${crimeBeatTerms}`, matchTerms: ['mexico', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: mexicoLocationTerms, excludedTerms: europeLocationTerms },
+    mexico: { label: 'Mexico', query: `Mexico ${crimeBeatTerms}`, matchTerms: ['mexico', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: mexicoLocationTerms, excludedTerms: europeLocationTerms, sources: [{ domain: 'fgr.org.mx', listingUrl: 'https://www.fgr.org.mx/es/FGR/Prensa', articlePathPattern: /\/es\/FGR\/Prensa\/_rid\/61\/_mod\/story/i, parser: 'fgr', name: 'Fiscalía General de la República', syndication: 'official' }] },
     federal: {
         label: 'Federal & Intelligence Desk',
         query: `FBI CIA Mossad ${crimeBeatTerms}`,
@@ -337,6 +337,11 @@ async function fetchOfficialSourceListings(desk) {
             return parseFbiListingPage(html, source);
         }
         if (source.listingUrl && source.articlePathPattern) {
+            if (source.parser === 'fgr') {
+                let html = await fetchText(source.listingUrl);
+                if (!/titBoletin/i.test(html)) html = await fetchOfficialTextWithCurl(source.listingUrl, source.domain);
+                return parseFgrListingPage(html, source);
+            }
             if (source.apiUrl) {
                 let payload = await fetchJson(source.apiUrl);
                 // Michigan's public Sitecore endpoint returns an HTML block to
@@ -352,6 +357,25 @@ async function fetchOfficialSourceListings(desk) {
         return [];
     }));
     return sourceItems.flat();
+}
+
+function parseFgrListingPage(html, source) {
+    const page = String(html || '');
+    if (!page) return [];
+    const items = [];
+    const seen = new Set();
+    const pattern = /<a[^>]+href=["']([^"']*\/es\/FGR\/Prensa\/_rid\/61\/_mod\/story[^"']*)["'][^>]*>[\s\S]*?<span[^>]*class=["'][^"']*titBoletin[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi;
+    let match;
+    while ((match = pattern.exec(page)) && items.length < 25) {
+        let url;
+        try { url = new URL(decodeXml(match[1]), source.listingUrl).href; } catch { continue; }
+        const title = decodeXml(match[2]).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+        if (!title || seen.has(url)) continue;
+        seen.add(url);
+        const nearby = page.slice(Math.max(0, match.index - 450), Math.min(page.length, pattern.lastIndex + 500));
+        items.push({ title, url, content: `${source.name} official press release.`, engine: source.name, publishedDate: extractSpanishDateText(nearby) });
+    }
+    return items;
 }
 
 function parseOfficialJsonListing(payload, source) {
@@ -427,6 +451,10 @@ function extractDateText(value) {
     return String(value || '').match(/\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\b/)?.[0] || null;
 }
 
+function extractSpanishDateText(value) {
+    return String(value || '').match(/\b\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+de\s+\d{4}\b/i)?.[0] || null;
+}
+
 async function selectNationalDeskStories(page) {
     const stateKeys = ['florida', 'georgia', 'louisiana', 'newyork', 'california', 'michigan', 'ohio', 'colorado'];
     const localSelections = await Promise.all(stateKeys.map(async (stateKey) => {
@@ -484,7 +512,7 @@ function rankNewsStories(items, desk) {
         const officialSource = allowedSource?.syndication === 'official';
         const stateSpecificOfficial = officialSource && allowedSource?.domain !== 'fbi.gov';
         const hasDeskSignal = matches.length || reportingMatches.length || officialSource;
-        if (quality.suppress || !isNewsSource(item) || (!allowedSource && !isAllowedDeskSource(item, desk)) || hasExcludedJurisdiction || (desk.jurisdictionTerms && !jurisdictionMatches.length && !stateSpecificOfficial) || (desk.geographyTerms && !geographyMatches.length) || !hasDeskSignal || seen.has(key)) return null;
+        if (quality.suppress || !isNewsSource(item) || (!allowedSource && !isAllowedDeskSource(item, desk)) || hasExcludedJurisdiction || (desk.jurisdictionTerms && !jurisdictionMatches.length && !stateSpecificOfficial) || (desk.geographyTerms && !geographyMatches.length && !officialSource) || !hasDeskSignal || seen.has(key)) return null;
         seen.add(key);
         return { ...item, sourcePriority: quality.label, relevanceScore: quality.score + (officialSource ? 80 : 0) + (matches.length * 25) + (jurisdictionMatches.length * 42) + (geographyMatches.length * 35) + (reportingMatches.length * 16) };
     }).filter(Boolean).sort((first, second) => second.relevanceScore - first.relevanceScore);
@@ -609,6 +637,22 @@ function fetchOfficialJsonWithCurl(url, expectedDomain) {
         execFile('curl', ['-L', '-sS', '--max-time', '12', '-A', 'Mozilla/5.0', parsed.href], { timeout: 15000, maxBuffer: 2 * 1024 * 1024 }, (error, stdout) => {
             if (error) { resolve(null); return; }
             try { resolve(JSON.parse(String(stdout || ''))); } catch { resolve(null); }
+        });
+    });
+}
+
+function fetchOfficialTextWithCurl(url, expectedDomain) {
+    return new Promise((resolve) => {
+        let parsed;
+        try { parsed = new URL(url); } catch { resolve(''); return; }
+        const expected = String(expectedDomain || '').toLowerCase().replace(/^www\./, '');
+        const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+        if (parsed.protocol !== 'https:' || !expected || (host !== expected && !host.endsWith(`.${expected}`))) {
+            resolve('');
+            return;
+        }
+        execFile('curl', ['-L', '-sS', '--max-time', '12', '-A', 'Mozilla/5.0', parsed.href], { encoding: 'buffer', timeout: 15000, maxBuffer: 3 * 1024 * 1024 }, (error, stdout) => {
+            resolve(error ? '' : Buffer.from(stdout || '').toString('latin1'));
         });
     });
 }
