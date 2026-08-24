@@ -72,7 +72,10 @@
     const escapeHtml=value=>String(value||'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
     const safeUrl=value=>{try{const parsed=new URL(value);return /^https?:$/.test(parsed.protocol)?parsed.href:''}catch{return''}};
     const resultUrl=item=>safeUrl(item.url||item.link||item.href||'');
-    const publisher=item=>escapeHtml(item.publisher||item.source||item.engine||new URL(resultUrl(item)).hostname.replace(/^www\./,''));
+    const publisher=item=>{
+      const value=String(item.publisher||item.source||item.engine||new URL(resultUrl(item)).hostname.replace(/^www\./,''));
+      return escapeHtml(/^(?:crossref|openalex|doi|scholarly|academic)/i.test(value)?'Read More':value);
+    };
     function storyArt(item,lead,href){
       const kind=['court','prison','police','records','investigation'].includes(item.imageType)?item.imageType:'court';
       const image=safeUrl(item.image||item.thumbnail||item.img_src||'');
