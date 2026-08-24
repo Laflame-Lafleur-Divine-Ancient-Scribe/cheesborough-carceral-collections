@@ -240,7 +240,7 @@ async function handleNews(requestUrl, response) {
 }
 
 function formatNewsStories(items, desk, limit = 9) {
-    return rankNewsStories(items, desk).slice(0, limit).map((item) => {
+    return limitFbiShare(rankNewsStories(items, desk), limit).map((item) => {
         const source = sourceSyndicationFor(item, desk);
         return {
             title: item.title || item.url,
@@ -258,7 +258,7 @@ function formatNewsStories(items, desk, limit = 9) {
 
 function formatNewsStoriesInOrder(items, desk, limit = 9) {
     const seen = new Set();
-    return (items || []).filter((item) => {
+    return limitFbiShare((items || []).filter((item) => {
         const url = item?.url;
         const key = String(url || '').replace(/[?#].*$/, '');
         const combined = `${item.title || ''} ${item.url || ''} ${item.content || ''}`.toLowerCase();
@@ -267,7 +267,7 @@ function formatNewsStoriesInOrder(items, desk, limit = 9) {
         if (!url || seen.has(key) || classifySourceQuality(item).suppress || !isNewsSource(item) || !isAllowedDeskSource(item, desk) || (desk.geographyTerms?.length && !geographyMatches) || excluded) return false;
         seen.add(key);
         return true;
-    }).slice(0, limit).map((item) => {
+    }), limit).map((item) => {
         const source = sourceSyndicationFor(item, desk);
         return {
             title: item.title || item.url,
@@ -281,6 +281,30 @@ function formatNewsStoriesInOrder(items, desk, limit = 9) {
             desk: desk.label,
         };
     });
+}
+
+function isFbiNewsItem(item) {
+    try {
+        return new URL(item?.url || '').hostname.toLowerCase().endsWith('fbi.gov');
+    } catch {
+        return /^fbi\b/i.test(String(item?.publisher || item?.engine || ''));
+    }
+}
+
+function limitFbiShare(items, limit) {
+    // FBI releases are a valuable primary source, but no desk should become an
+    // FBI-only ticker. Reserve at least 40% of each desk for its other vetted
+    // local, regional, or official publishers; if they are unavailable, show
+    // fewer cards instead of filling the desk with FBI duplicates.
+    const fbiLimit = Math.floor(limit * 0.6);
+    const fbi = items.filter(isFbiNewsItem);
+    const nonFbi = items.filter((item) => !isFbiNewsItem(item));
+    const reservedNonFbi = Math.ceil(limit * 0.4);
+    return [
+        ...nonFbi.slice(0, reservedNonFbi),
+        ...fbi.slice(0, fbiLimit),
+        ...nonFbi.slice(reservedNonFbi),
+    ].slice(0, limit);
 }
 
 async function searchOfficialFbiReleases() {
