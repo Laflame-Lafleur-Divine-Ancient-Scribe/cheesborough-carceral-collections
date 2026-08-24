@@ -115,20 +115,47 @@ async function handleOnlineSearch(requestUrl, response) {
     response.end(JSON.stringify({ query, count: results.length, profiles: profiles.map(profile => profile.label), results }));
 }
 
+const crimeBeatTerms = 'court OR trial OR arrest OR prison OR jail OR policing OR sheriff OR indictment OR sentencing OR investigation';
+const fbiOffice = (office, name) => ({
+    domain: 'fbi.gov',
+    path: `/contact-us/field-offices/${office}/news`,
+    search: `site:fbi.gov/contact-us/field-offices/${office}/news`,
+    name,
+    syndication: 'official',
+});
+
 const newsDesks = {
-    national: { label: 'United States', query: 'United States court policing prison investigation', matchTerms: ['united states', 'court', 'justice', 'investigation'] },
-    europe: { label: 'Europe', query: 'Europe court policing prison investigation', matchTerms: ['europe', 'court', 'justice', 'investigation'] },
-    mexico: { label: 'Mexico', query: 'Mexico court policing prison investigation', matchTerms: ['mexico', 'court', 'justice', 'investigation'] },
-    federal: { label: 'Federal & Intelligence Desk', query: 'FBI CIA Mossad investigation court public records', matchTerms: ['fbi', 'cia', 'mossad', 'federal'] },
-    florida: { label: 'Florida', query: 'Florida court policing jail prison investigation', matchTerms: ['florida', 'court', 'justice', 'investigation'], jurisdictionTerms: ['florida', 'miami', 'tampa', 'orlando', 'jacksonville', 'tallahassee', 'fort lauderdale', 'st petersburg', 'broward', 'miami-dade', 'duval', 'pinellas'], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }, { domain: 'flcourts.gov', name: 'Florida Courts', syndication: 'official' }, { domain: 'wlrn.org', name: 'WLRN', syndication: 'link-only' }, { domain: 'local10.com', name: 'Local 10', syndication: 'link-only' }] },
-    georgia: { label: 'Georgia', query: 'Georgia court policing jail prison investigation', matchTerms: ['georgia', 'court', 'justice', 'investigation'], jurisdictionTerms: ['georgia', 'atlanta', 'savannah', 'macon', 'augusta', 'columbus', 'athens', 'fulton', 'dekalb', 'cobb', 'gwinnett', 'chatham'], excludedTerms: ['tbilisi', 'georgian parliament', 'south ossetia', 'republic of georgia'], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }, { domain: 'fox5atlanta.com', name: 'FOX 5 Atlanta', syndication: 'link-only' }, { domain: 'ajc.com', name: 'Atlanta Journal-Constitution', syndication: 'link-only' }, { domain: 'walb.com', name: 'WALB', syndication: 'link-only' }, { domain: '11alive.com', name: '11Alive', syndication: 'link-only' }] },
-    louisiana: { label: 'Louisiana', query: 'Louisiana court policing jail prison investigation', matchTerms: ['louisiana', 'court', 'justice', 'investigation'], jurisdictionTerms: ['louisiana', 'new orleans', 'baton rouge', 'shreveport', 'lafayette', 'lake charles', 'jefferson parish', 'orleans parish', 'east baton rouge'], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }, { domain: 'nola.com', name: 'NOLA.com', syndication: 'link-only' }, { domain: 'wwltv.com', name: 'WWL Louisiana', syndication: 'link-only' }, { domain: 'theadvocate.com', name: 'The Advocate', syndication: 'link-only' }] },
-    newyork: { label: 'New York', query: 'New York court policing jail prison investigation', matchTerms: ['new york', 'court', 'justice', 'investigation'], jurisdictionTerms: ['new york', 'nyc', 'manhattan', 'brooklyn', 'queens', 'bronx', 'staten island', 'buffalo', 'rochester', 'albany', 'syracuse', 'westchester'], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }, { domain: 'gothamist.com', name: 'Gothamist', syndication: 'link-only' }, { domain: 'nytimes.com', name: 'The New York Times', syndication: 'link-only' }, { domain: 'nbcnewyork.com', name: 'NBC New York', syndication: 'link-only' }] },
-    california: { label: 'California', query: 'California court policing jail prison investigation', matchTerms: ['california', 'court', 'justice', 'investigation'], jurisdictionTerms: ['california', 'los angeles', 'san francisco', 'san diego', 'sacramento', 'oakland', 'fresno', 'riverside', 'san jose', 'orange county'], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }, { domain: 'latimes.com', name: 'Los Angeles Times', syndication: 'link-only' }, { domain: 'sfchronicle.com', name: 'San Francisco Chronicle', syndication: 'link-only' }, { domain: 'nbclosangeles.com', name: 'NBC Los Angeles', syndication: 'link-only' }] },
-    michigan: { label: 'Michigan', query: 'Michigan court policing jail prison investigation', matchTerms: ['michigan', 'court', 'justice', 'investigation'], jurisdictionTerms: ['michigan', 'detroit', 'grand rapids', 'flint', 'lansing', 'ann arbor', 'kalamazoo', 'wayne county', 'oakland county'], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }, { domain: 'freep.com', name: 'Detroit Free Press', syndication: 'link-only' }, { domain: 'detroitnews.com', name: 'The Detroit News', syndication: 'link-only' }, { domain: 'michiganpublic.org', name: 'Michigan Public', syndication: 'link-only' }] },
-    ohio: { label: 'Ohio', query: 'Ohio court policing jail prison investigation', matchTerms: ['ohio', 'court', 'justice', 'investigation'], jurisdictionTerms: ['ohio', 'columbus', 'cleveland', 'cincinnati', 'toledo', 'akron', 'dayton', 'hamilton county', 'cuyahoga', 'franklin county'], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }, { domain: 'cleveland.com', name: 'Cleveland.com', syndication: 'link-only' }, { domain: 'dispatch.com', name: 'The Columbus Dispatch', syndication: 'link-only' }, { domain: 'ideastream.org', name: 'Ideastream Public Media', syndication: 'link-only' }] },
-    colorado: { label: 'Colorado', query: 'Colorado court policing jail prison investigation', matchTerms: ['colorado', 'court', 'justice', 'investigation'], jurisdictionTerms: ['colorado', 'denver', 'aurora', 'colorado springs', 'boulder', 'fort collins', 'pueblo', 'jefferson county', 'el paso county'], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }, { domain: 'coloradosun.com', name: 'The Colorado Sun', syndication: 'link-only' }, { domain: 'denverpost.com', name: 'The Denver Post', syndication: 'link-only' }, { domain: 'cpr.org', name: 'Colorado Public Radio', syndication: 'link-only' }] },
-    world: { label: 'World', query: 'international court policing prison investigation', matchTerms: ['court', 'justice', 'investigation'] },
+    national: {
+        label: 'United States',
+        query: `United States ${crimeBeatTerms}`,
+        matchTerms: ['united states', 'court', 'justice', 'investigation', 'arrest', 'trial'],
+        sources: [
+            { domain: 'fbi.gov', path: '/news/press-releases', search: 'site:fbi.gov/news/press-releases', name: 'FBI Press Releases', syndication: 'official' },
+            { domain: 'justice.gov', path: '/opa/pr', search: 'site:justice.gov/opa/pr', name: 'U.S. Department of Justice', syndication: 'official' },
+        ],
+    },
+    europe: { label: 'Europe', query: `Europe ${crimeBeatTerms}`, matchTerms: ['europe', 'court', 'justice', 'investigation', 'arrest'] },
+    mexico: { label: 'Mexico', query: `Mexico ${crimeBeatTerms}`, matchTerms: ['mexico', 'court', 'justice', 'investigation', 'arrest'] },
+    federal: {
+        label: 'Federal & Intelligence Desk',
+        query: `FBI CIA Mossad ${crimeBeatTerms}`,
+        matchTerms: ['fbi', 'cia', 'mossad', 'federal', 'investigation'],
+        sources: [
+            { domain: 'fbi.gov', path: '/news/press-releases', search: 'site:fbi.gov/news/press-releases', name: 'FBI Press Releases', syndication: 'official' },
+            { domain: 'justice.gov', path: '/opa/pr', search: 'site:justice.gov/opa/pr', name: 'U.S. Department of Justice', syndication: 'official' },
+            { domain: 'cia.gov', search: 'site:cia.gov/newsroom', name: 'CIA Newsroom', syndication: 'official' },
+            { domain: 'gov.il', search: 'site:gov.il/en/departments/mossad', name: 'Mossad / Israel Gov', syndication: 'official' },
+        ],
+    },
+    florida: { label: 'Florida', query: `Florida ${crimeBeatTerms}`, matchTerms: ['florida', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['florida', 'miami', 'tampa', 'orlando', 'jacksonville', 'tallahassee', 'fort lauderdale', 'st petersburg', 'broward', 'miami-dade', 'duval', 'pinellas'], sources: [fbiOffice('miami', 'FBI Miami'), fbiOffice('tampa', 'FBI Tampa'), fbiOffice('jacksonville', 'FBI Jacksonville'), { domain: 'flcourts.gov', name: 'Florida Courts', syndication: 'official' }, { domain: 'wlrn.org', name: 'WLRN', syndication: 'link-only' }, { domain: 'local10.com', name: 'Local 10', syndication: 'link-only' }] },
+    georgia: { label: 'Georgia', query: `Georgia ${crimeBeatTerms}`, matchTerms: ['georgia', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['georgia', 'atlanta', 'savannah', 'macon', 'augusta', 'columbus', 'athens', 'fulton', 'dekalb', 'cobb', 'gwinnett', 'chatham'], excludedTerms: ['arizona', 'tbilisi', 'georgian parliament', 'south ossetia', 'republic of georgia'], sources: [fbiOffice('atlanta', 'FBI Atlanta'), { domain: 'fox5atlanta.com', name: 'FOX 5 Atlanta', syndication: 'link-only' }, { domain: 'ajc.com', name: 'Atlanta Journal-Constitution', syndication: 'link-only' }, { domain: 'walb.com', name: 'WALB', syndication: 'link-only' }, { domain: '11alive.com', name: '11Alive', syndication: 'link-only' }] },
+    louisiana: { label: 'Louisiana', query: `Louisiana ${crimeBeatTerms}`, matchTerms: ['louisiana', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['louisiana', 'new orleans', 'baton rouge', 'shreveport', 'lafayette', 'lake charles', 'jefferson parish', 'orleans parish', 'east baton rouge'], sources: [fbiOffice('neworleans', 'FBI New Orleans'), { domain: 'nola.com', name: 'NOLA.com', syndication: 'link-only' }, { domain: 'wwltv.com', name: 'WWL Louisiana', syndication: 'link-only' }, { domain: 'theadvocate.com', name: 'The Advocate', syndication: 'link-only' }] },
+    newyork: { label: 'New York', query: `New York ${crimeBeatTerms}`, matchTerms: ['new york', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['new york', 'nyc', 'manhattan', 'brooklyn', 'queens', 'bronx', 'staten island', 'buffalo', 'rochester', 'albany', 'syracuse', 'westchester'], sources: [fbiOffice('newyork', 'FBI New York'), fbiOffice('albany', 'FBI Albany'), fbiOffice('buffalo', 'FBI Buffalo'), { domain: 'gothamist.com', name: 'Gothamist', syndication: 'link-only' }, { domain: 'nytimes.com', name: 'The New York Times', syndication: 'link-only' }, { domain: 'nbcnewyork.com', name: 'NBC New York', syndication: 'link-only' }] },
+    california: { label: 'California', query: `California ${crimeBeatTerms}`, matchTerms: ['california', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['california', 'los angeles', 'san francisco', 'san diego', 'sacramento', 'oakland', 'fresno', 'riverside', 'san jose', 'orange county'], sources: [fbiOffice('losangeles', 'FBI Los Angeles'), fbiOffice('sanfrancisco', 'FBI San Francisco'), fbiOffice('sandiego', 'FBI San Diego'), fbiOffice('sacramento', 'FBI Sacramento'), { domain: 'latimes.com', name: 'Los Angeles Times', syndication: 'link-only' }, { domain: 'sfchronicle.com', name: 'San Francisco Chronicle', syndication: 'link-only' }, { domain: 'nbclosangeles.com', name: 'NBC Los Angeles', syndication: 'link-only' }] },
+    michigan: { label: 'Michigan', query: `Michigan ${crimeBeatTerms}`, matchTerms: ['michigan', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['michigan', 'detroit', 'grand rapids', 'flint', 'lansing', 'ann arbor', 'kalamazoo', 'wayne county', 'oakland county'], sources: [fbiOffice('detroit', 'FBI Detroit'), { domain: 'freep.com', name: 'Detroit Free Press', syndication: 'link-only' }, { domain: 'detroitnews.com', name: 'The Detroit News', syndication: 'link-only' }, { domain: 'michiganpublic.org', name: 'Michigan Public', syndication: 'link-only' }] },
+    ohio: { label: 'Ohio', query: `Ohio ${crimeBeatTerms}`, matchTerms: ['ohio', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['ohio', 'columbus', 'cleveland', 'cincinnati', 'toledo', 'akron', 'dayton', 'hamilton county', 'cuyahoga', 'franklin county'], sources: [fbiOffice('cincinnati', 'FBI Cincinnati'), fbiOffice('cleveland', 'FBI Cleveland'), { domain: 'cleveland.com', name: 'Cleveland.com', syndication: 'link-only' }, { domain: 'dispatch.com', name: 'The Columbus Dispatch', syndication: 'link-only' }, { domain: 'ideastream.org', name: 'Ideastream Public Media', syndication: 'link-only' }] },
+    colorado: { label: 'Colorado', query: `Colorado ${crimeBeatTerms}`, matchTerms: ['colorado', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['colorado', 'denver', 'aurora', 'colorado springs', 'boulder', 'fort collins', 'pueblo', 'jefferson county', 'el paso county'], sources: [fbiOffice('denver', 'FBI Denver'), { domain: 'coloradosun.com', name: 'The Colorado Sun', syndication: 'link-only' }, { domain: 'denverpost.com', name: 'The Denver Post', syndication: 'link-only' }, { domain: 'cpr.org', name: 'Colorado Public Radio', syndication: 'link-only' }] },
+    world: { label: 'World', query: `international ${crimeBeatTerms}`, matchTerms: ['court', 'justice', 'investigation', 'arrest'] },
 };
 
 const newsDeskAliases = {
@@ -163,7 +190,7 @@ async function handleNews(requestUrl, response) {
     let stories = [];
     // State desks use only their configured publisher allow-list. SearXNG is
     // used as a URL discovery layer, never as a broad web feed or page scraper.
-    const sourceDomains = (desk.sources || []).map((source) => `site:${source.domain}`).join(' OR ');
+    const sourceDomains = sourceSearchExpression(desk);
     const searchPages = [page, page + 1].map(async (searchPage) => {
         const params = new URLSearchParams({
             q: sourceDomains ? `(${sourceDomains}) ${desk.query}` : `${desk.query} latest`,
@@ -204,50 +231,35 @@ async function handleNews(requestUrl, response) {
 }
 
 function formatNewsStories(items, desk, limit = 9) {
-    return rankNewsStories(items, desk).slice(0, limit).map((item) => ({
-        title: sourceSyndicationFor(item, desk)?.syndication === 'link-only' ? `Open the latest ${desk.label} courts and public-safety report` : (item.title || item.url),
-        url: item.url,
-        content: sourceSyndicationFor(item, desk)?.syndication === 'link-only' ? `Direct link to the original report at ${sourceSyndicationFor(item, desk).name}.` : (item.content || ''),
-        publisher: sourceSyndicationFor(item, desk)?.name || newsPublisher(item),
-        publishedDate: item.publishedDate || null,
-        image: safeNewsImage(item.img_src || item.image || item.thumbnail || ''),
-        imageType: newsImageType(item),
-        sourcePriority: item.sourcePriority || 'General source',
-        desk: desk.label,
-    }));
+    return rankNewsStories(items, desk).slice(0, limit).map((item) => {
+        const source = sourceSyndicationFor(item, desk);
+        return {
+            title: item.title || item.url,
+            url: item.url,
+            content: shortNewsContent(item.content || item.description || '', source),
+            publisher: source?.name || newsPublisher(item),
+            publishedDate: item.publishedDate || null,
+            image: safeNewsImage(item.img_src || item.image || item.thumbnail || ''),
+            imageType: newsImageType(item),
+            sourcePriority: item.sourcePriority || 'General source',
+            desk: desk.label,
+        };
+    });
 }
 
-async function searchOfficialFbiReleases(page) {
-    const pages = [page, page + 1].map(async (searchPage) => {
-        const params = new URLSearchParams({
-            q: 'site:fbi.gov press release arrest court investigation',
-            format: 'json',
-            pageno: String(searchPage),
-            categories: 'general',
-            language: 'en-US',
-            safesearch: '1',
-        });
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 15000);
-        try {
-            const result = await fetch(`${searxngUrl}/search?${params}`, { signal: controller.signal });
-            if (!result.ok) return [];
-            const payload = await result.json();
-            return Array.isArray(payload.results) ? payload.results : [];
-        } catch {
-            return [];
-        } finally {
-            clearTimeout(timeout);
-        }
-    });
-    return (await Promise.all(pages)).flat();
+async function searchOfficialFbiReleases() {
+    // Directly consume the FBI's published RSS 1.0 release feed. This is not
+    // SearXNG discovery and keeps the title, direct link, release date, and
+    // location language supplied by the Bureau intact.
+    const xml = await fetchText('https://www.fbi.gov/feeds/national-press-releases/RSS');
+    return parseRssItems(xml, 'FBI', 'Official FBI press release');
 }
 
 async function selectNationalDeskStories(page) {
     const stateKeys = ['florida', 'georgia', 'louisiana', 'newyork', 'california', 'michigan', 'ohio', 'colorado'];
     const localSelections = await Promise.all(stateKeys.map(async (stateKey) => {
         const desk = newsDesks[stateKey];
-        const sourceDomains = desk.sources.map((source) => `site:${source.domain}`).join(' OR ');
+        const sourceDomains = sourceSearchExpression(desk);
         const params = new URLSearchParams({
             q: `(${sourceDomains}) ${desk.query}`,
             format: 'json',
@@ -269,8 +281,8 @@ async function selectNationalDeskStories(page) {
             clearTimeout(timeout);
         }
     }));
-    const fbiDesk = { label: 'United States', query: 'FBI releases', matchTerms: ['fbi'], jurisdictionTerms: [], sources: [{ domain: 'fbi.gov', name: 'FBI', syndication: 'official' }] };
-    const fbiStories = formatNewsStories(await searchOfficialFbiReleases(page), fbiDesk, 10);
+    const fbiDesk = { label: 'United States', query: 'FBI releases', matchTerms: ['fbi', 'press release', 'arrest', 'court', 'investigation'], jurisdictionTerms: [], sources: [{ domain: 'fbi.gov', path: '/news/press-releases', name: 'FBI Press Releases', syndication: 'official' }] };
+    const fbiStories = formatNewsStories(await searchOfficialFbiReleases(), fbiDesk, 10);
     const seen = new Set();
     return [...fbiStories, ...localSelections.flat()].filter((story) => {
         if (seen.has(story.url)) return false;
@@ -305,15 +317,21 @@ function isNewsSource(item) {
     const text = `${item.title || ''} ${item.content || ''}`.toLowerCase();
     const academicOrIndex = /(?:^|\.)(?:crossref\.org|openalex\.org|doi\.org|jstor\.org|ssrn\.com|researchgate\.net|semanticscholar\.org|pubmed\.ncbi\.nlm\.nih\.gov|worldcat\.org|proquest\.com|academia\.edu)(?:\/|$)/.test(url)
         || /\b(?:crossref|openalex|doi:|journal article|scholarly|peer[- ]reviewed|dissertation|university press|citation record)\b/i.test(text);
-    const genericSearchOrSeo = /(?:^|\.)(?:google\.com|bing\.com|yahoo\.com|duckduckgo\.com|yelp\.com|justia\.com|findlaw\.com|avvo\.com)(?:\/|$)/.test(url)
+    const genericSearchOrSeo = /(?:^|\.)(?:google\.com|news\.google\.com|bing\.com|yahoo\.com|duckduckgo\.com|yelp\.com|justia\.com|findlaw\.com|avvo\.com)(?:\/|$)/.test(url)
         || /\b(?:best lawyers|top attorneys|free consultation|sponsored|advertisement|coupon|seo)\b/i.test(text);
     return !academicOrIndex && !genericSearchOrSeo && !isSearchEngineLandingPage(item);
 }
 
 function sourceSyndicationFor(item, desk) {
-    let host = '';
-    try { host = new URL(item.url).hostname.toLowerCase().replace(/^www\./, ''); } catch { return null; }
-    return (desk.sources || []).find((source) => host === source.domain || host.endsWith(`.${source.domain}`)) || null;
+    let parsed;
+    try { parsed = new URL(item.url); } catch { return null; }
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+    const pathname = parsed.pathname.toLowerCase();
+    return (desk.sources || []).find((source) => {
+        const sourceHost = source.domain.toLowerCase().replace(/^www\./, '');
+        const sourcePath = String(source.path || '').toLowerCase();
+        return (host === sourceHost || host.endsWith(`.${sourceHost}`)) && (!sourcePath || pathname.startsWith(sourcePath));
+    }) || null;
 }
 
 function isAllowedDeskSource(item, desk) {
@@ -321,11 +339,22 @@ function isAllowedDeskSource(item, desk) {
     return !(desk.sources?.length) || Boolean(sourceSyndicationFor(item, desk));
 }
 
+function sourceSearchExpression(desk) {
+    return (desk.sources || []).map((source) => source.search || `site:${source.domain}`).join(' OR ');
+}
+
 function newsPublisher(item) {
     const title = String(item.title || '');
     const titleParts = title.split(/\s[\-–—]\s/);
     if (titleParts.length > 1 && titleParts.at(-1).length < 70) return titleParts.at(-1).trim();
     return item.engine_name || item.engine || 'Original publisher';
+}
+
+function shortNewsContent(value, source) {
+    const clean = String(value || '').replace(/\s+/g, ' ').trim();
+    if (!clean) return source ? `Read the report at ${source.name}.` : 'Read the original report at the publisher.';
+    if (source?.syndication === 'link-only') return `Read the report at ${source.name}.`;
+    return clean.length > 220 ? `${clean.slice(0, 217).trim()}...` : clean;
 }
 
 function safeNewsImage(value) {
@@ -388,7 +417,7 @@ function decodeXml(value) {
 }
 
 function parseRssItems(xml, engine, profile = 'General Web') {
-    return [...String(xml || '').matchAll(/<item>([\s\S]*?)<\/item>/gi)].map((match) => {
+    return [...String(xml || '').matchAll(/<item\b[^>]*>([\s\S]*?)<\/item>/gi)].map((match) => {
         const item = match[1];
         const read = (tag) => decodeXml(item.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))?.[1]);
         const title = read('title');
@@ -401,7 +430,7 @@ function parseRssItems(xml, engine, profile = 'General Web') {
             engine,
             profile,
             category: 'web search',
-            publishedDate: read('pubDate') || null,
+            publishedDate: read('pubDate') || read('dc:date') || read('date') || null,
         };
     }).filter(Boolean);
 }
@@ -409,7 +438,7 @@ function parseRssItems(xml, engine, profile = 'General Web') {
 function isSearchEngineLandingPage(item) {
     const url = String(item?.url || '').toLowerCase();
     const title = String(item?.title || '').toLowerCase();
-    return /(^|\/\/)(www\.)?(google\.com|google\.com\.[a-z.]+|bing\.com|yahoo\.com|search\.yahoo\.com|search\.brave\.com|wikipedia\.org)(\/|$)/.test(url)
+    return /(^|\/\/)(www\.|news\.)?(google\.com|google\.com\.[a-z.]+|bing\.com|yahoo\.com|search\.yahoo\.com|search\.brave\.com|wikipedia\.org)(\/|$)/.test(url)
         || /^(google|bing|yahoo|brave search|search - microsoft bing)/i.test(title);
 }
 
@@ -448,8 +477,9 @@ function classifySourceQuality(item) {
     try { host = new URL(item.url).hostname.toLowerCase().replace(/^www\./, ''); } catch { return { suppress: true, score: -9999, label: 'Suppressed' }; }
     const text = `${item.title || ''} ${item.content || ''}`.toLowerCase();
     const suppressedDomains = /(?:^|\.)(facebook|instagram|tiktok|reddit|quora|pinterest|x|twitter|linkedin|youtube|medium|fandom|wikihow|brainly|answers\.com|buzzfeed|ranker|perplexity|chatgpt|openai\.com|gemini\.google\.com)(?:\.|$)/;
-    const suppressedText = /\b(?:sponsored|advertisement|coupon|promo code|celebrity|celebrities|gossip|true crime podcast|ai[- ]generated|chatgpt summary)\b/i;
-    if (suppressedDomains.test(host) || suppressedText.test(text)) return { suppress: true, score: -9999, label: 'Suppressed' };
+    const suppressedText = /\b(?:sponsored|advertisement|coupon|promo code|true crime podcast|ai[- ]generated|chatgpt summary)\b/i;
+    const celebrityOnly = /\b(?:celebrity|celebrities|gossip)\b/i.test(text) && !/\b(?:court|trial|arrest|charge|charged|indict|sentence|sentenced|lawsuit|crime|criminal|police)\b/i.test(text);
+    if (suppressedDomains.test(host) || suppressedText.test(text) || celebrityOnly) return { suppress: true, score: -9999, label: 'Suppressed' };
 
     const highDomain = /(?:^|\.)(?:gov|mil)$/i.test(host)
         || /(?:^|\.)(archives\.gov|loc\.gov|govinfo\.gov|congress\.gov|uscode\.house\.gov|justice\.gov|courtlistener\.com|oyez\.org|uscourts\.gov|supremecourt\.gov|archive\.org|floridabar\.org|americanbar\.org)$/i.test(host);
