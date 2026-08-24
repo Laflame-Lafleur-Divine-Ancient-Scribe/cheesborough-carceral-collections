@@ -115,6 +115,70 @@ async function handleOnlineSearch(requestUrl, response) {
     response.end(JSON.stringify({ query, count: results.length, profiles: profiles.map(profile => profile.label), results }));
 }
 
+const newsDesks = {
+    national: { label: 'United States', query: 'United States courts justice public records' },
+    europe: { label: 'Europe', query: 'Europe courts justice investigation public records' },
+    mexico: { label: 'Mexico', query: 'Mexico courts justice investigation public records' },
+    federal: { label: 'Federal & Intelligence Desk', query: 'FBI CIA Mossad official investigation public records' },
+    florida: { label: 'Florida', query: 'Florida courts justice public records' },
+    georgia: { label: 'Georgia', query: 'Georgia courts justice public records' },
+    louisiana: { label: 'Louisiana', query: 'Louisiana courts justice public records' },
+    newyork: { label: 'New York', query: 'New York courts justice public records' },
+    california: { label: 'California', query: 'California courts justice public records' },
+    michigan: { label: 'Michigan', query: 'Michigan courts justice public records' },
+    ohio: { label: 'Ohio', query: 'Ohio courts justice public records' },
+    colorado: { label: 'Colorado', query: 'Colorado courts justice public records' },
+    world: { label: 'World', query: 'international courts justice investigation public records' },
+};
+
+const newsDeskAliases = {
+    'united-states': 'national',
+    'federal-agencies': 'federal',
+    'new-york': 'newyork',
+};
+
+async function handleNews(requestUrl, response) {
+    const requestedDesk = requestUrl.searchParams.get('desk') || requestUrl.searchParams.get('section') || 'national';
+    const deskKey = newsDeskAliases[requestedDesk] || requestedDesk;
+    const desk = newsDesks[deskKey] || newsDesks.national;
+    const requestedOffset = Number(requestUrl.searchParams.get('offset') || '0');
+    const requestedPage = Number(requestUrl.searchParams.get('page') || (Number.isFinite(requestedOffset) ? Math.floor(Math.max(requestedOffset, 0) / 9) + 1 : '1'));
+    const page = Number.isInteger(requestedPage) ? Math.min(Math.max(requestedPage, 1), 4) : 1;
+    const params = new URLSearchParams({
+        q: desk.query,
+        format: 'json',
+        pageno: String(page),
+        categories: 'news',
+        language: 'en-US',
+        time_range: 'month',
+        safesearch: '1',
+    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    let stories = [];
+    try {
+        const result = await fetch(`${searxngUrl}/search?${params}`, { signal: controller.signal });
+        if (result.ok) {
+            const payload = await result.json();
+            stories = rankRelevantResults(Array.isArray(payload.results) ? payload.results : [], desk.query).slice(0, 9).map((item) => ({
+                title: item.title || item.url,
+                url: item.url,
+                content: item.content || '',
+                publisher: item.engine_name || 'Original publisher',
+                publishedDate: item.publishedDate || null,
+                sourcePriority: item.sourcePriority || 'General source',
+                desk: desk.label,
+            }));
+        }
+    } catch {
+        stories = [];
+    } finally {
+        clearTimeout(timeout);
+    }
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    response.end(JSON.stringify({ desk: deskKey, label: desk.label, page, count: stories.length, stories, results: stories }));
+}
+
 async function fetchJson(url) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
@@ -315,6 +379,14 @@ const server = http.createServer((request, response) => {
             handleOnlineSearch(requestUrl, response).catch(() => {
                 response.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
                 response.end(JSON.stringify({ error: 'The self-hosted search service is unavailable.' }));
+            });
+            return;
+        }
+        if (requestUrl.pathname === '/api/news') {
+            applyApiCors(request, response);
+            handleNews(requestUrl, response).catch(() => {
+                response.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
+                response.end(JSON.stringify({ error: 'The live news service is unavailable.' }));
             });
             return;
         }
