@@ -169,14 +169,21 @@ const newsDesks = {
         ],
     },
     federal: {
-        label: 'Federal & Intelligence Desk',
-        query: `FBI CIA Mossad ${crimeBeatTerms}`,
-        matchTerms: ['fbi', 'cia', 'mossad', 'federal', 'investigation'],
+        label: 'Federal Agencies Desk',
+        query: `federal agency DOJ FBI DEA ATF U.S. Marshals Bureau of Prisons Secret Service Homeland Security Investigations ICE CBP IRS Criminal Investigation ${crimeBeatTerms}`,
+        matchTerms: ['doj', 'department of justice', 'fbi', 'dea', 'atf', 'u.s. marshals', 'bureau of prisons', 'secret service', 'homeland security investigations', 'immigration and customs enforcement', 'customs and border protection', 'irs criminal investigation', 'federal', 'investigation'],
         sources: [
-            { domain: 'fbi.gov', search: 'site:fbi.gov/news/press-releases', name: 'FBI Press Releases', syndication: 'official' },
-            { domain: 'justice.gov', path: '/opa/pr', search: 'site:justice.gov/opa/pr', name: 'U.S. Department of Justice', syndication: 'official' },
-            { domain: 'cia.gov', search: 'site:cia.gov/newsroom', name: 'CIA Newsroom', syndication: 'official' },
-            { domain: 'gov.il', search: 'site:gov.il/en/departments/mossad', name: 'Mossad / Israel Gov', syndication: 'official' },
+            { domain: 'justice.gov', search: 'site:justice.gov', name: 'U.S. Department of Justice', syndication: 'official' },
+            { domain: 'fbi.gov', search: 'site:fbi.gov', name: 'Federal Bureau of Investigation', syndication: 'official' },
+            { domain: 'dea.gov', search: 'site:dea.gov', name: 'Drug Enforcement Administration', syndication: 'official' },
+            { domain: 'atf.gov', search: 'site:atf.gov', name: 'Bureau of Alcohol, Tobacco, Firearms and Explosives', syndication: 'official' },
+            { domain: 'usmarshals.gov', search: 'site:usmarshals.gov', name: 'U.S. Marshals Service', syndication: 'official' },
+            { domain: 'bop.gov', search: 'site:bop.gov', name: 'Federal Bureau of Prisons', syndication: 'official' },
+            { domain: 'secretservice.gov', search: 'site:secretservice.gov', name: 'U.S. Secret Service', syndication: 'official' },
+            { domain: 'ice.gov', path: '/about-ice/hsi', search: 'site:ice.gov/about-ice/hsi', name: 'Homeland Security Investigations', syndication: 'official' },
+            { domain: 'ice.gov', search: 'site:ice.gov', name: 'U.S. Immigration and Customs Enforcement', syndication: 'official' },
+            { domain: 'cbp.gov', search: 'site:cbp.gov', name: 'U.S. Customs and Border Protection', syndication: 'official' },
+            { domain: 'irs.gov', path: '/compliance/criminal-investigation', search: 'site:irs.gov/compliance/criminal-investigation', name: 'IRS Criminal Investigation', syndication: 'official' },
         ],
     },
     florida: { label: 'Florida', query: `Florida ${crimeBeatTerms}`, matchTerms: ['florida', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['florida', 'miami', 'tampa', 'orlando', 'jacksonville', 'tallahassee', 'fort lauderdale', 'st petersburg', 'broward', 'miami-dade', 'duval', 'pinellas'], sources: [fbiOffice('miami', 'FBI Miami'), fbiOffice('tampa', 'FBI Tampa'), fbiOffice('jacksonville', 'FBI Jacksonville'), { domain: 'flcourts.gov', name: 'Florida Courts', syndication: 'official' }, { domain: 'wlrn.org', name: 'WLRN', syndication: 'link-only' }, { domain: 'local10.com', name: 'Local 10', syndication: 'link-only' }] },
@@ -196,13 +203,22 @@ const newsDeskAliases = {
     'new-york': 'newyork',
 };
 const newsCache = new Map();
+const minimumStoriesPerDesk = 10;
+const maximumStoriesPerDesk = 15;
+
+function storiesForDesk(deskKey) {
+    const key = String(deskKey || 'national');
+    const hash = [...key].reduce((value, character) => ((value * 31) + character.charCodeAt(0)) >>> 0, 0);
+    return minimumStoriesPerDesk + (hash % (maximumStoriesPerDesk - minimumStoriesPerDesk + 1));
+}
 
 async function handleNews(requestUrl, response) {
     const requestedDesk = requestUrl.searchParams.get('desk') || requestUrl.searchParams.get('section') || 'national';
     const deskKey = newsDeskAliases[requestedDesk] || requestedDesk;
     const desk = newsDesks[deskKey] || newsDesks.national;
+    const storyLimit = storiesForDesk(deskKey);
     const requestedOffset = Number(requestUrl.searchParams.get('offset') || '0');
-    const requestedPage = Number(requestUrl.searchParams.get('page') || (Number.isFinite(requestedOffset) ? Math.floor(Math.max(requestedOffset, 0) / 9) + 1 : '1'));
+    const requestedPage = Number(requestUrl.searchParams.get('page') || (Number.isFinite(requestedOffset) ? Math.floor(Math.max(requestedOffset, 0) / storyLimit) + 1 : '1'));
     const page = Number.isInteger(requestedPage) ? Math.min(Math.max(requestedPage, 1), 4) : 1;
     const cacheKey = `${deskKey}:${page}`;
     const cached = newsCache.get(cacheKey);
@@ -212,8 +228,8 @@ async function handleNews(requestUrl, response) {
         return;
     }
     if (deskKey === 'national') {
-        const stories = await selectNationalDeskStories(page);
-        const payload = { desk: deskKey, label: desk.label, page, count: stories.length, stories, results: stories };
+        const stories = await selectNationalDeskStories(page, storyLimit);
+        const payload = { desk: deskKey, label: desk.label, page, limit: storyLimit, count: stories.length, stories, results: stories };
         newsCache.set(cacheKey, { createdAt: Date.now(), payload });
         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
         response.end(JSON.stringify(payload));
@@ -223,7 +239,7 @@ async function handleNews(requestUrl, response) {
     // State desks use only their configured publisher allow-list. SearXNG is
     // used as a URL discovery layer, never as a broad web feed or page scraper.
     const sourceDomains = sourceSearchExpression(desk);
-    const searchPages = [page, page + 1].map(async (searchPage) => {
+    const searchPages = [page * 3 - 2, page * 3 - 1, page * 3].map(async (searchPage) => {
         const params = new URLSearchParams({
             q: sourceDomains ? `(${sourceDomains}) ${desk.query}` : `${desk.query} latest`,
             format: 'json',
@@ -256,18 +272,18 @@ async function handleNews(requestUrl, response) {
     // Bing's public RSS search is used only as a discovery fallback for the
     // desk's own allow-listed official publishers. It does not widen the
     // source list or introduce unrelated commercial stories.
-    const officialDiscovery = officialResults.length ? [] : await fetchOfficialDiscoveryFallback(desk);
-    stories = formatNewsStories([...officialResults, ...officialDiscovery, ...searchResults], desk);
+    const officialDiscovery = officialResults.length >= storyLimit ? [] : await fetchOfficialDiscoveryFallback(desk);
+    stories = formatNewsStories([...officialResults, ...officialDiscovery, ...searchResults], desk, storyLimit);
     if (stories.length === 0 && !desk.sources?.length) {
-        stories = formatNewsStories(await getKeylessFallbackResults(desk.query), desk);
+        stories = formatNewsStories(await getKeylessFallbackResults(desk.query), desk, storyLimit);
     }
     // Use the proven live-search route as the final resilience path. It has the
     // same relevance and source-quality protections as the site's Search page.
     if (stories.length === 0 && !desk.sources?.length) {
         const localSearch = await fetchJson(`http://127.0.0.1:${port}/api/online-search?q=${encodeURIComponent(desk.query)}`);
-        stories = formatNewsStories(Array.isArray(localSearch?.results) ? localSearch.results : [], desk);
+        stories = formatNewsStories(Array.isArray(localSearch?.results) ? localSearch.results : [], desk, storyLimit);
     }
-    const payload = { desk: deskKey, label: desk.label, page, count: stories.length, stories, results: stories };
+    const payload = { desk: deskKey, label: desk.label, page, limit: storyLimit, count: stories.length, stories, results: stories };
     // A publisher can temporarily throttle a fresh deployment. Never turn that
     // short outage into a twelve-hour blank desk; only cache usable reporting.
     if (stories.length) newsCache.set(cacheKey, { createdAt: Date.now(), payload });
@@ -275,7 +291,7 @@ async function handleNews(requestUrl, response) {
     response.end(JSON.stringify(payload));
 }
 
-function formatNewsStories(items, desk, limit = 9) {
+function formatNewsStories(items, desk, limit = maximumStoriesPerDesk) {
     return limitFbiShare(rankNewsStories(items, desk), limit).map((item) => {
         const source = sourceSyndicationFor(item, desk);
         return {
@@ -292,7 +308,7 @@ function formatNewsStories(items, desk, limit = 9) {
     });
 }
 
-function formatNewsStoriesInOrder(items, desk, limit = 9) {
+function formatNewsStoriesInOrder(items, desk, limit = maximumStoriesPerDesk) {
     const seen = new Set();
     return limitFbiShare((items || []).filter((item) => {
         const url = item?.url;
@@ -501,7 +517,7 @@ function extractSpanishDateText(value) {
     return String(value || '').match(/\b\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+de\s+\d{4}\b/i)?.[0] || null;
 }
 
-async function selectNationalDeskStories(page) {
+async function selectNationalDeskStories(page, storyLimit = maximumStoriesPerDesk) {
     const stateKeys = ['florida', 'georgia', 'louisiana', 'newyork', 'california', 'michigan', 'ohio', 'colorado'];
     const localSelections = await Promise.all(stateKeys.map(async (stateKey) => {
         const desk = newsDesks[stateKey];
@@ -519,23 +535,65 @@ async function selectNationalDeskStories(page) {
         const timeout = setTimeout(() => controller.abort(), 15000);
         try {
             const result = await fetch(`${searxngUrl}/search?${params}`, { signal: controller.signal });
-            if (!result.ok) return formatNewsStories(officialResults, desk, 1);
+            if (!result.ok) {
+                const discovery = officialResults.length >= 2 ? [] : await fetchOfficialDiscoveryFallback(desk);
+                return formatNewsStories([...officialResults, ...discovery], desk, 2);
+            }
             const payload = await result.json();
-            return formatNewsStories([...officialResults, ...(Array.isArray(payload.results) ? payload.results : [])], desk, 1);
+            const discovery = officialResults.length >= 2 ? [] : await fetchOfficialDiscoveryFallback(desk);
+            return formatNewsStories([...officialResults, ...discovery, ...(Array.isArray(payload.results) ? payload.results : [])], desk, 2);
         } catch {
-            return formatNewsStories(officialResults, desk, 1);
+            const discovery = officialResults.length >= 2 ? [] : await fetchOfficialDiscoveryFallback(desk);
+            return formatNewsStories([...officialResults, ...discovery], desk, 2);
         } finally {
             clearTimeout(timeout);
         }
     }));
     const fbiDesk = { label: 'United States', query: 'FBI releases', matchTerms: ['fbi', 'press release', 'arrest', 'court', 'investigation'], geographyTerms: usLocationTerms, sources: [{ domain: 'fbi.gov', name: 'FBI Press Releases', syndication: 'official' }] };
     const fbiStories = formatNewsStoriesInOrder(await searchOfficialFbiReleases(), fbiDesk, 10);
+    const federalDesk = newsDesks.federal;
+    const [federalOfficial, federalDiscovery] = await Promise.all([
+        fetchOfficialSourceListings(federalDesk),
+        fetchOfficialDiscoveryFallback(federalDesk),
+    ]);
+    const federalStories = formatNewsStories([...federalOfficial, ...federalDiscovery], federalDesk, storyLimit)
+        .filter((story) => !isFbiNewsItem(story));
     const seen = new Set();
-    return [...fbiStories, ...localSelections.flat()].filter((story) => {
+    const selected = [...federalStories, ...fbiStories, ...localSelections.flat()].filter((story) => {
         if (seen.has(story.url)) return false;
         seen.add(story.url);
         return true;
-    }).slice(0, 18);
+    });
+    if (selected.length < storyLimit) {
+        const nationalNewsDesk = {
+            label: 'United States',
+            query: 'criminal investigation arrest indictment court prison police',
+            matchTerms: ['criminal', 'investigation', 'arrest', 'indict', 'court', 'prison', 'police', 'sheriff', 'prosecut'],
+        };
+        const discovery = formatNewsStories(
+            await getNationalInvestigationNews(),
+            nationalNewsDesk,
+            storyLimit - selected.length,
+        );
+        for (const story of discovery) {
+            if (seen.has(story.url)) continue;
+            seen.add(story.url);
+            selected.push(story);
+            if (selected.length >= storyLimit) break;
+        }
+    }
+    return selected.slice(0, storyLimit);
+}
+
+async function getNationalInvestigationNews() {
+    const params = new URLSearchParams({
+        q: 'United States criminal investigation arrest indictment court prison police when:30d',
+        hl: 'en-US',
+        gl: 'US',
+        ceid: 'US:en',
+    });
+    const xml = await fetchText(`https://news.google.com/rss/search?${params}`);
+    return parseRssItems(xml, 'Google News', 'Current reporting');
 }
 
 function rankNewsStories(items, desk) {
@@ -552,7 +610,7 @@ function rankNewsStories(items, desk) {
         const geographyMatches = (desk.geographyTerms || []).filter((term) => combined.includes(term));
         const reportingMatches = reportingTerms.filter((term) => combined.includes(term));
         const quality = classifySourceQuality(item);
-        const key = `${title.replace(/[^a-z0-9]+/g, ' ').trim()}|${url.replace(/[?#].*$/, '')}`;
+        const key = url.replace(/[?#].*$/, '');
         const hasExcludedJurisdiction = (desk.excludedTerms || []).some((term) => combined.includes(term));
         const allowedSource = sourceSyndicationFor(item, desk);
         const officialSource = allowedSource?.syndication === 'official';
@@ -571,7 +629,9 @@ function isNewsSource(item) {
         || /\b(?:crossref|openalex|doi:|journal article|scholarly|peer[- ]reviewed|dissertation|university press|citation record)\b/i.test(text);
     const genericSearchOrSeo = /(?:^|\.)(?:google\.com|news\.google\.com|bing\.com|yahoo\.com|duckduckgo\.com|yelp\.com|justia\.com|findlaw\.com|avvo\.com)(?:\/|$)/.test(url)
         || /\b(?:best lawyers|top attorneys|free consultation|sponsored|advertisement|coupon|seo)\b/i.test(text);
-    return !academicOrIndex && !genericSearchOrSeo && !isSearchEngineLandingPage(item);
+    const googleNewsArticle = String(item?.engine || '') === 'Google News'
+        && /^https:\/\/news\.google\.com\/rss\/articles\//i.test(url);
+    return !academicOrIndex && (googleNewsArticle || !genericSearchOrSeo) && (googleNewsArticle || !isSearchEngineLandingPage(item));
 }
 
 function sourceSyndicationFor(item, desk) {

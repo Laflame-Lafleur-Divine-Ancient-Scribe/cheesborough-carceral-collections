@@ -139,7 +139,7 @@
       const controller=new AbortController();
       const timeout=window.setTimeout(()=>controller.abort(),20000);
       try{
-        const response=await fetch(`${endpoint}?section=${encodeURIComponent(section)}&limit=9&offset=${offset}`,{signal:controller.signal});
+        const response=await fetch(`${endpoint}?section=${encodeURIComponent(section)}&offset=${offset}`,{signal:controller.signal});
         if(!response.ok)throw new Error('Live desk response unavailable');
         const payload=await response.json();
         const incoming=Array.isArray(payload)?payload:(payload.results||payload.stories||payload.news||payload.items||[]);
@@ -148,7 +148,7 @@
         offset=stories.length;
         renderStories();
         status.textContent=stories.length?`${stories.length} selected reports &middot; original-source links`:'No reports selected';
-        more.hidden=incoming.length<9;
+        more.hidden=incoming.length<(Number(payload.limit)||10);
       }catch(error){
         if(reset)showState('The live desk is temporarily unavailable','Please return shortly, or use the source room below to begin with primary records and public court documents.');
         status.textContent='Live desk unavailable';
