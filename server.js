@@ -142,7 +142,7 @@ const newsDesks = {
             { domain: 'justice.gov', path: '/opa/pr', search: 'site:justice.gov/opa/pr', name: 'U.S. Department of Justice', syndication: 'official' },
         ],
     },
-    europe: { label: 'Europe', query: `Europe ${crimeBeatTerms}`, matchTerms: ['europe', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: europeLocationTerms, excludedTerms: mexicoLocationTerms },
+    europe: { label: 'Europe', query: `Europe ${crimeBeatTerms}`, matchTerms: ['europe', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: europeLocationTerms, excludedTerms: mexicoLocationTerms, sources: [{ domain: 'europol.europa.eu', listingUrl: 'https://www.europol.europa.eu/media-press/newsroom', articlePathPattern: /\/media-press\/newsroom\/(?:news|press-release)\//i, name: 'Europol', syndication: 'official' }, { domain: 'eurojust.europa.eu', listingUrl: 'https://www.eurojust.europa.eu/media-and-events/press-releases-and-news', articlePathPattern: /\/news\//i, name: 'Eurojust', syndication: 'official' }] },
     mexico: { label: 'Mexico', query: `Mexico ${crimeBeatTerms}`, matchTerms: ['mexico', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: mexicoLocationTerms, excludedTerms: europeLocationTerms },
     federal: {
         label: 'Federal & Intelligence Desk',
@@ -158,9 +158,9 @@ const newsDesks = {
     florida: { label: 'Florida', query: `Florida ${crimeBeatTerms}`, matchTerms: ['florida', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['florida', 'miami', 'tampa', 'orlando', 'jacksonville', 'tallahassee', 'fort lauderdale', 'st petersburg', 'broward', 'miami-dade', 'duval', 'pinellas'], sources: [fbiOffice('miami', 'FBI Miami'), fbiOffice('tampa', 'FBI Tampa'), fbiOffice('jacksonville', 'FBI Jacksonville'), { domain: 'flcourts.gov', name: 'Florida Courts', syndication: 'official' }, { domain: 'wlrn.org', name: 'WLRN', syndication: 'link-only' }, { domain: 'local10.com', name: 'Local 10', syndication: 'link-only' }] },
     georgia: { label: 'Georgia', query: `Georgia ${crimeBeatTerms}`, matchTerms: ['georgia', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['georgia', 'atlanta', 'savannah', 'macon', 'augusta', 'columbus', 'athens', 'fulton', 'dekalb', 'cobb', 'gwinnett', 'chatham'], excludedTerms: ['arizona', 'tbilisi', 'georgian parliament', 'south ossetia', 'republic of georgia'], sources: [fbiOffice('atlanta', 'FBI Atlanta'), { domain: 'fox5atlanta.com', name: 'FOX 5 Atlanta', syndication: 'link-only' }, { domain: 'ajc.com', name: 'Atlanta Journal-Constitution', syndication: 'link-only' }, { domain: 'walb.com', name: 'WALB', syndication: 'link-only' }, { domain: '11alive.com', name: '11Alive', syndication: 'link-only' }] },
     louisiana: { label: 'Louisiana', query: `Louisiana ${crimeBeatTerms}`, matchTerms: ['louisiana', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['louisiana', 'new orleans', 'baton rouge', 'shreveport', 'lafayette', 'lake charles', 'jefferson parish', 'orleans parish', 'east baton rouge'], sources: [fbiOffice('neworleans', 'FBI New Orleans'), { domain: 'nola.com', name: 'NOLA.com', syndication: 'link-only' }, { domain: 'wwltv.com', name: 'WWL Louisiana', syndication: 'link-only' }, { domain: 'theadvocate.com', name: 'The Advocate', syndication: 'link-only' }] },
-    newyork: { label: 'New York', query: `New York ${crimeBeatTerms}`, matchTerms: ['new york', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['new york', 'nyc', 'manhattan', 'brooklyn', 'queens', 'bronx', 'staten island', 'buffalo', 'rochester', 'albany', 'syracuse', 'westchester'], sources: [fbiOffice('newyork', 'FBI New York'), fbiOffice('albany', 'FBI Albany'), fbiOffice('buffalo', 'FBI Buffalo'), { domain: 'gothamist.com', name: 'Gothamist', syndication: 'link-only' }, { domain: 'nytimes.com', name: 'The New York Times', syndication: 'link-only' }, { domain: 'nbcnewyork.com', name: 'NBC New York', syndication: 'link-only' }] },
+    newyork: { label: 'New York', query: `New York ${crimeBeatTerms}`, matchTerms: ['new york', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['new york', 'nyc', 'manhattan', 'brooklyn', 'queens', 'bronx', 'staten island', 'buffalo', 'rochester', 'albany', 'syracuse', 'westchester', 'vermont', 'rutland', 'milton', 'shelburne', 'new jersey'], sources: [fbiOffice('newyork', 'FBI New York'), fbiOffice('albany', 'FBI Albany'), fbiOffice('buffalo', 'FBI Buffalo'), { domain: 'ag.ny.gov', path: '/press-release/', listingUrl: 'https://ag.ny.gov/press-releases', articlePathPattern: /\/press-release\//i, name: 'New York Attorney General', syndication: 'official' }, { domain: 'gothamist.com', name: 'Gothamist', syndication: 'link-only' }, { domain: 'nytimes.com', name: 'The New York Times', syndication: 'link-only' }, { domain: 'nbcnewyork.com', name: 'NBC New York', syndication: 'link-only' }] },
     california: { label: 'California', query: `California ${crimeBeatTerms}`, matchTerms: ['california', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['california', 'los angeles', 'san francisco', 'san diego', 'sacramento', 'oakland', 'fresno', 'riverside', 'san jose', 'orange county'], sources: [fbiOffice('losangeles', 'FBI Los Angeles'), fbiOffice('sanfrancisco', 'FBI San Francisco'), fbiOffice('sandiego', 'FBI San Diego'), fbiOffice('sacramento', 'FBI Sacramento'), { domain: 'latimes.com', name: 'Los Angeles Times', syndication: 'link-only' }, { domain: 'sfchronicle.com', name: 'San Francisco Chronicle', syndication: 'link-only' }, { domain: 'nbclosangeles.com', name: 'NBC Los Angeles', syndication: 'link-only' }] },
-    michigan: { label: 'Michigan', query: `Michigan ${crimeBeatTerms}`, matchTerms: ['michigan', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['michigan', 'detroit', 'grand rapids', 'flint', 'lansing', 'ann arbor', 'kalamazoo', 'wayne county', 'oakland county'], sources: [fbiOffice('detroit', 'FBI Detroit'), { domain: 'freep.com', name: 'Detroit Free Press', syndication: 'link-only' }, { domain: 'detroitnews.com', name: 'The Detroit News', syndication: 'link-only' }, { domain: 'michiganpublic.org', name: 'Michigan Public', syndication: 'link-only' }] },
+    michigan: { label: 'Michigan', query: `Michigan ${crimeBeatTerms}`, matchTerms: ['michigan', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['michigan', 'detroit', 'grand rapids', 'flint', 'lansing', 'ann arbor', 'kalamazoo', 'wayne county', 'oakland county'], sources: [fbiOffice('detroit', 'FBI Detroit'), { domain: 'michigan.gov', path: '/ag/news/press-releases/', listingUrl: 'https://www.michigan.gov/ag/news/press-releases', articlePathPattern: /\/ag\/news\/press-releases\/\d{4}\//i, name: 'Michigan Attorney General', syndication: 'official' }, { domain: 'michigan.gov', path: '/mspnewsroom/news-releases/', listingUrl: 'https://www.michigan.gov/mspnewsroom/news-releases', apiUrl: 'https://www.michigan.gov/mspnewsroom/sxa/search/results/?s=%7BC17A093E-4771-4947-8F37-7E4CA83E4401%7D&itemid=%7BD0A0F2DA-A467-45F2-A986-BE13DAEA6240%7D&p=10&sig=&o=Article%20Date%2CDescending', articlePathPattern: /\/mspnewsroom\/news-releases\/\d{4}\//i, name: 'Michigan State Police', syndication: 'official' }, { domain: 'freep.com', name: 'Detroit Free Press', syndication: 'link-only' }, { domain: 'detroitnews.com', name: 'The Detroit News', syndication: 'link-only' }, { domain: 'michiganpublic.org', name: 'Michigan Public', syndication: 'link-only' }] },
     ohio: { label: 'Ohio', query: `Ohio ${crimeBeatTerms}`, matchTerms: ['ohio', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['ohio', 'columbus', 'cleveland', 'cincinnati', 'toledo', 'akron', 'dayton', 'hamilton county', 'cuyahoga', 'franklin county'], sources: [fbiOffice('cincinnati', 'FBI Cincinnati'), fbiOffice('cleveland', 'FBI Cleveland'), { domain: 'cleveland.com', name: 'Cleveland.com', syndication: 'link-only' }, { domain: 'dispatch.com', name: 'The Columbus Dispatch', syndication: 'link-only' }, { domain: 'ideastream.org', name: 'Ideastream Public Media', syndication: 'link-only' }] },
     colorado: { label: 'Colorado', query: `Colorado ${crimeBeatTerms}`, matchTerms: ['colorado', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['colorado', 'denver', 'aurora', 'colorado springs', 'boulder', 'fort collins', 'pueblo', 'jefferson county', 'el paso county'], sources: [fbiOffice('denver', 'FBI Denver'), { domain: 'coloradosun.com', name: 'The Colorado Sun', syndication: 'link-only' }, { domain: 'denverpost.com', name: 'The Denver Post', syndication: 'link-only' }, { domain: 'cpr.org', name: 'Colorado Public Radio', syndication: 'link-only' }] },
     world: { label: 'World', query: `international ${crimeBeatTerms}`, matchTerms: ['court', 'justice', 'investigation', 'arrest'], excludedTerms: [...usLocationTerms, ...europeLocationTerms, ...mexicoLocationTerms] },
@@ -182,7 +182,7 @@ async function handleNews(requestUrl, response) {
     const page = Number.isInteger(requestedPage) ? Math.min(Math.max(requestedPage, 1), 4) : 1;
     const cacheKey = `${deskKey}:${page}`;
     const cached = newsCache.get(cacheKey);
-    if (cached && Date.now() - cached.createdAt < 5 * 60 * 1000) {
+    if (cached && Date.now() - cached.createdAt < 12 * 60 * 60 * 1000) {
         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
         response.end(JSON.stringify(cached.payload));
         return;
@@ -209,7 +209,7 @@ async function handleNews(requestUrl, response) {
             safesearch: '1',
         });
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 15000);
+            const timeout = setTimeout(() => controller.abort(), 8000);
         try {
             const result = await fetch(`${searxngUrl}/search?${params}`, { signal: controller.signal });
             if (!result.ok) return [];
@@ -221,8 +221,14 @@ async function handleNews(requestUrl, response) {
             clearTimeout(timeout);
         }
     });
-    const searchResults = (await Promise.all(searchPages)).flat();
-    const officialResults = await fetchOfficialSourceListings(desk);
+    // Publisher listings and SearXNG discovery are independent. Run them
+    // together so a slow discovery request never makes the live desk miss the
+    // browser's request window when official releases are already available.
+    const [searchResultPages, officialResults] = await Promise.all([
+        Promise.all(searchPages),
+        fetchOfficialSourceListings(desk),
+    ]);
+    const searchResults = searchResultPages.flat();
     stories = formatNewsStories([...officialResults, ...searchResults], desk);
     if (stories.length === 0 && !desk.sources?.length) {
         stories = formatNewsStories(await getKeylessFallbackResults(desk.query), desk);
@@ -322,12 +328,67 @@ async function searchOfficialFbiReleases() {
 }
 
 async function fetchOfficialSourceListings(desk) {
-    const officialSources = (desk.sources || []).filter((source) => source.syndication === 'official' && source.domain === 'fbi.gov' && source.path?.includes('/field-offices/'));
+    const officialSources = (desk.sources || []).filter((source) => source.syndication === 'official');
     const sourceItems = await Promise.all(officialSources.map(async (source) => {
-        const html = await fetchText(`https://www.fbi.gov${source.path}`);
-        return parseFbiListingPage(html, source);
+        if (source.domain === 'fbi.gov' && source.path?.includes('/field-offices/')) {
+            const listingUrl = `https://www.fbi.gov${source.path}`;
+            let html = await fetchText(listingUrl);
+            if (!/\/contact-us\/field-offices\/[^"']+\/news\//i.test(html)) html = await fetchTextWithCurl(listingUrl);
+            return parseFbiListingPage(html, source);
+        }
+        if (source.listingUrl && source.articlePathPattern) {
+            if (source.apiUrl) {
+                let payload = await fetchJson(source.apiUrl);
+                // Michigan's public Sitecore endpoint returns an HTML block to
+                // some server fetch clients. Its documented endpoint remains
+                // public JSON, so use curl as a narrowly-scoped compatibility
+                // fallback rather than discarding current state releases.
+                if (!payload) payload = await fetchOfficialJsonWithCurl(source.apiUrl, source.domain);
+                return parseOfficialJsonListing(payload, source);
+            }
+            const html = await fetchText(source.listingUrl);
+            return parseOfficialListingPage(html, source);
+        }
+        return [];
     }));
     return sourceItems.flat();
+}
+
+function parseOfficialJsonListing(payload, source) {
+    const rows = Array.isArray(payload?.Results) ? payload.Results : [];
+    const seen = new Set();
+    return rows.slice(0, 25).flatMap((row) => {
+        const title = String(row?.Path || '').split('/').pop()?.replace(/-/g, ' ').trim() || '';
+        let url;
+        try { url = new URL(row?.Url || '', source.listingUrl).href; } catch { return []; }
+        const parsed = new URL(url);
+        if (!source.articlePathPattern.test(parsed.pathname) || !title || seen.has(url)) return [];
+        seen.add(url);
+        const dateMatch = parsed.pathname.match(/\/(\d{4})\/(\d{2})\/(\d{2})\//);
+        const publishedDate = dateMatch ? `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}` : null;
+        return [{ title, url, content: `${source.name} official news release.`, engine: source.name, publishedDate }];
+    });
+}
+
+function parseOfficialListingPage(html, source) {
+    const page = String(html || '');
+    if (!page) return [];
+    const items = [];
+    const seen = new Set();
+    const pattern = /<a[^>]+href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+    let match;
+    while ((match = pattern.exec(page)) && items.length < 25) {
+        let url;
+        try { url = new URL(match[1], source.listingUrl).href; } catch { continue; }
+        const parsed = new URL(url);
+        const allowedHost = parsed.hostname.toLowerCase().replace(/^www\./, '').endsWith(source.domain.toLowerCase().replace(/^www\./, ''));
+        const title = decodeXml(match[2]);
+        if (!allowedHost || !source.articlePathPattern.test(parsed.pathname) || !title || title.length < 18 || seen.has(url)) continue;
+        seen.add(url);
+        const nearby = page.slice(Math.max(0, match.index - 500), Math.min(page.length, pattern.lastIndex + 800));
+        items.push({ title, url, content: decodeXml(nearby).replace(/\s+/g, ' ').slice(0, 240), engine: source.name, publishedDate: extractDateText(nearby) });
+    }
+    return items;
 }
 
 function parseFbiListingPage(html, source) {
@@ -421,8 +482,9 @@ function rankNewsStories(items, desk) {
         const hasExcludedJurisdiction = (desk.excludedTerms || []).some((term) => combined.includes(term));
         const allowedSource = sourceSyndicationFor(item, desk);
         const officialSource = allowedSource?.syndication === 'official';
+        const stateSpecificOfficial = officialSource && allowedSource?.domain !== 'fbi.gov';
         const hasDeskSignal = matches.length || reportingMatches.length || officialSource;
-        if (quality.suppress || !isNewsSource(item) || (!allowedSource && !isAllowedDeskSource(item, desk)) || hasExcludedJurisdiction || (desk.jurisdictionTerms && !jurisdictionMatches.length && !officialSource) || (desk.geographyTerms && !geographyMatches.length) || !hasDeskSignal || seen.has(key)) return null;
+        if (quality.suppress || !isNewsSource(item) || (!allowedSource && !isAllowedDeskSource(item, desk)) || hasExcludedJurisdiction || (desk.jurisdictionTerms && !jurisdictionMatches.length && !stateSpecificOfficial) || (desk.geographyTerms && !geographyMatches.length) || !hasDeskSignal || seen.has(key)) return null;
         seen.add(key);
         return { ...item, sourcePriority: quality.label, relevanceScore: quality.score + (officialSource ? 80 : 0) + (matches.length * 25) + (jurisdictionMatches.length * 42) + (geographyMatches.length * 35) + (reportingMatches.length * 16) };
     }).filter(Boolean).sort((first, second) => second.relevanceScore - first.relevanceScore);
@@ -530,6 +592,23 @@ function fetchTextWithCurl(url) {
         }
         execFile('curl', ['-L', '-sS', '--max-time', '12', parsed.href], { timeout: 15000, maxBuffer: 2 * 1024 * 1024 }, (error, stdout) => {
             resolve(error ? '' : String(stdout || ''));
+        });
+    });
+}
+
+function fetchOfficialJsonWithCurl(url, expectedDomain) {
+    return new Promise((resolve) => {
+        let parsed;
+        try { parsed = new URL(url); } catch { resolve(null); return; }
+        const expected = String(expectedDomain || '').toLowerCase().replace(/^www\./, '');
+        const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+        if (parsed.protocol !== 'https:' || !expected || (host !== expected && !host.endsWith(`.${expected}`))) {
+            resolve(null);
+            return;
+        }
+        execFile('curl', ['-L', '-sS', '--max-time', '12', '-A', 'Mozilla/5.0', parsed.href], { timeout: 15000, maxBuffer: 2 * 1024 * 1024 }, (error, stdout) => {
+            if (error) { resolve(null); return; }
+            try { resolve(JSON.parse(String(stdout || ''))); } catch { resolve(null); }
         });
     });
 }

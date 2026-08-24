@@ -40,7 +40,7 @@
     </nav>
     <section class="live-desk" aria-labelledby="live-desk-title">
       <p class="kicker" id="desk-kicker">United States desk</p>
-      <div class="desk-heading"><h2 id="live-desk-title">Latest from the public-interest press</h2><span class="status" id="desk-status" aria-live="polite">Selecting current reports</span></div>
+      <div class="desk-heading"><h2 id="live-desk-title">Latest From The Public-Interest Press</h2><span class="status" id="desk-status" aria-live="polite">Selecting current reports</span></div>
       <div id="news-content" aria-live="polite"><div class="state"><div><div class="loader" aria-hidden="true"></div><p>Loading the current desk.</p></div></div></div>
       <button class="load-more" type="button" id="load-more" hidden>Load more reporting</button>
     </section>
@@ -74,26 +74,26 @@
     const safeUrl=value=>{try{const parsed=new URL(value);return /^https?:$/.test(parsed.protocol)?parsed.href:''}catch{return''}};
     const resultUrl=item=>safeUrl(item.url||item.link||item.href||'');
     const mugshotPath='01_Photos/Illustrations/';
-    const maleMugshots=[
-      ...Array.from({length:8},(_,index)=>`${mugshotPath}mugshot-black-man-${String(index+1).padStart(2,'0')}.png`),
-      ...Array.from({length:15},(_,index)=>`${mugshotPath}mugshot-white-man-${String(index+1).padStart(2,'0')}.png`)
-    ];
-    const femaleMugshots=[
-      ...Array.from({length:5},(_,index)=>`${mugshotPath}mugshot-black-woman-${String(index+1).padStart(2,'0')}.png`),
-      ...Array.from({length:12},(_,index)=>`${mugshotPath}mugshot-white-woman-${String(index+1).padStart(2,'0')}.png`)
-    ];
+    const blackMaleMugshots=Array.from({length:8},(_,index)=>`${mugshotPath}mugshot-black-man-${String(index+1).padStart(2,'0')}.png`);
+    const whiteMaleMugshots=Array.from({length:15},(_,index)=>`${mugshotPath}mugshot-white-man-${String(index+1).padStart(2,'0')}.png`);
+    const blackFemaleMugshots=Array.from({length:5},(_,index)=>`${mugshotPath}mugshot-black-woman-${String(index+1).padStart(2,'0')}.png`);
+    const whiteFemaleMugshots=Array.from({length:12},(_,index)=>`${mugshotPath}mugshot-white-woman-${String(index+1).padStart(2,'0')}.png`);
     let usedMugshots=new Set();
     const storyText=item=>`${item.title||''} ${item.snippet||item.content||item.description||''}`.toLowerCase();
     function mugshotForStory(item,href){
       const text=storyText(item);
       const isFemale=/\b(?:woman|women|female)\b/.test(text);
       const isMale=/\b(?:man|men|male)\b/.test(text);
-      const pool=isFemale&&!isMale?femaleMugshots:isMale&&!isFemale?maleMugshots:[];
-      if(!pool.length)return '';
-      const start=[...href].reduce((total,character)=>total+character.charCodeAt(0),0)%pool.length;
-      for(let offset=0;offset<pool.length;offset++){
-        const portrait=pool[(start+offset)%pool.length];
-        if(!usedMugshots.has(portrait)){usedMugshots.add(portrait);return portrait;}
+      if(!isFemale&&!isMale)return '';
+      const [blackPool,whitePool]=isFemale&&!isMale?[blackFemaleMugshots,whiteFemaleMugshots]:[blackMaleMugshots,whiteMaleMugshots];
+      const preferred=Math.random()<0.3?blackPool:whitePool;
+      const fallback=preferred===blackPool?whitePool:blackPool;
+      for(const pool of [preferred,fallback]){
+        const start=[...href].reduce((total,character)=>total+character.charCodeAt(0),0)%pool.length;
+        for(let offset=0;offset<pool.length;offset++){
+          const portrait=pool[(start+offset)%pool.length];
+          if(!usedMugshots.has(portrait)){usedMugshots.add(portrait);return portrait;}
+        }
       }
       return '';
     }
@@ -134,7 +134,7 @@
       if(reset){offset=0;stories=[];showLoading();}
       status.textContent='Checking current reports';
       const controller=new AbortController();
-      const timeout=window.setTimeout(()=>controller.abort(),12000);
+      const timeout=window.setTimeout(()=>controller.abort(),20000);
       try{
         const response=await fetch(`${endpoint}?section=${encodeURIComponent(section)}&limit=9&offset=${offset}`,{signal:controller.signal});
         if(!response.ok)throw new Error('Live desk response unavailable');
