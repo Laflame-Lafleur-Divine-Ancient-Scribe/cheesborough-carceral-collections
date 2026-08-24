@@ -92,11 +92,11 @@ async function handleOnlineSearch(requestUrl, response) {
     }));
 
     const seen = new Set();
-    let results = pageResults.flat().filter((item) => {
+    let results = rankRelevantResults(pageResults.flat().filter((item) => {
         if (!item?.url || isSearchEngineLandingPage(item) || seen.has(item.url)) return false;
         seen.add(item.url);
         return true;
-    }).slice(0, 300).map((item) => ({
+    }), query).slice(0, 300).map((item) => ({
         title: item.title || item.url,
         url: item.url,
         content: item.content || '',
@@ -181,6 +181,29 @@ function isSearchEngineLandingPage(item) {
         || /^(google|bing|yahoo|brave search|search - microsoft bing)/i.test(title);
 }
 
+function rankRelevantResults(items, query) {
+    const ignoredTerms = new Set(['about', 'after', 'also', 'and', 'are', 'for', 'from', 'how', 'into', 'near', 'not', 'of', 'on', 'or', 'the', 'to', 'what', 'when', 'where', 'with']);
+    const terms = [...new Set(String(query || '').toLowerCase().match(/[a-z0-9]{3,}/g) || [])].filter((term) => !ignoredTerms.has(term));
+    const phrase = String(query || '').trim().toLowerCase();
+    if (!terms.length) return items;
+
+    const minimumTitleOrUrlMatches = terms.length === 1 ? 1 : Math.min(2, terms.length);
+    return items.map((item) => {
+        const title = String(item.title || '').toLowerCase();
+        const url = String(item.url || '').toLowerCase();
+        const content = String(item.content || '').toLowerCase();
+        const titleMatches = terms.filter((term) => title.includes(term));
+        const urlMatches = terms.filter((term) => url.includes(term));
+        const contentMatches = terms.filter((term) => content.includes(term));
+        const titleOrUrlMatches = new Set([...titleMatches, ...urlMatches]);
+        if (titleOrUrlMatches.size < minimumTitleOrUrlMatches) return null;
+
+        const exactPhraseBonus = phrase.length >= 3 && title.includes(phrase) ? 30 : 0;
+        const score = exactPhraseBonus + (titleMatches.length * 12) + (urlMatches.length * 8) + (contentMatches.length * 2);
+        return { ...item, relevanceScore: score };
+    }).filter(Boolean).sort((first, second) => second.relevanceScore - first.relevanceScore);
+}
+
 async function getKeylessFallbackResults(query) {
     const encodedQuery = encodeURIComponent(query);
     const profiles = [
@@ -235,11 +258,11 @@ async function getKeylessFallbackResults(query) {
     });
 
     const seen = new Set();
-    return fallback.filter((item) => {
+    return rankRelevantResults(fallback.filter((item) => {
         if (!item.url || isSearchEngineLandingPage(item) || /(?:^|\.)wikipedia\.org(?:\/|$)/i.test(item.url) || /wikipedia/i.test(item.engine || '') || seen.has(item.url)) return false;
         seen.add(item.url);
         return true;
-    }).slice(0, 300);
+    }), query).slice(0, 300);
 }
 
 const server = http.createServer((request, response) => {

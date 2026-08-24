@@ -583,7 +583,8 @@
       .online-result-card:hover { background: var(--paper-hover); }
       .online-result-title { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: 1.05rem; line-height: 1.35; }
       .online-result-title:hover { color: var(--gold); }
-      .online-result-url { color: #1b6343; font-size: 0.8rem; margin-top: 0.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .online-result-url { color: #1b6343; display: block; font-size: 0.8rem; margin-top: 0.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .online-result-url:hover { color: var(--gold); }
       .online-result-desc { color: var(--ink-light); font-size: 0.9rem; line-height: 1.45; margin-top: 0.25rem; }
       .online-result-meta { color: var(--muted); font-size: 0.76rem; margin-top: 0.35rem; }
       .online-pagination { align-items: center; display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin-top: 1.2rem; }
@@ -986,7 +987,7 @@
           ${pageItems.map(item => `
             <article class="online-result-card">
               <a class="online-result-title" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
-              <p class="online-result-url">${escapeHtml(getOnlineResultUrl(item.url))}</p>
+              <a class="online-result-url" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(getOnlineResultUrl(item.url))}</a>
               <p class="online-result-desc">${escapeHtml(item.content)}</p>
               <p class="online-result-meta">${escapeHtml(item.profile || item.engine)} &middot; ${escapeHtml(item.engine)}${item.publishedDate ? ` &middot; ${escapeHtml(item.publishedDate)}` : ''}</p>
             </article>
