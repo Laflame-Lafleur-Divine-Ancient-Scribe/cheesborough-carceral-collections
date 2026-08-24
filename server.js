@@ -143,7 +143,31 @@ const newsDesks = {
         ],
     },
     europe: { label: 'Europe', query: `Europe ${crimeBeatTerms}`, matchTerms: ['europe', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: europeLocationTerms, excludedTerms: mexicoLocationTerms, sources: [{ domain: 'europol.europa.eu', listingUrl: 'https://www.europol.europa.eu/media-press/newsroom', articlePathPattern: /\/media-press\/newsroom\/(?:news|press-release)\//i, name: 'Europol', syndication: 'official' }, { domain: 'eurojust.europa.eu', listingUrl: 'https://www.eurojust.europa.eu/media-and-events/press-releases-and-news', articlePathPattern: /\/news\//i, name: 'Eurojust', syndication: 'official' }] },
-    mexico: { label: 'Mexico', query: `Mexico ${crimeBeatTerms}`, matchTerms: ['mexico', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: mexicoLocationTerms, excludedTerms: europeLocationTerms, sources: [{ domain: 'fgr.org.mx', listingUrl: 'https://www.fgr.org.mx/es/FGR/Prensa', articlePathPattern: /\/es\/FGR\/Prensa\/_rid\/61\/_mod\/story/i, parser: 'fgr', name: 'Fiscalía General de la República', syndication: 'official' }] },
+    mexico: {
+        label: 'Mexico',
+        query: `Mexico ${crimeBeatTerms}`,
+        matchTerms: ['mexico', 'court', 'justice', 'investigation', 'arrest'],
+        geographyTerms: mexicoLocationTerms,
+        excludedTerms: europeLocationTerms,
+        sources: [
+            {
+                domain: 'fgr.org.mx',
+                listingUrl: 'https://www.fgr.org.mx/es/FGR/Prensa',
+                fallbackListingUrls: ['https://fgr.org.mx/swb/FGR/Prensa'],
+                articlePathPattern: /\/(?:es|swb)\/FGR\/Prensa\/_rid\/61\/_mod\/story/i,
+                parser: 'fgr',
+                name: 'Fiscalía General de la República',
+                syndication: 'official',
+            },
+            {
+                domain: 'gob.mx',
+                listingUrl: 'https://www.gob.mx/sspc',
+                articlePathPattern: /\/sspc\/prensa\//i,
+                name: 'Secretaría de Seguridad y Protección Ciudadana',
+                syndication: 'official',
+            },
+        ],
+    },
     federal: {
         label: 'Federal & Intelligence Desk',
         query: `FBI CIA Mossad ${crimeBeatTerms}`,
@@ -229,7 +253,11 @@ async function handleNews(requestUrl, response) {
         fetchOfficialSourceListings(desk),
     ]);
     const searchResults = searchResultPages.flat();
-    stories = formatNewsStories([...officialResults, ...searchResults], desk);
+    // Bing's public RSS search is used only as a discovery fallback for the
+    // desk's own allow-listed official publishers. It does not widen the
+    // source list or introduce unrelated commercial stories.
+    const officialDiscovery = officialResults.length ? [] : await fetchOfficialDiscoveryFallback(desk);
+    stories = formatNewsStories([...officialResults, ...officialDiscovery, ...searchResults], desk);
     if (stories.length === 0 && !desk.sources?.length) {
         stories = formatNewsStories(await getKeylessFallbackResults(desk.query), desk);
     }
@@ -240,7 +268,9 @@ async function handleNews(requestUrl, response) {
         stories = formatNewsStories(Array.isArray(localSearch?.results) ? localSearch.results : [], desk);
     }
     const payload = { desk: deskKey, label: desk.label, page, count: stories.length, stories, results: stories };
-    newsCache.set(cacheKey, { createdAt: Date.now(), payload });
+    // A publisher can temporarily throttle a fresh deployment. Never turn that
+    // short outage into a twelve-hour blank desk; only cache usable reporting.
+    if (stories.length) newsCache.set(cacheKey, { createdAt: Date.now(), payload });
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
     response.end(JSON.stringify(payload));
 }
@@ -338,9 +368,14 @@ async function fetchOfficialSourceListings(desk) {
         }
         if (source.listingUrl && source.articlePathPattern) {
             if (source.parser === 'fgr') {
-                let html = await fetchText(source.listingUrl);
-                if (!/titBoletin/i.test(html)) html = await fetchOfficialTextWithCurl(source.listingUrl, source.domain);
-                return parseFgrListingPage(html, source);
+                const listingUrls = [source.listingUrl, ...(source.fallbackListingUrls || [])].filter(Boolean);
+                for (const listingUrl of listingUrls) {
+                    let html = await fetchText(listingUrl);
+                    if (!/titBoletin/i.test(html)) html = await fetchOfficialTextWithCurl(listingUrl, source.domain);
+                    const releases = parseFgrListingPage(html, { ...source, listingUrl });
+                    if (releases.length) return releases;
+                }
+                return [];
             }
             if (source.apiUrl) {
                 let payload = await fetchJson(source.apiUrl);
@@ -359,12 +394,23 @@ async function fetchOfficialSourceListings(desk) {
     return sourceItems.flat();
 }
 
+async function fetchOfficialDiscoveryFallback(desk) {
+    const domains = (desk.sources || [])
+        .filter((source) => source.syndication === 'official' && source.domain)
+        .map((source) => `site:${source.domain}`);
+    if (!domains.length) return [];
+    const query = `${domains.join(' OR ')} ${desk.query}`;
+    const rssUrl = `https://www.bing.com/search?format=rss&q=${encodeURIComponent(query)}`;
+    const xml = await fetchText(rssUrl);
+    return parseRssItems(xml, 'Official-source discovery', 'Official release').filter((item) => isAllowedDeskSource(item, desk));
+}
+
 function parseFgrListingPage(html, source) {
     const page = String(html || '');
     if (!page) return [];
     const items = [];
     const seen = new Set();
-    const pattern = /<a[^>]+href=["']([^"']*\/es\/FGR\/Prensa\/_rid\/61\/_mod\/story[^"']*)["'][^>]*>[\s\S]*?<span[^>]*class=["'][^"']*titBoletin[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi;
+    const pattern = /<a[^>]+href=["']([^"']*\/(?:es|swb)\/FGR\/Prensa\/_rid\/61\/_mod\/story[^"']*)["'][^>]*>[\s\S]*?<span[^>]*class=["'][^"']*titBoletin[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi;
     let match;
     while ((match = pattern.exec(page)) && items.length < 25) {
         let url;
