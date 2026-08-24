@@ -120,6 +120,9 @@ async function handleOnlineSearch(requestUrl, response) {
 }
 
 const crimeBeatTerms = 'court OR trial OR arrest OR prison OR jail OR policing OR sheriff OR indictment OR sentencing OR investigation';
+const usLocationTerms = ['united states', 'u.s.', 'american', 'alabama', 'alaska', 'arizona', 'arkansas', 'california', 'colorado', 'connecticut', 'delaware', 'florida', 'georgia', 'hawaii', 'idaho', 'illinois', 'indiana', 'iowa', 'kansas', 'kentucky', 'louisiana', 'maine', 'maryland', 'massachusetts', 'michigan', 'minnesota', 'mississippi', 'missouri', 'montana', 'nebraska', 'nevada', 'new hampshire', 'new jersey', 'new mexico', 'new york', 'north carolina', 'ohio', 'oklahoma', 'oregon', 'pennsylvania', 'tennessee', 'texas', 'virginia', 'washington', 'wisconsin', 'wyoming', 'district of columbia', 'washington dc', 'federal court', 'u.s. attorney'];
+const europeLocationTerms = ['europe', 'european', 'europol', 'eurojust', 'france', 'germany', 'italy', 'spain', 'portugal', 'belgium', 'netherlands', 'poland', 'ukraine', 'united kingdom', 'england', 'scotland', 'ireland', 'sweden', 'norway', 'denmark', 'finland', 'greece', 'romania', 'bulgaria', 'austria', 'switzerland'];
+const mexicoLocationTerms = ['mexico', 'mexican', 'cdmx', 'mexico city', 'jalisco', 'nuevo león', 'nuevo leon', 'baja california', 'sinaloa', 'sonora', 'chihuahua', 'tamaulipas', 'guerrero', 'oaxaca'];
 const fbiOffice = (office, name) => ({
     domain: 'fbi.gov',
     path: `/contact-us/field-offices/${office}/news`,
@@ -133,13 +136,14 @@ const newsDesks = {
         label: 'United States',
         query: `United States ${crimeBeatTerms}`,
         matchTerms: ['united states', 'court', 'justice', 'investigation', 'arrest', 'trial'],
+        geographyTerms: usLocationTerms,
         sources: [
             { domain: 'fbi.gov', search: 'site:fbi.gov/news/press-releases', name: 'FBI Press Releases', syndication: 'official' },
             { domain: 'justice.gov', path: '/opa/pr', search: 'site:justice.gov/opa/pr', name: 'U.S. Department of Justice', syndication: 'official' },
         ],
     },
-    europe: { label: 'Europe', query: `Europe ${crimeBeatTerms}`, matchTerms: ['europe', 'court', 'justice', 'investigation', 'arrest'] },
-    mexico: { label: 'Mexico', query: `Mexico ${crimeBeatTerms}`, matchTerms: ['mexico', 'court', 'justice', 'investigation', 'arrest'] },
+    europe: { label: 'Europe', query: `Europe ${crimeBeatTerms}`, matchTerms: ['europe', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: europeLocationTerms, excludedTerms: mexicoLocationTerms },
+    mexico: { label: 'Mexico', query: `Mexico ${crimeBeatTerms}`, matchTerms: ['mexico', 'court', 'justice', 'investigation', 'arrest'], geographyTerms: mexicoLocationTerms, excludedTerms: europeLocationTerms },
     federal: {
         label: 'Federal & Intelligence Desk',
         query: `FBI CIA Mossad ${crimeBeatTerms}`,
@@ -159,7 +163,7 @@ const newsDesks = {
     michigan: { label: 'Michigan', query: `Michigan ${crimeBeatTerms}`, matchTerms: ['michigan', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['michigan', 'detroit', 'grand rapids', 'flint', 'lansing', 'ann arbor', 'kalamazoo', 'wayne county', 'oakland county'], sources: [fbiOffice('detroit', 'FBI Detroit'), { domain: 'freep.com', name: 'Detroit Free Press', syndication: 'link-only' }, { domain: 'detroitnews.com', name: 'The Detroit News', syndication: 'link-only' }, { domain: 'michiganpublic.org', name: 'Michigan Public', syndication: 'link-only' }] },
     ohio: { label: 'Ohio', query: `Ohio ${crimeBeatTerms}`, matchTerms: ['ohio', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['ohio', 'columbus', 'cleveland', 'cincinnati', 'toledo', 'akron', 'dayton', 'hamilton county', 'cuyahoga', 'franklin county'], sources: [fbiOffice('cincinnati', 'FBI Cincinnati'), fbiOffice('cleveland', 'FBI Cleveland'), { domain: 'cleveland.com', name: 'Cleveland.com', syndication: 'link-only' }, { domain: 'dispatch.com', name: 'The Columbus Dispatch', syndication: 'link-only' }, { domain: 'ideastream.org', name: 'Ideastream Public Media', syndication: 'link-only' }] },
     colorado: { label: 'Colorado', query: `Colorado ${crimeBeatTerms}`, matchTerms: ['colorado', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['colorado', 'denver', 'aurora', 'colorado springs', 'boulder', 'fort collins', 'pueblo', 'jefferson county', 'el paso county'], sources: [fbiOffice('denver', 'FBI Denver'), { domain: 'coloradosun.com', name: 'The Colorado Sun', syndication: 'link-only' }, { domain: 'denverpost.com', name: 'The Denver Post', syndication: 'link-only' }, { domain: 'cpr.org', name: 'Colorado Public Radio', syndication: 'link-only' }] },
-    world: { label: 'World', query: `international ${crimeBeatTerms}`, matchTerms: ['court', 'justice', 'investigation', 'arrest'] },
+    world: { label: 'World', query: `international ${crimeBeatTerms}`, matchTerms: ['court', 'justice', 'investigation', 'arrest'], excludedTerms: [...usLocationTerms, ...europeLocationTerms, ...mexicoLocationTerms] },
 };
 
 const newsDeskAliases = {
@@ -362,7 +366,7 @@ async function selectNationalDeskStories(page) {
             clearTimeout(timeout);
         }
     }));
-    const fbiDesk = { label: 'United States', query: 'FBI releases', matchTerms: ['fbi', 'press release', 'arrest', 'court', 'investigation'], jurisdictionTerms: [], sources: [{ domain: 'fbi.gov', name: 'FBI Press Releases', syndication: 'official' }] };
+    const fbiDesk = { label: 'United States', query: 'FBI releases', matchTerms: ['fbi', 'press release', 'arrest', 'court', 'investigation'], geographyTerms: usLocationTerms, sources: [{ domain: 'fbi.gov', name: 'FBI Press Releases', syndication: 'official' }] };
     const fbiStories = formatNewsStoriesInOrder(await searchOfficialFbiReleases(), fbiDesk, 10);
     const seen = new Set();
     return [...fbiStories, ...localSelections.flat()].filter((story) => {
@@ -383,6 +387,7 @@ function rankNewsStories(items, desk) {
         const combined = `${title} ${url} ${content}`;
         const matches = terms.filter((term) => combined.includes(term));
         const jurisdictionMatches = (desk.jurisdictionTerms || []).filter((term) => combined.includes(term));
+        const geographyMatches = (desk.geographyTerms || []).filter((term) => combined.includes(term));
         const reportingMatches = reportingTerms.filter((term) => combined.includes(term));
         const quality = classifySourceQuality(item);
         const key = `${title.replace(/[^a-z0-9]+/g, ' ').trim()}|${url.replace(/[?#].*$/, '')}`;
@@ -390,9 +395,9 @@ function rankNewsStories(items, desk) {
         const allowedSource = sourceSyndicationFor(item, desk);
         const officialSource = allowedSource?.syndication === 'official';
         const hasDeskSignal = matches.length || reportingMatches.length || officialSource;
-        if (quality.suppress || !isNewsSource(item) || (!allowedSource && !isAllowedDeskSource(item, desk)) || hasExcludedJurisdiction || (desk.jurisdictionTerms && !jurisdictionMatches.length && !officialSource) || !hasDeskSignal || seen.has(key)) return null;
+        if (quality.suppress || !isNewsSource(item) || (!allowedSource && !isAllowedDeskSource(item, desk)) || hasExcludedJurisdiction || (desk.jurisdictionTerms && !jurisdictionMatches.length && !officialSource) || (desk.geographyTerms && !geographyMatches.length) || !hasDeskSignal || seen.has(key)) return null;
         seen.add(key);
-        return { ...item, sourcePriority: quality.label, relevanceScore: quality.score + (officialSource ? 80 : 0) + (matches.length * 25) + (jurisdictionMatches.length * 42) + (reportingMatches.length * 16) };
+        return { ...item, sourcePriority: quality.label, relevanceScore: quality.score + (officialSource ? 80 : 0) + (matches.length * 25) + (jurisdictionMatches.length * 42) + (geographyMatches.length * 35) + (reportingMatches.length * 16) };
     }).filter(Boolean).sort((first, second) => second.relevanceScore - first.relevanceScore);
 }
 
