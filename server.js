@@ -102,6 +102,7 @@ async function handleOnlineSearch(requestUrl, response) {
         content: item.content || '',
         engine: item.engine_name || 'SearXNG result',
         profile: item.searchProfile || 'General Web',
+        sourcePriority: item.sourcePriority || 'Medium priority',
         category: item.category || 'general',
         publishedDate: item.publishedDate || null,
     }));
@@ -188,20 +189,48 @@ function rankRelevantResults(items, query) {
     if (!terms.length) return items;
 
     const minimumTitleOrUrlMatches = terms.length === 1 ? 1 : Math.min(2, terms.length);
+    const deduplicatedContent = new Set();
     return items.map((item) => {
         const title = String(item.title || '').toLowerCase();
         const url = String(item.url || '').toLowerCase();
         const content = String(item.content || '').toLowerCase();
+        const sourceQuality = classifySourceQuality(item);
+        if (sourceQuality.suppress) return null;
         const titleMatches = terms.filter((term) => title.includes(term));
         const urlMatches = terms.filter((term) => url.includes(term));
         const contentMatches = terms.filter((term) => content.includes(term));
         const titleOrUrlMatches = new Set([...titleMatches, ...urlMatches]);
         if (titleOrUrlMatches.size < minimumTitleOrUrlMatches) return null;
 
+        const normalizedContent = `${title.replace(/[^a-z0-9]+/g, ' ').trim()}|${url.replace(/[?#].*$/, '').replace(/\/$/, '')}`;
+        if (deduplicatedContent.has(normalizedContent)) return null;
+        deduplicatedContent.add(normalizedContent);
+
         const exactPhraseBonus = phrase.length >= 3 && title.includes(phrase) ? 30 : 0;
-        const score = exactPhraseBonus + (titleMatches.length * 12) + (urlMatches.length * 8) + (contentMatches.length * 2);
-        return { ...item, relevanceScore: score };
+        const score = sourceQuality.score + exactPhraseBonus + (titleMatches.length * 12) + (urlMatches.length * 8) + (contentMatches.length * 2);
+        return { ...item, relevanceScore: score, sourcePriority: sourceQuality.label };
     }).filter(Boolean).sort((first, second) => second.relevanceScore - first.relevanceScore);
+}
+
+function classifySourceQuality(item) {
+    let host = '';
+    try { host = new URL(item.url).hostname.toLowerCase().replace(/^www\./, ''); } catch { return { suppress: true, score: -9999, label: 'Suppressed' }; }
+    const text = `${item.title || ''} ${item.content || ''}`.toLowerCase();
+    const suppressedDomains = /(?:^|\.)(facebook|instagram|tiktok|reddit|quora|pinterest|x|twitter|linkedin|youtube|medium|fandom|wikihow|brainly|answers\.com|buzzfeed|ranker|perplexity|chatgpt|openai\.com|gemini\.google\.com)(?:\.|$)/;
+    const suppressedText = /\b(?:sponsored|advertisement|coupon|promo code|celebrity|celebrities|gossip|true crime podcast|ai[- ]generated|chatgpt summary)\b/i;
+    if (suppressedDomains.test(host) || suppressedText.test(text)) return { suppress: true, score: -9999, label: 'Suppressed' };
+
+    const highDomain = /(?:^|\.)(?:gov|mil)$/i.test(host)
+        || /(?:^|\.)(archives\.gov|loc\.gov|govinfo\.gov|congress\.gov|uscode\.house\.gov|justice\.gov|courtlistener\.com|oyez\.org|uscourts\.gov|supremecourt\.gov|archive\.org|floridabar\.org|americanbar\.org)$/i.test(host);
+    const highRecordSignal = /\b(?:court opinion|opinion of the court|case file|docket|trial record|prison register|institutional record|juvenile (?:court|institution)|forensic report|official investigation|commission report|government report|statute|legislation|public record|archival record|primary source)\b/i.test(text);
+    if (highDomain || highRecordSignal) return { suppress: false, score: 1000, label: 'High priority' };
+
+    const scholarlyDomain = /(?:^|\.)(?:edu|ac\.uk|jstor\.org|ssrn\.com|doi\.org|crossref\.org|openalex\.org|hathitrust\.org|books\.google\.com|proquest\.com|worldcat\.org|history\.org|si\.edu|digitalcommonwealth\.org)$/i.test(host);
+    const scholarlySignal = /\b(?:journal article|law review|university press|dissertation|thesis|scholarly|peer[- ]reviewed|museum collection|historical society|digital humanities)\b/i.test(text);
+    if (scholarlyDomain || scholarlySignal) return { suppress: false, score: 500, label: 'Medium priority' };
+
+    const lowDomain = /(?:^|\.)(?:news|blogspot\.com|wordpress\.com|substack\.com|avvo\.com|findlaw\.com|justia\.com|britannica\.com)$/i.test(host);
+    return { suppress: false, score: lowDomain ? 5 : 75, label: lowDomain ? 'Low priority' : 'General source' };
 }
 
 async function getKeylessFallbackResults(query) {
@@ -262,7 +291,7 @@ async function getKeylessFallbackResults(query) {
         if (!item.url || isSearchEngineLandingPage(item) || /(?:^|\.)wikipedia\.org(?:\/|$)/i.test(item.url) || /wikipedia/i.test(item.engine || '') || seen.has(item.url)) return false;
         seen.add(item.url);
         return true;
-    }), query).slice(0, 300);
+    }), query).slice(0, 300).map((item) => ({ ...item, sourcePriority: item.sourcePriority || 'Medium priority' }));
 }
 
 const server = http.createServer((request, response) => {

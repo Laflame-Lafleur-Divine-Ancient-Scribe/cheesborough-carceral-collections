@@ -989,7 +989,7 @@
               <a class="online-result-title" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a>
               <a class="online-result-url" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(getOnlineResultUrl(item.url))}</a>
               <p class="online-result-desc">${escapeHtml(item.content)}</p>
-              <p class="online-result-meta">${escapeHtml(item.profile || item.engine)} &middot; ${escapeHtml(item.engine)}${item.publishedDate ? ` &middot; ${escapeHtml(item.publishedDate)}` : ''}</p>
+              <p class="online-result-meta">${escapeHtml(item.sourcePriority || 'General source')} &middot; ${escapeHtml(item.profile || item.engine)} &middot; ${escapeHtml(item.engine)}${item.publishedDate ? ` &middot; ${escapeHtml(item.publishedDate)}` : ''}</p>
             </article>
           `).join('')}
           <nav class="online-pagination" aria-label="Online search result pages">
