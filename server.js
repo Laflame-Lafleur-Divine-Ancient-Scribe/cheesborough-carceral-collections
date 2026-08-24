@@ -261,7 +261,10 @@ function formatNewsStoriesInOrder(items, desk, limit = 9) {
     return (items || []).filter((item) => {
         const url = item?.url;
         const key = String(url || '').replace(/[?#].*$/, '');
-        if (!url || seen.has(key) || classifySourceQuality(item).suppress || !isNewsSource(item) || !isAllowedDeskSource(item, desk)) return false;
+        const combined = `${item.title || ''} ${item.url || ''} ${item.content || ''}`.toLowerCase();
+        const geographyMatches = (desk.geographyTerms || []).some((term) => combined.includes(term));
+        const excluded = (desk.excludedTerms || []).some((term) => combined.includes(term));
+        if (!url || seen.has(key) || classifySourceQuality(item).suppress || !isNewsSource(item) || !isAllowedDeskSource(item, desk) || (desk.geographyTerms?.length && !geographyMatches) || excluded) return false;
         seen.add(key);
         return true;
     }).slice(0, limit).map((item) => {
