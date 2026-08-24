@@ -118,8 +118,8 @@ async function handleOnlineSearch(requestUrl, response) {
 const crimeBeatTerms = 'court OR trial OR arrest OR prison OR jail OR policing OR sheriff OR indictment OR sentencing OR investigation';
 const fbiOffice = (office, name) => ({
     domain: 'fbi.gov',
-    path: `/contact-us/field-offices/${office}/news`,
-    search: `site:fbi.gov/contact-us/field-offices/${office}/news`,
+    path: `/contact-us/field-offices/${office}/news/press-releases`,
+    search: `site:fbi.gov/contact-us/field-offices/${office}/news/press-releases`,
     name,
     syndication: 'official',
 });
@@ -130,7 +130,7 @@ const newsDesks = {
         query: `United States ${crimeBeatTerms}`,
         matchTerms: ['united states', 'court', 'justice', 'investigation', 'arrest', 'trial'],
         sources: [
-            { domain: 'fbi.gov', path: '/news/press-releases', search: 'site:fbi.gov/news/press-releases', name: 'FBI Press Releases', syndication: 'official' },
+            { domain: 'fbi.gov', search: 'site:fbi.gov/news/press-releases', name: 'FBI Press Releases', syndication: 'official' },
             { domain: 'justice.gov', path: '/opa/pr', search: 'site:justice.gov/opa/pr', name: 'U.S. Department of Justice', syndication: 'official' },
         ],
     },
@@ -141,7 +141,7 @@ const newsDesks = {
         query: `FBI CIA Mossad ${crimeBeatTerms}`,
         matchTerms: ['fbi', 'cia', 'mossad', 'federal', 'investigation'],
         sources: [
-            { domain: 'fbi.gov', path: '/news/press-releases', search: 'site:fbi.gov/news/press-releases', name: 'FBI Press Releases', syndication: 'official' },
+            { domain: 'fbi.gov', search: 'site:fbi.gov/news/press-releases', name: 'FBI Press Releases', syndication: 'official' },
             { domain: 'justice.gov', path: '/opa/pr', search: 'site:justice.gov/opa/pr', name: 'U.S. Department of Justice', syndication: 'official' },
             { domain: 'cia.gov', search: 'site:cia.gov/newsroom', name: 'CIA Newsroom', syndication: 'official' },
             { domain: 'gov.il', search: 'site:gov.il/en/departments/mossad', name: 'Mossad / Israel Gov', syndication: 'official' },
@@ -214,7 +214,8 @@ async function handleNews(requestUrl, response) {
         }
     });
     const searchResults = (await Promise.all(searchPages)).flat();
-    stories = formatNewsStories(searchResults, desk);
+    const officialResults = await fetchOfficialSourceListings(desk);
+    stories = formatNewsStories([...officialResults, ...searchResults], desk);
     if (stories.length === 0 && !desk.sources?.length) {
         stories = formatNewsStories(await getKeylessFallbackResults(desk.query), desk);
     }
@@ -251,8 +252,53 @@ async function searchOfficialFbiReleases() {
     // Directly consume the FBI's published RSS 1.0 release feed. This is not
     // SearXNG discovery and keeps the title, direct link, release date, and
     // location language supplied by the Bureau intact.
-    const xml = await fetchText('https://www.fbi.gov/feeds/national-press-releases/RSS');
-    return parseRssItems(xml, 'FBI', 'Official FBI press release');
+    const xml = await fetchText('https://www.fbi.gov/feeds/national-press-releases/rss.xml') || await fetchText('https://www.fbi.gov/feeds/national-press-releases/RSS');
+    return parseFeedItems(xml, 'FBI', 'Official FBI press release');
+}
+
+async function fetchOfficialSourceListings(desk) {
+    const officialSources = (desk.sources || []).filter((source) => source.syndication === 'official' && source.domain === 'fbi.gov' && source.path?.includes('/field-offices/'));
+    const sourceItems = await Promise.all(officialSources.map(async (source) => {
+        const html = await fetchText(`https://www.fbi.gov${source.path}`);
+        return parseFbiListingPage(html, source);
+    }));
+    return sourceItems.flat();
+}
+
+function parseFbiListingPage(html, source) {
+    const page = String(html || '');
+    if (!page) return [];
+    const items = [];
+    const seen = new Set();
+    const pattern = /<a[^>]+href=["']([^"']*\/contact-us\/field-offices\/[^"']+\/news\/[^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+    let match;
+    while ((match = pattern.exec(page)) && items.length < 20) {
+        const url = absoluteFbiUrl(match[1]);
+        const title = decodeXml(match[2]);
+        if (!url || !title || title.length < 12 || seen.has(url)) continue;
+        seen.add(url);
+        const nearby = page.slice(Math.max(0, match.index - 500), Math.min(page.length, pattern.lastIndex + 800));
+        items.push({
+            title,
+            url,
+            content: decodeXml(nearby).replace(/\s+/g, ' ').slice(0, 240),
+            engine: source.name,
+            publishedDate: extractDateText(nearby),
+        });
+    }
+    return items;
+}
+
+function absoluteFbiUrl(value) {
+    try {
+        return new URL(value, 'https://www.fbi.gov').href;
+    } catch {
+        return '';
+    }
+}
+
+function extractDateText(value) {
+    return String(value || '').match(/\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\b/)?.[0] || null;
 }
 
 async function selectNationalDeskStories(page) {
@@ -260,6 +306,7 @@ async function selectNationalDeskStories(page) {
     const localSelections = await Promise.all(stateKeys.map(async (stateKey) => {
         const desk = newsDesks[stateKey];
         const sourceDomains = sourceSearchExpression(desk);
+        const officialResults = await fetchOfficialSourceListings(desk);
         const params = new URLSearchParams({
             q: `(${sourceDomains}) ${desk.query}`,
             format: 'json',
@@ -272,16 +319,16 @@ async function selectNationalDeskStories(page) {
         const timeout = setTimeout(() => controller.abort(), 15000);
         try {
             const result = await fetch(`${searxngUrl}/search?${params}`, { signal: controller.signal });
-            if (!result.ok) return [];
+            if (!result.ok) return formatNewsStories(officialResults, desk, 1);
             const payload = await result.json();
-            return formatNewsStories(Array.isArray(payload.results) ? payload.results : [], desk, 1);
+            return formatNewsStories([...officialResults, ...(Array.isArray(payload.results) ? payload.results : [])], desk, 1);
         } catch {
-            return [];
+            return formatNewsStories(officialResults, desk, 1);
         } finally {
             clearTimeout(timeout);
         }
     }));
-    const fbiDesk = { label: 'United States', query: 'FBI releases', matchTerms: ['fbi', 'press release', 'arrest', 'court', 'investigation'], jurisdictionTerms: [], sources: [{ domain: 'fbi.gov', path: '/news/press-releases', name: 'FBI Press Releases', syndication: 'official' }] };
+    const fbiDesk = { label: 'United States', query: 'FBI releases', matchTerms: ['fbi', 'press release', 'arrest', 'court', 'investigation'], jurisdictionTerms: [], sources: [{ domain: 'fbi.gov', name: 'FBI Press Releases', syndication: 'official' }] };
     const fbiStories = formatNewsStories(await searchOfficialFbiReleases(), fbiDesk, 10);
     const seen = new Set();
     return [...fbiStories, ...localSelections.flat()].filter((story) => {
@@ -433,6 +480,27 @@ function parseRssItems(xml, engine, profile = 'General Web') {
             publishedDate: read('pubDate') || read('dc:date') || read('date') || null,
         };
     }).filter(Boolean);
+}
+
+function parseFeedItems(xml, engine, profile = 'General Web') {
+    const rssItems = parseRssItems(xml, engine, profile);
+    const atomItems = [...String(xml || '').matchAll(/<entry\b[^>]*>([\s\S]*?)<\/entry>/gi)].map((match) => {
+        const item = match[1];
+        const read = (tag) => decodeXml(item.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))?.[1]);
+        const title = read('title');
+        const url = item.match(/<link[^>]+href=["']([^"']+)["'][^>]*>/i)?.[1] || read('link');
+        if (!title || !url || !/^https?:\/\//i.test(url)) return null;
+        return {
+            title,
+            url,
+            content: read('summary') || read('content'),
+            engine,
+            profile,
+            category: 'official release',
+            publishedDate: read('published') || read('updated') || null,
+        };
+    }).filter(Boolean);
+    return [...rssItems, ...atomItems];
 }
 
 function isSearchEngineLandingPage(item) {

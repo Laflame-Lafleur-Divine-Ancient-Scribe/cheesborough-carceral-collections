@@ -73,11 +73,11 @@
     const safeUrl=value=>{try{const parsed=new URL(value);return /^https?:$/.test(parsed.protocol)?parsed.href:''}catch{return''}};
     const resultUrl=item=>safeUrl(item.url||item.link||item.href||'');
     const publisher=item=>escapeHtml(item.publisher||item.source||item.engine||new URL(resultUrl(item)).hostname.replace(/^www\./,''));
-    function storyArt(item,lead){
+    function storyArt(item,lead,href){
       const kind=['court','prison','police','records','investigation'].includes(item.imageType)?item.imageType:'court';
       const image=safeUrl(item.image||item.thumbnail||item.img_src||'');
-      if(image)return `<a class="story-art" href="${image}" target="_blank" rel="noopener noreferrer" aria-label="Open source image for this report"><img src="${image}" alt="" loading="${lead?'eager':'lazy'}" referrerpolicy="no-referrer"></a>`;
-      return `<div class="story-art story-sketch ${kind}" role="img" aria-label="Illustrated ${kind} sketch"><span class="illustration-note">Illustrated</span></div>`;
+      if(image)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${image}" alt="" loading="${lead?'eager':'lazy'}" referrerpolicy="no-referrer"></a>`;
+      return `<a class="story-art story-sketch ${kind}" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this illustrated ${kind} report"><span class="illustration-note">${escapeHtml(kind)}</span></a>`;
     }
     function storyMarkup(item,lead=false){
       const href=resultUrl(item);if(!href)return '';
@@ -85,7 +85,7 @@
       const excerpt=escapeHtml(item.snippet||item.content||item.description||'Read the original reporting at the publisher.');
       const dateText=escapeHtml(item.published_at||item.published||item.date||'');
       const category=escapeHtml(item.category||section.replaceAll('-',' '));
-      return `<article class="${lead?'lead':'brief'} story-with-art">${storyArt(item,lead)}<div><p class="story-label">${category}</p><a class="headline" href="${href}" target="_blank" rel="noopener noreferrer">${title}</a><p class="summary">${excerpt}</p><div class="byline"><a class="publisher" href="${href}" target="_blank" rel="noopener noreferrer">${publisher(item)} &nearr;</a>${dateText?`<span>${dateText}</span>`:''}</div></article>`;
+      return `<article class="${lead?'lead':'brief'} story-with-art">${storyArt(item,lead,href)}<div><p class="story-label">${category}</p><a class="headline" href="${href}" target="_blank" rel="noopener noreferrer">${title}</a><p class="summary">${excerpt}</p><div class="byline"><a class="publisher" href="${href}" target="_blank" rel="noopener noreferrer">${publisher(item)} &nearr;</a>${dateText?`<span>${dateText}</span>`:''}</div></div></article>`;
     }
     function showState(kickerText,message){
       content.innerHTML=`<div class="state"><div><p class="kicker">${escapeHtml(kickerText)}</p><p>${escapeHtml(message)}</p></div></div>`;
