@@ -380,6 +380,31 @@
       .archive-link { color: var(--gold); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
       .archive-link:hover { color: #fff; }
 
+      .blackwhite-news { background: #e9e2d5; border-top: 1px solid #bdb09a; padding: clamp(2.75rem, 6vw, 5rem) 1rem; }
+      .blackwhite-news-inner { background: #f8f5ed; border: 1px solid #aa9c85; box-shadow: 7px 8px 0 rgba(16, 44, 76, 0.12); margin: 0 auto; max-width: 1040px; position: relative; }
+      .blackwhite-news-inner::before { background: var(--red); bottom: -1px; content: ""; left: 1.1rem; position: absolute; top: -1px; width: 7px; }
+      .blackwhite-news-masthead { align-items: end; background: var(--navy); border-bottom: 5px solid var(--gold); color: #fff; display: grid; gap: 1.4rem; grid-template-columns: minmax(0, 1fr) auto; padding: 1.25rem 1.5rem 1.2rem 2.2rem; }
+      .blackwhite-news-kicker { align-items: center; color: #e9c77f; display: flex; font-size: 0.73rem; font-weight: 700; gap: 0.55rem; letter-spacing: 0.14em; margin: 0 0 0.45rem; text-transform: uppercase; }
+      .blackwhite-news-kicker span { background: var(--gold); color: var(--deep-navy); font-size: 0.63rem; letter-spacing: 0.11em; padding: 0.18rem 0.38rem; }
+      .blackwhite-news h2 { color: #fff; font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.7rem, 3.2vw, 2.7rem); line-height: 1.08; margin: 0; }
+      .blackwhite-news-link { color: #f8f5ed; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-decoration-color: var(--gold); text-decoration-thickness: 2px; text-underline-offset: 0.3em; text-transform: uppercase; white-space: nowrap; }
+      .blackwhite-news-link:hover { color: var(--gold); }
+      .blackwhite-news-deck { border-bottom: 1px solid #d5ccbc; color: #514c44; line-height: 1.5; margin: 0; padding: 1.1rem 1.6rem 1.25rem 2.2rem; }
+      .blackwhite-news-stories { display: grid; gap: 1.25rem; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 1.45rem 1.5rem 1.55rem 2.2rem; }
+      .blackwhite-story { background: #f1ecdf; border: 1px solid #d5ccbc; display: grid; grid-template-rows: auto 1fr auto; min-width: 0; padding: 0.8rem; }
+      .blackwhite-story-image { aspect-ratio: 4 / 3; background: #e4dac9; border: 1px solid #b9aa92; box-shadow: 3px 3px 0 rgba(16, 44, 76, 0.12); display: block; margin: 0 0 0.8rem; overflow: hidden; }
+      .blackwhite-story-image img { display: block; filter: saturate(0.72) contrast(1.04); height: 100%; object-fit: cover; transition: transform 200ms ease; width: 100%; }
+      .blackwhite-story-image:hover img { transform: scale(1.035); }
+      .blackwhite-story h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1rem; line-height: 1.3; margin: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+      .blackwhite-story h3 a { color: var(--navy); text-decoration: none; }
+      .blackwhite-story h3 a:hover { text-decoration: underline; text-decoration-color: var(--gold); text-decoration-thickness: 3px; text-underline-offset: 0.14em; }
+      .blackwhite-story-source { align-self: end; color: var(--red); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; margin-top: 0.75rem; text-transform: uppercase; }
+      .blackwhite-story-source:hover { color: var(--navy); }
+      .blackwhite-empty { grid-column: 1 / -1; padding: 1.45rem 1.5rem 1.5rem 2.2rem; }
+      .blackwhite-empty h3 { font-family: "Libre Baskerville", Georgia, serif; margin: 0 0 0.4rem; }
+      .blackwhite-empty p { margin: 0; }
+      .blackwhite-empty a { color: var(--red); font-weight: 700; }
+
       .prison-hero { background: var(--deep-navy); color: #fff; }
       .prison-hero-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.8fr); margin: 0 auto; max-width: 980px; min-height: 26rem; }
       .prison-hero-copy { align-self: center; max-width: 39rem; padding: clamp(2rem, 5vw, 4rem) 1rem clamp(2rem, 5vw, 4rem) 0; }
@@ -515,6 +540,7 @@
         .collections { grid-template-columns: repeat(2, 1fr); }
         .hero { min-height: 39rem; }
         .publication-grid { grid-template-columns: 1fr; }
+        .blackwhite-news-stories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .prison-hero-inner { grid-template-columns: 1fr; min-height: 0; }
         .prison-hero-copy { max-width: none; padding: 2.25rem 1rem 1.75rem; }
         .prison-hero-copy h2 { font-size: clamp(1.65rem, 8vw, 2.25rem); line-height: 1.18; }
@@ -531,6 +557,12 @@
         .topbar { font-size: 0.78rem; }
         .topbar a { padding: 0 0.4rem; }
         .hero { min-height: 40rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+        .blackwhite-news { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .blackwhite-news-inner::before { left: 0.7rem; width: 5px; }
+        .blackwhite-news-masthead { align-items: start; grid-template-columns: 1fr; padding: 1rem 1rem 1rem 1.45rem; }
+        .blackwhite-news-deck { padding-left: 1.45rem; padding-right: 1rem; }
+        .blackwhite-news-stories { gap: 1rem; padding: 1rem 1rem 1.2rem 1.45rem; }
+        .blackwhite-news-stories { grid-template-columns: 1fr; }
         .collections { gap: 0.7rem; }
         .collection-card { min-height: 11rem; }
         .card-art { min-height: 6rem; }
@@ -541,6 +573,61 @@
         .topic-grid { grid-template-columns: 1fr; }
         .explore-grid { grid-template-columns: 1fr; }
         footer { align-items: flex-start; flex-direction: column; gap: 0.35rem; }
+      }
+      /* Homepage ink, paper & press rhythm */
+      :root {
+        --paper: #f5f0e5;
+        --paper-deep: #e7dece;
+        --ink: #102c4c;
+        --ink-dark: #091e36;
+        --press-red: #8f2d22;
+      }
+      body { background: var(--paper-deep); }
+      .topbar { background: var(--ink-dark); border-bottom: 3px solid var(--gold); }
+      .topbar a { position: relative; }
+      .topbar a:hover { color: #fff; }
+      .topbar a:hover::after { background: var(--press-red); bottom: -0.7rem; content: ""; height: 3px; left: 0.7rem; position: absolute; right: 0.7rem; }
+      .masthead { border-bottom: 1px solid var(--gold); }
+      .tagline { background: #293847; border-bottom: 4px solid var(--press-red); }
+      .hero { border-bottom: 7px solid var(--gold); }
+      .search { border: 1px solid var(--gold); box-shadow: 11px 11px 0 rgba(9, 30, 54, 0.45); }
+      .collections { gap: clamp(0.8rem, 1.8vw, 1.35rem); }
+      .collection-card { border-color: var(--gold); box-shadow: 5px 6px 0 rgba(9, 30, 54, 0.55); position: relative; }
+      .collection-card::after { background: var(--press-red); content: ""; height: 5px; left: 0; position: absolute; right: 0; top: 0; transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
+      .collection-card:hover { box-shadow: 9px 11px 0 rgba(9, 30, 54, 0.48); transform: translateY(-4px); }
+      .collection-card:hover::after { transform: scaleX(1); }
+      .card-art { background: var(--paper); border-bottom: 1px solid rgba(194, 155, 83, 0.65); }
+      .publication { background: var(--paper); border-bottom: 1px solid #cfc5b5; position: relative; }
+      .publication::before { background: var(--ink); content: ""; height: 8px; left: 0; position: absolute; right: 0; top: 0; }
+      .publication-inner { border-left: 1px solid rgba(16, 44, 76, 0.25); border-right: 1px solid rgba(16, 44, 76, 0.25); padding: 0 clamp(1rem, 3vw, 2.25rem); }
+      .feature-story { border-color: #bba988; box-shadow: 7px 8px 0 rgba(16, 44, 76, 0.12); }
+      .story-label { color: var(--press-red); }
+      .archive-box { border-left: 6px solid var(--press-red); box-shadow: 5px 6px 0 rgba(16, 44, 76, 0.2); }
+      .blackwhite-news { background: var(--ink-dark); border-bottom: 1px solid var(--gold); border-top: 7px solid var(--press-red); padding-bottom: clamp(3rem, 7vw, 5.75rem); padding-top: clamp(3rem, 7vw, 5.75rem); }
+      .blackwhite-news-inner { border: 1px solid var(--gold); box-shadow: 11px 12px 0 rgba(0, 0, 0, 0.3); }
+      .blackwhite-news-inner::after { border: 1px solid rgba(194, 155, 83, 0.5); bottom: 0.55rem; content: ""; left: 0.55rem; pointer-events: none; position: absolute; right: 0.55rem; top: 0.55rem; }
+      .blackwhite-news-masthead { background: var(--ink-dark); border-bottom-width: 4px; }
+      .blackwhite-news-deck { background: #ede5d6; color: #3d3c3a; }
+      .blackwhite-news-stories { background: #f8f5ed; position: relative; }
+      .blackwhite-story { background: #fffaf0; border-top: 4px solid var(--gold); box-shadow: 4px 5px 0 rgba(16, 44, 76, 0.14); }
+      .blackwhite-story:nth-child(3n + 2) { border-top-color: var(--press-red); }
+      .blackwhite-story:hover { box-shadow: 7px 8px 0 rgba(16, 44, 76, 0.2); transform: translateY(-3px); transition: transform 180ms ease, box-shadow 180ms ease; }
+      .prison-hero { border-bottom: 7px solid var(--gold); border-top: 1px solid var(--gold); }
+      .prison-hero-copy { border-left: 6px solid var(--press-red); padding-left: clamp(1rem, 3vw, 2rem); }
+      .topic-band { background: var(--paper-deep); border-bottom: 1px solid #bcae96; border-top: 6px solid var(--ink); }
+      .topic-card { background: var(--paper); border: 1px solid #c7b99f; border-top: 5px solid var(--gold); box-shadow: 4px 5px 0 rgba(16, 44, 76, 0.1); }
+      .topic-card:nth-child(even) { border-top-color: var(--press-red); }
+      .explore-band { background: var(--paper); border-top: 7px solid var(--gold); }
+      .explore-card { border: 1px solid var(--gold); box-shadow: 6px 7px 0 rgba(16, 44, 76, 0.22); }
+      .explore-card::before { background: rgba(9, 30, 54, 0.78); }
+      .explore-card:nth-child(2)::before { background: rgba(9, 30, 54, 0.7); }
+      .state-band { border-bottom: 5px solid var(--press-red); border-top: 1px solid var(--gold); }
+      .news { background: var(--ink-dark); border-top: 1px solid var(--gold); }
+      footer { border-top: 5px solid var(--gold); }
+      @media (max-width: 760px) {
+        .publication-inner { padding: 0 1rem; }
+        .blackwhite-news-inner::after { bottom: 0.4rem; left: 0.4rem; right: 0.4rem; top: 0.4rem; }
+        .prison-hero-copy { border-left-width: 4px; }
       }
     </style>
   <link rel="stylesheet" href="desktop-integrity.css">
@@ -601,7 +688,7 @@
             </a>
             <a class="collection-card" href="NEWS.html">
               <div class="card-art" aria-hidden="true"><span>&#9878;</span></div>
-              <h2>News &amp;<br />The Review</h2>
+              <h2>The Black &amp; White<br />News</h2>
             </a>
             <a class="collection-card" href="LAW-LIBRARY.html">
               <div class="card-art" aria-hidden="true"><span>&#9876;</span></div>
@@ -645,6 +732,14 @@
               </aside>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="blackwhite-news" aria-labelledby="blackwhite-news-title">
+        <div class="blackwhite-news-inner">
+          <header class="blackwhite-news-masthead"><div><p class="blackwhite-news-kicker"><span>Live desk</span> Current affairs &amp; public records</p><h2 id="blackwhite-news-title">The Black &amp; White News</h2></div><a class="blackwhite-news-link" href="NEWS.html">Enter the News desk &rarr;</a></header>
+          <p class="blackwhite-news-deck">Recent News &amp; Press Releases...</p>
+          <div class="blackwhite-news-stories" id="blackwhite-news-stories" aria-live="polite"><article class="blackwhite-empty"><h3>Follow the current record.</h3><p>Visit <a href="NEWS.html">The Black &amp; White News</a> for current official reporting, court coverage, and public records.</p></article></div>
         </div>
       </section>
 
@@ -853,5 +948,120 @@
         </script>
         <script src="dozier-daily-photo.js"></script>
         <script src="american-siberia-rotation.js"></script>
+        <script>
+          (() => {
+            const storyRoot = document.getElementById("blackwhite-news-stories");
+            if (!storyRoot) return;
+            const endpoint = "https://serviceapi-production-f574.up.railway.app/api/news";
+            const desks = ["united-states", "europe", "mexico", "federal-agencies", "florida", "georgia", "louisiana", "new-york", "california", "michigan", "ohio", "colorado", "world"];
+            const shuffle = items => [...items].sort(() => Math.random() - 0.5);
+            const escapeHtml = value => String(value || "").replace(/[&<>\"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[character]));
+            const plainText = value => {
+              let text = String(value || "").replace(/<[^>]*>/g, " ");
+              const decoder = document.createElement("textarea");
+              for (let pass = 0; pass < 3; pass += 1) {
+                decoder.innerHTML = text;
+                const decoded = decoder.value.replace(/<[^>]*>/g, " ");
+                if (decoded === text) break;
+                text = decoded;
+              }
+              return text.replace(/\s+/g, " ").trim();
+            };
+            const unusable = value => {
+              const raw = String(value || "").trim();
+              const text = plainText(raw);
+              const fragment = /(?:\b(?:class|id|href|src|style|name|value|data-[\w-]+|node-[\w-]+)\s*=|[\"']>|<\/|\/>|[{}]|(?:\d+\.){3,}\d*|\b\d+(?:\.\d+){2,}\b|(?:\.\s*){2,})/i;
+              return !text || fragment.test(raw) || fragment.test(text) || /(?:https?:\/\/|www\.)/i.test(text) || /^\s*[\[{]/.test(text) || /[;=]{2,}/.test(text) || /(?:[\"'](?:title|snippet|content|description|url|link|html|text)[\"']\s*:|\b(?:title|snippet|content|description|url|link|html)\s*:\s*[\"'[{])/i.test(text) || /\b(?:function\s*\(|(?:const|let|var)\s+\w+\s*=|=>|<script\b)/i.test(text);
+            };
+            const safeUrl = value => { try { const url = new URL(value); return /^https?:$/.test(url.protocol) ? url.href : ""; } catch { return ""; } };
+            const sourceSite = href => { try { return new URL(href).hostname.replace(/^www\./i, ""); } catch { return "Original source"; } };
+            const resultsFor = payload => Array.isArray(payload) ? payload : (payload.results || payload.stories || payload.news || payload.items || []);
+            const usablePublisherImage = value => {
+              const image = safeUrl(value);
+              if (!image || /(?:favicon|logo|icon|placeholder|default|sprite|blank|pixel|avatar)/i.test(image)) return "";
+              const url = new URL(image);
+              return /\.(?:avif|gif|jpe?g|png|webp)(?:$|[?#])/i.test(url.pathname) || /(?:image|media|thumbnail|photo|picture|asset|upload|files)/i.test(`${url.pathname}${url.search}`) ? image : "";
+            };
+            const artworkFor = story => {
+              const signals = `${story.title} ${story.summary} ${story.desk}`.toLowerCase();
+              if (/trafficking|exploitation|smuggling|digital[-\s]?forensics|child predator/.test(signals)) return "assets/news/blackwhite-editorial/trafficking-digital-forensics.png";
+              if (/arrest(?:ed|s)?|search warrant|indict(?:ed|ment)?|firearm|weapon|drug|fentanyl|meth(?:amphetamine)?|cocaine/.test(signals)) return "assets/news/blackwhite-editorial/arrest-evidence-processing.png";
+              if (/prison|sentenc(?:ed|ing|e)|inmate|convict(?:ed|ion)|incarcerat/.test(signals)) return "assets/news/blackwhite-editorial/prison-intake.png";
+              if (/fraud|scam|bank|wire|financial|identity theft|embezzl/.test(signals)) return "assets/news/blackwhite-editorial/fraud-digital-forensics.png";
+              if (/obstruction|training|\bice\b|interference|imped(?:e|ing)/.test(signals)) return "assets/news/blackwhite-editorial/obstruction-evidence.png";
+              return "assets/news/blackwhite-editorial/court-exhibit.png";
+            };
+            const investigationArt = [
+              "assets/news/blackwhite-editorial/trafficking-digital-forensics.png",
+              "assets/news/blackwhite-editorial/arrest-evidence-processing.png",
+              "assets/news/blackwhite-editorial/prison-intake.png",
+              "assets/news/blackwhite-editorial/fraud-digital-forensics.png",
+              "assets/news/blackwhite-editorial/obstruction-evidence.png",
+              "assets/news/blackwhite-editorial/court-exhibit.png"
+            ];
+            const maleMugshots = [
+              "01_Photos/Illustrations/mugshot-black-man-01.png",
+              "01_Photos/Illustrations/mugshot-black-man-02.png",
+              "01_Photos/Illustrations/mugshot-white-man-01.png",
+              "01_Photos/Illustrations/mugshot-white-man-02.png"
+            ];
+            const femaleMugshots = [
+              "01_Photos/Illustrations/mugshot-black-woman-01.png",
+              "01_Photos/Illustrations/mugshot-black-woman-02.png",
+              "01_Photos/Illustrations/mugshot-white-woman-01.png",
+              "01_Photos/Illustrations/mugshot-white-woman-02.png"
+            ];
+            const assignDistinctImages = stories => {
+              const used = new Set();
+              let maleIndex = 0;
+              let femaleIndex = 0;
+              return stories.map(story => {
+                const title = story.title.toLowerCase();
+                let image = story.image && !used.has(story.image) ? story.image : "";
+                if (!image && /\b(?:woman|female)\b/.test(title)) {
+                  while (femaleMugshots[femaleIndex] && used.has(femaleMugshots[femaleIndex])) femaleIndex += 1;
+                  image = femaleMugshots[femaleIndex++] || "";
+                } else if (!image && /\b(?:man|male)\b/.test(title)) {
+                  while (maleMugshots[maleIndex] && used.has(maleMugshots[maleIndex])) maleIndex += 1;
+                  image = maleMugshots[maleIndex++] || "";
+                }
+                const preferred = artworkFor(story);
+                if (!image) image = !used.has(preferred) ? preferred : investigationArt.find(path => !used.has(path)) || preferred;
+                used.add(image);
+                return { ...story, image };
+              });
+            };
+            const storyForDesk = (desk, payload) => resultsFor(payload).map(item => {
+              const href = safeUrl(item.url || item.link || item.href || "");
+              const title = plainText(item.title || "");
+              const summary = [item.snippet, item.content, item.description].map(value => (!unusable(value) ? plainText(value) : "")).find(Boolean) || "";
+              const image = usablePublisherImage(item.image || item.thumbnail || item.img_src || item.imageUrl || item.image_url || "");
+              return href && title && !unusable(item.title) ? { desk, href, title, summary, image } : null;
+            }).find(Boolean);
+            const fallback = () => { storyRoot.innerHTML = '<article class="blackwhite-empty"><h3>Follow the current record.</h3><p>Visit <a href="NEWS.html">The Black &amp; White News</a> for current official reporting, court coverage, and public records.</p></article>'; };
+            const storyMarkup = (story, index) => {
+              const image = story.image;
+              const source = sourceSite(story.href);
+              return `<article class="blackwhite-story"><a class="blackwhite-story-image" href="${escapeHtml(story.href)}" target="_blank" rel="noopener noreferrer"><img src="${escapeHtml(image)}" alt="${escapeHtml(`${story.desk.replaceAll("-", " ")}: ${story.title}`)}" loading="${index === 0 ? "eager" : "lazy"}"></a><h3><a href="${escapeHtml(story.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(story.title)}</a></h3><a class="blackwhite-story-source" href="${escapeHtml(story.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)} &rarr;</a></article>`;
+            };
+            const render = stories => {
+              storyRoot.innerHTML = assignDistinctImages(stories).map(storyMarkup).join("");
+            };
+            const selectedDesks = shuffle(desks).slice(0, Math.min(10, desks.length));
+            Promise.all(selectedDesks.map(async desk => {
+              const controller = new AbortController();
+              const timeout = window.setTimeout(() => controller.abort(), 9000);
+              try {
+                const response = await fetch(`${endpoint}?section=${encodeURIComponent(desk)}`, { signal: controller.signal });
+                if (!response.ok) return null;
+                return storyForDesk(desk, await response.json());
+              } catch { return null; } finally { window.clearTimeout(timeout); }
+            })).then(items => {
+              const stories = shuffle(items.filter(Boolean));
+              if (stories.length >= 6) render(stories.slice(0, 6));
+              else fallback();
+            }).catch(fallback);
+          })();
+        </script>
         <script src="title-case.js"></script></body>
     </html>

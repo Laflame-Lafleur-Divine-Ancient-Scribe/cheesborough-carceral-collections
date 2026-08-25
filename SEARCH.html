@@ -729,7 +729,9 @@
     </footer>
 
     <script>
-      window.CHEESBOROUGH_SEARCH_API_URL = "https://serviceapi-production-f574.up.railway.app";
+      window.CHEESBOROUGH_SEARCH_API_URL = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)
+        ? ""
+        : "https://serviceapi-production-f574.up.railway.app";
     </script>
     <script src="search-data.js"></script>
     <script>
@@ -914,6 +916,7 @@
       function getOnlineSourceLinks(query) {
         const encodedQuery = encodeURIComponent(query);
         const governmentQuery = encodeURIComponent(`site:gov ${query} (statute OR code) filetype:pdf`);
+        const pdfQuery = encodeURIComponent(`"${query}" filetype:pdf`);
         return [
           ["Google Search", `https://www.google.com/search?q=${encodedQuery}`],
           ["DuckDuckGo Search", `https://duckduckgo.com/?q=${encodedQuery}`],
@@ -921,6 +924,9 @@
           ["GovInfo Statutes & PDFs", `https://www.govinfo.gov/app/search?q=${encodedQuery}`],
           ["Google Scholar Case Law", `https://scholar.google.com/scholar?q=${encodedQuery}`],
           ["Justia Cases & Statutes", `https://www.justia.com/search/?q=${encodedQuery}`],
+          ["Internet Archive", `https://archive.org/advancedsearch.php?q=${encodedQuery}`],
+          ["YouTube Videos", `https://www.youtube.com/results?search_query=${encodedQuery}`],
+          ["Free PDF Search", `https://www.google.com/search?q=${pdfQuery}`],
           ["Official Government PDFs", `https://www.google.com/search?q=${governmentQuery}`]
         ];
       }

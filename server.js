@@ -29,6 +29,122 @@ const contentTypes = {
     '.webp': 'image/webp',
 };
 
+const searchSeedFiles = [
+    path.join(rootDirectory, 'data', 'public-figure-search-seeds.txt'),
+    path.join(rootDirectory, 'data', 'gang-history-search-seeds.txt'),
+];
+
+function normalizeSearchSeed(value) {
+    return String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
+function uniqueSearchTerms(values, limit = 6) {
+    const seen = new Set();
+    return values.filter((value) => {
+        const normalized = normalizeSearchSeed(value);
+        if (!normalized || seen.has(normalized)) return false;
+        seen.add(normalized);
+        return true;
+    }).slice(0, limit);
+}
+
+function parseSearchSeedLine(line) {
+    const numbered = String(line || '').match(/^\s*\d+\.\s+(.+?)\s*$/);
+    if (!numbered) return null;
+    const parts = numbered[1].split('|').map((part) => part.trim()).filter(Boolean);
+    const primary = parts[0] || '';
+    if (!primary || primary.length > 120) return null;
+    const aliases = (parts[1] || '')
+        .split(/,|\s+[—–-]\s+/)
+        .map((part) => part.replace(/[“”"']/g, '').trim())
+        .filter((part) => part && part.length < 90 && !/^\d{4}/.test(part));
+    return { primary, aliases };
+}
+
+const searchSeeds = uniqueSearchTerms(searchSeedFiles.flatMap((file) => {
+    try {
+        return fs.readFileSync(file, 'utf8').split(/\r?\n/).map(parseSearchSeedLine).filter(Boolean);
+    } catch {
+        return [];
+    }
+}).map((seed) => `${seed.primary}\u0000${seed.aliases.join('\u0000')}`), 1000).map((serialized) => {
+    const [primary, ...aliases] = serialized.split('\u0000');
+    return { primary, aliases };
+});
+
+function findSearchSeed(query) {
+    const normalized = normalizeSearchSeed(query);
+    if (!normalized || normalized.length < 3) return null;
+    const queryTerms = normalized.split(' ').filter((term) => term.length > 2);
+    let best = null;
+    for (const seed of searchSeeds) {
+        const terms = uniqueSearchTerms([seed.primary, ...seed.aliases], 8);
+        const normalizedTerms = terms.map(normalizeSearchSeed);
+        const exact = normalizedTerms.find((term) => term === normalized);
+        if (exact) return { ...seed, terms };
+        const score = normalizedTerms.reduce((highest, term) => {
+            const overlap = queryTerms.filter((part) => term.includes(part)).length;
+            return Math.max(highest, overlap / Math.max(queryTerms.length, 1));
+        }, 0);
+        if (score >= 0.75 && (!best || score > best.score)) best = { ...seed, terms, score };
+    }
+    return best;
+}
+
+function buildOnlineSearchPlan(query) {
+    const seed = findSearchSeed(query);
+    const names = uniqueSearchTerms(seed ? [seed.primary, ...seed.aliases] : [query], 5);
+    const subject = names.map((name) => `"${name.replace(/"/g, '')}"`).join(' OR ');
+    const statusTerms = 'arrest OR charged OR indicted OR convicted OR acquitted OR dismissed OR vacated OR sentencing OR appeal OR trial OR investigation';
+    return {
+        seed,
+        subject,
+        profiles: [
+            { label: 'Free News & Reporting', suffix: statusTerms },
+            { label: 'Official Government & Court Records', suffix: `site:justice.gov OR site:fbi.gov OR site:govinfo.gov OR site:.gov OR site:courtlistener.com ${statusTerms}` },
+            { label: 'Free PDFs & Primary Documents', suffix: `filetype:pdf ${statusTerms}` },
+            { label: 'Videos & Broadcast Archives', suffix: 'site:youtube.com OR site:archive.org OR site:c-span.org OR site:loc.gov video OR interview OR documentary' },
+            { label: 'Libraries & Digital Archives', suffix: 'site:archive.org OR site:loc.gov OR site:archives.gov OR site:nypl.org OR site:si.edu' },
+            { label: 'Academic & Scholarly', suffix: 'site:jstor.org OR site:books.google.com OR site:scholar.google.com OR site:ssrn.com filetype:pdf' },
+            { label: 'Case Law & Dockets', suffix: 'site:law.cornell.edu OR site:courtlistener.com OR site:oyez.org OR site:law.justia.com case law OR opinion OR docket' },
+            { label: 'Open Web Sources', suffix: '' },
+        ],
+    };
+}
+
+function getDirectSourceFallbackResults(query, searchPlan) {
+    const exactQuery = encodeURIComponent(query);
+    const subjectQuery = encodeURIComponent(searchPlan?.subject || `"${query}"`);
+    const pdfQuery = encodeURIComponent(`${searchPlan?.subject || `"${query}"`} filetype:pdf`);
+    const sources = [
+        ['Google News', `https://news.google.com/search?q=${exactQuery}`, 'Free current and historical news coverage.'],
+        ['Internet Archive', `https://archive.org/advancedsearch.php?q=${subjectQuery}`, 'Free digitized books, broadcasts, documents, and media.'],
+        ['YouTube', `https://www.youtube.com/results?search_query=${exactQuery}`, 'Free video reporting, interviews, and documentary material.'],
+        ['CourtListener', `https://www.courtlistener.com/?q=${exactQuery}`, 'Free court opinions, dockets, and legal research.'],
+        ['Google Books', `https://www.google.com/search?q=${encodeURIComponent(`${searchPlan?.subject || `"${query}"`} site:books.google.com`)}`, 'Books and digitized historical references.'],
+        ['Library of Congress', `https://www.loc.gov/search/?in=all&sp=1&q=${exactQuery}`, 'Library of Congress digital collections and catalog records.'],
+        ['Official Government PDFs', `https://www.google.com/search?q=${encodeURIComponent(`${searchPlan?.subject || `"${query}"`} site:gov filetype:pdf`)}`, 'Free official reports, releases, and government PDFs.'],
+        ['Free PDF Search', `https://www.google.com/search?q=${pdfQuery}`, 'Free online PDFs across public repositories.'],
+        ['U.S. Department of Justice', `https://www.justice.gov/search?keys=${exactQuery}`, 'Official Department of Justice releases and case information.'],
+        ['FBI', `https://www.fbi.gov/search?keywords=${exactQuery}`, 'Official FBI releases and records.'],
+    ];
+    return sources.map(([title, url, content]) => ({
+        title: `${title}: ${query}`,
+        url,
+        content,
+        engine: 'Direct public source',
+        profile: 'Free source search',
+        sourcePriority: 'Direct source',
+        category: 'source search',
+        publishedDate: null,
+    }));
+}
+
 function applyApiCors(request, response) {
     const origin = request.headers.origin;
     if (origin && allowedOrigins.has(origin)) {
@@ -63,18 +179,12 @@ async function handleOnlineSearch(requestUrl, response) {
         return;
     }
 
-    const profiles = [
-        { label: 'Academic & Scholarly', suffix: 'site:jstor.org OR site:books.google.com OR site:scholar.google.com OR site:ssrn.com filetype:pdf' },
-        { label: 'Federal Law & Government', suffix: 'site:congress.gov OR site:govinfo.gov OR site:justice.gov OR site:uscode.house.gov OR site:archives.gov statute OR regulation OR filetype:pdf' },
-        { label: 'Courts & Case Law', suffix: 'site:law.cornell.edu OR site:courtlistener.com OR site:oyez.org OR site:law.justia.com case law OR opinion OR docket' },
-        { label: 'State & Local Law', suffix: 'site:.gov state law OR county court OR municipal code OR legal aid' },
-        { label: 'Attorneys, Bars & Legal Briefs', suffix: 'site:americanbar.org OR site:floridabar.org OR attorney OR lawyer OR legal brief filetype:pdf' },
-        { label: 'General Web', suffix: '' },
-    ];
+    const searchPlan = buildOnlineSearchPlan(query);
+    const profiles = searchPlan.profiles;
     const requests = profiles.flatMap(profile => Array.from({ length: 5 }, (_, index) => ({ profile, page: index + 1 })));
     const pageResults = await Promise.all(requests.map(async ({ profile, page }) => {
         const params = new URLSearchParams({
-            q: [query, profile.suffix].filter(Boolean).join(' '),
+            q: [searchPlan.subject, profile.suffix].filter(Boolean).join(' '),
             format: 'json',
             pageno: String(page),
             safesearch: '0',
@@ -111,12 +221,23 @@ async function handleOnlineSearch(requestUrl, response) {
         publishedDate: item.publishedDate || null,
     }));
 
-    if (results.length === 0) {
-        results = await getKeylessFallbackResults(query);
-    }
+    // SearXNG is optional in production. Always merge keyless public feeds so
+    // a typo, alias, or temporarily unavailable metasearch service does not
+    // leave the reader with an empty result set.
+    const fallbackResults = await getKeylessFallbackResults(searchPlan.subject, query);
+    const mergedSeen = new Set(results.map((item) => item.url));
+    results = [...results, ...fallbackResults.filter((item) => item?.url && !mergedSeen.has(item.url) && mergedSeen.add(item.url))].slice(0, 300);
+    if (results.length === 0) results = getDirectSourceFallbackResults(query, searchPlan);
 
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    response.end(JSON.stringify({ query, count: results.length, profiles: profiles.map(profile => profile.label), results }));
+    response.end(JSON.stringify({
+        query,
+        expandedQuery: searchPlan.subject,
+        matchedSubject: searchPlan.seed ? { primary: searchPlan.seed.primary, aliases: searchPlan.seed.aliases } : null,
+        count: results.length,
+        profiles: profiles.map(profile => profile.label),
+        results,
+    }));
 }
 
 const newsPriorityTerms = [
@@ -888,7 +1009,7 @@ function classifySourceQuality(item) {
     return { suppress: false, score: lowDomain ? 5 : 75, label: lowDomain ? 'Low priority' : 'General source' };
 }
 
-async function getKeylessFallbackResults(query) {
+async function getKeylessFallbackResults(query, rankingQuery = query) {
     const encodedQuery = encodeURIComponent(query);
     const profiles = [
         ['Academic & Scholarly', 'site:jstor.org OR site:books.google.com OR site:scholar.google.com OR site:ssrn.com filetype:pdf'],
@@ -946,7 +1067,7 @@ async function getKeylessFallbackResults(query) {
         if (!item.url || isSearchEngineLandingPage(item) || /(?:^|\.)wikipedia\.org(?:\/|$)/i.test(item.url) || /wikipedia/i.test(item.engine || '') || seen.has(item.url)) return false;
         seen.add(item.url);
         return true;
-    }), query).slice(0, 300).map((item) => ({ ...item, sourcePriority: item.sourcePriority || 'Medium priority' }));
+    }), rankingQuery).slice(0, 300).map((item) => ({ ...item, sourcePriority: item.sourcePriority || 'Medium priority' }));
 }
 
 const server = http.createServer((request, response) => {

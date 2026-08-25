@@ -25,9 +25,11 @@
   .section-rail{display:flex;gap:.3rem;overflow-x:auto;padding:1rem 0 .9rem;border-bottom:4px solid var(--gold);scrollbar-color:var(--gold) transparent}.section-rail button{flex:0 0 auto;border:1px solid transparent;background:none;padding:.3rem .52rem;color:var(--navy);font:700 .82rem var(--sans);letter-spacing:.035em;cursor:pointer}.section-rail button:hover,.section-rail button[aria-pressed="true"]{background:var(--navy);color:#fff}.section-rail button[aria-pressed="true"]{box-shadow:inset 0 -3px var(--gold)}
   .live-desk{padding:1.6rem 0 2.1rem}.kicker{margin:0 0 .4rem;color:var(--red);font-size:.76rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.desk-heading{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:.65rem}.desk-heading h2{margin:0;color:var(--navy);font:700 clamp(1.45rem,2vw,2rem)/1.15 var(--serif)}.status{color:var(--muted);font-size:.88rem;text-align:right}.state{display:grid;place-items:center;min-height:18rem;border-bottom:1px solid var(--line);padding:2rem;text-align:center}.state p{max-width:37rem;margin:.5rem auto;color:var(--muted);line-height:1.45}.loader{width:34px;height:34px;margin:auto;border:3px solid var(--hair);border-top-color:var(--red);border-radius:50%;animation:spin .85s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
   .news-layout{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(275px,.76fr);gap:1.5rem;padding-top:1.25rem}.lead{border-bottom:5px solid var(--gold);padding:0 0 1.1rem}.story-label{margin:0 0 .55rem;color:var(--red);font-size:.76rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase}.headline{color:var(--navy);font-family:var(--serif);text-decoration:none}.headline:hover{text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:3px;text-underline-offset:.12em}.lead .headline{display:block;font-size:clamp(1.55rem,2.4vw,2.6rem);line-height:1.18}.summary{margin:.8rem 0;color:#38332d;line-height:1.48}.byline{display:flex;gap:.55rem;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:.83rem}.publisher{color:var(--red);font-weight:700;letter-spacing:.04em;text-decoration:none;text-transform:uppercase}.publisher:hover{text-decoration:underline}.desk-list{border-top:5px solid var(--navy)}.brief{padding:.92rem 0;border-bottom:1px solid var(--hair)}.brief .headline{display:block;font-size:1.08rem;line-height:1.28}.brief .summary{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:.4rem 0;font-size:.94rem}.news-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);margin-top:1.65rem}.news-grid .brief{padding:1rem 1rem 1rem 0;margin-right:1rem;border-bottom:0;border-right:1px solid var(--hair)}.news-grid .brief:last-child{border-right:0;margin-right:0}.news-grid .headline{font-size:1.04rem}.news-grid .summary{font-size:.9rem}.story-with-art{display:grid;grid-template-columns:105px minmax(0,1fr);gap:.85rem;align-items:start}.lead.story-with-art{grid-template-columns:minmax(0,1fr);gap:.85rem}.story-art{position:relative;display:block;aspect-ratio:4/3;overflow:hidden;background:#e7dfcf;border:1px solid var(--line);box-shadow:3px 3px 0 rgba(17,39,68,.14)}.story-art img{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(.76) contrast(1.03)}.story-art .illustration-note{position:absolute;right:.28rem;bottom:.24rem;background:rgba(250,247,239,.86);color:var(--navy);padding:.08rem .2rem;font-size:.54rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.story-sketch{background-image:url('assets/news/story-sketches-v2.png');background-size:400% 300%;filter:sepia(.13) saturate(.88) contrast(1.04)}.story-sketch.variant-0{background-position:0% 0%}.story-sketch.variant-1{background-position:33.333% 0%}.story-sketch.variant-2{background-position:66.666% 0%}.story-sketch.variant-3{background-position:100% 0%}.story-sketch.variant-4{background-position:0% 50%}.story-sketch.variant-5{background-position:33.333% 50%}.story-sketch.variant-6{background-position:66.666% 50%}.story-sketch.variant-7{background-position:100% 50%}.story-sketch.variant-8{background-position:0% 100%}.story-sketch.variant-9{background-position:33.333% 100%}.story-sketch.variant-10{background-position:66.666% 100%}.story-sketch.variant-11{background-position:100% 100%}.lead .story-art{max-height:300px}.load-more{display:block;margin:1.5rem auto 0;border:1px solid var(--navy);background:transparent;color:var(--navy);padding:.6rem 1.2rem;font:700 .83rem var(--sans);letter-spacing:.08em;text-transform:uppercase;cursor:pointer}.load-more:hover{background:var(--navy);color:#fff}.load-more[hidden]{display:none}
+  /* Each desk is treated as its own printed folio: the changing spine makes the live feed immediately recognizable. */
+  .desk-hero{--desk-band:var(--navy);--desk-accent:var(--gold);--desk-paper:#eee8db;--desk-line:#9b907c;--desk-ink:var(--navy);position:relative;margin-top:1.25rem;border:1px solid var(--desk-line);background:var(--desk-paper);box-shadow:7px 8px 0 rgba(16,44,76,.11);overflow:hidden}.desk-hero::before{position:absolute;z-index:2;top:0;bottom:0;left:0;width:9px;background:var(--desk-accent);content:""}.desk-hero[data-section="united-states"]{--desk-band:#102c4c;--desk-accent:#bf984f;--desk-paper:#f1ecdf;--desk-line:#a89e8c}.desk-hero[data-section="europe"]{--desk-band:#29485e;--desk-accent:#c49c53;--desk-paper:#e9eee9;--desk-line:#9eaaa0}.desk-hero[data-section="mexico"]{--desk-band:#7b352d;--desk-accent:#d0ad69;--desk-paper:#f2e9dc;--desk-line:#b29a83}.desk-hero[data-section="federal-agencies"]{--desk-band:#081a2d;--desk-accent:#963d32;--desk-paper:#e9e7df;--desk-line:#96988f}.desk-hero[data-section="florida"]{--desk-band:#15505a;--desk-accent:#bf984f;--desk-paper:#edf0e8;--desk-line:#99a59b}.desk-hero[data-section="georgia"]{--desk-band:#513e2d;--desk-accent:#b34b3b;--desk-paper:#f1eadc;--desk-line:#ab9c86}.desk-hero[data-section="louisiana"]{--desk-band:#3c314e;--desk-accent:#c5a262;--desk-paper:#eee8e1;--desk-line:#a59aa9}.desk-hero[data-section="new-york"]{--desk-band:#1f3d5d;--desk-accent:#9f4035;--desk-paper:#e8edf0;--desk-line:#94a2ad}.desk-hero[data-section="california"]{--desk-band:#6c4432;--desk-accent:#c29a4b;--desk-paper:#f2eadc;--desk-line:#ad9d83}.desk-hero[data-section="michigan"]{--desk-band:#21475a;--desk-accent:#ae8c48;--desk-paper:#e7efee;--desk-line:#94a9a7}.desk-hero[data-section="ohio"]{--desk-band:#4b3635;--desk-accent:#bd8e48;--desk-paper:#f0e7df;--desk-line:#aa968d}.desk-hero[data-section="colorado"]{--desk-band:#3d4d45;--desk-accent:#bd984e;--desk-paper:#e9ede4;--desk-line:#9ba391}.desk-hero[data-section="world"]{--desk-band:#313d57;--desk-accent:#b84d3d;--desk-paper:#e8e8e0;--desk-line:#979da2}.desk-hero-head{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.2rem;align-items:end;padding:1.15rem 1.35rem 1.08rem 1.7rem;background:var(--desk-band);color:#fff;border-bottom:5px solid var(--desk-accent)}.desk-hero-head::after{position:absolute;right:1.3rem;top:.62rem;color:rgba(255,255,255,.25);content:"CURRENT FILES";font:700 .63rem var(--sans);letter-spacing:.18em}.desk-hero .kicker{margin-bottom:.42rem;color:var(--desk-accent)}.desk-hero .desk-heading{border:0;padding:0}.desk-hero .desk-heading h2{color:#fff;font-size:clamp(1.5rem,2.25vw,2.25rem)}.desk-hero .status{color:#f4eee3;font-size:.82rem;letter-spacing:.04em}.desk-hero-content{padding:1.3rem 1.35rem 0 1.7rem}.desk-hero .news-layout{grid-template-columns:minmax(0,1.2fr);gap:0;padding:0}.desk-hero .lead{display:grid;grid-template-columns:minmax(215px,.66fr) minmax(0,1.34fr);gap:1.15rem;align-items:start;border-bottom:4px solid var(--desk-accent);padding:0 0 1.3rem}.desk-hero .lead .story-art{max-height:none;min-height:178px}.desk-hero .headline{color:var(--desk-ink)}.desk-hero .headline:hover{text-decoration-color:var(--desk-accent)}.desk-hero .lead .headline{font-size:clamp(1.45rem,2.45vw,2.5rem);line-height:1.16}.desk-hero .story-label,.desk-hero .publisher{color:var(--desk-band)}.desk-hero .desk-list,.desk-hero .news-grid{border:0;margin:0}.supporting-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:1.15rem;border-top:1px solid var(--desk-line)}.supporting-grid .brief{min-height:100%;padding:1rem 1rem 1.05rem 0;margin-right:1rem;border-bottom:0;border-right:1px solid var(--desk-line)}.supporting-grid .brief:nth-child(3n){padding-right:0;margin-right:0;border-right:0}.supporting-grid .brief:nth-child(n+4){border-top:1px solid var(--desk-line)}.supporting-grid .story-with-art{grid-template-columns:84px minmax(0,1fr);gap:.7rem}.supporting-grid .summary{font-size:.9rem}.desk-hero .load-more{margin:1.25rem auto 1.35rem;border-color:var(--desk-band);color:var(--desk-band)}.desk-hero .load-more:hover{background:var(--desk-band);color:#fff}.desk-hero .state{min-height:18rem;border:0}.desk-hero .loader{border-top-color:var(--desk-accent)}
   .archive-rule{border:0;border-top:5px solid var(--red);margin:1.1rem 0 2rem}.source-room-head{display:grid;grid-template-columns:.75fr 1.25fr;gap:1.5rem;align-items:end;border-bottom:1px solid var(--line);padding-bottom:.75rem}.source-room-head h2{margin:0;color:var(--navy);font:700 clamp(1.45rem,2vw,2rem)/1.15 var(--serif)}.source-room-head p{margin:0;color:var(--muted);line-height:1.4}.source-room{display:grid;grid-template-columns:repeat(3,1fr);margin-top:1rem;border-top:1px solid var(--line)}.source-room article{padding:1rem 1.1rem 1rem 0;margin-right:1.1rem;border-right:1px solid var(--hair)}.source-room article:last-child{margin-right:0;border-right:0}.source-room h3{margin:.3rem 0;color:var(--navy);font:700 1.16rem/1.24 var(--serif)}.source-room p{margin:.45rem 0 .75rem;line-height:1.42}.source-note{border-top:1px solid var(--line);margin:1.4rem 0 0;padding-top:.8rem;color:var(--muted);font-size:.9rem;line-height:1.5}.source-note a{color:var(--navy);font-weight:700}footer{background:var(--deep);color:#fff;text-align:center;padding:1.1rem 1rem;font-size:.83rem;letter-spacing:.055em}
-  @media(max-width:830px){.news-grid{grid-template-columns:repeat(2,1fr)}.news-grid .brief:nth-child(2n){border-right:0;margin-right:0;padding-right:0}.news-grid .brief:nth-child(n+3){border-top:1px solid var(--hair)}.source-room,.source-room-head{grid-template-columns:1fr}.source-room article{border-right:0;border-bottom:1px solid var(--hair);margin:0;padding:1rem 0}.source-room article:last-child{border-bottom:0}}@media(max-width:640px){body{font-size:16px}.paper{padding:1rem 1rem 3rem}.topbar{padding:.45rem .3rem}.topbar a{padding:.22rem .42rem;font-size:.7rem}.mast{grid-template-columns:1fr}.mast-note{text-align:left}.edition,.desk-heading{align-items:flex-start;flex-direction:column;gap:.18rem}.status{text-align:left}.news-layout,.news-grid{grid-template-columns:1fr}.news-grid .brief{border-right:0;margin:0;padding:1rem 0;border-bottom:1px solid var(--hair)}.news-grid .brief:nth-child(n+3){border-top:0}.story-with-art{grid-template-columns:88px minmax(0,1fr)}.lead.story-with-art{grid-template-columns:minmax(0,1fr)}.lead .story-art{max-height:220px}}
-  .story-sketch.variant-6{background-image:url('assets/news/missing-persons-investigation-sketch.png');background-position:center;background-size:cover}
+  @media(max-width:830px){.news-grid{grid-template-columns:repeat(2,1fr)}.news-grid .brief:nth-child(2n){border-right:0;margin-right:0;padding-right:0}.news-grid .brief:nth-child(n+3){border-top:1px solid var(--hair)}.supporting-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.supporting-grid .brief:nth-child(3n){padding-right:1rem;margin-right:1rem;border-right:1px solid var(--desk-line)}.supporting-grid .brief:nth-child(2n){padding-right:0;margin-right:0;border-right:0}.supporting-grid .brief:nth-child(n+3){border-top:1px solid var(--desk-line)}.source-room,.source-room-head{grid-template-columns:1fr}.source-room article{border-right:0;border-bottom:1px solid var(--hair);margin:0;padding:1rem 0}.source-room article:last-child{border-bottom:0}}@media(max-width:640px){body{font-size:16px}.paper{padding:1rem 1rem 3rem}.topbar{padding:.45rem .3rem}.topbar a{padding:.22rem .42rem;font-size:.7rem}.mast{grid-template-columns:1fr}.mast-note{text-align:left}.edition,.desk-heading{align-items:flex-start;flex-direction:column;gap:.18rem}.status{text-align:left}.news-layout,.news-grid{grid-template-columns:1fr}.news-grid .brief{border-right:0;margin:0;padding:1rem 0;border-bottom:1px solid var(--hair)}.news-grid .brief:nth-child(n+3){border-top:0}.story-with-art{grid-template-columns:88px minmax(0,1fr)}.lead.story-with-art{grid-template-columns:minmax(0,1fr)}.lead .story-art{max-height:220px}.desk-hero{margin-top:1rem;box-shadow:4px 5px 0 rgba(16,44,76,.1)}.desk-hero::before{width:6px}.desk-hero-head{grid-template-columns:1fr;padding:1rem 1rem .95rem 1.22rem;gap:.35rem}.desk-hero-head::after{right:1rem;top:.38rem;font-size:.55rem}.desk-hero .desk-heading{display:flex}.desk-hero .desk-heading h2{font-size:1.48rem}.desk-hero .status{font-size:.77rem}.desk-hero-content{padding:1rem 1rem 0 1.22rem}.desk-hero .lead{grid-template-columns:1fr;gap:.85rem;padding-bottom:1rem}.desk-hero .lead .story-art{min-height:0;max-height:245px}.supporting-grid{grid-template-columns:1fr;margin-top:.85rem}.supporting-grid .brief,.supporting-grid .brief:nth-child(3n),.supporting-grid .brief:nth-child(2n){padding:1rem 0;margin:0;border-right:0;border-top:1px solid var(--desk-line)}.supporting-grid .brief:first-child{border-top:0}.supporting-grid .story-with-art{grid-template-columns:88px minmax(0,1fr)}}
+  .story-sketch.variant-6{background-image:url('assets/news/international-court-casefiles.png');background-position:center;background-size:cover}
   </style>
   <link rel="stylesheet" href="desktop-integrity.css">
 </head>
@@ -40,10 +42,14 @@
       <button type="button" data-section="united-states" aria-pressed="true">United States</button><button type="button" data-section="europe">Europe</button><button type="button" data-section="mexico">Mexico</button><button type="button" data-section="federal-agencies">Federal agencies</button><button type="button" data-section="florida">Florida</button><button type="button" data-section="georgia">Georgia</button><button type="button" data-section="louisiana">Louisiana</button><button type="button" data-section="new-york">New York</button><button type="button" data-section="california">California</button><button type="button" data-section="michigan">Michigan</button><button type="button" data-section="ohio">Ohio</button><button type="button" data-section="colorado">Colorado</button><button type="button" data-section="world">World</button>
     </nav>
     <section class="live-desk" aria-labelledby="live-desk-title">
-      <p class="kicker" id="desk-kicker">United States desk</p>
-      <div class="desk-heading"><h2 id="live-desk-title">Latest From The Public-Interest Press</h2><span class="status" id="desk-status" aria-live="polite">Selecting current reports</span></div>
-      <div id="news-content" aria-live="polite"><div class="state"><div><div class="loader" aria-hidden="true"></div><p>Loading the current desk.</p></div></div></div>
-      <button class="load-more" type="button" id="load-more" hidden>Load more reporting</button>
+      <div class="desk-hero" id="desk-hero" data-section="united-states">
+        <header class="desk-hero-head">
+          <div><p class="kicker" id="desk-kicker">United States desk</p><div class="desk-heading"><h2 id="live-desk-title">Latest From The Public-Interest Press</h2></div></div>
+          <span class="status" id="desk-status" aria-live="polite">Selecting current reports</span>
+        </header>
+        <div class="desk-hero-content" id="news-content" aria-live="polite"><div class="state"><div><div class="loader" aria-hidden="true"></div><p>Loading the current desk.</p></div></div></div>
+        <button class="load-more" type="button" id="load-more" hidden>Load more reporting</button>
+      </div>
     </section>
     <hr class="archive-rule">
     <section aria-labelledby="source-room-title">
@@ -65,6 +71,7 @@
     const content=document.getElementById('news-content');
     const status=document.getElementById('desk-status');
     const kicker=document.getElementById('desk-kicker');
+    const deskHero=document.getElementById('desk-hero');
     const more=document.getElementById('load-more');
     const rail=document.getElementById('section-rail');
     let section='united-states',offset=0,stories=[];
@@ -74,29 +81,68 @@
     const escapeHtml=value=>String(value||'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
     const safeUrl=value=>{try{const parsed=new URL(value);return /^https?:$/.test(parsed.protocol)?parsed.href:''}catch{return''}};
     const resultUrl=item=>safeUrl(item.url||item.link||item.href||'');
-    const mugshotPath='01_Photos/Illustrations/';
-    const blackMaleMugshots=Array.from({length:8},(_,index)=>`${mugshotPath}mugshot-black-man-${String(index+1).padStart(2,'0')}.png`);
-    const whiteMaleMugshots=Array.from({length:15},(_,index)=>`${mugshotPath}mugshot-white-man-${String(index+1).padStart(2,'0')}.png`);
-    const blackFemaleMugshots=Array.from({length:5},(_,index)=>`${mugshotPath}mugshot-black-woman-${String(index+1).padStart(2,'0')}.png`);
-    const whiteFemaleMugshots=Array.from({length:12},(_,index)=>`${mugshotPath}mugshot-white-woman-${String(index+1).padStart(2,'0')}.png`);
-    let usedMugshots=new Set();
-    const storyText=item=>`${item.title||''} ${item.snippet||item.content||item.description||''}`.toLowerCase();
-    function mugshotForStory(item,href){
-      const text=storyText(item);
-      const isFemale=/\b(?:woman|women|female)\b/.test(text);
-      const isMale=/\b(?:man|men|male)\b/.test(text);
-      if(!isFemale&&!isMale)return '';
-      const [blackPool,whitePool]=isFemale&&!isMale?[blackFemaleMugshots,whiteFemaleMugshots]:[blackMaleMugshots,whiteMaleMugshots];
-      const preferred=Math.random()<0.3?blackPool:whitePool;
-      const fallback=preferred===blackPool?whitePool:blackPool;
-      for(const pool of [preferred,fallback]){
-        const start=[...href].reduce((total,character)=>total+character.charCodeAt(0),0)%pool.length;
-        for(let offset=0;offset<pool.length;offset++){
-          const portrait=pool[(start+offset)%pool.length];
-          if(!usedMugshots.has(portrait)){usedMugshots.add(portrait);return portrait;}
-        }
+    const plainText=value=>{
+      let text=String(value||'').replace(/<[^>]*>/g,' ');
+      const decoder=document.createElement('textarea');
+      for(let pass=0;pass<3;pass++){
+        decoder.innerHTML=text;
+        const decoded=decoder.value.replace(/<[^>]*>/g,' ');
+        if(decoded===text)break;
+        text=decoded;
+      }
+      return text.replace(/\s+/g,' ').trim();
+    };
+    const unusableExcerpt=value=>{
+      const raw=String(value||'').trim();
+      const text=plainText(raw);
+      const codeOrCmsFragment=/(?:\b(?:class|id|href|src|style|name|value|data-[\w-]+|node-[\w-]+)\s*=|["']>|<\/|\/>|[{}]|(?:\d+\.){3,}\d*|\b\d+(?:\.\d+){2,}\b|(?:\.\s*){2,})/i;
+      return !text||codeOrCmsFragment.test(raw)||codeOrCmsFragment.test(text)||/(?:https?:\/\/|www\.)/i.test(text)||/^\s*[\[{]/.test(text)||/[;=]{2,}/.test(text)||/(?:["'](?:title|snippet|content|description|url|link|html|text)["']\s*:|\b(?:title|snippet|content|description|url|link|html)\s*:\s*["'[{])/i.test(text)||/\b(?:function\s*\(|(?:const|let|var)\s+\w+\s*=|=>|<script\b)/i.test(text);
+    };
+    const excerptForStory=item=>{
+      for(const value of [item.snippet,item.content,item.description]){
+        if(!unusableExcerpt(value))return plainText(value);
       }
       return '';
+    };
+    const mugshotPath='01/_Photos/Illustrations-card-watermarked/';
+    const blackMaleMugshots=Array.from({length:10},(_,index)=>`${mugshotPath}black-man-${String(index+1).padStart(2,'0')}.png`);
+    const whiteMaleMugshots=Array.from({length:20},(_,index)=>`${mugshotPath}white-man-${String(index+1).padStart(2,'0')}.png`);
+    const blackFemaleMugshots=Array.from({length:10},(_,index)=>`${mugshotPath}black-woman-${String(index+1).padStart(2,'0')}.png`);
+    const whiteFemaleMugshots=Array.from({length:10},(_,index)=>`${mugshotPath}white-woman-${String(index+1).padStart(2,'0')}.png`);
+    let usedMugshots=new Set();
+    let usedDeskImages=new Set();
+    const storyText=item=>`${item.title||''} ${item.snippet||item.content||item.description||''}`.toLowerCase();
+    const portraitGenderForStory=item=>{
+      const text=storyText(item);
+      const mentionsWomen=/\b(?:woman|women|female|girl|girls)\b/.test(text);
+      const mentionsMen=/\b(?:man|men|male|boy|boys)\b/.test(text);
+      if(mentionsWomen&&!mentionsMen)return 'women';
+      if(mentionsMen&&!mentionsWomen)return 'men';
+      return '';
+    };
+    const stableIndex=value=>[...String(value)].reduce((total,character)=>(total+character.charCodeAt(0))>>>0,0);
+    const reserveDeskImage=source=>{
+      if(!source||usedDeskImages.has(source))return '';
+      usedDeskImages.add(source);
+      return source;
+    };
+    const storySketchVariants=[0,1,3,4,5,6,7,8,9,10,11];
+    const sketchVariantForStory=storyIndex=>{
+      for(let offset=0;offset<storySketchVariants.length;offset++){
+        const variant=storySketchVariants[(storyIndex+offset)%storySketchVariants.length];
+        if(reserveDeskImage(`story-sketch-${variant}`))return variant;
+      }
+      return null;
+    };
+    function mugshotForStory(item,href){
+      const gender=portraitGenderForStory(item);
+      if(!gender)return '';
+      const pools=gender==='women'?[blackFemaleMugshots,whiteFemaleMugshots]:[blackMaleMugshots,whiteMaleMugshots];
+      const available=pools.flat().filter(portrait=>!usedMugshots.has(portrait));
+      if(!available.length)return '';
+      const portrait=available[stableIndex(href)%available.length];
+      usedMugshots.add(portrait);
+      return reserveDeskImage(portrait);
     }
     const publisher=item=>{
       const value=String(item.publisher||item.source||item.engine||new URL(resultUrl(item)).hostname.replace(/^www\./,''));
@@ -107,19 +153,24 @@
       const storyText=`${item.title||''} ${item.content||item.description||''}`.toLowerCase();
       const mugshot=mugshotForStory(item,href);
       const image=safeUrl(item.image||item.thumbnail||item.img_src||'');
-      if(/\b(?:fugitive|most[-\s]?wanted)\b/.test(storyText))return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this fugitive report"><img src="assets/news/fugitive-most-wanted-sketch.png" alt="" loading="${lead?'eager':'lazy'}"></a>`;
+      if(/\b(?:fugitive|most[-\s]?wanted)\b/.test(storyText)){
+        const fugitive=reserveDeskImage('assets/news/fugitive-most-wanted-sketch.png');
+        if(fugitive)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this fugitive report"><img src="${fugitive}" alt="" loading="${lead?'eager':'lazy'}"></a>`;
+      }
       if(mugshot)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${mugshot}" alt="" loading="${lead?'eager':'lazy'}"></a>`;
-      if(image)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${image}" alt="" loading="${lead?'eager':'lazy'}" referrerpolicy="no-referrer"></a>`;
-      const variant=storyIndex%12;
-      return `<a class="story-art story-sketch ${kind} variant-${variant}" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this ${kind} report"></a>`;
+      const uniqueImage=reserveDeskImage(image);
+      if(uniqueImage)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${uniqueImage}" alt="" loading="${lead?'eager':'lazy'}" referrerpolicy="no-referrer"></a>`;
+      const variant=sketchVariantForStory(storyIndex);
+      if(variant!==null)return `<a class="story-art story-sketch ${kind} variant-${variant}" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this ${kind} report"></a>`;
+      return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this ${kind} report"></a>`;
     }
     function storyMarkup(item,lead=false,storyIndex=0){
       const href=resultUrl(item);if(!href)return '';
       const title=escapeHtml(item.title||'Untitled report');
-      const excerpt=escapeHtml(item.snippet||item.content||item.description||'Read the original reporting at the publisher.');
+      const excerpt=escapeHtml(excerptForStory(item));
       const dateText=escapeHtml(item.published_at||item.published||item.date||'');
       const category=escapeHtml(item.category||section.replaceAll('-',' '));
-      return `<article class="${lead?'lead':'brief'} story-with-art">${storyArt(item,lead,href,storyIndex)}<div><p class="story-label">${category}</p><a class="headline" href="${href}" target="_blank" rel="noopener noreferrer">${title}</a><p class="summary">${excerpt}</p><div class="byline"><a class="publisher" href="${href}" target="_blank" rel="noopener noreferrer">${publisher(item)} &nearr;</a>${dateText?`<span>${dateText}</span>`:''}</div></div></article>`;
+      return `<article class="${lead?'lead':'brief'} story-with-art">${storyArt(item,lead,href,storyIndex)}<div><p class="story-label">${category}</p><a class="headline" href="${href}" target="_blank" rel="noopener noreferrer">${title}</a>${excerpt?`<p class="summary">${excerpt}</p>`:''}<div class="byline"><a class="publisher" href="${href}" target="_blank" rel="noopener noreferrer">${publisher(item)} &nearr;</a>${dateText?`<span>${dateText}</span>`:''}</div></div></article>`;
     }
     function showState(kickerText,message){
       content.innerHTML=`<div class="state"><div><p class="kicker">${escapeHtml(kickerText)}</p><p>${escapeHtml(message)}</p></div></div>`;
@@ -129,8 +180,9 @@
       const valid=stories.filter(item=>resultUrl(item));
       if(!valid.length){showState('No current selection','No source-verified reports are available for this desk at the moment. Choose another desk or return shortly.');return;}
       usedMugshots=new Set();
-      const lead=valid[0],deskItems=valid.slice(1,5),gridItems=valid.slice(5);
-      content.innerHTML=`<div class="news-layout">${storyMarkup(lead,true,0)}<div class="desk-list">${deskItems.map((item,index)=>storyMarkup(item,false,index+1)).join('')}</div></div>${gridItems.length?`<div class="news-grid">${gridItems.map((item,index)=>storyMarkup(item,false,index+5)).join('')}</div>`:''}`;
+      usedDeskImages=new Set();
+      const lead=valid[0],supportingItems=valid.slice(1);
+      content.innerHTML=`<div class="news-layout">${storyMarkup(lead,true,0)}</div>${supportingItems.length?`<div class="supporting-grid">${supportingItems.map((item,index)=>storyMarkup(item,false,index+1)).join('')}</div>`:''}`;
     }
     function showLoading(){content.innerHTML='<div class="state"><div><div class="loader" aria-hidden="true"></div><p>Loading the current desk.</p></div></div>';}
     async function loadNews(reset=false){
@@ -147,7 +199,7 @@
         stories=reset?incoming:stories.concat(incoming);
         offset=stories.length;
         renderStories();
-        status.textContent=stories.length?`${stories.length} selected reports &middot; original-source links`:'No reports selected';
+        status.textContent='Cheesborough Carceral Collections';
         more.hidden=incoming.length<(Number(payload.limit)||10);
       }catch(error){
         if(reset)showState('The live desk is temporarily unavailable','Please return shortly, or use the source room below to begin with primary records and public court documents.');
@@ -157,6 +209,7 @@
     rail.addEventListener('click',event=>{
       const button=event.target.closest('button[data-section]');if(!button)return;
       section=button.dataset.section;kicker.textContent=`${button.textContent.trim()} desk`;
+      deskHero.dataset.section=section;
       rail.querySelectorAll('button').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
       loadNews(true);
     });
