@@ -171,19 +171,22 @@ const newsDesks = {
     federal: {
         label: 'Federal Agencies Desk',
         query: `federal agency DOJ FBI DEA ATF U.S. Marshals Bureau of Prisons Secret Service Homeland Security Investigations ICE CBP IRS Criminal Investigation ${crimeBeatTerms}`,
-        matchTerms: ['doj', 'department of justice', 'fbi', 'dea', 'atf', 'u.s. marshals', 'bureau of prisons', 'secret service', 'homeland security investigations', 'immigration and customs enforcement', 'customs and border protection', 'irs criminal investigation', 'federal', 'investigation'],
+        matchTerms: ['doj', 'department of justice', 'fbi', 'dea', 'atf', 'u.s. marshals', 'bureau of prisons', 'secret service', 'homeland security investigations', 'immigration and customs enforcement', 'customs and border protection', 'irs criminal investigation', 'postal inspection', 'securities and exchange commission', 'federal trade commission', 'federal', 'investigation'],
         sources: [
-            { domain: 'justice.gov', search: 'site:justice.gov', name: 'U.S. Department of Justice', syndication: 'official' },
-            { domain: 'fbi.gov', search: 'site:fbi.gov', name: 'Federal Bureau of Investigation', syndication: 'official' },
-            { domain: 'dea.gov', search: 'site:dea.gov', name: 'Drug Enforcement Administration', syndication: 'official' },
-            { domain: 'atf.gov', search: 'site:atf.gov', name: 'Bureau of Alcohol, Tobacco, Firearms and Explosives', syndication: 'official' },
-            { domain: 'usmarshals.gov', search: 'site:usmarshals.gov', name: 'U.S. Marshals Service', syndication: 'official' },
-            { domain: 'bop.gov', search: 'site:bop.gov', name: 'Federal Bureau of Prisons', syndication: 'official' },
-            { domain: 'secretservice.gov', search: 'site:secretservice.gov', name: 'U.S. Secret Service', syndication: 'official' },
-            { domain: 'ice.gov', path: '/about-ice/hsi', search: 'site:ice.gov/about-ice/hsi', name: 'Homeland Security Investigations', syndication: 'official' },
-            { domain: 'ice.gov', search: 'site:ice.gov', name: 'U.S. Immigration and Customs Enforcement', syndication: 'official' },
-            { domain: 'cbp.gov', search: 'site:cbp.gov', name: 'U.S. Customs and Border Protection', syndication: 'official' },
-            { domain: 'irs.gov', path: '/compliance/criminal-investigation', search: 'site:irs.gov/compliance/criminal-investigation', name: 'IRS Criminal Investigation', syndication: 'official' },
+            { domain: 'justice.gov', listingUrl: 'https://www.justice.gov/news', articlePathPattern: /\/(?:opa|usao)\/(?:pr|press-releases)\//i, name: 'U.S. Department of Justice', syndication: 'official' },
+            { domain: 'fbi.gov', rssUrl: 'https://www.fbi.gov/feeds/national-press-releases/RSS', name: 'Federal Bureau of Investigation', syndication: 'official' },
+            { domain: 'dea.gov', listingUrl: 'https://www.dea.gov/what-we-do/news/press-releases', articlePathPattern: /\/press-releases\//i, name: 'Drug Enforcement Administration', syndication: 'official' },
+            { domain: 'atf.gov', listingUrl: 'https://www.atf.gov/news', articlePathPattern: /\/news\//i, name: 'Bureau of Alcohol, Tobacco, Firearms and Explosives', syndication: 'official' },
+            { domain: 'usmarshals.gov', listingUrl: 'https://www.usmarshals.gov/news', articlePathPattern: /\/news\//i, name: 'U.S. Marshals Service', syndication: 'official' },
+            { domain: 'bop.gov', listingUrl: 'https://www.bop.gov/resources/press_releases.jsp', articlePathPattern: /\/resources\/press_releases\.jsp/i, name: 'Federal Bureau of Prisons', syndication: 'official' },
+            { domain: 'secretservice.gov', listingUrl: 'https://www.secretservice.gov/newsroom', articlePathPattern: /\/newsroom\//i, name: 'U.S. Secret Service', syndication: 'official' },
+            { domain: 'ice.gov', path: '/newsroom', listingUrl: 'https://www.ice.gov/newsroom', articlePathPattern: /\/newsroom\//i, name: 'U.S. Immigration and Customs Enforcement', syndication: 'official' },
+            { domain: 'ice.gov', path: '/news', listingUrl: 'https://www.ice.gov/news', articlePathPattern: /\/news\//i, name: 'Homeland Security Investigations', syndication: 'official' },
+            { domain: 'cbp.gov', listingUrl: 'https://www.cbp.gov/newsroom', articlePathPattern: /\/newsroom\//i, name: 'U.S. Customs and Border Protection', syndication: 'official' },
+            { domain: 'irs.gov', listingUrl: 'https://www.irs.gov/newsroom', articlePathPattern: /\/newsroom\//i, name: 'IRS Criminal Investigation', syndication: 'official' },
+            { domain: 'uspis.gov', listingUrl: 'https://www.uspis.gov/news', articlePathPattern: /\/news\//i, name: 'U.S. Postal Inspection Service', syndication: 'official' },
+            { domain: 'sec.gov', listingUrl: 'https://www.sec.gov/enforcement-litigation/litigation-releases', articlePathPattern: /\/litigation\/litreleases\//i, name: 'Securities and Exchange Commission Enforcement', syndication: 'official' },
+            { domain: 'ftc.gov', listingUrl: 'https://www.ftc.gov/legal-library/browse/cases-proceedings', articlePathPattern: /\/legal-library\/browse\/cases-proceedings\//i, name: 'Federal Trade Commission Enforcement', syndication: 'official' },
         ],
     },
     florida: { label: 'Florida', query: `Florida ${crimeBeatTerms}`, matchTerms: ['florida', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['florida', 'miami', 'tampa', 'orlando', 'jacksonville', 'tallahassee', 'fort lauderdale', 'st petersburg', 'broward', 'miami-dade', 'duval', 'pinellas'], sources: [fbiOffice('miami', 'FBI Miami'), fbiOffice('tampa', 'FBI Tampa'), fbiOffice('jacksonville', 'FBI Jacksonville'), { domain: 'flcourts.gov', name: 'Florida Courts', syndication: 'official' }, { domain: 'wlrn.org', name: 'WLRN', syndication: 'link-only' }, { domain: 'local10.com', name: 'Local 10', syndication: 'link-only' }] },
@@ -376,6 +379,11 @@ async function searchOfficialFbiReleases() {
 async function fetchOfficialSourceListings(desk) {
     const officialSources = (desk.sources || []).filter((source) => source.syndication === 'official');
     const sourceItems = await Promise.all(officialSources.map(async (source) => {
+        if (source.rssUrl) {
+            let xml = await fetchText(source.rssUrl);
+            if (!/<(?:rdf:RDF|rss)\b/i.test(xml) && source.domain === 'fbi.gov') xml = await fetchTextWithCurl(source.rssUrl);
+            return parseFeedItems(xml, source.name, `${source.name} official release`);
+        }
         if (source.domain === 'fbi.gov' && source.path?.includes('/field-offices/')) {
             const listingUrl = `https://www.fbi.gov${source.path}`;
             let html = await fetchText(listingUrl);
