@@ -627,9 +627,18 @@
       .page-loader { align-items: center; background: var(--deep-navy); color: #f8f5ed; display: flex; inset: 0; justify-content: center; padding: 1.5rem; position: fixed; text-align: center; z-index: 10000; }
       .page-loader::before { border: 1px solid rgba(194, 155, 83, 0.42); content: ""; inset: 1rem; pointer-events: none; position: absolute; }
       .page-loader.is-closing { opacity: 0; transition: opacity 260ms ease; }
-      .page-loader-panel { border-bottom: 4px solid var(--gold); max-width: 32rem; padding: 1.5rem 2rem 1.75rem; position: relative; }
+      .page-loader-panel { border-bottom: 4px solid var(--gold); box-sizing: border-box; max-height: calc(100svh - 3rem); max-width: 40rem; overflow-y: auto; padding: 1.5rem 2rem 1.75rem; position: relative; scrollbar-color: rgba(233, 199, 127, 0.55) transparent; scrollbar-width: thin; width: min(100%, 40rem); }
       .page-loader-kicker { color: #e9c77f; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; margin: 0 0 0.75rem; text-transform: uppercase; }
       .page-loader-title { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.55rem, 5vw, 2.45rem); line-height: 1.16; margin: 0; }
+      .page-loader-epigraph { border-top: 1px solid rgba(233, 199, 127, 0.48); margin: 1.25rem auto 0; max-width: 35rem; padding: 1rem 1.3rem 0; position: relative; }
+      .page-loader-epigraph::before { background: var(--deep-navy); color: var(--gold); content: "✦"; font-size: 0.8rem; left: 50%; line-height: 1; padding: 0 0.55rem; position: absolute; top: -0.42rem; transform: translateX(-50%); }
+      .page-loader-quote { color: rgba(248, 245, 237, 0.86); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(0.88rem, 2.25vw, 1.06rem); font-style: italic; line-height: 1.5; margin: 0; overflow-wrap: anywhere; }
+      .page-loader-attribution { color: #e9c77f; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em; line-height: 1.45; margin: 0.65rem 0 0; overflow-wrap: anywhere; text-transform: uppercase; }
+      .page-loader-panel.has-long-epigraph .page-loader-quote { font-size: clamp(0.82rem, 2vw, 0.95rem); line-height: 1.43; }
+      .page-loader-panel.has-long-epigraph .page-loader-attribution { font-size: 0.59rem; letter-spacing: 0.08em; }
+      .page-loader-panel.has-extended-epigraph { padding-bottom: 1.35rem; padding-top: 1.2rem; }
+      .page-loader-panel.has-extended-epigraph .page-loader-kicker { margin-bottom: 0.55rem; }
+      .page-loader-panel.has-extended-epigraph .page-loader-progress { margin-top: 0.9rem; }
       .page-loader-progress { display: flex; gap: 0.38rem; justify-content: center; margin: 1.3rem auto 0; width: 8.5rem; }
       .page-loader-progress span { animation: archive-pulse 1.25s ease-in-out infinite; background: var(--gold); display: block; height: 0.35rem; transform-origin: center; width: 1.12rem; }
       .page-loader-progress span:nth-child(2) { animation-delay: 0.14s; background: #e9c77f; }
@@ -641,6 +650,10 @@
         .publication-inner { padding: 0 1rem; }
         .blackwhite-news-inner::after { bottom: 0.4rem; left: 0.4rem; right: 0.4rem; top: 0.4rem; }
         .prison-hero-copy { border-left-width: 4px; }
+        .page-loader { padding: 1rem; }
+        .page-loader-panel { max-height: calc(100svh - 2rem); padding: 1.2rem 1.1rem 1.35rem; }
+        .page-loader-epigraph { margin-top: 1rem; padding: 0.85rem 0.45rem 0; }
+        .page-loader-panel.has-extended-epigraph .page-loader-title { font-size: clamp(1.35rem, 7vw, 1.9rem); }
       }
     </style>
   <link rel="stylesheet" href="desktop-integrity.css">
@@ -650,6 +663,10 @@
       <div class="page-loader-panel">
         <p class="page-loader-kicker">Cheesborough Carceral Collections</p>
         <p class="page-loader-title">Opening the record</p>
+        <div class="page-loader-epigraph" aria-hidden="true">
+          <blockquote class="page-loader-quote" data-loader-quote>“Justice must not only be done, but must also be seen to be done.”</blockquote>
+          <p class="page-loader-attribution" data-loader-attribution>— Lord Hewart</p>
+        </div>
         <div class="page-loader-progress" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
       </div>
     </div>
@@ -1083,6 +1100,7 @@
             }).catch(fallback);
           })();
         </script>
+        <script src="loader-quotes.js"></script>
         <script>
           (() => {
             const loader = document.getElementById("page-loader");
