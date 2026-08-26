@@ -181,6 +181,25 @@ async function handleOnlineSearch(requestUrl, response) {
 
     const searchPlan = buildOnlineSearchPlan(query);
     const profiles = searchPlan.profiles;
+
+    // Give breaking and current coverage a short, dedicated path.  The broad
+    // metasearch plan below can involve many slow public repositories; waiting
+    // for it first made the browser's 12-second request expire before a live
+    // news feed was ever consulted.
+    const journalismResults = await getJournalismResults(query);
+    if (journalismResults.length) {
+        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({
+            query,
+            expandedQuery: searchPlan.subject,
+            matchedSubject: searchPlan.seed ? { primary: searchPlan.seed.primary, aliases: searchPlan.seed.aliases } : null,
+            count: journalismResults.length,
+            profiles: ['Current journalism and reporting'],
+            results: journalismResults,
+        }));
+        return;
+    }
+
     const requests = profiles.flatMap(profile => Array.from({ length: 5 }, (_, index) => ({ profile, page: index + 1 })));
     const pageResults = await Promise.all(requests.map(async ({ profile, page }) => {
         const params = new URLSearchParams({
@@ -229,7 +248,7 @@ async function handleOnlineSearch(requestUrl, response) {
     results = [...results, ...fallbackResults.filter((item) => item?.url && !mergedSeen.has(item.url) && mergedSeen.add(item.url))].slice(0, 300);
     if (results.length === 0) results = getDirectSourceFallbackResults(query, searchPlan);
 
-    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
     response.end(JSON.stringify({
         query,
         expandedQuery: searchPlan.subject,
@@ -821,8 +840,12 @@ function newsImageType(item) {
 }
 
 async function fetchJson(url) {
+    return fetchJsonWithin(url, 10000);
+}
+
+async function fetchJsonWithin(url, timeoutMs) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
         const response = await fetch(url, { headers: jsonHeaders, signal: controller.signal });
         if (!response.ok) return null;
@@ -835,8 +858,12 @@ async function fetchJson(url) {
 }
 
 async function fetchText(url) {
+    return fetchTextWithin(url, 10000);
+}
+
+async function fetchTextWithin(url, timeoutMs) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
         const response = await fetch(url, { headers: jsonHeaders, signal: controller.signal });
         if (!response.ok) return '';
@@ -953,8 +980,44 @@ function parseFeedItems(xml, engine, profile = 'General Web') {
 function isSearchEngineLandingPage(item) {
     const url = String(item?.url || '').toLowerCase();
     const title = String(item?.title || '').toLowerCase();
+    // Google News RSS articles are individual reporting links, not a search
+    // landing page.  They redirect readers to the publisher's original story.
+    if (/^https:\/\/news\.google\.com\/rss\/articles\//.test(url)) return false;
     return /(^|\/\/)(www\.|news\.)?(google\.com|google\.com\.[a-z.]+|bing\.com|yahoo\.com|search\.yahoo\.com|search\.brave\.com|wikipedia\.org)(\/|$)/.test(url)
         || /^(google|bing|yahoo|brave search|search - microsoft bing)/i.test(title);
+}
+
+async function getJournalismResults(query) {
+    const encodedQuery = encodeURIComponent(query);
+    const gdeltUrl = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodedQuery}&mode=artlist&format=json&maxrecords=75&sort=HybridRel`;
+    const [googleNewsRss, bingNewsRss, gdelt] = await Promise.all([
+        fetchTextWithin(`https://news.google.com/rss/search?q=${encodedQuery}&hl=en-US&gl=US&ceid=US:en`, 5000),
+        fetchTextWithin(`https://www.bing.com/news/search?format=rss&q=${encodedQuery}`, 5000),
+        fetchJsonWithin(gdeltUrl, 5000),
+    ]);
+
+    const seen = new Set();
+    const articles = [
+        ...parseRssItems(googleNewsRss, 'Google News', 'Current journalism and reporting'),
+        ...parseRssItems(bingNewsRss, 'Bing News', 'Current journalism and reporting'),
+        ...(Array.isArray(gdelt?.articles) ? gdelt.articles : []).map((article) => ({
+            title: article.title || article.url,
+            url: article.url,
+            content: article.domain ? `Current reporting from ${article.domain}.` : 'Current reporting indexed by GDELT.',
+            engine: 'GDELT News Index',
+            profile: 'Current journalism and reporting',
+            category: 'journalism',
+            publishedDate: article.seendate || null,
+        })),
+    ].filter((item) => {
+        if (!item?.url || isSearchEngineLandingPage(item) || seen.has(item.url)) return false;
+        seen.add(item.url);
+        return true;
+    });
+
+    return rankRelevantResults(articles, query)
+        .slice(0, 60)
+        .map((item) => ({ ...item, sourcePriority: 'Current journalism' }));
 }
 
 function rankRelevantResults(items, query) {
@@ -991,10 +1054,14 @@ function classifySourceQuality(item) {
     let host = '';
     try { host = new URL(item.url).hostname.toLowerCase().replace(/^www\./, ''); } catch { return { suppress: true, score: -9999, label: 'Suppressed' }; }
     const text = `${item.title || ''} ${item.content || ''}`.toLowerCase();
+    const currentJournalism = /(?:google|bing) news|gdelt news index/i.test(String(item.engine || ''))
+        || /\b(?:associated press|ap news|reuters|cnn|abc news|nbc news|cbs news|pbs news)\b/i.test(text);
     const suppressedDomains = /(?:^|\.)(facebook|instagram|tiktok|reddit|quora|pinterest|x|twitter|linkedin|youtube|medium|fandom|wikihow|brainly|answers\.com|buzzfeed|ranker|perplexity|chatgpt|openai\.com|gemini\.google\.com)(?:\.|$)/;
     const suppressedText = /\b(?:sponsored|advertisement|coupon|promo code|true crime podcast|ai[- ]generated|chatgpt summary)\b/i;
     const celebrityOnly = /\b(?:celebrity|celebrities|gossip)\b/i.test(text) && !/\b(?:court|trial|arrest|charge|charged|indict|sentence|sentenced|lawsuit|crime|criminal|police)\b/i.test(text);
     if (suppressedDomains.test(host) || suppressedText.test(text) || celebrityOnly) return { suppress: true, score: -9999, label: 'Suppressed' };
+
+    if (currentJournalism) return { suppress: false, score: 850, label: 'Current journalism' };
 
     const highDomain = /(?:^|\.)(?:gov|mil)$/i.test(host)
         || /(?:^|\.)(archives\.gov|loc\.gov|govinfo\.gov|congress\.gov|uscode\.house\.gov|justice\.gov|courtlistener\.com|oyez\.org|uscourts\.gov|supremecourt\.gov|archive\.org|floridabar\.org|americanbar\.org)$/i.test(host);
