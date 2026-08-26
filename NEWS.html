@@ -105,7 +105,9 @@
       }
       return '';
     };
-    const mugshotPath='01/_Photos/Illustrations-card-watermarked/';
+    // GitHub Pages does not publish underscore-prefixed photo paths reliably.
+    // These published portrait sketches are selected whenever a story names a man or woman.
+    const mugshotPath='assets/news/portraits/';
     const blackMaleMugshots=Array.from({length:10},(_,index)=>`${mugshotPath}black-man-${String(index+1).padStart(2,'0')}.png`);
     const whiteMaleMugshots=Array.from({length:20},(_,index)=>`${mugshotPath}white-man-${String(index+1).padStart(2,'0')}.png`);
     const blackFemaleMugshots=Array.from({length:10},(_,index)=>`${mugshotPath}black-woman-${String(index+1).padStart(2,'0')}.png`);
@@ -154,11 +156,11 @@
       const storyText=`${item.title||''} ${item.content||item.description||''}`.toLowerCase();
       const mugshot=mugshotForStory(item,href);
       const image=safeUrl(item.image||item.thumbnail||item.img_src||'');
+      if(mugshot)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${mugshot}" alt="" loading="${lead?'eager':'lazy'}"></a>`;
       if(/\b(?:fugitive|most[-\s]?wanted)\b/.test(storyText)){
         const fugitive=reserveDeskImage('assets/news/fugitive-most-wanted-sketch.png');
         if(fugitive)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this fugitive report"><img src="${fugitive}" alt="" loading="${lead?'eager':'lazy'}"></a>`;
       }
-      if(mugshot)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${mugshot}" alt="" loading="${lead?'eager':'lazy'}"></a>`;
       const uniqueImage=reserveDeskImage(image);
       if(uniqueImage)return `<a class="story-art" href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Open this report"><img src="${uniqueImage}" alt="" loading="${lead?'eager':'lazy'}" referrerpolicy="no-referrer"></a>`;
       const variant=sketchVariantForStory(storyIndex);
