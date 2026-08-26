@@ -239,6 +239,14 @@ function requestCountry(request) {
     return /^[A-Z]{2}$/i.test(String(raw)) ? String(raw).toUpperCase() : 'Unknown';
 }
 
+function requestRegion(request) {
+    // These headers are supplied by trusted edge proxies. Keep only a coarse
+    // region label; never derive location from an address, timezone, or API.
+    const raw = request.headers['cf-region'] || request.headers['x-vercel-ip-country-region'];
+    const region = String(raw || '').trim();
+    return /^[A-Za-z0-9][A-Za-z0-9 .,'-]{0,78}$/.test(region) ? region : null;
+}
+
 function hasStudioAccess(request) {
     const configured = process.env.STUDIO_ADMIN_TOKEN;
     const supplied = String(request.headers.authorization || '').replace(/^Bearer\s+/i, '');
@@ -318,12 +326,15 @@ async function handleAnalyticsCollect(request, response, requestUrl) {
     const page = analyticsKeyPart(requestUrl.searchParams.get('page') || '/');
     const visitor = analyticsKeyPart(requestUrl.searchParams.get('visitor') || 'anonymous');
     const country = requestCountry(request);
-    const reply = await redisPipeline([
+    const region = requestRegion(request);
+    const commands = [
         ['INCR', 'analytics:visits:total'],
         ['PFADD', 'analytics:visitors:unique', visitor],
         ['ZINCRBY', 'analytics:pages', 1, page],
-        ['ZINCRBY', 'analytics:countries', 1, country],
-    ]);
+    ];
+    if (country !== 'Unknown') commands.push(['ZINCRBY', 'analytics:countries', 1, country]);
+    if (region) commands.push(['ZINCRBY', 'analytics:regions', 1, country !== 'Unknown' ? `${country} · ${region}` : region]);
+    const reply = await redisPipeline(commands);
     applyApiCors(request, response);
     response.writeHead(reply ? 204 : 503, { 'Cache-Control': 'no-store' });
     response.end();
@@ -340,6 +351,7 @@ async function handleStudioAnalytics(request, response) {
         ['GET', 'analytics:visits:total'],
         ['PFCOUNT', 'analytics:visitors:unique'],
         ['ZREVRANGE', 'analytics:countries', 0, 7, 'WITHSCORES'],
+        ['ZREVRANGE', 'analytics:regions', 0, 7, 'WITHSCORES'],
         ['ZREVRANGE', 'analytics:pages', 0, 7, 'WITHSCORES'],
     ]);
     applyApiCors(request, response);
@@ -353,8 +365,11 @@ async function handleStudioAnalytics(request, response) {
     response.end(JSON.stringify({
         totalVisits: Number(reply[0] || 0),
         uniqueVisitors: Number(reply[1] || 0),
+        countries: toRows(reply[2]),
+        regions: toRows(reply[3]),
+        // Retain the legacy field while Studio moves to the separate ledgers.
         locations: toRows(reply[2]),
-        popularPages: toRows(reply[3]),
+        popularPages: toRows(reply[4]),
         updatedAt: new Date().toISOString(),
     }));
 }
