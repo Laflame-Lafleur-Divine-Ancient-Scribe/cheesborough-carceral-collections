@@ -91,7 +91,10 @@ function findSearchSeed(query) {
             const overlap = queryTerms.filter((part) => term.includes(part)).length;
             return Math.max(highest, overlap / Math.max(queryTerms.length, 1));
         }, 0);
-        if (score >= 0.75 && (!best || score > best.score)) best = { ...seed, terms, score };
+        // A supplied name plus a legal-status word such as "trial" should
+        // still resolve to its research seed.  For example, "tupac trial"
+        // should expand to Tupac Amaru Shakur and his aliases.
+        if (score >= 0.5 && (!best || score > best.score)) best = { ...seed, terms, score };
     }
     return best;
 }
@@ -186,7 +189,7 @@ async function handleOnlineSearch(requestUrl, response) {
     // metasearch plan below can involve many slow public repositories; waiting
     // for it first made the browser's 12-second request expire before a live
     // news feed was ever consulted.
-    const journalismResults = await getJournalismResults(query);
+    const journalismResults = await getJournalismResults(query, searchPlan);
     if (journalismResults.length) {
         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
         response.end(JSON.stringify({
@@ -987,22 +990,34 @@ function isSearchEngineLandingPage(item) {
         || /^(google|bing|yahoo|brave search|search - microsoft bing)/i.test(title);
 }
 
-async function getJournalismResults(query) {
+async function getJournalismResults(query, searchPlan = null) {
+    const journalismQueries = uniqueSearchTerms([
+        query,
+        ...((searchPlan?.seed?.terms || []).map((term) => `${term} trial`)),
+    ], 4);
     const encodedQuery = encodeURIComponent(query);
     // GDELT provides enough current coverage for a real research result set,
     // not merely a six-link news teaser. Its public article-list ceiling is
     // 250, which the Search page presents in fifty-result pages.
     const gdeltUrl = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodedQuery}&mode=artlist&format=json&maxrecords=250&sort=HybridRel`;
-    const [googleNewsRss, bingNewsRss, gdelt] = await Promise.all([
-        fetchTextWithin(`https://news.google.com/rss/search?q=${encodedQuery}&hl=en-US&gl=US&ceid=US:en`, 5000),
-        fetchTextWithin(`https://www.bing.com/news/search?format=rss&q=${encodedQuery}`, 5000),
+    const [rssFeeds, gdelt] = await Promise.all([
+        Promise.all(journalismQueries.flatMap((journalismQuery) => {
+            const encodedJournalismQuery = encodeURIComponent(journalismQuery);
+            return [
+                fetchTextWithin(`https://news.google.com/rss/search?q=${encodedJournalismQuery}&hl=en-US&gl=US&ceid=US:en`, 5000),
+                fetchTextWithin(`https://www.bing.com/news/search?format=rss&q=${encodedJournalismQuery}`, 5000),
+            ];
+        })),
         fetchJsonWithin(gdeltUrl, 5000),
     ]);
 
     const seen = new Set();
     const articles = [
-        ...parseRssItems(googleNewsRss, 'Google News', 'Current journalism and reporting'),
-        ...parseRssItems(bingNewsRss, 'Bing News', 'Current journalism and reporting'),
+        ...rssFeeds.flatMap((feed, index) => parseRssItems(
+            feed,
+            index % 2 === 0 ? 'Google News' : 'Bing News',
+            'Current journalism and reporting',
+        )),
         ...(Array.isArray(gdelt?.articles) ? gdelt.articles : []).map((article) => ({
             title: article.title || article.url,
             url: article.url,
@@ -1018,7 +1033,8 @@ async function getJournalismResults(query) {
         return true;
     });
 
-    return rankRelevantResults(articles, query)
+    const rankingQuery = uniqueSearchTerms([query, ...(searchPlan?.seed?.terms || [])], 5).join(' ');
+    return rankRelevantResults(articles, rankingQuery)
         .slice(0, 250)
         .map((item) => ({ ...item, sourcePriority: 'Current journalism' }));
 }
