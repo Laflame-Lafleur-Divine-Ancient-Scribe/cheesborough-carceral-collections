@@ -3,6 +3,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFile } = require('node:child_process');
 const { URL } = require('node:url');
+const net = require('node:net');
+const tls = require('node:tls');
+const crypto = require('node:crypto');
 
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
@@ -154,6 +157,206 @@ function applyApiCors(request, response) {
         response.setHeader('Access-Control-Allow-Origin', origin);
         response.setHeader('Vary', 'Origin');
     }
+}
+
+function redisFrame(parts) {
+    return `*${parts.length}\r\n${parts.map((part) => {
+        const value = String(part);
+        return `$${Buffer.byteLength(value)}\r\n${value}\r\n`;
+    }).join('')}`;
+}
+
+function parseRedisResponse(input, start = 0) {
+    if (start >= input.length) return null;
+    const type = input[start];
+    const end = input.indexOf('\r\n', start);
+    if (end < 0) return null;
+    const value = input.slice(start + 1, end);
+    if (type === '+' || type === '-' || type === ':') return { value: type === ':' ? Number(value) : value, next: end + 2 };
+    if (type === '$') {
+        const length = Number(value);
+        if (length < 0) return { value: null, next: end + 2 };
+        const bodyStart = end + 2;
+        const bodyEnd = bodyStart + length;
+        if (input.length < bodyEnd + 2) return null;
+        return { value: input.slice(bodyStart, bodyEnd), next: bodyEnd + 2 };
+    }
+    if (type === '*') {
+        const items = [];
+        let cursor = end + 2;
+        for (let index = 0; index < Number(value); index += 1) {
+            const parsed = parseRedisResponse(input, cursor);
+            if (!parsed) return null;
+            items.push(parsed.value);
+            cursor = parsed.next;
+        }
+        return { value: items, next: cursor };
+    }
+    return null;
+}
+
+function redisPipeline(commands) {
+    const redisUrl = process.env.REDIS_URL;
+    if (!redisUrl) return Promise.resolve(null);
+    let parsed;
+    try { parsed = new URL(redisUrl); } catch { return Promise.resolve(null); }
+    const frames = [];
+    if (parsed.password) frames.push(redisFrame(['AUTH', decodeURIComponent(parsed.username || 'default'), decodeURIComponent(parsed.password)]));
+    frames.push(...commands.map(redisFrame));
+    const expected = frames.length;
+    return new Promise((resolve) => {
+        const connect = parsed.protocol === 'rediss:' ? tls.connect : net.createConnection;
+        const socket = connect({ host: parsed.hostname, port: Number(parsed.port) || 6379, servername: parsed.hostname });
+        let buffer = '';
+        let replies = [];
+        let settled = false;
+        const finish = (value) => { if (!settled) { settled = true; socket.destroy(); resolve(value); } };
+        const timeout = setTimeout(() => finish(null), 4000);
+        socket.once('error', () => { clearTimeout(timeout); finish(null); });
+        socket.once('connect', () => socket.write(frames.join('')));
+        socket.on('data', (chunk) => {
+            buffer += chunk.toString('utf8');
+            let parsedReply = parseRedisResponse(buffer);
+            while (parsedReply) {
+                replies.push(parsedReply.value);
+                buffer = buffer.slice(parsedReply.next);
+                parsedReply = parseRedisResponse(buffer);
+            }
+            if (replies.length >= expected) {
+                clearTimeout(timeout);
+                finish(replies.slice(expected - commands.length));
+            }
+        });
+    });
+}
+
+function analyticsKeyPart(value) {
+    return String(value || '').replace(/[^a-zA-Z0-9_./:-]/g, '_').slice(0, 160) || 'unknown';
+}
+
+function requestCountry(request) {
+    const raw = request.headers['cf-ipcountry'] || request.headers['x-vercel-ip-country'] || request.headers['x-country-code'] || 'Unknown';
+    return /^[A-Z]{2}$/i.test(String(raw)) ? String(raw).toUpperCase() : 'Unknown';
+}
+
+function hasStudioAccess(request) {
+    const configured = process.env.STUDIO_ADMIN_TOKEN;
+    const supplied = String(request.headers.authorization || '').replace(/^Bearer\s+/i, '');
+    return safeCredentialEqual(configured, supplied) || hasStudioSession(supplied);
+}
+
+function safeCredentialEqual(expected, supplied) {
+    if (!expected || !supplied) return false;
+    const left = Buffer.from(String(expected));
+    const right = Buffer.from(String(supplied));
+    return left.length === right.length && crypto.timingSafeEqual(left, right);
+}
+
+function readRequestBody(request, maximumLength = 4096) {
+    return new Promise((resolve, reject) => {
+        let body = '';
+        request.setEncoding('utf8');
+        request.on('data', (chunk) => {
+            body += chunk;
+            if (body.length > maximumLength) reject(new Error('Request body is too large.'));
+        });
+        request.once('end', () => resolve(body));
+        request.once('error', reject);
+    });
+}
+
+function studioSessionToken() {
+    const secret = process.env.STUDIO_SESSION_SECRET;
+    if (!secret) return null;
+    const payload = Buffer.from(JSON.stringify({ scope: 'site-studio', expiresAt: Date.now() + (8 * 60 * 60 * 1000) })).toString('base64url');
+    const signature = crypto.createHmac('sha256', secret).update(payload).digest('base64url');
+    return `${payload}.${signature}`;
+}
+
+function hasStudioSession(token) {
+    const secret = process.env.STUDIO_SESSION_SECRET;
+    if (!secret || !token || !token.includes('.')) return false;
+    const [payload, signature] = token.split('.');
+    const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('base64url');
+    if (!safeCredentialEqual(expectedSignature, signature)) return false;
+    try {
+        const session = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
+        return session.scope === 'site-studio' && Number(session.expiresAt) > Date.now();
+    } catch {
+        return false;
+    }
+}
+
+async function handleStudioAuthentication(request, response) {
+    const configuredPassword = process.env.STUDIO_PASSWORD;
+    const sessionSecret = process.env.STUDIO_SESSION_SECRET;
+    applyApiCors(request, response);
+    if (!configuredPassword || !sessionSecret) {
+        response.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'Site Studio access has not been configured in Railway.' }));
+        return;
+    }
+    let submittedPassword = '';
+    try {
+        const body = await readRequestBody(request);
+        submittedPassword = JSON.parse(body || '{}').password || '';
+    } catch {
+        response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'Enter a valid password.' }));
+        return;
+    }
+    if (!safeCredentialEqual(configuredPassword, submittedPassword)) {
+        response.writeHead(401, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'That password is not correct.' }));
+        return;
+    }
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    response.end(JSON.stringify({ accessToken: studioSessionToken(), expiresInSeconds: 28800 }));
+}
+
+async function handleAnalyticsCollect(request, response, requestUrl) {
+    const page = analyticsKeyPart(requestUrl.searchParams.get('page') || '/');
+    const visitor = analyticsKeyPart(requestUrl.searchParams.get('visitor') || 'anonymous');
+    const country = requestCountry(request);
+    const reply = await redisPipeline([
+        ['INCR', 'analytics:visits:total'],
+        ['PFADD', 'analytics:visitors:unique', visitor],
+        ['ZINCRBY', 'analytics:pages', 1, page],
+        ['ZINCRBY', 'analytics:countries', 1, country],
+    ]);
+    applyApiCors(request, response);
+    response.writeHead(reply ? 204 : 503, { 'Cache-Control': 'no-store' });
+    response.end();
+}
+
+async function handleStudioAnalytics(request, response) {
+    if (!hasStudioAccess(request)) {
+        applyApiCors(request, response);
+        response.writeHead(401, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'Studio authorization is required.' }));
+        return;
+    }
+    const reply = await redisPipeline([
+        ['GET', 'analytics:visits:total'],
+        ['PFCOUNT', 'analytics:visitors:unique'],
+        ['ZREVRANGE', 'analytics:countries', 0, 7, 'WITHSCORES'],
+        ['ZREVRANGE', 'analytics:pages', 0, 7, 'WITHSCORES'],
+    ]);
+    applyApiCors(request, response);
+    if (!reply) {
+        response.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'Analytics storage is not connected. Add REDIS_URL to ServiceAPI.' }));
+        return;
+    }
+    const toRows = (pairs) => Array.isArray(pairs) ? pairs.reduce((rows, value, index) => index % 2 === 0 ? [...rows, { label: value, count: Number(pairs[index + 1] || 0) }] : rows, []) : [];
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    response.end(JSON.stringify({
+        totalVisits: Number(reply[0] || 0),
+        uniqueVisitors: Number(reply[1] || 0),
+        locations: toRows(reply[2]),
+        popularPages: toRows(reply[3]),
+        updatedAt: new Date().toISOString(),
+    }));
 }
 
 function resolveFile(requestPath) {
@@ -1157,6 +1360,40 @@ async function getKeylessFallbackResults(query, rankingQuery = query) {
 }
 
 const server = http.createServer((request, response) => {
+    let requestUrl;
+    try {
+        requestUrl = new URL(request.url, `http://${request.headers.host}`);
+    } catch {
+        response.writeHead(400);
+        response.end('Bad Request');
+        return;
+    }
+
+    if (request.method === 'OPTIONS') {
+        applyApiCors(request, response);
+        response.writeHead(204, { 'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Authorization, Content-Type' });
+        response.end();
+        return;
+    }
+
+    if (request.method === 'POST' && requestUrl.pathname === '/api/analytics/collect') {
+        handleAnalyticsCollect(request, response, requestUrl).catch(() => {
+            applyApiCors(request, response);
+            response.writeHead(503, { 'Cache-Control': 'no-store' });
+            response.end();
+        });
+        return;
+    }
+
+    if (request.method === 'POST' && requestUrl.pathname === '/api/studio/auth') {
+        handleStudioAuthentication(request, response).catch(() => {
+            applyApiCors(request, response);
+            response.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+            response.end(JSON.stringify({ error: 'Site Studio authentication is unavailable.' }));
+        });
+        return;
+    }
+
     if (request.method !== 'GET' && request.method !== 'HEAD') {
         response.writeHead(405, { Allow: 'GET, HEAD' });
         response.end('Method Not Allowed');
@@ -1165,7 +1402,6 @@ const server = http.createServer((request, response) => {
 
     let filePath;
     try {
-        const requestUrl = new URL(request.url, `http://${request.headers.host}`);
         if (requestUrl.pathname === '/api/health') {
             applyApiCors(request, response);
             response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
@@ -1185,6 +1421,14 @@ const server = http.createServer((request, response) => {
             handleNews(requestUrl, response).catch(() => {
                 response.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
                 response.end(JSON.stringify({ error: 'The live news service is unavailable.' }));
+            });
+            return;
+        }
+        if (requestUrl.pathname === '/api/studio/analytics') {
+            applyApiCors(request, response);
+            handleStudioAnalytics(request, response).catch(() => {
+                response.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+                response.end(JSON.stringify({ error: 'Analytics service is unavailable.' }));
             });
             return;
         }
