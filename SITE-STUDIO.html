@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Cheesborough Site Studio</title>
+    <style>
+      :root { --navy:#102c4c; --deep:#091e36; --gold:#c29b53; --paper:#f5f2eb; --red:#8f3d32; --ink:#202020; --line:#d9d0c1; --muted:#716b61; --ui:system-ui,-apple-system,"Segoe UI",sans-serif; --display:Georgia,"Times New Roman",serif; }
+      * { box-sizing:border-box; }
+      html { scroll-behavior:smooth; }
+      body { margin:0; color:var(--ink); background:var(--paper); font-family:var(--ui); }
+      button, input, select { font:inherit; }
+      button { cursor:pointer; }
+      button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline:3px solid var(--gold); outline-offset:3px; }
+      .utility { min-height:2.45rem; background:var(--gold); color:#fff; display:flex; justify-content:center; align-items:center; padding:.35rem 1.4rem; font-size:.74rem; letter-spacing:.11em; text-transform:uppercase; font-weight:700; }
+      .utility span + span { border-left:1px solid rgba(255,255,255,.65); margin-left:.9rem; padding-left:.9rem; }
+      .mast { background:var(--deep); color:#fff; padding:1.1rem clamp(1rem,4vw,4rem); border-bottom:4px solid var(--gold); display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+      .brand { display:flex; align-items:center; gap:.85rem; min-width:0; }
+      .brand-mark { width:2.6rem; height:2.6rem; border:1px solid var(--gold); display:grid; place-items:center; color:var(--gold); font-family:var(--display); font-size:1.38rem; }
+      .brand h1 { margin:0; font:700 clamp(1.1rem,2.3vw,1.55rem)/1.2 var(--display); }
+      .brand p { margin:.16rem 0 0; color:#ddcfb6; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; }
+      .mast-actions { display:flex; align-items:center; gap:.7rem; }
+      .private { border:1px solid rgba(223,194,135,.7); color:#e9d8af; padding:.32rem .55rem; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; white-space:nowrap; }
+      .button { border:1px solid var(--gold); background:transparent; color:#fff; padding:.54rem .75rem; font-size:.73rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+      .button:hover { background:var(--gold); color:var(--deep); }
+      .button.ghost { border-color:rgba(255,255,255,.4); color:#e5ded2; }
+      .app { max-width:1520px; margin:0 auto; display:grid; grid-template-columns:14.25rem minmax(0,1fr); min-height:calc(100vh - 7.2rem); }
+      .rail { background:#eee9df; border-right:1px solid var(--line); padding:1.55rem .95rem; }
+      .connection { border-top:3px solid var(--gold); background:#fffdf8; padding:1rem; margin-bottom:1.55rem; box-shadow:0 3px 12px rgba(9,30,54,.06); }
+      .eyebrow { margin:0 0 .45rem; color:var(--red); font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700; }
+      .connection strong { color:var(--deep); font:700 .96rem var(--display); }
+      .connection p { font-size:.77rem; line-height:1.45; color:var(--muted); margin:.45rem 0 0; }
+      .status-dot { display:inline-block; width:.5rem; height:.5rem; border-radius:50%; margin-right:.35rem; background:var(--red); box-shadow:0 0 0 3px rgba(143,61,50,.12); }
+      .nav { display:grid; gap:.25rem; }
+      .nav button { display:flex; width:100%; align-items:center; gap:.75rem; padding:.72rem .7rem; color:var(--deep); text-align:left; background:transparent; border:0; border-left:3px solid transparent; font-weight:600; }
+      .nav button span { color:var(--gold); font-family:var(--display); font-size:1.08rem; width:1rem; }
+      .nav button:hover, .nav button[aria-current="page"] { background:#fffdf8; border-left-color:var(--red); color:var(--red); }
+      .rail-note { margin:2rem .7rem 0; color:var(--muted); font-size:.73rem; line-height:1.5; }
+      main { padding:clamp(1.3rem,3vw,3rem); overflow:hidden; }
+      .section { display:none; animation:reveal .32s ease both; }
+      .section.active { display:block; }
+      @keyframes reveal { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+      .page-heading { display:flex; justify-content:space-between; align-items:end; gap:1rem; padding-bottom:1.2rem; border-bottom:1px solid var(--line); margin-bottom:1.65rem; }
+      .page-heading h2 { margin:0; color:var(--deep); font:700 clamp(1.5rem,3vw,2.15rem)/1.2 var(--display); }
+      .page-heading p { margin:.35rem 0 0; color:var(--muted); }
+      .local-label { color:var(--red); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; white-space:nowrap; }
+      .overview-grid { display:grid; grid-template-columns:minmax(16rem,1.2fr) minmax(15rem,.8fr); gap:1.5rem; align-items:start; }
+      .panel { background:#fffdf8; border:1px solid var(--line); box-shadow:0 5px 16px rgba(9,30,54,.055); }
+      .panel-head { padding:.85rem 1rem; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:.7rem; }
+      .panel-head h3 { margin:0; color:var(--deep); font:700 1.03rem var(--display); }
+      .panel-body { padding:1rem; }
+      .public-preview { border:1px solid var(--gold); background:var(--paper); }
+      .preview-mast { background:var(--navy); color:#fff; border-bottom:4px solid var(--gold); padding:1.55rem; }
+      .preview-mast small { color:#e5c77f; text-transform:uppercase; letter-spacing:.13em; font-size:.63rem; font-weight:700; }
+      .preview-mast h3 { margin:.7rem 0 0; font:700 clamp(1.35rem,3vw,2.15rem)/1.2 var(--display); }
+      .preview-copy { padding:1.45rem; min-height:9rem; background:var(--paper); color:var(--ink); }
+      .preview-copy .rule { display:block; width:4rem; border-top:3px solid var(--red); margin-bottom:.7rem; }
+      .preview-copy p { max-width:38rem; margin:0; line-height:1.65; }
+      .swatches { display:flex; align-items:stretch; min-height:5.4rem; }
+      .swatch { flex:1; padding:.65rem; color:#fff; min-width:0; display:flex; justify-content:end; flex-direction:column; }
+      .swatch b { font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; }
+      .swatch small { opacity:.8; font-size:.67rem; }
+      .next-actions { padding:0; margin:0; list-style:none; }
+      .next-actions li { border-top:1px solid var(--line); padding:.8rem 1rem; display:flex; gap:.65rem; align-items:flex-start; color:var(--ink); }
+      .next-actions li:first-child { border-top:0; }
+      .next-actions strong { display:block; color:var(--navy); font-size:.85rem; }
+      .next-actions span { color:var(--red); font-family:var(--display); }
+      .notice { margin-top:1.5rem; border-left:4px solid var(--gold); background:#ede5d6; padding:.85rem 1rem; color:#4d4942; font-size:.86rem; line-height:1.5; }
+      .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.25rem; }
+      .field { padding-bottom:.8rem; border-bottom:1px solid var(--line); }
+      .field label { display:flex; justify-content:space-between; gap:.8rem; align-items:center; margin-bottom:.5rem; color:var(--deep); font-weight:700; font-size:.82rem; }
+      .field label code { color:var(--muted); font-size:.69rem; font-weight:500; }
+      .color-input { width:100%; display:grid; grid-template-columns:2.7rem 1fr; gap:.6rem; }
+      .color-input input[type="color"] { width:2.7rem; height:2.45rem; padding:.14rem; border:1px solid var(--line); background:#fff; }
+      .color-input input[type="text"], select, input[type="range"] { width:100%; }
+      input[type="text"], select { min-height:2.45rem; border:1px solid var(--line); color:var(--ink); background:#fff; padding:.4rem .55rem; }
+      .form-actions { display:flex; flex-wrap:wrap; gap:.65rem; margin-top:1.1rem; align-items:center; }
+      .button-dark { background:var(--navy); border:1px solid var(--navy); color:#fff; padding:.62rem .85rem; font-size:.75rem; text-transform:uppercase; letter-spacing:.07em; font-weight:700; }
+      .button-dark:hover { background:var(--deep); }
+      .button-light { background:transparent; border:1px solid var(--navy); color:var(--navy); padding:.62rem .85rem; font-size:.75rem; text-transform:uppercase; letter-spacing:.07em; font-weight:700; }
+      .feedback { color:var(--red); font-size:.8rem; font-weight:600; }
+      .appearance-layout { display:grid; grid-template-columns:minmax(19rem,.94fr) minmax(19rem,1.06fr); gap:1.5rem; align-items:start; }
+      .type-samples { padding:1.6rem; background:var(--paper); border:1px solid var(--gold); }
+      .type-samples h3 { color:var(--navy); margin:0 0 .9rem; font-family:var(--display); font-size:clamp(1.6rem,3vw,2.35rem); line-height:1.25; }
+      .type-samples p { margin:0; font-size:1rem; line-height:1.7; }
+      .type-scale { display:grid; grid-template-columns:1fr auto; gap:.8rem; align-items:center; border-top:1px solid var(--line); padding-top:1rem; margin-top:1rem; }
+      .type-scale output { color:var(--red); font-weight:700; min-width:2.5rem; text-align:right; }
+      .insights-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+      .empty-metric { min-height:11.5rem; position:relative; overflow:hidden; padding:1rem; background:#fffdf8; border:1px solid var(--line); border-top:3px solid var(--gold); }
+      .empty-metric::after { content:""; position:absolute; inset:auto -1.5rem -2rem 35%; height:5rem; background:repeating-linear-gradient(135deg,rgba(194,155,83,.11) 0 1px,transparent 1px 9px); transform:rotate(-8deg); }
+      .empty-metric span { color:var(--red); font-size:.69rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+      .empty-metric h3 { color:var(--deep); margin:.65rem 0 .35rem; font:700 1.15rem var(--display); }
+      .empty-metric p { color:var(--muted); font-size:.82rem; line-height:1.45; margin:0; }
+      .analytics-instruction { margin-top:1.5rem; background:var(--deep); color:#fff; border-top:4px solid var(--gold); padding:1.25rem; display:grid; grid-template-columns:auto 1fr; gap:1rem; }
+      .analytics-instruction .step { color:var(--gold); font:700 1.75rem var(--display); }
+      .analytics-instruction h3 { font:700 1rem var(--display); margin:0; }
+      .analytics-instruction p { margin:.3rem 0 0; color:#dcd2c0; font-size:.88rem; line-height:1.5; }
+      .publish-layout { display:grid; grid-template-columns:1fr minmax(17rem,.7fr); gap:1.5rem; align-items:start; }
+      .publish-list { margin:0; padding:0; list-style:none; }
+      .publish-list li { display:grid; grid-template-columns:1.4rem 1fr; gap:.7rem; padding:.9rem 0; border-top:1px solid var(--line); }
+      .publish-list li:first-child { border-top:0; }
+      .publish-list b { color:var(--navy); }
+      .publish-list p { margin:.15rem 0 0; color:var(--muted); font-size:.86rem; line-height:1.45; }
+      .copy-box { background:#eee7d9; border:1px solid var(--gold); padding:1.2rem; }
+      .copy-box h3 { margin:0; color:var(--deep); font:700 1.2rem var(--display); }
+      .copy-box p { color:#565047; line-height:1.5; font-size:.86rem; }
+      .copy-box textarea { width:100%; min-height:9rem; border:1px solid #c7bda9; background:#fffdf8; color:#313131; padding:.8rem; font:500 .76rem/1.45 monospace; resize:vertical; }
+      .sign-in-gate { border:1px solid var(--line); background:#fffdf8; padding:1.4rem; max-width:33rem; }
+      .sign-in-gate h3 { color:var(--deep); font:700 1.4rem var(--display); margin:.1rem 0 .7rem; }
+      .sign-in-gate p { color:var(--muted); line-height:1.55; font-size:.9rem; }
+      .gate-form { display:flex; gap:.65rem; margin-top:1rem; }
+      .gate-form input { flex:1; min-width:0; }
+      .small-print { margin-top:1rem; color:var(--muted); font-size:.73rem !important; }
+      @media (max-width:900px) { .app { grid-template-columns:1fr; } .rail { border-right:0; border-bottom:1px solid var(--line); padding:1rem; } .connection { display:none; } .nav { grid-template-columns:repeat(3,minmax(0,1fr)); overflow:visible; } .nav button { justify-content:center; white-space:normal; border-left:0; border-bottom:3px solid transparent; } .nav button:hover,.nav button[aria-current="page"] { border-bottom-color:var(--red); } .rail-note { display:none; } .overview-grid,.appearance-layout,.publish-layout { grid-template-columns:1fr; } }
+      @media (max-width:620px) { .utility { justify-content:flex-start; font-size:.61rem; } .mast { align-items:flex-start; flex-direction:column; } .mast-actions { width:100%; flex-wrap:wrap; } .private { margin-right:auto; } .nav { grid-template-columns:repeat(2,minmax(0,1fr)); } main { padding:1.2rem 1rem 2rem; } .page-heading { align-items:flex-start; flex-direction:column; } .form-grid,.insights-grid { grid-template-columns:1fr; } .swatch { min-height:5rem; } .preview-mast { padding:1.15rem; } .gate-form { flex-direction:column; } }
+    </style>
+  </head>
+  <body>
+    <div class="utility"><span>Owner tools</span><span>Local theme workspace</span><span>Analytics setup required</span></div>
+    <header class="mast">
+      <div class="brand"><div class="brand-mark" aria-hidden="true">C</div><div><h1>Cheesborough Site Studio</h1><p>Editorial systems and publishing controls</p></div></div>
+      <div class="mast-actions"><span class="private">Private Workspace</span><a class="button" href="index.html">Preview Public Site</a><button class="button ghost" id="sign-out" type="button">Sign Out</button></div>
+    </header>
+    <div class="app">
+      <aside class="rail" aria-label="Studio navigation">
+        <section class="connection"><p class="eyebrow"><span class="status-dot"></span>Connection</p><strong>Local Studio</strong><p>Theme settings are saved only in this browser. No authenticated publishing connection is configured.</p></section>
+        <nav class="nav">
+          <button type="button" data-section="overview" aria-current="page"><span>01</span>Overview</button>
+          <button type="button" data-section="appearance"><span>02</span>Appearance</button>
+          <button type="button" data-section="typography"><span>03</span>Typography</button>
+          <button type="button" data-section="insights"><span>04</span>Visitor Insights</button>
+          <button type="button" data-section="publishing"><span>05</span>Publishing</button>
+          <button type="button" data-section="help"><span>06</span>Help</button>
+        </nav>
+        <p class="rail-note">This page is intentionally not linked from public site navigation. Its local controls do not automatically alter reader-facing pages.</p>
+      </aside>
+      <main>
+        <section class="section active" id="overview">
+          <div class="page-heading"><div><p class="eyebrow">Control room</p><h2>Editorial system at a glance</h2><p>Review the public identity, keep a working palette, and prepare changes for a real publish.</p></div><span class="local-label">Browser-local workspace</span></div>
+          <div class="overview-grid">
+            <div class="panel"><div class="panel-head"><h3>Public brand preview</h3><span class="local-label">Live sample</span></div><div class="panel-body"><div class="public-preview" data-preview><div class="preview-mast"><small>Cheesborough Carceral Collections</small><h3>Research, history, and public memory.</h3></div><div class="preview-copy"><span class="rule"></span><p>A reading environment built for evidence, institutional history, and the people whose lives appear in the archive.</p></div></div></div></div>
+            <aside class="panel"><div class="panel-head"><h3>Current palette</h3><span class="local-label">Working copy</span></div><div class="swatches" id="swatches"></div><ul class="next-actions"><li><span>→</span><div><strong>Review appearance</strong><small>Set the local color values you want to test.</small></div></li><li><span>→</span><div><strong>Connect analytics</strong><small>Configure a protected server endpoint before visitor data appears.</small></div></li><li><span>→</span><div><strong>Prepare publishing</strong><small>Copy the exact CSS variables for your project files.</small></div></li></ul></aside>
+          </div>
+          <p class="notice">Local theme choices are for this browser only. Publishing them to visitors still requires editing the site files and committing a deployment through an authenticated service.</p>
+        </section>
+        <section class="section" id="appearance">
+          <div class="page-heading"><div><p class="eyebrow">Appearance</p><h2>Build a confident working palette</h2><p>Adjust the five foundational colors. The sample updates immediately in this studio only.</p></div><span class="local-label" id="appearance-state">Not yet saved</span></div>
+          <div class="appearance-layout"><div class="panel"><div class="panel-head"><h3>Color settings</h3><span class="local-label">Local only</span></div><div class="panel-body"><div class="form-grid" id="color-controls"></div><div class="form-actions"><button class="button-dark" id="save-colors" type="button">Save to this browser</button><button class="button-light" id="reset-colors" type="button">Reset palette</button><span class="feedback" id="color-feedback" role="status" aria-live="polite"></span></div></div></div><div class="type-samples" data-preview><p class="eyebrow">Reader-facing sample</p><h3>Making public memory visible</h3><p>The visual system preserves warmth and seriousness while keeping difficult material readable on every screen.</p></div></div>
+        </section>
+        <section class="section" id="typography">
+          <div class="page-heading"><div><p class="eyebrow">Typography</p><h2>Set the reading voice</h2><p>Choose from the project’s existing editorial and interface families.</p></div><span class="local-label" id="type-state">Not yet saved</span></div>
+          <div class="appearance-layout"><div class="panel"><div class="panel-head"><h3>Type preferences</h3><span class="local-label">Local only</span></div><div class="panel-body"><div class="field"><label for="heading-font">Heading family <code>display</code></label><select id="heading-font"><option value="Georgia, Times New Roman, serif">Georgia</option><option value="Times New Roman, serif">Times New Roman</option></select></div><div class="field"><label for="body-font">Body family <code>interface</code></label><select id="body-font"><option value="system-ui, -apple-system, Segoe UI, sans-serif">System Sans</option><option value="Georgia, serif">Georgia</option></select></div><div class="type-scale"><label for="scale">Reading scale</label><input id="scale" type="range" min="90" max="115" value="100" /><output id="scale-output" for="scale">100%</output></div><div class="form-actions"><button class="button-dark" id="save-type" type="button">Save type settings</button><button class="button-light" id="reset-type" type="button">Reset type</button><span class="feedback" id="type-feedback" role="status" aria-live="polite"></span></div></div></div><div class="type-samples" id="type-preview"><p class="eyebrow">Feature story sample</p><h3>Where the historical record meets a human life</h3><p>Clear hierarchy and an unhurried reading rhythm help readers work through difficult material without losing the thread of the story.</p></div></div>
+        </section>
+        <section class="section" id="insights">
+          <div class="page-heading"><div><p class="eyebrow">Visitor insights</p><h2>Analytics await a secure connection</h2><p>No visitor data is shown until a trusted analytics provider is connected.</p></div><span class="local-label"><span class="status-dot"></span>No provider connected</span></div>
+          <div class="insights-grid"><article class="empty-metric"><span>Visitors</span><h3>Awaiting data</h3><p>Unique visitors will appear here once a privacy-respecting analytics endpoint is configured.</p></article><article class="empty-metric"><span>Reader locations</span><h3>Awaiting data</h3><p>Country or region summaries require consent-aware analytics and a protected server response.</p></article><article class="empty-metric"><span>Popular reading</span><h3>Awaiting data</h3><p>Page-level engagement should only appear after the provider reports verified, aggregated data.</p></article></div>
+          <section class="analytics-instruction"><div class="step">01</div><div><h3>Connect an authenticated analytics endpoint</h3><p>A future Railway service can return approved, aggregate metrics to this private workspace. Do not place analytics keys or personal visitor data in this static page.</p></div></section>
+        </section>
+        <section class="section" id="publishing">
+          <div class="page-heading"><div><p class="eyebrow">Publishing</p><h2>Move from a local test to a published theme</h2><p>Copy your settings, then add them to the project’s source files and deploy through the authenticated workflow.</p></div><span class="local-label">Manual deployment required</span></div>
+          <div class="publish-layout"><div class="panel"><div class="panel-head"><h3>Publishing checklist</h3></div><div class="panel-body"><ol class="publish-list"><li><span>01</span><div><b>Save locally</b><p>Preferences remain in this browser’s localStorage until you reset them.</p></div></li><li><span>02</span><div><b>Copy theme variables</b><p>Use the generated variable block in the relevant site stylesheet or page.</p></div></li><li><span>03</span><div><b>Review public pages</b><p>Check contrast, responsiveness, and editorial pages before committing.</p></div></li><li><span>04</span><div><b>Commit and deploy</b><p>Publishing to everyone requires repository access and the authenticated deployment workflow.</p></div></li></ol></div></div><aside class="copy-box"><h3>Theme settings</h3><p>These values can be copied safely. They do not publish automatically.</p><textarea id="theme-output" aria-label="Current CSS theme settings" readonly></textarea><div class="form-actions"><button class="button-dark" id="copy-theme" type="button">Copy Current Theme Settings</button><span class="feedback" id="copy-feedback" role="status" aria-live="polite"></span></div></aside></div>
+        </section>
+        <section class="section" id="help">
+          <div class="page-heading"><div><p class="eyebrow">Access</p><h2>Private workspace guidance</h2><p>This page helps prepare changes, but static HTML alone cannot create a secure sign-in system.</p></div></div>
+          <div class="sign-in-gate"><p class="eyebrow">Connection placeholder</p><h3>Owner sign-in is not connected</h3><p>Enter an email to save a local reminder. A real sign-in needs a protected backend, secure sessions, and access rules outside this static file.</p><form class="gate-form" id="gate-form"><input id="owner-email" type="email" autocomplete="email" placeholder="owner@example.com" aria-label="Owner email address" /><button class="button-dark" type="submit">Save local reminder</button></form><p class="small-print" id="gate-feedback" role="status">No email is sent or stored remotely by this page.</p></div>
+        </section>
+      </main>
+    </div>
+    <script>
+      (() => {
+        const defaults = { navy:'#102c4c', paper:'#f5f2eb', gold:'#c29b53', red:'#8f3d32', ink:'#202020', display:'Georgia, Times New Roman, serif', ui:'system-ui, -apple-system, Segoe UI, sans-serif', scale:100 };
+        const storageKey='cheesborough-site-studio';
+        const labels={navy:'Navy',paper:'Paper',gold:'Gold',red:'Brick Red',ink:'Body Text'};
+        let settings={...defaults};
+        try { settings={...defaults,...JSON.parse(localStorage.getItem(storageKey)||'{}')}; } catch (_) {}
+        const setVars=() => { Object.entries(settings).forEach(([k,v]) => { if(['navy','paper','gold','red','ink'].includes(k)) document.documentElement.style.setProperty('--'+k,v); }); document.documentElement.style.setProperty('--display',settings.display); document.documentElement.style.setProperty('--ui',settings.ui); document.querySelectorAll('[data-preview]').forEach(el=>{el.style.fontSize=(settings.scale/100)+'em';}); document.getElementById('type-preview').style.fontSize=(settings.scale/100)+'em'; document.getElementById('type-preview').style.setProperty('font-family',settings.ui); document.getElementById('type-preview').querySelector('h3').style.fontFamily=settings.display; updateSwatches(); updateOutput(); };
+        const updateSwatches=()=>{ const swatches=document.getElementById('swatches'); if(!swatches) return; swatches.innerHTML=['navy','paper','gold','red','ink'].map(k=>`<div class="swatch" style="background:${settings[k]};color:${k==='paper'||k==='gold'?'#102c4c':'#fff'}"><b>${labels[k]}</b><small>${settings[k]}</small></div>`).join(''); };
+        const updateOutput=()=>{ const out=document.getElementById('theme-output'); if(out) out.value=`:root {\n  --navy: ${settings.navy};\n  --deep: #091e36;\n  --gold: ${settings.gold};\n  --paper: ${settings.paper};\n  --red: ${settings.red};\n  --ink: ${settings.ink};\n  --display: ${settings.display};\n  --ui: ${settings.ui};\n}`; };
+        const save=()=>localStorage.setItem(storageKey,JSON.stringify(settings));
+        const renderControls=()=>{ const host=document.getElementById('color-controls'); host.innerHTML=Object.keys(labels).map(k=>`<div class="field"><label for="${k}">${labels[k]} <code>--${k}</code></label><div class="color-input"><input type="color" id="${k}-picker" value="${settings[k]}" aria-label="Choose ${labels[k]} color" /><input type="text" id="${k}" value="${settings[k]}" maxlength="7" aria-label="${labels[k]} hex value" /></div></div>`).join(''); Object.keys(labels).forEach(k=>{ const text=document.getElementById(k), picker=document.getElementById(k+'-picker'); const change=v=>{ if(/^#[0-9a-f]{6}$/i.test(v)){settings[k]=v; text.value=v; picker.value=v; setVars();} }; text.addEventListener('input',e=>change(e.target.value)); picker.addEventListener('input',e=>change(e.target.value)); }); };
+        document.querySelectorAll('.nav button').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.nav button').forEach(b=>b.removeAttribute('aria-current')); button.setAttribute('aria-current','page'); document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.getElementById(button.dataset.section).classList.add('active');}));
+        document.getElementById('save-colors').addEventListener('click',()=>{save(); document.getElementById('appearance-state').textContent='Saved in this browser'; document.getElementById('color-feedback').textContent='Color settings saved locally.';});
+        document.getElementById('reset-colors').addEventListener('click',()=>{Object.keys(labels).forEach(k=>settings[k]=defaults[k]); renderControls(); setVars(); document.getElementById('color-feedback').textContent='Project palette restored.';});
+        const heading=document.getElementById('heading-font'), body=document.getElementById('body-font'), scale=document.getElementById('scale'); heading.value=settings.display; body.value=settings.ui; scale.value=settings.scale; document.getElementById('scale-output').value=settings.scale+'%';
+        heading.addEventListener('change',e=>{settings.display=e.target.value;setVars();}); body.addEventListener('change',e=>{settings.ui=e.target.value;setVars();}); scale.addEventListener('input',e=>{settings.scale=e.target.value; document.getElementById('scale-output').value=e.target.value+'%';setVars();});
+        document.getElementById('save-type').addEventListener('click',()=>{save();document.getElementById('type-state').textContent='Saved in this browser';document.getElementById('type-feedback').textContent='Type settings saved locally.';});
+        document.getElementById('reset-type').addEventListener('click',()=>{settings.display=defaults.display;settings.ui=defaults.ui;settings.scale=defaults.scale;heading.value=settings.display;body.value=settings.ui;scale.value=settings.scale;document.getElementById('scale-output').value='100%';setVars();document.getElementById('type-feedback').textContent='Typography restored.';});
+        document.getElementById('copy-theme').addEventListener('click',async()=>{const text=document.getElementById('theme-output').value;const feedback=document.getElementById('copy-feedback');try{await navigator.clipboard.writeText(text);feedback.textContent='Theme settings copied.';}catch(_){document.getElementById('theme-output').focus();document.getElementById('theme-output').select();feedback.textContent='Select the settings above and copy them manually.';}});
+        document.getElementById('gate-form').addEventListener('submit',e=>{e.preventDefault();const email=document.getElementById('owner-email').value.trim();if(email){localStorage.setItem('cheesborough-studio-owner-reminder',email);document.getElementById('gate-feedback').textContent='Local reminder saved in this browser. No email was sent.';}});
+        document.getElementById('sign-out').addEventListener('click',()=>{document.getElementById('owner-email').value='';document.getElementById('gate-feedback').textContent='This local interface has no authenticated session to sign out of.';});
+        renderControls(); setVars();
+      })();
+    </script>
+  </body>
+</html>
