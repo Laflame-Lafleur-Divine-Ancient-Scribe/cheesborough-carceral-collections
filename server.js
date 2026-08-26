@@ -989,7 +989,10 @@ function isSearchEngineLandingPage(item) {
 
 async function getJournalismResults(query) {
     const encodedQuery = encodeURIComponent(query);
-    const gdeltUrl = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodedQuery}&mode=artlist&format=json&maxrecords=75&sort=HybridRel`;
+    // GDELT provides enough current coverage for a real research result set,
+    // not merely a six-link news teaser. Its public article-list ceiling is
+    // 250, which the Search page presents in fifty-result pages.
+    const gdeltUrl = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodedQuery}&mode=artlist&format=json&maxrecords=250&sort=HybridRel`;
     const [googleNewsRss, bingNewsRss, gdelt] = await Promise.all([
         fetchTextWithin(`https://news.google.com/rss/search?q=${encodedQuery}&hl=en-US&gl=US&ceid=US:en`, 5000),
         fetchTextWithin(`https://www.bing.com/news/search?format=rss&q=${encodedQuery}`, 5000),
@@ -1016,7 +1019,7 @@ async function getJournalismResults(query) {
     });
 
     return rankRelevantResults(articles, query)
-        .slice(0, 60)
+        .slice(0, 250)
         .map((item) => ({ ...item, sourcePriority: 'Current journalism' }));
 }
 
