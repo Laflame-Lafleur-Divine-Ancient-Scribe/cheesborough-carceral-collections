@@ -253,6 +253,30 @@ function hasStudioAccess(request) {
     return safeCredentialEqual(configured, supplied) || hasStudioSession(supplied);
 }
 
+function sanitizeThemeColor(value, fallback) {
+    const color = String(value || '').trim();
+    return /^#[0-9a-f]{6}$/i.test(color) ? color.toLowerCase() : fallback;
+}
+
+function sanitizeThemeFont(value, fallback) {
+    const font = String(value || '').trim();
+    return /^[a-zA-Z0-9 ,"'_-]{1,120}$/.test(font) ? font : fallback;
+}
+
+function sanitizePublishedTheme(candidate) {
+    const input = candidate && typeof candidate === 'object' ? candidate : {};
+    return {
+        navy: sanitizeThemeColor(input.navy, '#102c4c'),
+        deep: sanitizeThemeColor(input.deep, '#091e36'),
+        gold: sanitizeThemeColor(input.gold, '#c29b53'),
+        paper: sanitizeThemeColor(input.paper, '#f5f2eb'),
+        red: sanitizeThemeColor(input.red, '#8f3d32'),
+        ink: sanitizeThemeColor(input.ink, '#202020'),
+        display: sanitizeThemeFont(input.display, 'Georgia, Times New Roman, serif'),
+        ui: sanitizeThemeFont(input.ui, 'system-ui, -apple-system, Segoe UI, sans-serif'),
+    };
+}
+
 function safeCredentialEqual(expected, supplied) {
     if (!expected || !supplied) return false;
     const left = Buffer.from(String(expected));
@@ -320,6 +344,50 @@ async function handleStudioAuthentication(request, response) {
     }
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
     response.end(JSON.stringify({ accessToken: studioSessionToken(), expiresInSeconds: 28800 }));
+}
+
+async function handleStudioThemeSave(request, response) {
+    applyApiCors(request, response);
+    if (!hasStudioAccess(request)) {
+        response.writeHead(401, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'Studio authorization is required.' }));
+        return;
+    }
+    let theme;
+    try {
+        theme = sanitizePublishedTheme(JSON.parse(await readRequestBody(request) || '{}'));
+    } catch {
+        response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'Enter valid theme settings before publishing.' }));
+        return;
+    }
+    const saved = await redisPipeline([['SET', 'site:theme:published', JSON.stringify(theme)]]);
+    if (!saved) {
+        response.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'Live theme storage is unavailable. Confirm REDIS_URL in Railway.' }));
+        return;
+    }
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    response.end(JSON.stringify({ theme, publishedAt: new Date().toISOString() }));
+}
+
+async function handlePublicTheme(request, response) {
+    applyApiCors(request, response);
+    const reply = await redisPipeline([['GET', 'site:theme:published']]);
+    if (!reply || !reply[0]) {
+        response.writeHead(204, { 'Cache-Control': 'public, max-age=120' });
+        response.end();
+        return;
+    }
+    let theme;
+    try { theme = sanitizePublishedTheme(JSON.parse(reply[0])); } catch { theme = null; }
+    if (!theme) {
+        response.writeHead(204, { 'Cache-Control': 'public, max-age=120' });
+        response.end();
+        return;
+    }
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=120' });
+    response.end(JSON.stringify({ theme }));
 }
 
 async function handleAnalyticsCollect(request, response, requestUrl) {
@@ -1409,6 +1477,15 @@ const server = http.createServer((request, response) => {
         return;
     }
 
+    if (request.method === 'POST' && requestUrl.pathname === '/api/studio/theme') {
+        handleStudioThemeSave(request, response).catch(() => {
+            applyApiCors(request, response);
+            response.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+            response.end(JSON.stringify({ error: 'Live theme publishing is unavailable.' }));
+        });
+        return;
+    }
+
     if (request.method !== 'GET' && request.method !== 'HEAD') {
         response.writeHead(405, { Allow: 'GET, HEAD' });
         response.end('Method Not Allowed');
@@ -1444,6 +1521,14 @@ const server = http.createServer((request, response) => {
             handleStudioAnalytics(request, response).catch(() => {
                 response.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
                 response.end(JSON.stringify({ error: 'Analytics service is unavailable.' }));
+            });
+            return;
+        }
+        if (requestUrl.pathname === '/api/site-theme') {
+            handlePublicTheme(request, response).catch(() => {
+                applyApiCors(request, response);
+                response.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+                response.end(JSON.stringify({ error: 'Live theme service is unavailable.' }));
             });
             return;
         }

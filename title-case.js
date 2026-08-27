@@ -1,4 +1,10 @@
 (() => {
+  if (!document.querySelector('script[src="site-theme.js"]')) {
+    const liveTheme = document.createElement('script');
+    liveTheme.src = 'site-theme.js';
+    liveTheme.async = true;
+    document.head.append(liveTheme);
+  }
   if (!document.querySelector('link[href="desktop-integrity.css"]')) {
     const desktopIntegrity = document.createElement("link");
     desktopIntegrity.rel = "stylesheet";
