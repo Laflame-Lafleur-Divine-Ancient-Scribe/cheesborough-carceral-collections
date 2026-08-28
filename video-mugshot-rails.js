@@ -7,6 +7,7 @@
     'mugshot-black-man-07.png',
     'mugshot-white-man-18.png'
   ];
+  const focusPoints = ['center top', '50% 22%', '46% top', '54% 16%'];
 
   const shuffle = (items) => {
     const copy = [...items];
@@ -24,16 +25,12 @@
     const selected = shuffle(mugshots).slice(0, 4);
     rails.forEach((rail, railIndex) => {
       rail.replaceChildren();
-      rail.style.setProperty('--mugshot-gap', `${8 + Math.floor(Math.random() * 8)}px`);
-      selected.slice(railIndex * 2, railIndex * 2 + 2).forEach((filename, imageIndex) => {
+      selected.slice(railIndex * 2, railIndex * 2 + 2).forEach((filename) => {
         const card = document.createElement('figure');
         const image = document.createElement('img');
-        const turn = (Math.random() * 2.4 - 1.2).toFixed(2);
-        const nudge = `${Math.round(Math.random() * 8 - 4)}px`;
 
         card.className = 'mugshot-card';
-        card.style.setProperty('--mugshot-turn', `${turn}deg`);
-        card.style.setProperty('--mugshot-nudge', nudge);
+        image.style.setProperty('--mugshot-focus', focusPoints[Math.floor(Math.random() * focusPoints.length)]);
         image.src = `01_Photos/Illustrations/${encodeURIComponent(filename)}`;
         image.alt = '';
         image.decoding = 'async';

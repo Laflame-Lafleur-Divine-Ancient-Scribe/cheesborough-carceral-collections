@@ -5,36 +5,38 @@
 
 @media (min-width: 1150px) {
   .ccc-header {
+    --crime-newstv-banner-width: 620px;
+    --crime-newstv-masthead-height: 206px;
     position: relative;
   }
 
   .mugshot-rail {
     display: grid;
-    gap: var(--mugshot-gap, 0.65rem);
+    gap: 0;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    height: 12.9rem;
-    left: max(1.25rem, calc(50% - 650px));
+    height: var(--crime-newstv-masthead-height);
+    left: 0;
     pointer-events: none;
     position: absolute;
-    top: 3rem;
-    width: min(18vw, 16.25rem);
+    top: 2.6rem;
+    width: max(0px, calc((100% - var(--crime-newstv-banner-width)) / 2));
     z-index: 2;
   }
 
   .mugshot-rail-right {
     left: auto;
-    right: max(1.25rem, calc(50% - 650px));
+    right: 0;
   }
 
   .mugshot-card {
-    background: #f8f5ec;
-    border: 1px solid rgba(101, 83, 51, 0.48);
-    box-shadow: 0 0.4rem 0.8rem rgba(8, 25, 45, 0.13);
+    background: #1d1b18;
+    border: 0;
+    box-shadow: none;
     margin: 0;
     min-width: 0;
     overflow: hidden;
-    padding: 0.22rem;
-    transform: translateX(var(--mugshot-nudge, 0)) rotate(var(--mugshot-turn, 0deg));
+    padding: 0;
+    transform: none;
   }
 
   .mugshot-card img {
@@ -42,7 +44,7 @@
     filter: grayscale(0.15) sepia(0.1) contrast(0.96);
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    object-position: var(--mugshot-focus, center top);
     width: 100%;
   }
 }
