@@ -34,10 +34,27 @@ const contentTypes = {
     '.webp': 'image/webp',
 };
 let communityPool;
+let communitySchemaPromise;
 function communityDb() {
     if (!process.env.DATABASE_URL) return null;
     if (!communityPool) communityPool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined });
     return communityPool;
+}
+
+async function ensureCommunitySchema() {
+    const db = communityDb();
+    if (!db) return false;
+    if (!communitySchemaPromise) {
+        communitySchemaPromise = (async () => {
+            const schema = fs.readFileSync(path.join(rootDirectory, 'db', 'schema.sql'), 'utf8');
+            await db.query(schema);
+            return true;
+        })().catch((error) => {
+            communitySchemaPromise = null;
+            throw error;
+        });
+    }
+    return communitySchemaPromise;
 }
 
 const searchSeedFiles = [
@@ -1520,13 +1537,14 @@ async function v2Rate(request, action, limit, seconds) { return permitCommunityA
 async function v2Register(request, response) {
     applyApiCors(request, response); const db = communityDb();
     if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' });
+    try { await ensureCommunitySchema(); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); }
     if (!await v2Rate(request, 'signup', 5, 3600)) return communityJson(response, 429, { error: 'Please wait before trying again.' });
     const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), firstName = normalizeCommunityPersonalName(body?.firstName), lastName = normalizeCommunityPersonalName(body?.lastName), displayName = normalizeCommunityName(body?.displayName), phoneNumber = normalizeCommunityPhone(body?.phoneNumber), password = String(body?.password || '');
     if (!firstName || !lastName || !email || !displayName || phoneNumber === undefined || password.length < 10 || password.length > 128) return communityJson(response, 400, { error: 'Enter your first name, last name, username, valid email, and a password of at least 10 characters. Phone number is optional.' });
     try { const hash = await argon2.hash(password, { type: argon2.argon2id }); const result = await db.query('INSERT INTO community_users (first_name,last_name,display_name,email,phone_number,password_hash,role,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id,display_name', [firstName, lastName, displayName, email, phoneNumber, hash, 'user', 'active']); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [result.rows[0].id, 'registered']); return v2StartSession(response, result.rows[0]); } catch (error) { if (error.code === '23505') return communityJson(response, 409, { error: error.constraint === 'community_users_email_key' ? 'That email is already registered.' : 'That username is already in use.' }); return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); }
 }
 async function v2StartSession(response, user) { const sid = crypto.randomBytes(32).toString('hex'), key = v2SessionKey(sid); if (!key) return communityJson(response, 503, { error: 'Community sessions are not configured yet.' }); const saved = await redisPipeline([['SET', key, JSON.stringify({ id: user.id }), 'EX', 604800]]); if (!saved) return communityJson(response, 503, { error: 'Community sessions are temporarily unavailable.' }); v2Cookie(response, sid); return communityJson(response, 201, { user: { id: user.id, displayName: user.display_name, avatarUpdatedAt:user.avatar_updated_at || null } }); }
-async function v2Login(request, response) { applyApiCors(request, response); const db = communityDb(); if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' }); if (!await v2Rate(request, 'login', 12, 900)) return communityJson(response, 429, { error: 'Please wait before trying again.' }); const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), password = String(body?.password || ''); if (!email || !password) return communityJson(response, 401, { error: 'Email or password is not correct.' }); try { const result = await db.query('SELECT id,display_name,password_hash,status,avatar_updated_at FROM community_users WHERE email=$1', [email]); const user = result.rows[0]; if (!user || user.status !== 'active' || !await argon2.verify(user.password_hash, password)) return communityJson(response, 401, { error: 'Email or password is not correct.' }); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [user.id, 'logged_in']); return v2StartSession(response, user); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } }
+async function v2Login(request, response) { applyApiCors(request, response); const db = communityDb(); if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' }); try { await ensureCommunitySchema(); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } if (!await v2Rate(request, 'login', 12, 900)) return communityJson(response, 429, { error: 'Please wait before trying again.' }); const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), password = String(body?.password || ''); if (!email || !password) return communityJson(response, 401, { error: 'Email or password is not correct.' }); try { const result = await db.query('SELECT id,display_name,password_hash,status,avatar_updated_at FROM community_users WHERE email=$1', [email]); const user = result.rows[0]; if (!user || user.status !== 'active' || !await argon2.verify(user.password_hash, password)) return communityJson(response, 401, { error: 'Email or password is not correct.' }); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [user.id, 'logged_in']); return v2StartSession(response, user); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } }
 async function v2Me(request, response) { applyApiCors(request, response); const user = await v2User(request); return user ? communityJson(response, 200, { user: { id: user.id, displayName: user.displayName, avatarUpdatedAt:user.avatarUpdatedAt || null } }) : communityJson(response, 401, { error: 'Sign in is required.' }); }
 function v2AvatarResponse(response, status, body, type) { response.writeHead(status, { 'Content-Type': type || 'text/plain; charset=utf-8', 'Cache-Control': status === 200 ? 'public, max-age=86400' : 'no-store', 'X-Content-Type-Options': 'nosniff' }); response.end(body); }
 async function v2AvatarGet(request, requestUrl, response) { const id = String(requestUrl.pathname.split('/').pop() || ''); const user = await v2User(request), db = communityDb(); if (!db || !user || user.id !== id || !/^[0-9a-f-]{36}$/i.test(id)) return v2AvatarResponse(response, 404, 'Not found'); try { const result = await db.query('SELECT avatar_data,avatar_mime_type FROM community_users WHERE id=$1', [id]); const avatar = result.rows[0]; return avatar?.avatar_data && avatar?.avatar_mime_type ? v2AvatarResponse(response, 200, avatar.avatar_data, avatar.avatar_mime_type) : v2AvatarResponse(response, 404, 'Not found'); } catch { return v2AvatarResponse(response, 503, 'Unavailable'); } }
