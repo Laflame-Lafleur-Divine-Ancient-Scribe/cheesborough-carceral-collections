@@ -1,0 +1,32 @@
+/* August 28, 2026 edition: newest selections remain distinct from the archive. */
+const CCC_TODAYS_VIDEOS = [
+  ['lRNwHwNR-jk', 'Tallahassee Interrogation', 'Interrogations'], ['Gl4sV4aXgKQ', 'New York Interrogation', 'Interrogations'], ['0znh3HtfWPw', 'Dunk Case Breakdown', 'Interrogations'], ['4HJ890QjBdc', 'Court Trial', 'Court Proceedings'], ['ETprGtc1kfg', 'Florida Body Camera Footage', 'Bodycam'], ['PWv-gMJlyyo', 'Tallahassee Interrogation', 'Interrogations'], ['9qMnP1CsBgE', 'Court Trial', 'Court Proceedings'], ['-WCsa4H5U94', 'Yellow Beezy Case', 'Court Proceedings'], ['LklKfVmhYrs', 'Dozier School for Boys', 'Historical Records'], ['crLQzolzu1I', 'New York Interrogation', 'Interrogations'], ['FvJjnjFPTFc', 'Dunk Case Breakdown', 'Interrogations'], ['bA5J4q-ZBKM', 'Dozier School for Boys', 'Historical Records'], ['o_q5jGwhvrQ', 'Florida Body Camera Footage', 'Bodycam'], ['dWH1qOiREpA', 'Dozier School for Boys', 'Historical Records'], ['Eqm-S7AqBB4', 'Atlanta Interrogation', 'Interrogations'], ['fSfmnesgAvw', 'Tallahassee Interrogation', 'Interrogations'], ['5GLn-LzcD-I', 'Atlanta Interrogation', 'Interrogations']
+].map(([embed, title, category]) => ({ id: embed, title, category, embed, runtime: 'YouTube', date: 'Today', views: 'Video record', deck: 'A public YouTube video selected for the CrimeNewsTV desk.', description: 'This public YouTube video is provided for viewing and discussion. Availability remains under the original publisher\u2019s control.' }));
+
+CCC_VIDEO_CATALOG.push(...CCC_TODAYS_VIDEOS);
+
+(() => {
+  const editionStyle = document.createElement('style');
+  editionStyle.textContent = `
+    .video-grid:has(.video-edition){display:block}.video-edition{border-top:3px solid var(--navy);margin-top:2.7rem;padding-top:1rem}.video-edition:first-child{margin-top:0}.edition-header{align-items:baseline;border-bottom:1px solid var(--line);display:flex;gap:1rem;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.72rem}.edition-header .eyebrow{margin:0;color:var(--red)}.edition-header h2{font-size:clamp(1.5rem,3vw,2.35rem);margin:0}.edition-header>p:last-child{color:#625d55;font-size:.85rem;margin:0;white-space:nowrap}.edition-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.6rem 1rem}@media(max-width:760px){.edition-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.edition-header{align-items:flex-start;flex-wrap:wrap}}@media(max-width:460px){.edition-cards{grid-template-columns:1fr}}`;
+  document.head.append(editionStyle);
+  const escapeHtml = value => String(value || '').replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+  const thumbnail = film => `https://i.ytimg.com/vi/${encodeURIComponent(film.embed)}/hqdefault.jpg`;
+  const card = film => `<article class="video-card"><a href="VIDEO.html?id=${encodeURIComponent(film.id)}"><div class="video-thumb"><img src="${thumbnail(film)}" alt="${escapeHtml(film.title)} video thumbnail" loading="lazy"><span class="play-mini">Play</span></div><p class="eyebrow">${escapeHtml(film.category)}</p><h3>${escapeHtml(film.title)}</h3><p class="deck">${escapeHtml(film.deck)}</p></a></article>`;
+  const group = (id, heading, films, label) => films.length ? `<section class="video-edition" aria-labelledby="${id}"><header class="edition-header"><p class="eyebrow">${label}</p><h2 id="${id}">${heading}</h2><p>${films.length} ${films.length === 1 ? 'video' : 'videos'}</p></header><div class="edition-cards">${films.map(card).join('')}</div></section>` : '';
+  function renderDatedBrowse() {
+    if (document.body.dataset.videoPage !== 'browse') return;
+    const grid = document.querySelector('#video-grid'), filters = document.querySelector('#video-filters'), search = document.querySelector('#video-search'), summary = document.querySelector('#video-results'), empty = document.querySelector('#video-empty');
+    if (!grid || !filters || !search || !summary || !empty) return;
+    let activeCategory = 'All';
+    const archive = CCC_VIDEO_CATALOG.filter(film => film.date !== 'Today').map(film => ({ ...film, date: 'August 27, 2026' }));
+    const allFilms = [...CCC_TODAYS_VIDEOS, ...archive], categories = ['All', ...new Set(allFilms.map(film => film.category))], featured = document.querySelector('#featured-film');
+    const catalogCount = document.querySelector('#catalog-count'); if (catalogCount) catalogCount.textContent = 'Watch CrimeNewsTV';
+    if (featured) { const film = CCC_TODAYS_VIDEOS[0]; featured.innerHTML = `<article class="lead-film"><div class="film-visual"><img src="${thumbnail(film)}" alt="${escapeHtml(film.title)} video thumbnail"><a class="play-disc" href="VIDEO.html?id=${encodeURIComponent(film.id)}" aria-label="Play ${escapeHtml(film.title)}">&#9654;</a></div><div class="lead-copy"><p class="eyebrow">Today&#8217;s Videos &middot; ${escapeHtml(film.category)}</p><h2>${escapeHtml(film.title)}</h2><p>${escapeHtml(film.deck)}</p><a class="watch-link" href="VIDEO.html?id=${encodeURIComponent(film.id)}">Enter the screening room &rarr;</a></div></article>`; }
+    filters.innerHTML = categories.map(category => `<button type="button" data-category="${escapeHtml(category)}" aria-pressed="${category === 'All'}">${escapeHtml(category)}</button>`).join('');
+    const render = () => { const query = search.value.trim().toLowerCase(), matches = film => (activeCategory === 'All' || film.category === activeCategory) && `${film.title} ${film.category} ${film.deck}`.toLowerCase().includes(query), today = CCC_TODAYS_VIDEOS.filter(matches), yesterday = archive.filter(matches), total = today.length + yesterday.length; grid.innerHTML = group('todays-videos-heading', 'Today&#8217;s Videos', today, 'Newly Added') + group('august-27-videos-heading', 'August 27, 2026', yesterday, 'Archive Edition'); summary.textContent = total ? `${today.length} in Today\u2019s Videos \u00b7 ${yesterday.length} in the August 27 archive.` : 'No videos shown.'; empty.hidden = Boolean(total); };
+    filters.addEventListener('click', event => { const button = event.target.closest('button[data-category]'); if (!button) return; activeCategory = button.dataset.category; filters.querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === button))); render(); });
+    search.addEventListener('input', render); render();
+  }
+  document.addEventListener('DOMContentLoaded', renderDatedBrowse);
+})();
