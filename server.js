@@ -1509,7 +1509,13 @@ async function getKeylessFallbackResults(query, rankingQuery = query) {
 function parseCookies(request) { return Object.fromEntries(String(request.headers.cookie || '').split(';').map((part) => part.trim().split('=').map(decodeURIComponent)).filter((part) => part.length === 2)); }
 function v2SessionKey(sid) { const secret = process.env.SESSION_SECRET; return secret && /^[a-f0-9]{64}$/.test(sid || '') ? `community:session:${crypto.createHmac('sha256', secret).update(sid).digest('hex')}` : null; }
 async function v2User(request) { const key = v2SessionKey(parseCookies(request).cc_session); const db = communityDb(); if (!key || !db) return null; const session = await redisPipeline([['GET', key]]); if (!session?.[0]) return null; try { const stored = JSON.parse(session[0]); const result = await db.query("SELECT id,display_name,role,status,avatar_updated_at FROM community_users WHERE id=$1 AND status='active'", [stored.id]); const user = result.rows[0]; return user ? { id:user.id, displayName:user.display_name, role:user.role, avatarUpdatedAt:user.avatar_updated_at } : null; } catch { return null; } }
-function v2Cookie(response, value, maxAge = 604800) { response.setHeader('Set-Cookie', `cc_session=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`); }
+function v2Cookie(response, value, maxAge = 604800) {
+    // The public site and API are on different HTTPS origins.  A Lax cookie is
+    // not sent on the credentialed fetches made by the login page, which makes
+    // a successful phone login immediately look like a signed-out session.
+    const secure = process.env.NODE_ENV === 'production' ? '; Secure; SameSite=None; Partitioned' : '; SameSite=Lax';
+    response.setHeader('Set-Cookie', `cc_session=${value}; Path=/; HttpOnly; Max-Age=${maxAge}${secure}`);
+}
 async function v2Rate(request, action, limit, seconds) { return permitCommunityAction(request, action, limit, seconds); }
 async function v2Register(request, response) {
     applyApiCors(request, response); const db = communityDb();
