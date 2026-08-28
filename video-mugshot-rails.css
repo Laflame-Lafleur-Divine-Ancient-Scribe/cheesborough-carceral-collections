@@ -1,40 +1,46 @@
-/* Decorative CrimeNewsTV mugshots: shown only when the desktop gutters are wide. */
+/* Decorative CrimeNewsTV mugshots occupy the masthead's wide-screen gutters. */
 .mugshot-rail {
   display: none;
 }
 
-@media (min-width: 1641px) {
+@media (min-width: 1150px) {
+  .ccc-header {
+    position: relative;
+  }
+
   .mugshot-rail {
     display: grid;
-    gap: 2rem;
-    left: max(1.5rem, calc(50% - 770px));
+    gap: var(--mugshot-gap, 0.65rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: 12.9rem;
+    left: max(1.25rem, calc(50% - 650px));
     pointer-events: none;
-    position: fixed;
-    top: 25rem;
-    width: min(10.75vw, 166px);
+    position: absolute;
+    top: 3rem;
+    width: min(18vw, 16.25rem);
     z-index: 2;
   }
 
   .mugshot-rail-right {
     left: auto;
-    right: max(1.5rem, calc(50% - 770px));
+    right: max(1.25rem, calc(50% - 650px));
   }
 
   .mugshot-card {
     background: #f8f5ec;
-    border: 1px solid rgba(101, 83, 51, 0.42);
-    box-shadow: 0 0.65rem 1.1rem rgba(8, 25, 45, 0.14);
-    margin: var(--mugshot-offset, 0) 0 0;
+    border: 1px solid rgba(101, 83, 51, 0.48);
+    box-shadow: 0 0.4rem 0.8rem rgba(8, 25, 45, 0.13);
+    margin: 0;
+    min-width: 0;
     overflow: hidden;
-    padding: 0.28rem;
-    transform: rotate(var(--mugshot-turn, 0deg));
+    padding: 0.22rem;
+    transform: translateX(var(--mugshot-nudge, 0)) rotate(var(--mugshot-turn, 0deg));
   }
 
   .mugshot-card img {
-    aspect-ratio: 4 / 5;
     display: block;
     filter: grayscale(0.15) sepia(0.1) contrast(0.96);
-    height: auto;
+    height: 100%;
     object-fit: cover;
     object-position: center top;
     width: 100%;

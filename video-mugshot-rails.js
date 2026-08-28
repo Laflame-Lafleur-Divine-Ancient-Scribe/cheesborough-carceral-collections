@@ -24,15 +24,16 @@
     const selected = shuffle(mugshots).slice(0, 4);
     rails.forEach((rail, railIndex) => {
       rail.replaceChildren();
+      rail.style.setProperty('--mugshot-gap', `${8 + Math.floor(Math.random() * 8)}px`);
       selected.slice(railIndex * 2, railIndex * 2 + 2).forEach((filename, imageIndex) => {
         const card = document.createElement('figure');
         const image = document.createElement('img');
-        const offset = Math.floor(Math.random() * 38) + (imageIndex === 1 ? 20 : 0);
         const turn = (Math.random() * 2.4 - 1.2).toFixed(2);
+        const nudge = `${Math.round(Math.random() * 8 - 4)}px`;
 
         card.className = 'mugshot-card';
-        card.style.setProperty('--mugshot-offset', `${offset}px`);
         card.style.setProperty('--mugshot-turn', `${turn}deg`);
+        card.style.setProperty('--mugshot-nudge', nudge);
         image.src = `01_Photos/Illustrations/${encodeURIComponent(filename)}`;
         image.alt = '';
         image.decoding = 'async';
