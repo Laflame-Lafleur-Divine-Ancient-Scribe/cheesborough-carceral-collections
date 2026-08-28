@@ -61,6 +61,39 @@
     location.assign('LOGIN.html');
   }
 
+  function initials(name) {
+    return String(name || 'U').trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase() || 'U';
+  }
+
+  function avatarUrl(user) {
+    return user?.id && user?.avatarUpdatedAt ? `${apiBase}/api/auth/avatar/${encodeURIComponent(user.id)}?v=${encodeURIComponent(user.avatarUpdatedAt)}` : '';
+  }
+
+  function renderFloatingAvatar(user) {
+    document.querySelectorAll('[data-community-avatar-fixed]').forEach((node) => node.remove());
+    if (!user || document.body.classList.contains('community-auth-page')) return;
+    const link = document.createElement('a');
+    link.className = 'community-avatar-fixed';
+    link.dataset.communityAvatarFixed = 'true';
+    link.href = 'PROFILE.html';
+    link.title = `${user.displayName}: open profile`;
+    link.setAttribute('aria-label', `${user.displayName}: open profile`);
+    const fallback = document.createElement('span');
+    fallback.className = 'community-avatar-initials';
+    fallback.textContent = initials(user.displayName);
+    const src = avatarUrl(user);
+    if (src) {
+      const image = document.createElement('img');
+      image.src = src;
+      image.alt = '';
+      image.onload = () => fallback.hidden = true;
+      image.onerror = () => { image.remove(); fallback.hidden = false; };
+      link.append(image);
+    }
+    link.append(fallback);
+    document.body.append(link);
+  }
+
   function renderNav(user) {
     document.querySelectorAll('[data-community-account]').forEach((slot) => {
       slot.textContent = '';
@@ -82,9 +115,10 @@
         slot.append(link);
       }
     });
+    renderFloatingAvatar(user);
   }
 
-  window.CCCCommunity = { request, restoreSession, submitAccount, logout, safeReturnTo, renderNav };
+  window.CCCCommunity = { request, restoreSession, submitAccount, logout, safeReturnTo, renderNav, avatarUrl, initials };
   document.addEventListener('DOMContentLoaded', () => {
     selectLoginMugshot();
     restoreSession();

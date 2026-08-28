@@ -1,0 +1,42 @@
+/* Decorative CrimeNewsTV mugshots: shown only when the desktop gutters are wide. */
+.mugshot-rail {
+  display: none;
+}
+
+@media (min-width: 1641px) {
+  .mugshot-rail {
+    display: grid;
+    gap: 2rem;
+    left: max(1.5rem, calc(50% - 770px));
+    pointer-events: none;
+    position: fixed;
+    top: 25rem;
+    width: min(10.75vw, 166px);
+    z-index: 2;
+  }
+
+  .mugshot-rail-right {
+    left: auto;
+    right: max(1.5rem, calc(50% - 770px));
+  }
+
+  .mugshot-card {
+    background: #f8f5ec;
+    border: 1px solid rgba(101, 83, 51, 0.42);
+    box-shadow: 0 0.65rem 1.1rem rgba(8, 25, 45, 0.14);
+    margin: var(--mugshot-offset, 0) 0 0;
+    overflow: hidden;
+    padding: 0.28rem;
+    transform: rotate(var(--mugshot-turn, 0deg));
+  }
+
+  .mugshot-card img {
+    aspect-ratio: 4 / 5;
+    display: block;
+    filter: grayscale(0.15) sepia(0.1) contrast(0.96);
+    height: auto;
+    object-fit: cover;
+    object-position: center top;
+    width: 100%;
+  }
+}

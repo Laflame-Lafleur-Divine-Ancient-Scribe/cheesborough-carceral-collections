@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="desktop-integrity.css">
     <script defer src="site-analytics.js"></script>
 <script src="site-theme.js" defer></script>
-</head>
+<script src="community-auth.js" defer></script></head>
 <body><nav class="topbar"><a href="index.html">Home</a><a href="SEARCH.html">Search</a><a href="EVIDENCE-INDEX.html">Evidence index</a><a href="AMERICAN-SIBERIA.html">Powell</a></nav><main class="wrap"><h1 id="title">Spreadsheet reader</h1><p id="status" class="status loading">Loading the original workbook...</p><div class="controls"><label for="sheet-select">View sheet</label><select id="sheet-select" aria-label="Choose worksheet" hidden></select><a id="download" hidden download>Download original workbook</a></div><div id="content" class="table-wrap"></div></main><script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script><script>
 const params=new URLSearchParams(window.location.search);const file=params.get('file');const title=document.querySelector('#title');const status=document.querySelector('#status');const content=document.querySelector('#content');const download=document.querySelector('#download');const sheetSelect=document.querySelector('#sheet-select');let workbook;
 function fileUrl(path){const normalized=decodeURIComponent(path.replaceAll('\\','/'));const encoded=normalized.split('/').map(part=>encodeURIComponent(part)).join('/');return new URL(encoded,document.baseURI).href}

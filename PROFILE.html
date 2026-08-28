@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Manage your Cheesborough Carceral Collections community profile.">
+  <title>Your Community Profile | Cheesborough Carceral Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community-auth.css">
+  <script src="community-auth.js" defer></script>
+  <script src="profile.js" defer></script>
+</head>
+<body class="community-auth-page profile-page">
+  <header class="profile-masthead">
+    <a class="profile-brand" href="index.html">Cheesborough Carceral<br>Collections</a>
+    <p>CrimeNewsTV <span aria-hidden="true">/</span> community record</p>
+  </header>
+
+  <main class="profile-layout">
+    <aside class="profile-folio" aria-label="Profile record information">
+      <p class="profile-folio-label">Reader accession</p>
+      <p class="profile-folio-number">COMMUNITY<br><strong>PROFILE</strong></p>
+      <div class="profile-folio-rule" aria-hidden="true"></div>
+      <p class="profile-folio-note">A private credential for the public discussion archive. Your profile image appears in your signed-in account indicator.</p>
+    </aside>
+
+    <section class="profile-card" aria-labelledby="profile-title">
+      <a class="profile-return" href="index.html"><span aria-hidden="true">←</span> Return to collections</a>
+      <p class="auth-kicker">Community credential</p>
+      <h1 id="profile-title">Your community profile</h1>
+      <p class="profile-intro">Keep the name and image attached to your contributions recognizable to fellow readers.</p>
+
+      <div class="profile-identity" aria-label="Account summary">
+        <div class="profile-avatar-frame">
+          <img id="profile-avatar-preview" class="profile-avatar-preview" alt="Your profile photo" hidden>
+          <span id="profile-avatar-initials" class="profile-avatar-initials" aria-label="Your initials">—</span>
+        </div>
+        <div class="profile-account-details">
+          <p class="profile-record-label">Account holder</p>
+          <p id="profile-display-name" class="profile-display-name">Loading profile…</p>
+          <p id="profile-email" class="profile-email"></p>
+        </div>
+      </div>
+
+      <section class="profile-photo-section" aria-labelledby="photo-heading">
+        <div class="profile-section-heading">
+          <span class="profile-section-number">01</span>
+          <h2 id="photo-heading">Profile photograph</h2>
+        </div>
+        <p class="profile-photo-copy">Choose an image that helps the discussion community recognize your work.</p>
+        <div class="profile-controls">
+          <label class="profile-upload" for="profile-avatar-input">Upload profile photo</label>
+          <input id="profile-avatar-input" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="profile-avatar-help">
+          <button id="profile-avatar-remove" class="profile-remove" type="button" disabled hidden>Remove photo</button>
+        </div>
+        <p id="profile-avatar-help" class="profile-upload-help">JPG, PNG, or WebP. Your image is resized before upload.</p>
+      </section>
+
+      <p id="profile-status" class="profile-status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+</body>
+</html>
