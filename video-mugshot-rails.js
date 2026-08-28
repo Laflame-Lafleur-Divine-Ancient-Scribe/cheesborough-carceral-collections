@@ -1,13 +1,11 @@
 (() => {
+  // Original CrimeNewsTV portraits are composed for the shared masthead crop.
   const mugshots = [
-    'mugshot-black-woman-04.png',
-    'mugshot-black-woman-05.png',
-    'mugshot-white-woman-15.png',
-    'mugshot-white-woman-17.png',
-    'mugshot-black-man-07.png',
-    'mugshot-white-man-18.png'
+    { filename: 'crime-newstv-mugshot-evan-carter.png', focus: '50% 45%' },
+    { filename: 'crime-newstv-mugshot-daniel-harper.png', focus: '50% 45%' },
+    { filename: 'crime-newstv-mugshot-claire-bennett.png', focus: '50% 45%' },
+    { filename: 'crime-newstv-mugshot-megan-lawson.png', focus: '50% 45%' }
   ];
-  const focusPoints = ['center top', '50% 22%', '46% top', '54% 16%'];
 
   const shuffle = (items) => {
     const copy = [...items];
@@ -22,15 +20,15 @@
     const rails = [...document.querySelectorAll('[data-mugshot-rail]')];
     if (rails.length !== 2) return;
 
-    const selected = shuffle(mugshots).slice(0, 4);
+    const selected = shuffle(mugshots);
     rails.forEach((rail, railIndex) => {
       rail.replaceChildren();
-      selected.slice(railIndex * 2, railIndex * 2 + 2).forEach((filename) => {
+      selected.slice(railIndex * 2, railIndex * 2 + 2).forEach(({ filename, focus }) => {
         const card = document.createElement('figure');
         const image = document.createElement('img');
 
         card.className = 'mugshot-card';
-        image.style.setProperty('--mugshot-focus', focusPoints[Math.floor(Math.random() * focusPoints.length)]);
+        image.style.setProperty('--mugshot-focus', focus);
         image.src = `01_Photos/Illustrations/${encodeURIComponent(filename)}`;
         image.alt = '';
         image.decoding = 'async';
