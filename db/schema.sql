@@ -1,5 +1,9 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-CREATE TABLE IF NOT EXISTS community_users (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), display_name varchar(39) NOT NULL, email varchar(254) NOT NULL UNIQUE, password_hash text NOT NULL, role varchar(16) NOT NULL CHECK (role IN ('user','moderator','admin')) DEFAULT 'user', status varchar(16) NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS community_users (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), first_name varchar(60), last_name varchar(60), display_name varchar(39) NOT NULL, email varchar(254) NOT NULL UNIQUE, phone_number varchar(30), password_hash text NOT NULL, role varchar(16) NOT NULL CHECK (role IN ('user','moderator','admin')) DEFAULT 'user', status varchar(16) NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now());
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS first_name varchar(60);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_name varchar(60);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS phone_number varchar(30);
+CREATE UNIQUE INDEX IF NOT EXISTS community_users_display_name_unique_index ON community_users (lower(display_name));
 CREATE TABLE IF NOT EXISTS community_comments (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), content_type varchar(16) NOT NULL CHECK (content_type IN ('video','article')), content_id varchar(151) NOT NULL, author_id uuid NOT NULL REFERENCES community_users(id), body varchar(1200) NOT NULL, status varchar(16) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','published','rejected')), created_at timestamptz NOT NULL DEFAULT now());
 CREATE INDEX IF NOT EXISTS community_comments_public_index ON community_comments(content_type,content_id,created_at) WHERE status='published';
 CREATE TABLE IF NOT EXISTS community_bookmarks (user_id uuid REFERENCES community_users(id), content_type varchar(16) NOT NULL, content_id varchar(151) NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(user_id,content_type,content_id));

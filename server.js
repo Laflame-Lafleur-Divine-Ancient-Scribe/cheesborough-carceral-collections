@@ -327,6 +327,18 @@ function normalizeCommunityName(value) {
     return /^[\p{L}\p{N}][\p{L}\p{N} .,'_-]{1,38}$/u.test(name) ? name : null;
 }
 
+function normalizeCommunityPersonalName(value) {
+    const name = String(value || '').trim().replace(/\s+/g, ' ');
+    return /^[\p{L}][\p{L} .'-]{0,59}$/u.test(name) ? name : null;
+}
+
+function normalizeCommunityPhone(value) {
+    const phone = String(value || '').trim();
+    if (!phone) return null;
+    const digits = phone.replace(/\D/g, '');
+    return digits.length >= 7 && digits.length <= 15 && /^[0-9+(). -]{7,30}$/.test(phone) ? phone : undefined;
+}
+
 function normalizeCommentBody(value) {
     const body = String(value || '').trim().replace(/\s+/g, ' ');
     return body.length >= 2 && body.length <= 1200 ? body : null;
@@ -1503,9 +1515,9 @@ async function v2Register(request, response) {
     applyApiCors(request, response); const db = communityDb();
     if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' });
     if (!await v2Rate(request, 'signup', 5, 3600)) return communityJson(response, 429, { error: 'Please wait before trying again.' });
-    const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), displayName = normalizeCommunityName(body?.displayName), password = String(body?.password || '');
-    if (!email || !displayName || password.length < 10 || password.length > 128) return communityJson(response, 400, { error: 'Use a display name, valid email, and password of at least 10 characters.' });
-    try { const hash = await argon2.hash(password, { type: argon2.argon2id }); const result = await db.query('INSERT INTO community_users (display_name,email,password_hash,role,status) VALUES ($1,$2,$3,$4,$5) RETURNING id,display_name', [displayName, email, hash, 'user', 'active']); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [result.rows[0].id, 'registered']); return v2StartSession(response, result.rows[0]); } catch (error) { return communityJson(response, error.code === '23505' ? 409 : 503, { error: error.code === '23505' ? 'That email cannot be used to create an account.' : 'Community accounts are temporarily unavailable.' }); }
+    const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), firstName = normalizeCommunityPersonalName(body?.firstName), lastName = normalizeCommunityPersonalName(body?.lastName), displayName = normalizeCommunityName(body?.displayName), phoneNumber = normalizeCommunityPhone(body?.phoneNumber), password = String(body?.password || '');
+    if (!firstName || !lastName || !email || !displayName || phoneNumber === undefined || password.length < 10 || password.length > 128) return communityJson(response, 400, { error: 'Enter your first name, last name, username, valid email, and a password of at least 10 characters. Phone number is optional.' });
+    try { const hash = await argon2.hash(password, { type: argon2.argon2id }); const result = await db.query('INSERT INTO community_users (first_name,last_name,display_name,email,phone_number,password_hash,role,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id,display_name', [firstName, lastName, displayName, email, phoneNumber, hash, 'user', 'active']); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [result.rows[0].id, 'registered']); return v2StartSession(response, result.rows[0]); } catch (error) { if (error.code === '23505') return communityJson(response, 409, { error: error.constraint === 'community_users_email_key' ? 'That email is already registered.' : 'That username is already in use.' }); return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); }
 }
 async function v2StartSession(response, user) { const sid = crypto.randomBytes(32).toString('hex'), key = v2SessionKey(sid); if (!key) return communityJson(response, 503, { error: 'Community sessions are not configured yet.' }); const saved = await redisPipeline([['SET', key, JSON.stringify({ id: user.id }), 'EX', 604800]]); if (!saved) return communityJson(response, 503, { error: 'Community sessions are temporarily unavailable.' }); v2Cookie(response, sid); return communityJson(response, 201, { user: { id: user.id, displayName: user.display_name } }); }
 async function v2Login(request, response) { applyApiCors(request, response); const db = communityDb(); if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' }); if (!await v2Rate(request, 'login', 12, 900)) return communityJson(response, 429, { error: 'Please wait before trying again.' }); const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), password = String(body?.password || ''); if (!email || !password) return communityJson(response, 401, { error: 'Email or password is not correct.' }); try { const result = await db.query('SELECT id,display_name,password_hash,status FROM community_users WHERE email=$1', [email]); const user = result.rows[0]; if (!user || user.status !== 'active' || !await argon2.verify(user.password_hash, password)) return communityJson(response, 401, { error: 'Email or password is not correct.' }); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [user.id, 'logged_in']); return v2StartSession(response, user); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } }
