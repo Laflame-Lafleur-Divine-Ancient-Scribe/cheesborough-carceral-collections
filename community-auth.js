@@ -1,14 +1,10 @@
 (() => {
   const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://api.carceralcollections.org';
   const loginMugshots = [
-    'mugshot-white-woman-club-20s-07.png', 'mugshot-white-woman-club-20s-09.png', 'mugshot-white-woman-club-20s-10.png',
-    'mugshot-black-man-05.png', 'mugshot-black-man-06.png', 'mugshot-black-man-07.png',
-    'mugshot-black-woman-01.png', 'mugshot-black-woman-02.png', 'mugshot-black-woman-03.png', 'mugshot-black-woman-05.png',
-    'mugshot-white-man-17.png', 'mugshot-white-man-18.png',
-    'mugshot-white-woman-13.png', 'mugshot-white-woman-14.png', 'mugshot-white-woman-15.png',
-    'mugshot-white-woman-17.png', 'mugshot-white-woman-18.png', 'mugshot-white-woman-19.png',
-    'mugshot-white-woman-club-20s-01.png', 'mugshot-white-woman-club-20s-02.png', 'mugshot-white-woman-club-20s-03.png',
-    'mugshot-white-woman-club-20s-05.png', 'mugshot-white-woman-club-20s-06.png',
+    'crime-newstv-mugshot-evan-carter.png',
+    'crime-newstv-mugshot-daniel-harper.png',
+    'crime-newstv-mugshot-claire-bennett.png',
+    'crime-newstv-mugshot-megan-lawson.png',
   ];
 
   const safeReturnTo = (value) => /^\/[\w./?=&%-]*$/.test(value || '') && !value.startsWith('//') ? value : '/VIDEOS.html';
@@ -17,7 +13,7 @@
     const panel = document.querySelector('.auth-archive');
     if (!panel) return;
     const image = loginMugshots[Math.floor(Math.random() * loginMugshots.length)];
-    panel.style.setProperty('--auth-mugshot', `url("01_Photos/Illustrations/${image}")`);
+    panel.style.setProperty('--auth-mugshot', `url("01_Photos/interpreted/${image}")`);
   }
 
   async function request(route, options = {}) {
