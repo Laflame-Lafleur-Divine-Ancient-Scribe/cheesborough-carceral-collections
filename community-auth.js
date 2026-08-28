@@ -69,53 +69,57 @@
     return user?.id && user?.avatarUpdatedAt ? `${apiBase}/api/auth/avatar/${encodeURIComponent(user.id)}?v=${encodeURIComponent(user.avatarUpdatedAt)}` : '';
   }
 
-  function renderFloatingAvatar(user) {
-    document.querySelectorAll('[data-community-avatar-fixed]').forEach((node) => node.remove());
-    if (!user || document.body.classList.contains('community-auth-page')) return;
-    const link = document.createElement('a');
-    link.className = 'community-avatar-fixed';
-    link.dataset.communityAvatarFixed = 'true';
-    link.href = 'PROFILE.html';
-    link.title = `${user.displayName}: open profile`;
-    link.setAttribute('aria-label', `${user.displayName}: open profile`);
-    const fallback = document.createElement('span');
-    fallback.className = 'community-avatar-initials';
-    fallback.textContent = initials(user.displayName);
-    const src = avatarUrl(user);
-    if (src) {
-      const image = document.createElement('img');
-      image.src = src;
-      image.alt = '';
-      image.onload = () => fallback.hidden = true;
-      image.onerror = () => { image.remove(); fallback.hidden = false; };
-      link.append(image);
+  function ensureNavigationSlot() {
+    if (document.body.classList.contains('community-auth-page')) return;
+    if (document.querySelector('[data-community-account]')) return;
+    const topbar = document.querySelector('.topbar');
+    if (!topbar) return;
+    if (!document.querySelector('#community-navigation-style')) {
+      const style = document.createElement('style');
+      style.id = 'community-navigation-style';
+      style.textContent = '.community-navigation-account{align-items:center;display:flex;position:absolute;right:.75rem;top:50%;transform:translateY(-50%);z-index:5}.community-navigation-account .account-link{background:transparent;border:1px solid rgba(255,255,255,.8);color:#fff;font:700 .72rem "Source Sans 3",sans-serif;letter-spacing:.07em;padding:.38rem .62rem;text-decoration:none;text-transform:uppercase}.community-navigation-account .account-link:hover{background:#fff;color:#081d35}.account-avatar-link{align-items:center;background:#d6c9b3;border:2px solid #f1d597;border-radius:50%;color:#081d35;display:flex;height:34px;justify-content:center;overflow:hidden;width:34px}.account-avatar-link img{height:100%;object-fit:cover;width:100%}.account-avatar-initials{font:700 .7rem "Source Sans 3",sans-serif}.account-avatar-link:focus-visible,.community-navigation-account .account-link:focus-visible{outline:3px solid #f1d597;outline-offset:3px}@media(max-width:700px){.community-navigation-account{right:.5rem}.community-navigation-account .account-link{padding:.31rem .48rem}}';
+      document.head.append(style);
     }
-    link.append(fallback);
-    document.body.append(link);
+    topbar.style.position = 'relative';
+    const slot = document.createElement('span');
+    slot.className = 'community-account community-navigation-account';
+    slot.dataset.communityAccount = 'true';
+    topbar.append(slot);
   }
 
   function renderNav(user) {
+    document.querySelectorAll('[data-community-avatar-fixed], [data-community-login-fixed]').forEach((node) => node.remove());
+    ensureNavigationSlot();
     document.querySelectorAll('[data-community-account]').forEach((slot) => {
       slot.textContent = '';
       if (user) {
-        const name = document.createElement('span');
-        name.className = 'account-chip';
-        name.textContent = user.displayName;
-        const button = document.createElement('button');
-        button.className = 'account-logout';
-        button.type = 'button';
-        button.textContent = 'Sign out';
-        button.onclick = logout;
-        slot.append(name, button);
+        const profile = document.createElement('a');
+        profile.className = 'account-avatar-link';
+        profile.href = 'PROFILE.html';
+        profile.title = `${user.displayName}: open profile`;
+        profile.setAttribute('aria-label', `${user.displayName}: open profile`);
+        const fallback = document.createElement('span');
+        fallback.className = 'account-avatar-initials';
+        fallback.textContent = initials(user.displayName);
+        const src = avatarUrl(user);
+        if (src) {
+          const image = document.createElement('img');
+          image.src = src;
+          image.alt = '';
+          image.onload = () => fallback.hidden = true;
+          image.onerror = () => { image.remove(); fallback.hidden = false; };
+          profile.append(image);
+        }
+        profile.append(fallback);
+        slot.append(profile);
       } else {
         const link = document.createElement('a');
         link.className = 'account-link';
         link.href = `LOGIN.html?returnTo=${encodeURIComponent(location.pathname + location.search)}`;
-        link.textContent = 'Sign in to comment';
+        link.textContent = 'Sign In';
         slot.append(link);
       }
     });
-    renderFloatingAvatar(user);
   }
 
   window.CCCCommunity = { request, restoreSession, submitAccount, logout, safeReturnTo, renderNav, avatarUrl, initials };
