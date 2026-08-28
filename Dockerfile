@@ -1,8 +1,10 @@
-FROM node:22-alpine
+FROM node:22-bookworm-slim
 
-RUN apk add --no-cache curl
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 COPY server.js ./
 
 ENV NODE_ENV=production

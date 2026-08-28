@@ -6,6 +6,8 @@ const { URL } = require('node:url');
 const net = require('node:net');
 const tls = require('node:tls');
 const crypto = require('node:crypto');
+const { Pool } = require('pg');
+const argon2 = require('argon2');
 
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
@@ -31,6 +33,12 @@ const contentTypes = {
     '.svg': 'image/svg+xml',
     '.webp': 'image/webp',
 };
+let communityPool;
+function communityDb() {
+    if (!process.env.DATABASE_URL) return null;
+    if (!communityPool) communityPool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined });
+    return communityPool;
+}
 
 const searchSeedFiles = [
     path.join(rootDirectory, 'data', 'public-figure-search-seeds.txt'),
@@ -155,6 +163,7 @@ function applyApiCors(request, response) {
     const origin = request.headers.origin;
     if (origin && allowedOrigins.has(origin)) {
         response.setHeader('Access-Control-Allow-Origin', origin);
+        response.setHeader('Access-Control-Allow-Credentials', 'true');
         response.setHeader('Vary', 'Origin');
     }
 }
@@ -295,6 +304,49 @@ function readRequestBody(request, maximumLength = 4096) {
         request.once('end', () => resolve(body));
         request.once('error', reject);
     });
+}
+
+function communityJson(response, status, payload) {
+    response.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    response.end(JSON.stringify(payload));
+}
+
+function communityClientIp(request) {
+    const forwarded = String(request.headers['x-forwarded-for'] || '').split(',')[0].trim();
+    const ip = forwarded || request.socket.remoteAddress || 'unknown';
+    return crypto.createHash('sha256').update(ip).digest('hex').slice(0, 32);
+}
+
+function normalizeCommunityEmail(value) {
+    const email = String(value || '').trim().toLowerCase();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(email) && email.length <= 254 ? email : null;
+}
+
+function normalizeCommunityName(value) {
+    const name = String(value || '').trim().replace(/\s+/g, ' ');
+    return /^[\p{L}\p{N}][\p{L}\p{N} .,'_-]{1,38}$/u.test(name) ? name : null;
+}
+
+function normalizeCommentBody(value) {
+    const body = String(value || '').trim().replace(/\s+/g, ' ');
+    return body.length >= 2 && body.length <= 1200 ? body : null;
+}
+
+function communityResource(type, id) {
+    const resourceType = String(type || '');
+    const resourceId = String(id || '').trim();
+    return (resourceType === 'video' || resourceType === 'article') && /^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,150}$/.test(resourceId)
+        ? { resourceType, resourceId } : null;
+}
+
+async function permitCommunityAction(request, action, limit, seconds) {
+    const key = `community:rate:${action}:${communityClientIp(request)}:${Math.floor(Date.now() / (seconds * 1000))}`;
+    const reply = await redisPipeline([['INCR', key], ['EXPIRE', key, seconds + 5]]);
+    return Boolean(reply && Number(reply[0]) <= limit);
+}
+
+async function parseCommunityBody(request) {
+    try { return JSON.parse(await readRequestBody(request, 4096) || '{}'); } catch { return null; }
 }
 
 function studioSessionToken() {
@@ -1442,6 +1494,25 @@ async function getKeylessFallbackResults(query, rankingQuery = query) {
     }), rankingQuery).slice(0, 300).map((item) => ({ ...item, sourcePriority: item.sourcePriority || 'Medium priority' }));
 }
 
+function parseCookies(request) { return Object.fromEntries(String(request.headers.cookie || '').split(';').map((part) => part.trim().split('=').map(decodeURIComponent)).filter((part) => part.length === 2)); }
+function v2SessionKey(sid) { const secret = process.env.SESSION_SECRET; return secret && /^[a-f0-9]{64}$/.test(sid || '') ? `community:session:${crypto.createHmac('sha256', secret).update(sid).digest('hex')}` : null; }
+async function v2User(request) { const key = v2SessionKey(parseCookies(request).cc_session); const db = communityDb(); if (!key || !db) return null; const session = await redisPipeline([['GET', key]]); if (!session?.[0]) return null; try { const stored = JSON.parse(session[0]); const result = await db.query("SELECT id,display_name,role,status FROM community_users WHERE id=$1 AND status='active'", [stored.id]); const user = result.rows[0]; return user ? { id:user.id, displayName:user.display_name, role:user.role } : null; } catch { return null; } }
+function v2Cookie(response, value, maxAge = 604800) { response.setHeader('Set-Cookie', `cc_session=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`); }
+async function v2Rate(request, action, limit, seconds) { return permitCommunityAction(request, action, limit, seconds); }
+async function v2Register(request, response) {
+    applyApiCors(request, response); const db = communityDb();
+    if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' });
+    if (!await v2Rate(request, 'signup', 5, 3600)) return communityJson(response, 429, { error: 'Please wait before trying again.' });
+    const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), displayName = normalizeCommunityName(body?.displayName), password = String(body?.password || '');
+    if (!email || !displayName || password.length < 10 || password.length > 128) return communityJson(response, 400, { error: 'Use a display name, valid email, and password of at least 10 characters.' });
+    try { const hash = await argon2.hash(password, { type: argon2.argon2id }); const result = await db.query('INSERT INTO community_users (display_name,email,password_hash,role,status) VALUES ($1,$2,$3,$4,$5) RETURNING id,display_name', [displayName, email, hash, 'user', 'active']); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [result.rows[0].id, 'registered']); return v2StartSession(response, result.rows[0]); } catch (error) { return communityJson(response, error.code === '23505' ? 409 : 503, { error: error.code === '23505' ? 'That email cannot be used to create an account.' : 'Community accounts are temporarily unavailable.' }); }
+}
+async function v2StartSession(response, user) { const sid = crypto.randomBytes(32).toString('hex'), key = v2SessionKey(sid); if (!key) return communityJson(response, 503, { error: 'Community sessions are not configured yet.' }); const saved = await redisPipeline([['SET', key, JSON.stringify({ id: user.id }), 'EX', 604800]]); if (!saved) return communityJson(response, 503, { error: 'Community sessions are temporarily unavailable.' }); v2Cookie(response, sid); return communityJson(response, 201, { user: { id: user.id, displayName: user.display_name } }); }
+async function v2Login(request, response) { applyApiCors(request, response); const db = communityDb(); if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' }); if (!await v2Rate(request, 'login', 12, 900)) return communityJson(response, 429, { error: 'Please wait before trying again.' }); const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), password = String(body?.password || ''); if (!email || !password) return communityJson(response, 401, { error: 'Email or password is not correct.' }); try { const result = await db.query('SELECT id,display_name,password_hash,status FROM community_users WHERE email=$1', [email]); const user = result.rows[0]; if (!user || user.status !== 'active' || !await argon2.verify(user.password_hash, password)) return communityJson(response, 401, { error: 'Email or password is not correct.' }); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [user.id, 'logged_in']); return v2StartSession(response, user); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } }
+async function v2Me(request, response) { applyApiCors(request, response); const user = await v2User(request); return user ? communityJson(response, 200, { user: { id: user.id, displayName: user.displayName } }) : communityJson(response, 401, { error: 'Sign in is required.' }); }
+async function v2Logout(request, response) { applyApiCors(request, response); const key = v2SessionKey(parseCookies(request).cc_session); if (key) await redisPipeline([['DEL', key]]); v2Cookie(response, '', 0); return communityJson(response, 204, {}); }
+async function v2Comments(request, requestUrl, response) { applyApiCors(request, response); const resource = communityResource(requestUrl.searchParams.get('contentType'), requestUrl.searchParams.get('contentId')); const db = communityDb(); if (!resource) return communityJson(response, 400, { error: 'A valid discussion resource is required.' }); if (!db) return communityJson(response, 503, { error: 'Discussion is temporarily unavailable.' }); const r = await db.query("SELECT c.id,c.body,c.created_at,u.display_name FROM community_comments c JOIN community_users u ON u.id=c.author_id WHERE c.content_type=$1 AND c.content_id=$2 AND c.status='published' ORDER BY c.created_at ASC LIMIT 100", [resource.resourceType, resource.resourceId]); return communityJson(response, 200, { comments: r.rows.map((x) => ({ id: x.id, body: x.body, createdAt: x.created_at, author: { displayName: x.display_name } })) }); }
+async function v2CommentCreate(request, response) { applyApiCors(request, response); const user = await v2User(request), db = communityDb(); if (!user) return communityJson(response, 401, { error: 'Sign in to join this discussion.' }); if (!db) return communityJson(response, 503, { error: 'Discussion is temporarily unavailable.' }); if (!await v2Rate(request, 'comment', 12, 600)) return communityJson(response, 429, { error: 'Please wait before posting again.' }); const body = await parseCommunityBody(request), resource = communityResource(body?.contentType, body?.contentId), text = normalizeCommentBody(body?.body); if (!resource || !text) return communityJson(response, 400, { error: 'Comments must be between 2 and 1,200 characters.' }); const r = await db.query("INSERT INTO community_comments (content_type,content_id,author_id,body,status) VALUES ($1,$2,$3,$4,'pending') RETURNING id,created_at", [resource.resourceType, resource.resourceId, user.id, text]); await db.query('INSERT INTO community_audit_log (user_id,event_type,metadata) VALUES ($1,$2,$3)', [user.id, 'comment_submitted', JSON.stringify({ commentId: r.rows[0].id })]); return communityJson(response, 201, { comment: { id: r.rows[0].id, body: text, createdAt: r.rows[0].created_at, status: 'pending' }, message: 'Your comment is awaiting moderation.' }); }
 const server = http.createServer((request, response) => {
     let requestUrl;
     try {
@@ -1486,6 +1557,22 @@ const server = http.createServer((request, response) => {
         return;
     }
 
+    if (request.method === 'POST' && requestUrl.pathname === '/api/auth/register') {
+        v2Register(request, response).catch(() => communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }));
+        return;
+    }
+    if (request.method === 'POST' && requestUrl.pathname === '/api/auth/login') {
+        v2Login(request, response).catch(() => communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }));
+        return;
+    }
+    if (request.method === 'POST' && requestUrl.pathname === '/api/auth/logout') {
+        v2Logout(request, response);
+        return;
+    }
+    if (request.method === 'POST' && requestUrl.pathname === '/api/comments') {
+        v2CommentCreate(request, response).catch(() => communityJson(response, 503, { error: 'Discussion is temporarily unavailable.' }));
+        return;
+    }
     if (request.method !== 'GET' && request.method !== 'HEAD') {
         response.writeHead(405, { Allow: 'GET, HEAD' });
         response.end('Method Not Allowed');
@@ -1498,6 +1585,14 @@ const server = http.createServer((request, response) => {
             applyApiCors(request, response);
             response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
             response.end(JSON.stringify({ status: 'ok', service: 'cheesborough-search-api' }));
+            return;
+        }
+        if (requestUrl.pathname === '/api/auth/me' || requestUrl.pathname === '/api/auth/session') {
+            v2Me(request, response).catch(() => communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }));
+            return;
+        }
+        if (requestUrl.pathname === '/api/comments') {
+            v2Comments(request, requestUrl, response).catch(() => communityJson(response, 503, { error: 'Discussion is temporarily unavailable.' }));
             return;
         }
         if (requestUrl.pathname === '/api/online-search') {
