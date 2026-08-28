@@ -1,5 +1,5 @@
 (() => {
-  const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://api.carceralcollections.org';
+  const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://serviceapi-production-f574.up.railway.app';
   const loginMugshots = [
     'crime-newstv-mugshot-evan-carter.png',
     'crime-newstv-mugshot-daniel-harper.png',
