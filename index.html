@@ -664,11 +664,99 @@
       .hero { border-bottom: 7px solid var(--gold); }
       .search { border: 1px solid var(--gold); box-shadow: 11px 11px 0 rgba(9, 30, 54, 0.45); }
       .collections { gap: clamp(0.8rem, 1.8vw, 1.35rem); }
-      .collection-card { border-color: var(--gold); box-shadow: 5px 6px 0 rgba(9, 30, 54, 0.55); position: relative; }
-      .collection-card::after { background: var(--press-red); content: ""; height: 5px; left: 0; position: absolute; right: 0; top: 0; transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
-      .collection-card:hover { box-shadow: 9px 11px 0 rgba(9, 30, 54, 0.48); transform: translateY(-4px); }
-      .collection-card:hover::after { transform: scaleX(1); }
-      .card-art { background: var(--paper); border-bottom: 1px solid rgba(194, 155, 83, 0.65); }
+      .collection-card {
+        background: var(--ink-dark);
+        border: 1px solid var(--gold);
+        box-shadow: 6px 7px 0 rgba(9, 30, 54, 0.55);
+        isolation: isolate;
+        min-height: 15.6rem;
+        padding: 0.45rem;
+        position: relative;
+      }
+      .collection-card::before,
+      .collection-card::after {
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+      .collection-card::before {
+        border: 1px solid rgba(194, 155, 83, 0.72);
+        inset: 0.29rem;
+        z-index: 0;
+      }
+      .collection-card::after {
+        background: var(--press-red);
+        border-radius: 50%;
+        box-shadow: 0 0 0 3px var(--ink-dark), 0 0 0 4px var(--press-red);
+        height: 0.42rem;
+        opacity: 0;
+        right: 0.76rem;
+        top: 0.76rem;
+        transform: scale(0.6);
+        width: 0.42rem;
+        z-index: 2;
+      }
+      .collection-card > * { position: relative; z-index: 1; }
+      .collection-card:hover,
+      .collection-card:focus-visible { box-shadow: 10px 12px 0 rgba(9, 30, 54, 0.48); transform: translateY(-5px); }
+      .collection-card:hover::after,
+      .collection-card:focus-visible::after { opacity: 1; transform: scale(1); }
+      .collection-card:focus-visible { outline: 3px solid var(--press-red); outline-offset: 4px; }
+      .card-art {
+        align-items: center;
+        background: var(--ink-dark);
+        border: 0;
+        display: flex;
+        justify-content: center;
+        min-height: 9.2rem;
+        overflow: hidden;
+        position: relative;
+      }
+      .card-art::before {
+        border: 1px solid rgba(194, 155, 83, 0.7);
+        content: "";
+        height: 4.8rem;
+        position: absolute;
+        transform: rotate(45deg);
+        width: 4.8rem;
+      }
+      .card-art::after {
+        color: var(--gold);
+        font-family: "Libre Baskerville", serif;
+        font-size: clamp(2.15rem, 4vw, 3.25rem);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        line-height: 1;
+        position: relative;
+        text-shadow: 0 2px 0 rgba(0, 0, 0, 0.32);
+      }
+      .card-art span { display: none; }
+      .collection-card:nth-child(1) .card-art::after { content: "I"; }
+      .collection-card:nth-child(2) .card-art::after { content: "II"; }
+      .collection-card:nth-child(3) .card-art::after { content: "III"; }
+      .collection-card:nth-child(4) .card-art::after { content: "IV"; }
+      .collection-card h2 {
+        align-items: center;
+        border-top: 1px solid rgba(194, 155, 83, 0.72);
+        color: #f8f1df;
+        display: flex;
+        font-family: "Libre Baskerville", serif;
+        font-size: clamp(0.82rem, 1.32vw, 1.05rem);
+        justify-content: center;
+        letter-spacing: 0.015em;
+        line-height: 1.38;
+        margin: 0 0.35rem 0.2rem;
+        min-height: 4.25rem;
+        padding: 0.75rem 0.35rem 0.55rem;
+        text-transform: none;
+      }
+      @media (max-width: 480px) {
+        .collection-card { min-height: 12.9rem; padding: 0.35rem; }
+        .card-art { min-height: 7.25rem; }
+        .card-art::before { height: 3.7rem; width: 3.7rem; }
+        .collection-card h2 { font-size: clamp(0.75rem, 3.45vw, 0.95rem); min-height: 4.6rem; }
+      }
       .publication { background: var(--paper); border-bottom: 1px solid #cfc5b5; position: relative; }
       .publication::before { background: var(--ink); content: ""; height: 8px; left: 0; position: absolute; right: 0; top: 0; }
       .publication-inner { border-left: 1px solid rgba(16, 44, 76, 0.25); border-right: 1px solid rgba(16, 44, 76, 0.25); padding: 0 clamp(1rem, 3vw, 2.25rem); }
