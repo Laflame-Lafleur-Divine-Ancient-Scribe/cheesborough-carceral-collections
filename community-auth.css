@@ -45,3 +45,6 @@
 .profile-page ::selection{background:#2456ac;color:#fff}
 @media(max-width:900px){.profile-page{--profile-blue-width:clamp(27rem,44vw,35rem)}.profile-page .profile-layout{grid-template-columns:minmax(250px,300px) minmax(0,1fr)}}
 @media(max-width:700px){.profile-page{background:var(--community-paper)}.profile-page .profile-folio:before{display:none}.profile-page .profile-layout{display:block}.profile-page .profile-folio>*{max-width:31ch}}
+
+/* Keep the accession title as two complete, centered lines. */
+.profile-page .profile-folio-number{font-size:clamp(1.5rem,2.2vw,2.25rem);overflow-wrap:normal;white-space:nowrap;word-break:keep-all}
