@@ -19,6 +19,9 @@ ALTER TABLE community_users ADD COLUMN IF NOT EXISTS activity_privacy varchar(16
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_login_at timestamptz;
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_activity_at timestamptz;
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS email_verified_at timestamptz;
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS suspension_reason varchar(500);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS suspension_expires_at timestamptz;
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS admin_notes varchar(2000);
 ALTER TABLE community_users DROP CONSTRAINT IF EXISTS community_users_role_check;
 UPDATE community_users SET role='member' WHERE role='user';
 ALTER TABLE community_users ADD CONSTRAINT community_users_role_check CHECK (role IN ('member','moderator','admin','owner'));

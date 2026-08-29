@@ -1617,6 +1617,49 @@ async function v2OwnerOverview(request, response) {
         return communityJson(response, 503, { error: 'Owner records are temporarily unavailable.' });
     }
 }
+function ownerMemberRecord(row) {
+    return { id: row.id, displayName: row.display_name, username: row.username || '', email: row.email, role: row.role, status: row.status, createdAt: row.created_at, lastLoginAt: row.last_login_at, lastActivityAt: row.last_activity_at, emailVerifiedAt: row.email_verified_at, suspensionExpiresAt: row.suspension_expires_at, suspensionReason: row.suspension_reason || '' };
+}
+async function v2OwnerMembers(request, requestUrl, response) {
+    applyApiCors(request, response);
+    const owner = await v2User(request), db = communityDb();
+    if (!isOwner(owner)) return communityJson(response, 403, { error: 'Owner access is required.' });
+    const search = String(requestUrl.searchParams.get('q') || '').trim().slice(0, 100);
+    try {
+        await ensureCommunitySchema();
+        const result = search ? await db.query("SELECT id,display_name,username,email,role,status,created_at,last_login_at,last_activity_at,email_verified_at,suspension_expires_at,suspension_reason FROM community_users WHERE display_name ILIKE $1 OR username ILIKE $1 OR email ILIKE $1 OR id::text ILIKE $1 OR status ILIKE $1 OR role ILIKE $1 ORDER BY created_at DESC LIMIT 100", [`%${search}%`]) : await db.query("SELECT id,display_name,username,email,role,status,created_at,last_login_at,last_activity_at,email_verified_at,suspension_expires_at,suspension_reason FROM community_users ORDER BY created_at DESC LIMIT 100");
+        return communityJson(response, 200, { members: result.rows.map(ownerMemberRecord) });
+    } catch { return communityJson(response, 503, { error: 'Member records are temporarily unavailable.' }); }
+}
+async function v2OwnerMemberUpdate(request, response, id) {
+    applyApiCors(request, response);
+    const owner = await v2User(request), db = communityDb();
+    if (!isOwner(owner)) return communityJson(response, 403, { error: 'Owner access is required.' });
+    if (!/^[0-9a-f-]{36}$/i.test(id)) return communityJson(response, 400, { error: 'A valid member is required.' });
+    const body = await parseCommunityBody(request, 4096);
+    const role = ['member', 'moderator', 'admin'].includes(body?.role) ? body.role : null;
+    const status = ['active', 'suspended', 'banned'].includes(body?.status) ? body.status : null;
+    const reason = String(body?.reason || '').trim().slice(0, 500) || null;
+    const expiresAt = body?.suspensionExpiresAt ? new Date(body.suspensionExpiresAt) : null;
+    if (!role && !status) return communityJson(response, 400, { error: 'Choose a valid role or account status.' });
+    if (expiresAt && Number.isNaN(expiresAt.getTime())) return communityJson(response, 400, { error: 'Use a valid suspension expiration.' });
+    try {
+        await ensureCommunitySchema();
+        const targetResult = await db.query('SELECT id,display_name,email,role,status,suspension_expires_at,suspension_reason FROM community_users WHERE id=$1', [id]);
+        const target = targetResult.rows[0];
+        if (!target) return communityJson(response, 404, { error: 'Member not found.' });
+        if (target.id === owner.id || target.role === 'owner' || String(target.email).toLowerCase() === configuredOwnerEmail()) return communityJson(response, 403, { error: 'The protected owner account cannot be modified.' });
+        const nextRole = role || target.role, nextStatus = status || target.status;
+        if (nextStatus !== target.status && !reason) return communityJson(response, 400, { error: 'Record a reason before changing account status.' });
+        const result = await db.query("UPDATE community_users SET role=$1,status=$2,suspension_reason=$3,suspension_expires_at=$4 WHERE id=$5 RETURNING id,display_name,username,email,role,status,created_at,last_login_at,last_activity_at,email_verified_at,suspension_expires_at,suspension_reason", [nextRole, nextStatus, nextStatus === 'suspended' ? reason : null, nextStatus === 'suspended' && expiresAt ? expiresAt.toISOString() : null, id]);
+        const action = role && status ? 'role_and_status_updated' : role ? 'role_updated' : `account_${nextStatus}`;
+        const before = { role: target.role, status: target.status, suspensionExpiresAt: target.suspension_expires_at, suspensionReason: target.suspension_reason };
+        const after = { role: nextRole, status: nextStatus, suspensionExpiresAt: nextStatus === 'suspended' && expiresAt ? expiresAt.toISOString() : null, suspensionReason: nextStatus === 'suspended' ? reason : null };
+        await db.query('INSERT INTO community_moderation_actions (actor_id,target_user_id,action,reason,previous_state,new_state) VALUES ($1,$2,$3,$4,$5,$6)', [owner.id, id, action, reason, JSON.stringify(before), JSON.stringify(after)]);
+        await db.query('INSERT INTO community_audit_log (user_id,event_type,metadata) VALUES ($1,$2,$3)', [owner.id, 'owner_member_updated', JSON.stringify({ targetUserId: id, action, reason, previousState: before, newState: after })]);
+        return communityJson(response, 200, { member: ownerMemberRecord(result.rows[0]), message: 'Member record updated and logged.' });
+    } catch { return communityJson(response, 503, { error: 'The member record could not be updated.' }); }
+}
 function v2AvatarResponse(response, status, body, type) { response.writeHead(status, { 'Content-Type': type || 'text/plain; charset=utf-8', 'Cache-Control': status === 200 ? 'public, max-age=86400' : 'no-store', 'X-Content-Type-Options': 'nosniff' }); response.end(body); }
 async function v2AvatarGet(request, requestUrl, response) { const id = String(requestUrl.pathname.split('/').pop() || ''); const user = await v2User(request), db = communityDb(); if (!db || !user || user.id !== id || !/^[0-9a-f-]{36}$/i.test(id)) return v2AvatarResponse(response, 404, 'Not found'); try { const result = await db.query('SELECT avatar_data,avatar_mime_type FROM community_users WHERE id=$1', [id]); const avatar = result.rows[0]; return avatar?.avatar_data && avatar?.avatar_mime_type ? v2AvatarResponse(response, 200, avatar.avatar_data, avatar.avatar_mime_type) : v2AvatarResponse(response, 404, 'Not found'); } catch { return v2AvatarResponse(response, 503, 'Unavailable'); } }
 async function v2AvatarUpload(request, response) { applyApiCors(request, response); const user = await v2User(request), db = communityDb(); if (!user || !db) return communityJson(response, 401, { error: 'Sign in is required.' }); if (!await v2Rate(request, 'avatar_upload', 6, 3600)) return communityJson(response, 429, { error: 'Please wait before uploading another photo.' }); const body = await parseCommunityBody(request, 768 * 1024), imageData = String(body?.imageData || ''); const match = /^data:(image\/(?:jpeg|png|webp));base64,([a-zA-Z0-9+/=]+)$/.exec(imageData); if (!match) return communityJson(response, 400, { error: 'Upload a JPG, PNG, or WebP image.' }); const image = Buffer.from(match[2], 'base64'); if (!image.length || image.length > 512 * 1024) return communityJson(response, 400, { error: 'Your profile photo must be smaller than 512 KB.' }); try { const result = await db.query('UPDATE community_users SET avatar_data=$1,avatar_mime_type=$2,avatar_updated_at=now() WHERE id=$3 RETURNING avatar_updated_at', [image, match[1], user.id]); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [user.id, 'avatar_uploaded']); return communityJson(response, 200, { avatarUpdatedAt: result.rows[0].avatar_updated_at }); } catch { return communityJson(response, 503, { error: 'Your profile photo could not be saved.' }); } }
@@ -1702,6 +1745,10 @@ const server = http.createServer((request, response) => {
         v2CommentCreate(request, response).catch(() => communityJson(response, 503, { error: 'Discussion is temporarily unavailable.' }));
         return;
     }
+    if (request.method === 'POST' && /^\/api\/owner\/members\/[0-9a-f-]{36}$/i.test(requestUrl.pathname)) {
+        v2OwnerMemberUpdate(request, response, requestUrl.pathname.split('/').pop()).catch(() => communityJson(response, 503, { error: 'The member record could not be updated.' }));
+        return;
+    }
     if (request.method !== 'GET' && request.method !== 'HEAD') {
         response.writeHead(405, { Allow: 'GET, HEAD' });
         response.end('Method Not Allowed');
@@ -1726,6 +1773,10 @@ const server = http.createServer((request, response) => {
         }
         if (requestUrl.pathname === '/api/owner/overview') {
             v2OwnerOverview(request, response).catch(() => communityJson(response, 503, { error: 'Owner records are temporarily unavailable.' }));
+            return;
+        }
+        if (requestUrl.pathname === '/api/owner/members') {
+            v2OwnerMembers(request, requestUrl, response).catch(() => communityJson(response, 503, { error: 'Member records are temporarily unavailable.' }));
             return;
         }
         if (requestUrl.pathname === '/api/comments') {
