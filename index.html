@@ -705,7 +705,7 @@
       .collection-card:focus-visible { outline: 3px solid var(--press-red); outline-offset: 4px; }
       .card-art {
         align-items: center;
-        background: var(--ink-dark);
+        background: #e9dfc8;
         border: 0;
         display: flex;
         justify-content: center;
@@ -716,26 +716,20 @@
       .card-art::before {
         border: 1px solid rgba(194, 155, 83, 0.7);
         content: "";
-        height: 4.8rem;
+        inset: 0.46rem;
         position: absolute;
-        transform: rotate(45deg);
-        width: 4.8rem;
+        z-index: 1;
       }
-      .card-art::after {
-        color: var(--gold);
-        font-family: "Libre Baskerville", serif;
-        font-size: clamp(2.15rem, 4vw, 3.25rem);
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        line-height: 1;
-        position: relative;
-        text-shadow: 0 2px 0 rgba(0, 0, 0, 0.32);
+      .card-art img {
+        display: block;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 260ms ease;
+        width: 100%;
       }
-      .card-art span { display: none; }
-      .collection-card:nth-child(1) .card-art::after { content: "I"; }
-      .collection-card:nth-child(2) .card-art::after { content: "II"; }
-      .collection-card:nth-child(3) .card-art::after { content: "III"; }
-      .collection-card:nth-child(4) .card-art::after { content: "IV"; }
+      .collection-card:hover .card-art img,
+      .collection-card:focus-visible .card-art img { transform: scale(1.045); }
       .collection-card h2 {
         align-items: center;
         border-top: 1px solid rgba(194, 155, 83, 0.72);
@@ -754,7 +748,7 @@
       @media (max-width: 480px) {
         .collection-card { min-height: 12.9rem; padding: 0.35rem; }
         .card-art { min-height: 7.25rem; }
-        .card-art::before { height: 3.7rem; width: 3.7rem; }
+        .card-art::before { inset: 0.35rem; }
         .collection-card h2 { font-size: clamp(0.75rem, 3.45vw, 0.95rem); min-height: 4.6rem; }
       }
       .publication { background: var(--paper); border-bottom: 1px solid #cfc5b5; position: relative; }
@@ -879,19 +873,19 @@
           </div>
           <div class="collections" id="collections">
             <a class="collection-card" href="COLLECTIONS.html">
-              <div class="card-art" aria-hidden="true"><span>&#128196;</span></div>
+              <div class="card-art"><img src="01_Photos/ShareImages/carceral-history-archival-records-sketch.png" alt="Archival records, bound documents, and a collection cabinet" /></div>
               <h2>Carceral History<br />&amp; Archival Sources</h2>
             </a>
             <a class="collection-card" href="BOOKS-AND-MANUSCRIPTS.html">
-              <div class="card-art" aria-hidden="true"><span>&#128218;</span></div>
+              <div class="card-art"><img src="01_Photos/ShareImages/books-manuscripts-sketch.png" alt="Antique books and manuscripts from the collection" /></div>
               <h2>Books &amp;<br />Manuscripts</h2>
             </a>
             <a class="collection-card" href="NEWS.html">
-              <div class="card-art" aria-hidden="true"><span>&#9878;</span></div>
+              <div class="card-art"><img src="01_Photos/ShareImages/black-white-news-courthouse-evidence-sketch.png" alt="Courthouse records and evidence for The Black and White News" /></div>
               <h2>The Black &amp; White<br />News</h2>
             </a>
             <a class="collection-card" href="LAW-LIBRARY.html">
-              <div class="card-art" aria-hidden="true"><span>&#9876;</span></div>
+              <div class="card-art"><img src="01_Photos/ShareImages/law-library-reform-history-sketch.png" alt="Law books and reform history records" /></div>
               <h2>Law Library &amp;<br />Reform History</h2>
             </a>
           </div>
