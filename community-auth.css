@@ -36,3 +36,8 @@
 @media(min-width:701px){.profile-page .profile-folio-label{font-size:.98rem;line-height:1.45}.profile-page .profile-folio-note{font-size:1.12rem;line-height:1.65;max-width:20ch}}
 
 .profile-owner-dashboard{background:#8d362d;border:1px solid #8d362d;color:#fff;font:700 .72rem "Source Sans 3",sans-serif;letter-spacing:.08em;padding:.68rem .85rem;text-decoration:none;text-transform:uppercase}.profile-owner-dashboard:hover{background:#fff;color:#8d362d}@media(max-width:700px){.profile-owner-dashboard{width:100%;text-align:center}}
+
+/* The Join share image is editorial artwork, not a crop: retain the full design at every viewport. */
+.auth-archive{background:#081d35 url('01_Photos/ShareImages/Join%20Share%20Image.png') center/contain no-repeat}
+.auth-archive:after{border:0}
+.auth-brand,.auth-accession{clip:rect(0 0 0 0);height:1px;overflow:hidden;position:absolute;white-space:nowrap;width:1px}

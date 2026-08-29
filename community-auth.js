@@ -1,20 +1,6 @@
 (() => {
   const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://serviceapi-production-f574.up.railway.app';
-  const loginMugshots = [
-    'crime-newstv-mugshot-evan-carter.png',
-    'crime-newstv-mugshot-daniel-harper.png',
-    'crime-newstv-mugshot-claire-bennett.png',
-    'crime-newstv-mugshot-megan-lawson.png',
-  ];
-
   const safeReturnTo = (value) => /^\/[\w./?=&%-]*$/.test(value || '') && !value.startsWith('//') ? value : '/VIDEOS.html';
-
-  function selectLoginMugshot() {
-    const panel = document.querySelector('.auth-archive');
-    if (!panel) return;
-    const image = loginMugshots[Math.floor(Math.random() * loginMugshots.length)];
-    panel.style.setProperty('--auth-mugshot', `url("01_Photos/interpreted/${image}")`);
-  }
 
   async function request(route, options = {}) {
     let response;
@@ -122,7 +108,6 @@
 
   window.CCCCommunity = { request, restoreSession, submitAccount, logout, safeReturnTo, renderNav, avatarUrl, initials };
   document.addEventListener('DOMContentLoaded', () => {
-    selectLoginMugshot();
     restoreSession();
   });
 })();
