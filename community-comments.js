@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   section.id = 'community-discussion';
   section.className = 'community-discussion';
   section.setAttribute('aria-label', 'Community discussion');
-  section.innerHTML = '<p class="community-discussion-kicker">Community discussion</p><h2>Comments</h2><p class="community-discussion-intro">Published comments are visible to every reader. Sign in to add a comment.</p><div class="community-comment-list" aria-live="polite"><p>Loading comments...</p></div><div class="community-comment-compose"></div>';
+  section.innerHTML = '<p class="community-discussion-kicker">Community discussion</p><h2>Community conversation</h2><p class="community-discussion-intro">Published comments are visible to every reader. Signed-in members can join the conversation below.</p><div class="community-comment-list" aria-live="polite"><p>Loading comments...</p></div><div class="community-comment-compose"></div>';
   article.append(section);
 
   const list = section.querySelector('.community-comment-list');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const render = comments => {
     list.innerHTML = comments.length
       ? comments.map(comment => `<article class="community-comment"><p class="community-comment-author">${esc(comment.author.displayName)}</p><p>${esc(comment.body)}</p></article>`).join('')
-      : '<p>No published comments yet.</p>';
+      : '<p>No published comments yet. Start the conversation below.</p>';
   };
 
   try {

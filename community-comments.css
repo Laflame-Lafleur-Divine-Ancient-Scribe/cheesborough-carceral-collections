@@ -1,1 +1,24 @@
-.community-discussion{border-top:1px solid currentColor;margin-top:3rem;padding-top:1.5rem}.community-discussion>*{max-width:100%}.community-discussion-kicker{font-family:inherit;font-size:.78em;font-weight:700;letter-spacing:.1em;margin:0 0 .5rem;text-transform:uppercase}.community-discussion h2{border:0!important;color:inherit!important;font-family:inherit!important;font-size:1.35em!important;line-height:1.25!important;margin:0 0 .55rem!important;padding:0!important}.community-discussion-intro{margin:0 0 1.25rem}.community-comment-list{border-top:1px solid currentColor;padding-top:.65rem}.community-comment{border-bottom:1px solid currentColor;padding:.8rem 0}.community-comment p{margin:.2rem 0}.community-comment-author{font-weight:700}.community-comment-form{display:grid;gap:.6rem;margin-top:1.25rem}.community-comment-form textarea{background:transparent;border:1px solid currentColor;color:inherit;font:inherit;min-height:7rem;padding:.65rem;width:100%}.community-comment-form button,.community-comment-signin{background:#0d2948;border:1px solid #0d2948;color:#fff;cursor:pointer;display:inline-block;font:700 .82rem/1.1 sans-serif;letter-spacing:.05em;padding:.7rem .9rem;text-decoration:none;width:max-content}.community-comment-form button:hover,.community-comment-signin:hover{background:transparent;color:#0d2948}
+.community-discussion{
+  background:#f2e9d8;
+  border-left:5px solid #bc8f42;
+  border-top:4px solid #8d362d;
+  color:#211f1b;
+  margin-top:3rem;
+  padding:1.5rem;
+}
+.community-discussion>*{max-width:100%}
+.community-discussion-kicker{color:#8d362d;font:700 .75rem/1.2 sans-serif;letter-spacing:.12em;margin:0 0 .45rem;text-transform:uppercase}
+.community-discussion h2{border:0!important;color:#0f2c4a!important;font-family:Georgia,serif!important;font-size:1.45rem!important;line-height:1.25!important;margin:0 0 .5rem!important;padding:0!important}
+.community-discussion-intro{line-height:1.55;margin:0 0 1.2rem}
+.community-comment-list{background:#fffdf8;border:1px solid #d9cbb5;padding:1rem}
+.community-comment{border-bottom:1px solid #d9cbb5;padding:.8rem 0}
+.community-comment:last-child{border-bottom:0}
+.community-comment p{margin:.2rem 0}
+.community-comment-author{color:#8d362d;font-weight:700}
+.community-comment-form{display:grid;gap:.6rem;margin-top:1.2rem}
+.community-comment-form label{color:#0f2c4a;font-weight:700}
+.community-comment-form textarea{background:#fffdf8;border:1px solid #877d70;color:#211f1b;font:inherit;min-height:8rem;padding:.75rem;width:100%}
+.community-comment-form button,.community-comment-signin{background:#0f2c4a;border:1px solid #0f2c4a;color:#fff;cursor:pointer;display:inline-block;font:700 .78rem/1.1 sans-serif;letter-spacing:.06em;padding:.75rem 1rem;text-decoration:none;width:max-content}
+.community-comment-form button:hover,.community-comment-signin:hover{background:#8d362d;border-color:#8d362d}
+.community-comment-form [role="status"]{font-size:.9rem;margin:0}
+@media(max-width:620px){.community-discussion{margin-top:2rem;padding:1.1rem}.community-comment-list{padding:.8rem}}
