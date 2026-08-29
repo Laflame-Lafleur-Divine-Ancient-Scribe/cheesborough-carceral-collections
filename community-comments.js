@@ -1,4 +1,5 @@
 async function initializeCommunityDiscussion() {
+  if (document.body.dataset.communityDiscussion !== 'article') return;
   const article = document.querySelector('main article, article');
   if (!article || document.querySelector('#community-discussion')) return;
 

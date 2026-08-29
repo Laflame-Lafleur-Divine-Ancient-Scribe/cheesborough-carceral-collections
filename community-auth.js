@@ -74,13 +74,15 @@
       const style = document.createElement('style');
       style.id = 'community-navigation-style';
       style.textContent = '.community-navigation-account{align-items:center;display:flex;position:absolute;right:.75rem;top:50%;transform:translateY(-50%);z-index:5}.community-navigation-account .account-link{background:transparent;border:1px solid rgba(255,255,255,.8);color:#fff;font:700 .72rem "Source Sans 3",sans-serif;letter-spacing:.07em;padding:.38rem .62rem;text-decoration:none;text-transform:uppercase}.community-navigation-account .account-link:hover{background:#fff;color:#081d35}.account-avatar-link{align-items:center;background:#eee6d8;border:2px solid #f1d597;border-radius:50%;color:#081d35;display:flex;height:34px;justify-content:center;overflow:hidden;width:34px}.account-avatar-link{position:relative}.account-avatar-link>img{display:block!important;height:100%!important;inset:0!important;max-height:none!important;max-width:none!important;min-height:0!important;min-width:0!important;object-fit:cover!important;object-position:center!important;position:absolute!important;width:100%!important}.account-avatar-initials{font:700 .7rem "Source Sans 3",sans-serif}.account-avatar-link:focus-visible,.community-navigation-account .account-link:focus-visible{outline:3px solid #f1d597;outline-offset:3px}@media(max-width:700px){.community-navigation-account{right:.5rem}.community-navigation-account .account-link{padding:.31rem .48rem}}';
+      style.textContent += '@media(max-width:700px){.topbar nav .community-navigation-account{align-self:center;display:inline-flex;flex:0 0 auto;position:static;transform:none}.topbar nav .community-navigation-account .account-link{padding:.32rem .5rem;white-space:nowrap}}';
       document.head.append(style);
     }
     topbar.style.position = 'relative';
     const slot = document.createElement('span');
     slot.className = 'community-account community-navigation-account';
     slot.dataset.communityAccount = 'true';
-    topbar.append(slot);
+    const compactNavigation = window.matchMedia('(max-width:700px)').matches ? topbar.querySelector('nav') : null;
+    (compactNavigation || topbar).append(slot);
   }
 
   function renderNav(user) {
