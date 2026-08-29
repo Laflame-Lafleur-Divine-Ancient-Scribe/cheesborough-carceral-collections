@@ -28,3 +28,7 @@
 
 /* Keep the accession title as two complete, centered lines. */
 .profile-page .profile-folio-number{font-size:clamp(1.5rem,2.2vw,2.25rem);overflow-wrap:normal;white-space:nowrap;word-break:keep-all}
+
+/* Keep the entire masthead and folio in one navy field; the paper begins beneath the card edge. */
+.profile-page{background:linear-gradient(90deg,#07192e 0 max(42%,calc(50% - 9.4rem)),#e7dece max(42%,calc(50% - 9.4rem)) 100%)}
+@media(max-width:700px){.profile-page{background:var(--community-paper)}}
