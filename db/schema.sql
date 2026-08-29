@@ -1,5 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
-CREATE TABLE IF NOT EXISTS community_users (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), first_name varchar(60), last_name varchar(60), display_name varchar(39) NOT NULL, email varchar(254) NOT NULL UNIQUE, phone_number varchar(30), avatar_data bytea, avatar_mime_type varchar(30), avatar_updated_at timestamptz, password_hash text NOT NULL, role varchar(16) NOT NULL CHECK (role IN ('user','moderator','admin')) DEFAULT 'user', status varchar(16) NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS community_users (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), first_name varchar(60), last_name varchar(60), display_name varchar(39) NOT NULL, email varchar(254) NOT NULL UNIQUE, phone_number varchar(30), avatar_data bytea, avatar_mime_type varchar(30), avatar_updated_at timestamptz, password_hash text NOT NULL, role varchar(16) NOT NULL DEFAULT 'member', status varchar(16) NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now());
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS first_name varchar(60);
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_name varchar(60);
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS phone_number varchar(30);
@@ -16,6 +16,12 @@ ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_links jsonb NOT NUL
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS location_privacy varchar(16) NOT NULL DEFAULT 'private';
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS social_privacy varchar(16) NOT NULL DEFAULT 'private';
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS activity_privacy varchar(16) NOT NULL DEFAULT 'private';
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_login_at timestamptz;
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_activity_at timestamptz;
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS email_verified_at timestamptz;
+ALTER TABLE community_users DROP CONSTRAINT IF EXISTS community_users_role_check;
+ALTER TABLE community_users ADD CONSTRAINT community_users_role_check CHECK (role IN ('member','moderator','admin','owner'));
+UPDATE community_users SET role='member' WHERE role='user';
 CREATE UNIQUE INDEX IF NOT EXISTS community_users_display_name_unique_index ON community_users (lower(display_name));
 CREATE UNIQUE INDEX IF NOT EXISTS community_users_username_unique_index ON community_users (lower(username)) WHERE username IS NOT NULL;
 CREATE TABLE IF NOT EXISTS community_comments (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), content_type varchar(16) NOT NULL CHECK (content_type IN ('video','article')), content_id varchar(151) NOT NULL, author_id uuid NOT NULL REFERENCES community_users(id), body varchar(1200) NOT NULL, status varchar(16) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','published','rejected')), created_at timestamptz NOT NULL DEFAULT now());
@@ -24,3 +30,6 @@ CREATE TABLE IF NOT EXISTS community_bookmarks (user_id uuid REFERENCES communit
 CREATE TABLE IF NOT EXISTS community_password_reset_tokens (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid REFERENCES community_users(id), token_hash text NOT NULL, expires_at timestamptz NOT NULL, used_at timestamptz);
 CREATE TABLE IF NOT EXISTS community_email_verification_tokens (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid REFERENCES community_users(id), token_hash text NOT NULL, expires_at timestamptz NOT NULL, used_at timestamptz);
 CREATE TABLE IF NOT EXISTS community_audit_log (id bigserial PRIMARY KEY, user_id uuid REFERENCES community_users(id), event_type varchar(80) NOT NULL, metadata jsonb, created_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS community_moderation_actions (id bigserial PRIMARY KEY, actor_id uuid NOT NULL REFERENCES community_users(id), target_user_id uuid REFERENCES community_users(id), comment_id uuid REFERENCES community_comments(id), action varchar(48) NOT NULL, reason varchar(500), previous_state jsonb, new_state jsonb, created_at timestamptz NOT NULL DEFAULT now());
+CREATE INDEX IF NOT EXISTS community_audit_log_event_time_index ON community_audit_log(event_type,created_at DESC);
+CREATE INDEX IF NOT EXISTS community_comments_status_time_index ON community_comments(status,created_at DESC);

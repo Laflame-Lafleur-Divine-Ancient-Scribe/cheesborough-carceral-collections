@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const interests = ['True Crime', 'Unsolved Cases', 'Cold Cases', 'Prison Stories', 'Gang History', 'Famous Trials', 'Historical Crime', 'Missing Persons', 'Criminal Justice', 'Courtroom Stories', 'Crime Documentaries', 'Forensics', 'Wrongful Convictions', 'Juvenile Justice']; let selectedInterests = [];
   let user = await community.restoreSession(); if (!user) { location.replace('LOGIN.html?returnTo=%2FPROFILE.html'); return; }
   logout?.addEventListener('click', () => community.logout());
+  if (user.role === 'owner') { const ownerLink = document.createElement('a'); ownerLink.className = 'profile-owner-dashboard'; ownerLink.href = 'OWNER.html'; ownerLink.textContent = 'Owner dashboard'; logout?.before(ownerLink); }
   avatarHelp.textContent = 'JPG, PNG, or WebP. New uploads crop to fill the circular profile frame.';
   const field = (name) => form.elements.namedItem(name);
   const setAvatar = () => { const source = community.avatarUrl(user); fallback.textContent = community.initials(user.displayName); fallback.hidden = Boolean(source); image.hidden = !source; image.src = source || ''; remove.hidden = !source; remove.disabled = !source; };

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Private owner dashboard for Cheesborough Carceral Collections.">
+  <title>Owner Desk | Cheesborough Carceral Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community-auth.css">
+  <link rel="stylesheet" href="owner-dashboard.css">
+  <script src="community-auth.js" defer></script>
+  <script src="owner-dashboard.js" defer></script>
+</head>
+<body class="community-auth-page owner-page">
+  <header class="owner-masthead">
+    <a class="owner-brand" href="index.html">Cheesborough Carceral<br>Collections</a>
+    <p>CrimeNewsTV <span aria-hidden="true">/</span> owner record</p>
+  </header>
+  <main class="owner-layout" aria-busy="true">
+    <aside class="owner-folio" aria-label="Owner desk navigation">
+      <p class="owner-folio-label">Curator's desk</p>
+      <h1>Owner<br><strong>Record</strong></h1>
+      <span class="owner-folio-rule" aria-hidden="true"></span>
+      <p class="owner-folio-note">A private ledger for stewardship of the collection and its community.</p>
+      <nav class="owner-nav" aria-label="Owner dashboard sections">
+        <a class="is-active" href="#overview">Overview</a><a href="#members">Members</a><a href="#comments">Comments</a><a href="#analytics">Analytics</a><a href="#activity">Activity</a><a href="#communications">Communications</a><a href="#content">Content</a><a href="#security">Security</a><a href="#audit-log">Audit log</a><a href="#settings">Settings</a>
+      </nav>
+    </aside>
+    <section class="owner-card" id="overview" aria-labelledby="owner-title">
+      <div class="owner-card-top"><a class="profile-return" href="PROFILE.html"><span aria-hidden="true">&larr;</span> View public profile</a><button id="owner-logout" class="profile-logout" type="button">Log out</button></div>
+      <p class="auth-kicker">Private access</p>
+      <h2 id="owner-title">Owner dashboard</h2>
+      <p class="owner-intro">A quiet view of the community record. Counts reflect the current service data; no member email addresses or private profile details are shown here.</p>
+      <p id="owner-status" class="owner-status" role="status" aria-live="polite">Checking access&hellip;</p>
+
+      <section id="analytics" class="owner-section" aria-labelledby="overview-heading">
+        <div class="owner-section-heading"><span>01</span><h3 id="overview-heading">At a glance</h3><p>Current record</p></div>
+        <div class="owner-stat-grid" id="owner-stats" aria-live="polite">
+          <article class="owner-stat"><p>Members</p><strong data-stat="members">&mdash;</strong></article>
+          <article class="owner-stat"><p>Active today</p><strong data-stat="activeToday">&mdash;</strong></article>
+          <article class="owner-stat"><p>New this week</p><strong data-stat="newThisWeek">&mdash;</strong></article>
+          <article class="owner-stat"><p>Comments</p><strong data-stat="comments">&mdash;</strong></article>
+          <article class="owner-stat owner-stat-alert"><p>Pending comments</p><strong data-stat="pendingComments">&mdash;</strong></article>
+          <article class="owner-stat"><p>Page views</p><strong data-stat="pageViews">&mdash;</strong></article>
+        </div>
+      </section>
+
+      <section id="content" class="owner-section owner-section-paper" aria-labelledby="content-heading">
+        <div class="owner-section-heading"><span>02</span><h3 id="content-heading">Content drawing readers</h3><p>Most visited</p></div>
+        <ol id="owner-popular-content" class="owner-content-list"><li class="owner-empty">Loading available record&hellip;</li></ol>
+      </section>
+
+      <section id="activity" class="owner-section owner-activity" aria-labelledby="activity-heading">
+        <div class="owner-section-heading"><span>03</span><h3 id="activity-heading">Recent activity</h3><p>Public-safe summary</p></div>
+        <ul id="owner-activity-list"><li class="owner-empty">No activity summary is available yet.</li></ul>
+      </section>
+
+      <div id="members" class="owner-anchor" aria-hidden="true"></div><div id="comments" class="owner-anchor" aria-hidden="true"></div><div id="communications" class="owner-anchor" aria-hidden="true"></div><div id="security" class="owner-anchor" aria-hidden="true"></div><div id="audit-log" class="owner-anchor" aria-hidden="true"></div><div id="settings" class="owner-anchor" aria-hidden="true"></div>
+    </section>
+  </main>
+</body>
+</html>
