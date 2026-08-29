@@ -1,5 +1,5 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  const article = document.querySelector('article.article, article.story');
+async function initializeCommunityDiscussion() {
+  const article = document.querySelector('main article, article');
   if (!article || document.querySelector('#community-discussion')) return;
 
   const id = location.pathname.split('/').pop().replace(/\.html$/i, '').toLowerCase();
@@ -47,4 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       status.textContent = error.message || 'Your comment could not be submitted.';
     }
   });
-});
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeCommunityDiscussion, { once: true });
+else initializeCommunityDiscussion();

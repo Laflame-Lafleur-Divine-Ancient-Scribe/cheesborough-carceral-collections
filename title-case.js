@@ -1,4 +1,33 @@
 (() => {
+  function loadCommunityDiscussion() {
+    if (!document.querySelector('article') || document.querySelector('script[data-community-comments], script[src="community-comments.js"]')) return;
+    if (!document.querySelector('link[href="community-comments.css"]')) {
+      const styles = document.createElement('link');
+      styles.rel = 'stylesheet';
+      styles.href = 'community-comments.css';
+      document.head.append(styles);
+    }
+    const start = () => {
+      if (document.querySelector('script[data-community-comments], script[src="community-comments.js"]')) return;
+      const discussion = document.createElement('script');
+      discussion.src = 'community-comments.js';
+      discussion.defer = true;
+      discussion.dataset.communityComments = 'true';
+      document.head.append(discussion);
+    };
+    const auth = document.querySelector('script[src="community-auth.js"]');
+    if (window.CCCCommunity) start();
+    else if (auth) auth.addEventListener('load', start, { once: true });
+    else {
+      const authScript = document.createElement('script');
+      authScript.src = 'community-auth.js';
+      authScript.addEventListener('load', start, { once: true });
+      authScript.addEventListener('error', start, { once: true });
+      document.head.append(authScript);
+    }
+  }
+
+  loadCommunityDiscussion();
   if (!document.querySelector('script[src="site-theme.js"]')) {
     const liveTheme = document.createElement('script');
     liveTheme.src = 'site-theme.js';
