@@ -26,25 +26,5 @@
 .profile-page .profile-masthead span{color:#7d2921}
 @media(max-width:700px){.profile-page .profile-folio{align-items:center;padding:1.7rem 1.4rem;text-align:center}.profile-page .profile-folio-number{margin:.65rem 0}.profile-page .profile-folio-rule{display:block;margin:1rem auto}.profile-page .profile-folio-note{max-width:31ch}.profile-card-top{align-items:flex-start;flex-direction:column}.profile-logout{width:100%}}
 
-/* Profile readability pass: keep folio copy centered inside the blue field. */
-.profile-page{--profile-blue-width:clamp(34rem,42vw,52rem);background:linear-gradient(90deg,#07192e 0 var(--profile-blue-width),#e7dece var(--profile-blue-width) 100%)}
-.profile-page .profile-masthead{max-width:1220px}
-.profile-page .profile-masthead p{color:#493821;text-align:right}
-.profile-page .profile-masthead span{color:#7d2921}
-.profile-page .profile-layout{align-items:start;grid-template-columns:minmax(300px,340px) minmax(0,760px);max-width:1220px}
-.profile-page .profile-folio{background:var(--community-navy);border-right:0;justify-content:center;min-height:470px;padding:clamp(2rem,4vw,4.25rem) clamp(1.5rem,3vw,2.5rem);position:relative;z-index:0}
-.profile-page .profile-folio:before{background:var(--community-navy);bottom:-8rem;content:"";left:-100vw;position:absolute;right:0;top:-8rem;z-index:-1}
-.profile-page .profile-folio>*{max-width:260px}
-.profile-page .profile-folio-label{background:#143d75;color:#fff;display:inline-block;padding:.18rem .36rem}
-.profile-page .profile-folio-number{font-size:clamp(1.85rem,2.6vw,2.75rem);letter-spacing:0;overflow-wrap:break-word;white-space:normal}
-.profile-page .profile-folio-number strong{color:#ffe0a3}
-.profile-page .profile-folio-note{color:#f7f2e9;max-width:24ch}
-.profile-page .profile-photo-section,.profile-page .profile-disclosure{background:#f4efe4}
-.profile-page .profile-intro,.profile-page .profile-photo-copy,.profile-page .profile-editor-section>p,.profile-page .profile-upload-help,.profile-page .profile-email,.profile-page .profile-optional,.profile-page .profile-counter{color:#32404c}
-.profile-page .auth-kicker,.profile-page .profile-record-label,.profile-page .profile-section-number{color:#74271f}
-.profile-page ::selection{background:#2456ac;color:#fff}
-@media(max-width:900px){.profile-page{--profile-blue-width:clamp(27rem,44vw,35rem)}.profile-page .profile-layout{grid-template-columns:minmax(250px,300px) minmax(0,1fr)}}
-@media(max-width:700px){.profile-page{background:var(--community-paper)}.profile-page .profile-folio:before{display:none}.profile-page .profile-layout{display:block}.profile-page .profile-folio>*{max-width:31ch}}
-
 /* Keep the accession title as two complete, centered lines. */
 .profile-page .profile-folio-number{font-size:clamp(1.5rem,2.2vw,2.25rem);overflow-wrap:normal;white-space:nowrap;word-break:keep-all}
