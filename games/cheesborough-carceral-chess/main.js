@@ -317,24 +317,7 @@ function varySuppliedAvatarMaterials(avatar, profile) {
   });
 }
 
-function addSeatedAvatar(profile) {
-  if (profile.group === "Men") {
-    const expectedName = profile.name;
-    const expectedSide = profile.side;
-    new FBXLoader().load(detailedMaleAvatarPath(profile), (avatar) => {
-      if (!seatedAvatarProfiles.some((item) => item.name === expectedName && item.side === expectedSide)) return;
-      poseDetailedAvatarForChair(avatar);
-      positionDetailedAvatarInChair(avatar, profile.side);
-      avatar.name = `Seated_${profile.side}_${profile.name}`;
-      avatar.traverse((child) => {
-        if (!child.isMesh) return;
-        child.castShadow = true;
-        child.receiveShadow = true;
-      });
-      seatedAvatarGroup.add(avatar);
-    }, undefined, (error) => console.error("Unable to load detailed seated avatar", error));
-    return;
-  }
+function addLegacySeatedAvatar(profile) {
   const expectedName = profile.name;
   const expectedSide = profile.side;
   const materialLoader = new MTLLoader();
@@ -352,6 +335,47 @@ function addSeatedAvatar(profile) {
       seatedAvatarGroup.add(avatar);
     }, undefined, (error) => console.error("Unable to load seated avatar geometry", error));
   }, undefined, (error) => console.error("Unable to load seated avatar materials", error));
+}
+
+function addSeatedAvatar(profile) {
+  if (profile.group !== "Men") {
+    addLegacySeatedAvatar(profile);
+    return;
+  }
+  const expectedName = profile.name;
+  const expectedSide = profile.side;
+  let avatarLoaded = false;
+  let fallbackStarted = false;
+  const useVisibleFallback = () => {
+    if (avatarLoaded || fallbackStarted || !seatedAvatarProfiles.some((item) => item.name === expectedName && item.side === expectedSide)) return;
+    fallbackStarted = true;
+    console.warn("Detailed avatar did not arrive promptly; using the seated fallback.");
+    addLegacySeatedAvatar(profile);
+  };
+  // Never leave a selected playerâ€™s chair empty while an optional, heavier
+  // FBX asset is slow or unavailable. The established local OBJ remains the
+  // immediate visible fallback and is removed if the detailed model arrives.
+  const fallbackTimer = window.setTimeout(useVisibleFallback, 1800);
+  new FBXLoader().load(detailedMaleAvatarPath(profile), (avatar) => {
+    if (!seatedAvatarProfiles.some((item) => item.name === expectedName && item.side === expectedSide)) return;
+    avatarLoaded = true;
+    window.clearTimeout(fallbackTimer);
+    seatedAvatarGroup.children
+      .filter((child) => child.name === `Seated_${profile.side}_${profile.name}`)
+      .forEach((child) => seatedAvatarGroup.remove(child));
+    poseDetailedAvatarForChair(avatar);
+    positionDetailedAvatarInChair(avatar, profile.side);
+    avatar.name = `Seated_${profile.side}_${profile.name}`;
+    avatar.traverse((child) => {
+      if (!child.isMesh) return;
+      child.castShadow = true;
+      child.receiveShadow = true;
+    });
+    seatedAvatarGroup.add(avatar);
+  }, undefined, () => {
+    window.clearTimeout(fallbackTimer);
+    useVisibleFallback();
+  });
 }
 
 function positionAvatarInChair(avatar, side) {
