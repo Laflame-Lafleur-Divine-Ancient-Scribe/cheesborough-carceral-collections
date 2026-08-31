@@ -702,6 +702,13 @@ const fbiOffice = (office, name) => ({
     name,
     syndication: 'official',
 });
+const floridaDiscoverySource = (domain, path, name) => ({
+    domain,
+    path,
+    search: `site:${domain}${path}`,
+    name,
+    syndication: 'official',
+});
 
 const newsDesks = {
     national: {
@@ -761,7 +768,51 @@ const newsDesks = {
             { domain: 'ftc.gov', listingUrl: 'https://www.ftc.gov/legal-library/browse/cases-proceedings', articlePathPattern: /\/legal-library\/browse\/cases-proceedings\//i, name: 'Federal Trade Commission Enforcement', syndication: 'official' },
         ],
     },
-    florida: { label: 'Florida', query: `Florida ${crimeBeatTerms}`, matchTerms: ['florida', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['florida', 'miami', 'tampa', 'orlando', 'jacksonville', 'tallahassee', 'fort lauderdale', 'st petersburg', 'broward', 'miami-dade', 'duval', 'pinellas'], sources: [fbiOffice('miami', 'FBI Miami'), fbiOffice('tampa', 'FBI Tampa'), fbiOffice('jacksonville', 'FBI Jacksonville'), { domain: 'flcourts.gov', name: 'Florida Courts', syndication: 'official' }, { domain: 'wlrn.org', name: 'WLRN', syndication: 'link-only' }, { domain: 'local10.com', name: 'Local 10', syndication: 'link-only' }] },
+    florida: {
+        label: 'Florida',
+        query: `Florida ${crimeBeatTerms}`,
+        matchTerms: ['florida', 'court', 'justice', 'investigation', 'arrest'],
+        jurisdictionTerms: ['florida', 'miami', 'tampa', 'orlando', 'jacksonville', 'tallahassee', 'fort lauderdale', 'st petersburg', 'broward', 'miami-dade', 'duval', 'pinellas'],
+        sources: [
+            fbiOffice('miami', 'FBI Miami'),
+            fbiOffice('tampa', 'FBI Tampa'),
+            fbiOffice('jacksonville', 'FBI Jacksonville'),
+            { domain: 'justice.gov', path: '/usao-ndfl/', listingUrl: 'https://www.justice.gov/usao-ndfl/pr', articlePathPattern: /\/usao-ndfl\/pr\//i, name: 'U.S. Attorney Northern District of Florida', syndication: 'official' },
+            { domain: 'justice.gov', path: '/usao-mdfl/', listingUrl: 'https://www.justice.gov/usao-mdfl/pr', articlePathPattern: /\/usao-mdfl\/pr\//i, name: 'U.S. Attorney Middle District of Florida', syndication: 'official' },
+            { domain: 'justice.gov', path: '/usao-sdfl/', listingUrl: 'https://www.justice.gov/usao-sdfl/pr', articlePathPattern: /\/usao-sdfl\/pr\//i, name: 'U.S. Attorney Southern District of Florida', syndication: 'official' },
+            { domain: 'fdle.state.fl.us', path: '/news/', listingUrl: 'https://www.fdle.state.fl.us/news', articlePathPattern: /\/news\/\d{4}\/[a-z-]+\//i, name: 'Florida Department of Law Enforcement', syndication: 'official' },
+            floridaDiscoverySource('atf.gov', '/field-divisions/tampa/press-releases', 'ATF Tampa Field Division'),
+            floridaDiscoverySource('atf.gov', '/field-divisions/miami/press-releases', 'ATF Miami Field Division'),
+            floridaDiscoverySource('dea.gov', '/divisions/miami', 'DEA Miami Field Division'),
+            floridaDiscoverySource('usmarshals.gov', '/news/press-releases', 'U.S. Marshals Service'),
+            floridaDiscoverySource('fdle.state.fl.us', '/Regions-Divisions/JROC', 'FDLE Jacksonville Regional Operations Center'),
+            floridaDiscoverySource('fdle.state.fl.us', '/regions-divisions/mroc', 'FDLE Miami Regional Operations Center'),
+            floridaDiscoverySource('fdle.state.fl.us', '/regions-divisions/oroc', 'FDLE Orlando Regional Operations Center'),
+            floridaDiscoverySource('fdle.state.fl.us', '/Regions-Divisions/TROC', 'FDLE Tallahassee Regional Operations Center'),
+            floridaDiscoverySource('fdle.state.fl.us', '/regions-divisions/tbroc', 'FDLE Tampa Bay Regional Operations Center'),
+            floridaDiscoverySource('fdle.state.fl.us', '/regions-divisions/fmroc/news', 'FDLE Fort Myers Regional Operations Center'),
+            floridaDiscoverySource('sheriff.org', '/pio/breaking-news', 'Broward Sheriff Office'),
+            floridaDiscoverySource('polksheriff.org', '/news-investigations', 'Polk County Sheriff'),
+            floridaDiscoverySource('pbso.org', '/category/all-news/news-release', 'Palm Beach County Sheriff'),
+            floridaDiscoverySource('acso.us', '/blog', 'Alachua County Sheriff'),
+            floridaDiscoverySource('leoncountyso.com', '/Media/Public-Information-Office', 'Leon County Sheriff'),
+            floridaDiscoverySource('volusiasheriff.gov', '/contact/pio.stml', 'Volusia Sheriff'),
+            floridaDiscoverySource('ocso.com', '/media-inquiries', 'Orange County Sheriff'),
+            floridaDiscoverySource('seminolesheriff.org', '/page.aspx', 'Seminole County Sheriff'),
+            floridaDiscoverySource('colliersheriff.org', '/news/ccso-newsroom', 'Collier County Sheriff'),
+            floridaDiscoverySource('sheriffleefl.org', '/public-information-office', 'Lee County Sheriff'),
+            floridaDiscoverySource('miamidade.gov', '/global/navigation/prindex.page', 'Miami-Dade County'),
+            floridaDiscoverySource('hillsboroughsao.gov', '/newsroom', 'Hillsborough State Attorney'),
+            floridaDiscoverySource('sa14.fl.gov', '/news', 'Florida Fourteenth Judicial Circuit State Attorney'),
+            floridaDiscoverySource('sao20.org', '/news-releases', 'Florida Twentieth Judicial Circuit State Attorney'),
+            floridaDiscoverySource('miamisao.com', '/', 'Miami-Dade State Attorney'),
+            floridaDiscoverySource('supremecourt.flcourts.gov', '/Opinions', 'Florida Supreme Court'),
+            floridaDiscoverySource('myfwc.com', '/news/all-news/tag/law-enforcement', 'Florida Fish and Wildlife Conservation Commission'),
+            { domain: 'flcourts.gov', name: 'Florida Courts', syndication: 'official' },
+            { domain: 'wlrn.org', name: 'WLRN', syndication: 'link-only' },
+            { domain: 'local10.com', name: 'Local 10', syndication: 'link-only' },
+        ],
+    },
     georgia: { label: 'Georgia', query: `Georgia ${crimeBeatTerms}`, matchTerms: ['georgia', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['georgia', 'atlanta', 'savannah', 'macon', 'augusta', 'columbus', 'athens', 'fulton', 'dekalb', 'cobb', 'gwinnett', 'chatham'], excludedTerms: ['arizona', 'tbilisi', 'georgian parliament', 'south ossetia', 'republic of georgia'], sources: [fbiOffice('atlanta', 'FBI Atlanta'), { domain: 'gbi.georgia.gov', listingUrl: 'https://gbi.georgia.gov/press-releases/2026', articlePathPattern: /\/press-releases\//i, name: 'Georgia Bureau of Investigation', syndication: 'official' }, { domain: 'law.georgia.gov', listingUrl: 'https://law.georgia.gov/press-releases', articlePathPattern: /\/press-releases\//i, name: 'Georgia Attorney General', syndication: 'official' }, { domain: 'justice.gov', path: '/usao-ndga/', listingUrl: 'https://www.justice.gov/usao-ndga/pr', articlePathPattern: /\/usao-ndga\/pr\//i, name: 'U.S. Attorney Northern District of Georgia', syndication: 'official' }, { domain: 'justice.gov', path: '/usao-mdga/', listingUrl: 'https://www.justice.gov/usao-mdga/pr', articlePathPattern: /\/usao-mdga\/pr\//i, name: 'U.S. Attorney Middle District of Georgia', syndication: 'official' }, { domain: 'justice.gov', path: '/usao-sdga/', listingUrl: 'https://www.justice.gov/usao-sdga/pr', articlePathPattern: /\/usao-sdga\/pr\//i, name: 'U.S. Attorney Southern District of Georgia', syndication: 'official' }, { domain: 'dps.georgia.gov', listingUrl: 'https://dps.georgia.gov/press-releases', articlePathPattern: /\/press-releases\//i, name: 'Georgia Department of Public Safety', syndication: 'official' }, { domain: 'gdc.georgia.gov', listingUrl: 'https://gdc.georgia.gov/press-releases', articlePathPattern: /\/press-releases\//i, name: 'Georgia Department of Corrections', syndication: 'official' }, { domain: 'pap.georgia.gov', listingUrl: 'https://pap.georgia.gov/press-releases', articlePathPattern: /\/press-releases\//i, name: 'Georgia Pardon and Parole', syndication: 'official' }, { domain: 'gasupreme.us', listingUrl: 'https://www.gasupreme.us/opinions/', articlePathPattern: /\/opinions\//i, name: 'Georgia Supreme Court', syndication: 'official' }, { domain: 'gaappeals.us', listingUrl: 'https://www.gaappeals.us/opinions/', articlePathPattern: /\/opinions\//i, name: 'Georgia Court of Appeals', syndication: 'official' }] },
     louisiana: { label: 'Louisiana', query: `Louisiana ${crimeBeatTerms}`, matchTerms: ['louisiana', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['louisiana', 'new orleans', 'baton rouge', 'shreveport', 'lafayette', 'lake charles', 'jefferson parish', 'orleans parish', 'east baton rouge'], sources: [fbiOffice('neworleans', 'FBI New Orleans'), { domain: 'lsp.org', listingUrl: 'https://lsp.org/community-outreach/news/', articlePathPattern: /\/community-outreach\/news\//i, name: 'Louisiana State Police', syndication: 'official' }, { domain: 'ag.state.la.us', listingUrl: 'https://www.ag.state.la.us/News', articlePathPattern: /\/News\//i, name: 'Louisiana Attorney General', syndication: 'official' }, { domain: 'justice.gov', path: '/usao-edla/', listingUrl: 'https://www.justice.gov/usao-edla/pr', articlePathPattern: /\/usao-edla\/pr\//i, name: 'U.S. Attorney Eastern District of Louisiana', syndication: 'official' }, { domain: 'justice.gov', path: '/usao-mdla/', listingUrl: 'https://www.justice.gov/usao-mdla/pr', articlePathPattern: /\/usao-mdla\/pr\//i, name: 'U.S. Attorney Middle District of Louisiana', syndication: 'official' }, { domain: 'justice.gov', path: '/usao-wdla/', listingUrl: 'https://www.justice.gov/usao-wdla/pr', articlePathPattern: /\/usao-wdla\/pr\//i, name: 'U.S. Attorney Western District of Louisiana', syndication: 'official' }, { domain: 'lasc.org', listingUrl: 'https://www.lasc.org/Opinions', articlePathPattern: /\/Opinions\//i, name: 'Louisiana Supreme Court', syndication: 'official' }, { domain: 'la2nd.org', listingUrl: 'https://www.la2nd.org/', articlePathPattern: /\/opinions?\//i, name: 'Louisiana Second Circuit Court of Appeal', syndication: 'official' }, { domain: 'la4th.org', listingUrl: 'https://www.la4th.org/', articlePathPattern: /\/opinions?\//i, name: 'Louisiana Fourth Circuit Court of Appeal', syndication: 'official' }, { domain: 'doc.louisiana.gov', listingUrl: 'https://doc.louisiana.gov/', articlePathPattern: /\/(?:news|imprisoned-person-programs-resources)\//i, name: 'Louisiana Department of Public Safety and Corrections', syndication: 'official' }, { domain: 'lcle.la.gov', listingUrl: 'https://lcle.la.gov/', articlePathPattern: /\/programs\//i, name: 'Louisiana Commission on Law Enforcement', syndication: 'official' }] },
     newyork: { label: 'New York', query: `New York ${crimeBeatTerms}`, matchTerms: ['new york', 'court', 'justice', 'investigation', 'arrest'], jurisdictionTerms: ['new york', 'nyc', 'manhattan', 'brooklyn', 'queens', 'bronx', 'staten island', 'buffalo', 'rochester', 'albany', 'syracuse', 'westchester', 'vermont', 'rutland', 'milton', 'shelburne', 'new jersey'], sources: [fbiOffice('newyork', 'FBI New York'), fbiOffice('albany', 'FBI Albany'), fbiOffice('buffalo', 'FBI Buffalo'), { domain: 'ag.ny.gov', path: '/press-release/', listingUrl: 'https://ag.ny.gov/press-releases', articlePathPattern: /\/press-release\//i, name: 'New York Attorney General', syndication: 'official' }, { domain: 'gothamist.com', name: 'Gothamist', syndication: 'link-only' }, { domain: 'nytimes.com', name: 'The New York Times', syndication: 'link-only' }, { domain: 'nbcnewyork.com', name: 'NBC New York', syndication: 'link-only' }] },
@@ -780,9 +831,12 @@ const newsDeskAliases = {
 const newsCache = new Map();
 const minimumStoriesPerDesk = 10;
 const maximumStoriesPerDesk = 15;
+const floridaStoriesPerDay = 15;
+const floridaCacheDurationMs = 24 * 60 * 60 * 1000;
 
 function storiesForDesk(deskKey) {
     const key = String(deskKey || 'national');
+    if (key === 'florida') return floridaStoriesPerDay;
     const hash = [...key].reduce((value, character) => ((value * 31) + character.charCodeAt(0)) >>> 0, 0);
     return minimumStoriesPerDesk + (hash % (maximumStoriesPerDesk - minimumStoriesPerDesk + 1));
 }
@@ -797,7 +851,8 @@ async function handleNews(requestUrl, response) {
     const page = Number.isInteger(requestedPage) ? Math.min(Math.max(requestedPage, 1), 4) : 1;
     const cacheKey = `${deskKey}:${page}`;
     const cached = newsCache.get(cacheKey);
-    if (cached && Date.now() - cached.createdAt < 12 * 60 * 60 * 1000) {
+    const cacheDuration = deskKey === 'florida' ? floridaCacheDurationMs : 12 * 60 * 60 * 1000;
+    if (cached && Date.now() - cached.createdAt < cacheDuration) {
         response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
         response.end(JSON.stringify(cached.payload));
         return;
@@ -861,7 +916,9 @@ async function handleNews(requestUrl, response) {
     const payload = { desk: deskKey, label: desk.label, page, limit: storyLimit, count: stories.length, stories, results: stories };
     // A publisher can temporarily throttle a fresh deployment. Never turn that
     // short outage into a twelve-hour blank desk; only cache usable reporting.
-    if (stories.length) newsCache.set(cacheKey, { createdAt: Date.now(), payload });
+    // Florida is a fixed daily edition. Never replace a complete daily batch
+    // with an underfilled response caused by a temporary publisher outage.
+    if (stories.length && (deskKey !== 'florida' || stories.length >= storyLimit)) newsCache.set(cacheKey, { createdAt: Date.now(), payload });
     response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
     response.end(JSON.stringify(payload));
 }
@@ -982,8 +1039,17 @@ async function fetchOfficialSourceListings(desk) {
                 if (!payload) payload = await fetchOfficialJsonWithCurl(source.apiUrl, source.domain);
                 return parseOfficialJsonListing(payload, source);
             }
-            const html = await fetchText(source.listingUrl);
-            return parseOfficialListingPage(html, source);
+            let html = await fetchText(source.listingUrl);
+            let releases = parseOfficialListingPage(html, source);
+            // Some public-sector sites reject Node's default fetch while still
+            // serving their public listing normally to curl. Fall back only
+            // when the configured listing did not yield a usable article, and
+            // keep the existing allow-list and article-path checks intact.
+            if (!releases.length) {
+                html = await fetchOfficialTextWithCurl(source.listingUrl, source.domain);
+                releases = parseOfficialListingPage(html, source);
+            }
+            return releases;
         }
         return [];
     }));
@@ -993,7 +1059,7 @@ async function fetchOfficialSourceListings(desk) {
 async function fetchOfficialDiscoveryFallback(desk) {
     const domains = (desk.sources || [])
         .filter((source) => source.syndication === 'official' && source.domain)
-        .map((source) => `site:${source.domain}`);
+        .map((source) => source.search || `site:${source.domain}`);
     if (!domains.length) return [];
     const query = `${domains.join(' OR ')} ${desk.query}`;
     const rssUrl = `https://www.bing.com/search?format=rss&q=${encodeURIComponent(query)}`;
@@ -1874,6 +1940,12 @@ const server = http.createServer((request, response) => {
         response.writeHead(403);
         response.end('Forbidden');
         return;
+    }
+
+    // The playable chess game is linked as a directory from the homepage.
+    // Resolve that single static entry point without changing general routing.
+    if (requestUrl.pathname === '/games/cheesborough-carceral-chess/') {
+        filePath = path.join(filePath, 'index.html');
     }
 
     fs.stat(filePath, (error, stats) => {
