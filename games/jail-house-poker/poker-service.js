@@ -137,7 +137,7 @@ function createPokerService(ctx) {
       activity: raw.messages.map((message) => ({ message, createdAt: nowISO() })),
     };
   }
-  function tableList() { return LIVE_TABLES.map((definition) => { const room = getRoom(definition.id, definition.label); return { id: room.id, name: room.label, playerCount: room.players.length, maxPlayers: 6, canJoin: room.players.length < 6, status: room.stage === 'waiting' ? 'Taking players' : `${room.stage[0].toUpperCase() + room.stage.slice(1)} hand`, stakesLabel: `Ante $${ANTE}` }; }); }
+  function tableList() { return LIVE_TABLES.map((definition) => { const room = getRoom(definition.id, definition.label); return { id: room.id, name: room.label, playerCount: room.players.length, maxPlayers: 6, canJoin: room.players.length < 6, status: room.stage === 'waiting' ? 'Table Talk On' : `${room.stage[0].toUpperCase() + room.stage.slice(1)} hand`, stakesLabel: `Ante $${ANTE}` }; }); }
   async function publicState(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required.' });
     const balance = await wallet(user.id); const room = playerRoom.get(user.id) ? rooms.get(playerRoom.get(user.id)) : null;
@@ -159,17 +159,17 @@ function createPokerService(ctx) {
     return json(response, 200, { table: uiTable(room, user.id), balance: balance.balance });
   }
   async function practice(request, response) {
-    cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required to practice.' });
+    cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required to take a solo seat.' });
     const body = await parseBody(request);
-    if (playerRoom.has(user.id) && !String(playerRoom.get(user.id)).startsWith('practice-')) return json(response, 409, { error: 'Leave your live table before opening a practice table.' });
-    const room = getRoom(playerRoom.get(user.id) || `practice-${user.id}`, 'Private Practice Table');
+    if (playerRoom.has(user.id) && !String(playerRoom.get(user.id)).startsWith('practice-')) return json(response, 409, { error: 'Leave your live table before taking a solo seat.' });
+    const room = getRoom(playerRoom.get(user.id) || `practice-${user.id}`, 'Private Solo Table');
     if (!playerRoom.has(user.id)) {
       const balance = await wallet(user.id); room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: balance.balance, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
     }
     if (room.players.length < 2) {
       const requested = String(body?.aiId || body?.opponentName || '').replace(/[^a-z]/gi, '').toLowerCase();
       const chosen = AI_ROSTER.find((ai) => ai.id === String(body?.aiId || '') || ai.name.replace(/[^a-z]/gi, '').toLowerCase() === requested) || AI_ROSTER[randomInt(AI_ROSTER.length)];
-      room.players.push({ ...chosen, isAI: true, stack: STARTING_BALANCE, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); room.messages.push(`${chosen.name} joined the practice table.`);
+      room.players.push({ ...chosen, isAI: true, stack: STARTING_BALANCE, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); room.messages.push(`${chosen.name} took a seat at the solo table.`);
     }
     if (room.stage === 'waiting') await deal(room);
     return json(response, 200, { table: uiTable(room, user.id), balance: (await wallet(user.id)).balance });
@@ -178,7 +178,7 @@ function createPokerService(ctx) {
     if (room.players.length < 2) return;
     room.deck = shuffledDeck(); room.board = []; room.pot = 0; room.currentBet = ANTE; room.stage = 'preflop'; room.handId = crypto.randomUUID();
     for (const player of room.players) { player.cards = [room.deck.pop(), room.deck.pop()]; player.roundBet = 0; player.folded = false; player.allIn = false; player.acted = false; const ante = Math.min(ANTE, player.stack); player.stack -= ante; player.roundBet = ante; room.pot += ante; if (!player.isAI) await applyChips(player.id, -ante, 'ante', room.handId); }
-    room.turn = 0; room.messages.push(`Hand dealt. Ante: $${ANTE} fictional chips.`); room.updatedAt = Date.now(); await advanceAIs(room);
+    room.turn = 0; room.messages.push(`Hand dealt. Ante: $${ANTE} chips.`); room.updatedAt = Date.now(); await advanceAIs(room);
   }
   function active(room) { return room.players.filter((player) => !player.folded && !player.allIn); }
   function nextTurn(room) { for (let i = 1; i <= room.players.length; i += 1) { const index = (room.turn + i) % room.players.length; if (!room.players[index].folded && !room.players[index].allIn) { room.turn = index; return; } } }
@@ -227,7 +227,7 @@ function createPokerService(ctx) {
     const player = room.players.find((seat) => seat.id === user.id); if (!player || room.players[room.turn] !== player) return json(response, 409, { error: 'It is not your turn.' });
     const kind = ['fold', 'call', 'raise'].includes(body?.action) ? body.action : null; if (!kind) return json(response, 400, { error: 'Choose fold, check/call, or raise.' });
     try { await perform(room, player, kind, body?.raiseBy || body?.amount); return json(response, 200, { table: uiTable(room, user.id), balance: (await wallet(user.id)).balance }); }
-    catch (error) { return json(response, error.message === 'INSUFFICIENT_CHIPS' ? 409 : 503, { error: error.message === 'INSUFFICIENT_CHIPS' ? 'You do not have enough fictional chips for that wager.' : 'The table is temporarily unavailable.' }); }
+    catch (error) { return json(response, error.message === 'INSUFFICIENT_CHIPS' ? 409 : 503, { error: error.message === 'INSUFFICIENT_CHIPS' ? 'You do not have enough chips for that wager.' : 'The table is temporarily unavailable.' }); }
   }
   async function leave(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required.' });

@@ -3,7 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Jail House Poker is a live, fictional-chip Texas Hold'em table from Cheesborough Carceral Collections.">
+  <meta name="description" content="Jail House Poker is a live Texas Hold'em table from Cheesborough Carceral Collections.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Laflame-Lafleur-Divine-Ancient-Scribe/cheesborough-carceral-collections/main/01_Photos/ShareImages/jailhousepoker.png">
+  <meta property="og:image:alt" content="Jail House Poker from Cheesborough Carceral Collections">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/Laflame-Lafleur-Divine-Ancient-Scribe/cheesborough-carceral-collections/main/01_Photos/ShareImages/jailhousepoker.png">
   <title>Jail House Poker | Cheesborough Carceral Collections</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +34,7 @@
     <section class="auth-gate" data-auth-gate aria-labelledby="sign-in-title" hidden>
       <p class="eyebrow">Restricted Table / Community Members</p>
       <h1 id="sign-in-title">Sign In To Take A Seat.</h1>
-      <p>Jail House Poker is played with fictional, non-redeemable game chips. Sign in to receive your game balance and enter the table.</p>
+      <p>Jail House Poker is played for chips only. Sign in to receive your chip balance and enter the table.</p>
       <a class="button button--brass" data-login-link href="../../LOGIN.html">Sign In To Play</a>
       <p class="fine-print">No deposits. No withdrawals. No prizes. No real-money gambling.</p>
     </section>
@@ -40,12 +44,12 @@
         <div>
           <p class="eyebrow">After-Hours Card Room</p>
           <h1>Jail House Poker</h1>
-          <p>Texas Hold’em at a live strategy table. Read the room, protect your stack, and make the next decision count.</p>
+          <p>Texas Hold’em behind the walls. Read the table, protect your stack, know when to press your luck, and make every hand count.</p>
         </div>
         <aside class="wallet" aria-live="polite">
-          <span class="wallet__label">Fictional Game Balance</span>
+          <span class="wallet__label">Chip Balance</span>
           <strong data-wallet-balance>—</strong>
-          <small data-wallet-note>Loading account ledger…</small>
+          <small data-wallet-note>For gameplay only</small>
         </aside>
       </header>
 
@@ -63,9 +67,9 @@
             <button class="text-button" type="button" data-refresh-tables>Refresh live tables</button>
           </section>
           <section class="practice-panel" aria-labelledby="practice-title">
-            <p class="evidence-tag">Practice File</p>
-            <h3 id="practice-title">Practice With An AI</h3>
-            <p>Each named opponent holds an unrevealed betting pattern, from rookie to intermediate. The cards are still dealt at random.</p>
+            <p class="evidence-tag">Solo Table</p>
+            <h3 id="practice-title">Play Head-To-Head</h3>
+            <p>Take a seat across from one of our house opponents. Every player has a different personality, betting style, level of aggression, and way of reading the table. Their tendencies are yours to discover one hand at a time.</p>
             <label for="ai-opponent">Choose an opponent</label>
             <select id="ai-opponent" data-ai-opponent aria-describedby="ai-opponent-note">
               <option value="Marcus Mack Holloway">Marcus “Mack” Holloway</option>
@@ -75,8 +79,8 @@
               <option value="Marisol Vega">Marisol Vega</option>
               <option value="Carmen Salazar">Carmen Salazar</option>
             </select>
-            <p id="ai-opponent-note" class="small-note">Tendency and skill remain concealed until the game reveals them through play.</p>
-            <button class="button button--outline" type="button" data-start-practice>Open Practice Table</button>
+            <p id="ai-opponent-note" class="small-note">You will not know exactly how your opponent plays until the cards are on the table.</p>
+            <button class="button button--outline" type="button" data-start-practice>Take A Seat</button>
           </section>
         </div>
       </section>
@@ -90,7 +94,7 @@
 
         <div class="felt-frame">
           <div class="felt-table" data-felt-table>
-            <div class="table-mark" aria-hidden="true"><span>JHP</span><small>Texas Hold’em / Fictional Chips</small></div>
+            <div class="table-mark" aria-hidden="true"><span>JHP</span><small>Texas Hold’em / Game Chips</small></div>
             <div class="community-cards" data-community-cards aria-label="Community cards">
               <span class="card card--down" data-community-card></span><span class="card card--down" data-community-card></span><span class="card card--down" data-community-card></span><span class="card card--down" data-community-card></span><span class="card card--down" data-community-card></span>
             </div>
@@ -122,14 +126,14 @@
 
       <section class="lower-record">
         <section class="activity" aria-labelledby="activity-title">
-          <div class="subheading"><h2 id="activity-title">Table Record</h2><span data-connection-state>Connecting…</span></div>
-          <ol data-activity-feed aria-live="polite"><li>The table record will appear here.</li></ol>
+          <div class="subheading"><h2 id="activity-title">Table Action</h2><span data-connection-state>Live Table Updates</span></div>
+          <ol data-activity-feed aria-live="polite"><li>Hands, bets, wins, folds, and table activity will appear here as the game unfolds.</li></ol>
         </section>
         <aside class="rules-note" aria-labelledby="rules-title">
           <p class="evidence-tag">Terms Of Play</p>
-          <h2 id="rules-title">Fictional Chips Only.</h2>
-          <p>Your balance is a non-redeemable game record. It cannot be purchased, withdrawn, transferred outside a table, or exchanged for a prize.</p>
-          <p>Hands use randomly dealt cards. Player choices and the selected AI’s hidden strategy shape the play; no outcome is guaranteed.</p>
+          <h2 id="rules-title">Play For Chips. Play For The Pot.</h2>
+          <p>Your chips are used only inside Jail House Poker. They cannot be purchased, cashed out, transferred for real money, or exchanged for prizes.</p>
+          <p>Cards are dealt at random. Your decisions, your opponent’s tendencies, and the way each hand develops determine what happens at the table. No hand is guaranteed.</p>
         </aside>
       </section>
     </section>

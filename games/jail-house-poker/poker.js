@@ -55,14 +55,14 @@
       li.append(time, document.createTextNode(item.message || item.text || String(item)));
       feed.append(li);
     });
-    if (!feed.children.length) feed.innerHTML = '<li>The table record will appear here.</li>';
+    if (!feed.children.length) feed.innerHTML = '<li>Hands, bets, wins, folds, and table activity will appear here as the game unfolds.</li>';
   }
   function renderTable(table) {
     state.table = table;
     $('[data-poker-stage]').hidden = false;
     $('[data-poker-lobby]').hidden = true;
-    $('[data-table-kind]').textContent = table.mode === 'practice' ? 'Practice Table / AI' : 'Live Table';
-    $('[data-table-name]').textContent = table.name || (table.mode === 'practice' ? 'Practice Table' : 'Live Table');
+    $('[data-table-kind]').textContent = table.mode === 'practice' ? 'Solo Table / House Opponent' : 'Live Table';
+    $('[data-table-name]').textContent = table.name || (table.mode === 'practice' ? 'Solo Table' : 'Live Table');
     $('[data-pot]').textContent = `$${money(table.pot)}`;
     $('[data-player-name]').textContent = table.localPlayer?.displayName || state.user?.displayName || 'Player';
     $('[data-hand-status]').textContent = table.handLabel || table.status || 'Waiting for the next hand.';
@@ -79,7 +79,7 @@
   function tableRow(table) {
     const row = document.createElement('article'); row.className = 'live-table-row';
     const info = document.createElement('div'); const heading = document.createElement('h4'); heading.textContent = table.name || 'Open Hold’em Table';
-    const detail = document.createElement('p'); detail.textContent = `${table.stakesLabel || 'Fictional chips'} · ${table.status || 'Taking players'}`; info.append(heading, detail);
+    const detail = document.createElement('p'); detail.textContent = `${table.stakesLabel || 'Chips'} · ${table.status || 'Table Talk On'}`; info.append(heading, detail);
     const count = document.createElement('span'); count.className = 'seat-count'; count.textContent = `${table.playerCount ?? table.players ?? 0}/${table.maxPlayers || 6} seated`;
     const join = document.createElement('button'); join.className = 'row-button'; join.type = 'button'; join.dataset.joinTable = table.id; join.textContent = table.canJoin === false ? 'Table Full' : 'Join Table'; join.disabled = table.canJoin === false;
     row.append(info, count, join); return row;
@@ -87,10 +87,10 @@
   function renderLobby(payload) {
     const tables = payload.tables || payload.liveTables || [];
     const container = $('[data-live-tables]'); container.textContent = '';
-    if (!tables.length) container.innerHTML = '<p class="table-list__message">No live table is open yet. Start a practice table while the room fills.</p>';
+    if (!tables.length) container.innerHTML = '<p class="table-list__message">No live table is open yet. Take a solo seat while the room fills.</p>';
     tables.forEach((table) => container.append(tableRow(table)));
     $('[data-online-count]').textContent = `${payload.onlineCount ?? payload.onlinePlayers ?? 0} online`;
-    if (payload.balance !== undefined) { $('[data-wallet-balance]').textContent = `$${money(payload.balance)}`; $('[data-wallet-note]').textContent = 'Fictional, non-redeemable chips'; }
+    if (payload.balance !== undefined) { $('[data-wallet-balance]').textContent = `$${money(payload.balance)}`; $('[data-wallet-note]').textContent = 'For gameplay only'; }
   }
   async function request(route, options) { return window.CCCCommunity.request(route, options); }
   async function loadLobby() {
@@ -100,7 +100,7 @@
   }
   async function loadTable() {
     if (!state.table?.id) return;
-    try { const payload = await request('/api/poker/state'); if (payload.balance !== undefined) { $('[data-wallet-balance]').textContent = `$${money(payload.balance)}`; } if (payload.table) renderTable(payload.table); setConnection('Table record current'); }
+    try { const payload = await request('/api/poker/state'); if (payload.balance !== undefined) { $('[data-wallet-balance]').textContent = `$${money(payload.balance)}`; } if (payload.table) renderTable(payload.table); setConnection('Live table updates'); }
     catch (error) { setConnection('Connection interrupted', true); toast(error.message); }
   }
   function startPolling() { clearInterval(state.poll); state.poll = setInterval(loadTable, 3000); }
