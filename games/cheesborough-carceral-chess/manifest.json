@@ -1,0 +1,23 @@
+{
+    "name": "Cheesborough Carceral Chess",
+    "short_name": "Carceral Chess",
+    "description": "A tactile 3D strategy table from Cheesborough Carceral Collections.",
+    "version": "3.0",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#07182b",
+    "theme_color": "#07182b",
+    "icons": [
+      {
+        "src": "assets/Logo192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "assets/Logo512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

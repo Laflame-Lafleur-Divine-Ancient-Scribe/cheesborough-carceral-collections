@@ -536,12 +536,38 @@
         padding: 0.55rem 0.8rem;
         text-align: center;
       }
+      /* Games promotion: an archival desk recast as an interactive field kit. */
+      .games-promo { background: var(--ink-dark); border-bottom: 7px solid var(--gold); color: #fff; overflow: hidden; padding: clamp(3rem, 6vw, 5.35rem) 1rem; position: relative; }
+      .games-promo::before { background: repeating-linear-gradient(90deg, transparent 0 31px, rgba(194, 155, 83, 0.12) 32px 33px); content: ""; inset: 0; opacity: 0.5; pointer-events: none; position: absolute; }
+      .games-promo-inner { align-items: center; display: grid; gap: clamp(2.5rem, 7vw, 6rem); grid-template-columns: minmax(0, 1.05fr) minmax(17rem, 0.8fr); margin: 0 auto; max-width: 980px; position: relative; }
+      .games-promo-copy { border-left: 6px solid var(--press-red); padding-left: clamp(1rem, 3vw, 2rem); }
+      .games-promo-kicker { color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; margin: 0 0 0.75rem; text-transform: uppercase; }
+      .games-promo-title { color: #fff; font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(2rem, 4.6vw, 3.7rem); line-height: 1.08; margin: 0; max-width: 13ch; }
+      .games-promo-deck { color: #eee4d3; font-size: clamp(1rem, 1.35vw, 1.12rem); line-height: 1.6; margin: 1.15rem 0 1.5rem; max-width: 35rem; }
+      .games-promo-status { align-items: center; background: var(--gold); border: 2px solid var(--gold); color: var(--deep-navy); display: inline-flex; font: inherit; font-size: 0.79rem; font-weight: 800; letter-spacing: 0.08em; min-height: 3rem; padding: 0.65rem 1rem; text-decoration: none; text-transform: uppercase; transition: background 160ms ease, color 160ms ease, transform 160ms ease; }
+      .games-promo-status:hover { background: var(--press-red); border-color: var(--press-red); color: #fff; transform: translateY(-2px); }
+      .games-promo-status:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+      .games-promo-note { color: #d8cdbb; display: block; font-size: 0.8rem; line-height: 1.45; margin-top: 0.7rem; }
+      .games-promo-stack { min-height: 19rem; position: relative; }
+      .game-file { background: #f7f0e2; border: 1px solid #c9b78e; box-shadow: 9px 10px 0 rgba(0, 0, 0, 0.28); color: var(--navy); min-height: 12.5rem; padding: 1rem; position: absolute; width: min(100%, 18rem); }
+      .game-file::before { border: 1px solid rgba(16, 44, 76, 0.22); content: ""; inset: 0.45rem; pointer-events: none; position: absolute; }
+      .game-file--one { left: 0; top: 2.7rem; transform: rotate(-5deg); }
+      .game-file--two { right: 0; top: 0; transform: rotate(4deg); }
+      .game-file--three { background: var(--navy); border-color: var(--gold); bottom: 0; color: #fff; right: 1.1rem; transform: rotate(-1deg); }
+      .game-file-label { color: var(--press-red); display: block; font-size: 0.67rem; font-weight: 800; letter-spacing: 0.11em; margin-bottom: 1.25rem; position: relative; text-transform: uppercase; }
+      .game-file--three .game-file-label { color: var(--gold); }
+      .game-file-number { color: var(--gold); display: block; font-family: "Libre Baskerville", Georgia, serif; font-size: 3.6rem; line-height: 0.85; position: relative; }
+      .game-file h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.05rem; line-height: 1.22; margin: 0.7rem 0 0; position: relative; }
+      .game-file p { font-size: 0.78rem; line-height: 1.35; margin: 0.5rem 0 0; position: relative; }
       [hidden] { display: none; }
 
       @media (max-width: 760px) {
         .collections { grid-template-columns: repeat(2, 1fr); }
         .hero { min-height: 39rem; }
         .publication-grid { grid-template-columns: 1fr; }
+        .games-promo-inner { grid-template-columns: 1fr; }
+        .games-promo-title { max-width: 19ch; }
+        .games-promo-stack { margin: 0 auto; max-width: 23rem; width: 100%; }
         .blackwhite-news-stories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .prison-hero-inner { grid-template-columns: 1fr; min-height: 0; }
         .prison-hero-copy { max-width: none; padding: 2.25rem 1rem 1.75rem; }
@@ -559,6 +585,9 @@
         .topbar { font-size: 0.78rem; }
         .topbar a { padding: 0 0.4rem; }
         .hero { min-height: 40rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+        .games-promo { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .games-promo-copy { padding-left: 1rem; }
+        .game-file { min-height: 11.5rem; width: min(100%, 15.5rem); }
         .blackwhite-news { padding-left: 0.75rem; padding-right: 0.75rem; }
         .blackwhite-news-inner::before { left: 0.7rem; width: 5px; }
         .blackwhite-news-masthead { align-items: start; grid-template-columns: 1fr; padding: 1rem 1rem 1rem 1.45rem; }
@@ -774,6 +803,23 @@
                 <a class="archive-link" href="RIVERS-LOVE.html">Read Rivers Love&rsquo;s Story &rarr;</a>
               </aside>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="games-promo" id="games" aria-labelledby="games-promo-title">
+        <div class="games-promo-inner">
+          <div class="games-promo-copy">
+            <p class="games-promo-kicker">Interactive Archive / Now Playing</p>
+            <h2 class="games-promo-title" id="games-promo-title">Take Your Place At The Strategy Table.</h2>
+            <p class="games-promo-deck">Cheesborough Carceral Chess is the first playable archive experience: a tactile 3D chessboard built for patient play, close attention, and every move in the record.</p>
+            <a class="games-promo-status" href="games/cheesborough-carceral-chess/" aria-describedby="games-promo-note">Play Cheesborough Carceral Chess</a>
+            <span class="games-promo-note" id="games-promo-note">Game File 01 is now open. More archive games will follow.</span>
+          </div>
+          <div class="games-promo-stack" aria-label="Preview of upcoming archive games">
+            <article class="game-file game-file--one"><span class="game-file-label">Game File 01 / Playable</span><span class="game-file-number">01</span><h3>Cheesborough Carceral Chess</h3><p>A 3D strategy table where every move enters the record.</p></article>
+            <article class="game-file game-file--two"><span class="game-file-label">Game File 02</span><span class="game-file-number">02</span><h3>Read Between The Lines</h3><p>Discover the stories records leave unfinished.</p></article>
+            <article class="game-file game-file--three"><span class="game-file-label">Game File 03</span><span class="game-file-number">03</span><h3>Map The Record</h3><p>Place people, places, and time in context.</p></article>
           </div>
         </div>
       </section>
