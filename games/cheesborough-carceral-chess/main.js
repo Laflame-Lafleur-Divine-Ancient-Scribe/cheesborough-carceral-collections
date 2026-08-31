@@ -53,19 +53,19 @@ const voiceState = {
   enabled: true,
   volume: 0.72,
   voices: [],
-  available: "speechSynthesis" in window
+  // Azure synthesis is server-side, so it does not depend on a browser voice.
+  available: true
 };
 
 function initialiseVoice() {
-  if (!voiceState.available) return;
   try {
     voiceState.enabled = localStorage.getItem("ccc-voice-enabled") !== "false";
     const savedVolume = Number(localStorage.getItem("ccc-voice-volume"));
     if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 1) voiceState.volume = savedVolume;
   } catch (_) { /* Private browsing can disallow storage; use session defaults. */ }
-  const refreshVoices = () => { voiceState.voices = window.speechSynthesis.getVoices(); updateVoiceControls(); };
+  const refreshVoices = () => { voiceState.voices = "speechSynthesis" in window ? window.speechSynthesis.getVoices() : []; updateVoiceControls(); };
   refreshVoices();
-  window.speechSynthesis.onvoiceschanged = refreshVoices;
+  if ("speechSynthesis" in window) window.speechSynthesis.onvoiceschanged = refreshVoices;
 }
 
 function updateVoiceControls() {
@@ -88,7 +88,7 @@ function updateVoiceControls() {
 
 function setVoiceEnabled(enabled) {
   voiceState.enabled = Boolean(enabled) && voiceState.available;
-  if (!voiceState.enabled && voiceState.available) window.speechSynthesis.cancel();
+  if (!voiceState.enabled && "speechSynthesis" in window) window.speechSynthesis.cancel();
   try { localStorage.setItem("ccc-voice-enabled", String(voiceState.enabled)); } catch (_) {}
   updateVoiceControls();
 }
@@ -106,27 +106,42 @@ function voiceForProfile(profile) {
   return pool[profile.portrait % pool.length] || null;
 }
 
-function speakAIEvent(side, message) {
+const chessVoiceLines = [
+  'I am still reading the whole board.', 'That lane was open for a reason.', 'A quiet move can carry a lot of weight.', 'The center is not giving anything away.', 'I saved that square for later.',
+  'That exchange changes the shape of things.', 'Every piece has a job.', 'I have seen this pressure before.', 'The clock does not change the position.', 'There is more on this board than one move.',
+  'I am taking my time with this one.', 'The long route is still a route.', 'That file is getting crowded.', 'You can feel the tension in the middle.', 'The plan is still alive.',
+  'A pawn move can tell a whole story.', 'I am not rushing the ending.', 'That corner is not as quiet as it looks.', 'The board remembers what left it.', 'I am keeping an eye on that diagonal.',
+  'There is room to maneuver yet.', 'I have another idea in reserve.', 'That piece is carrying more than it seems.', 'The next few moves will matter.', 'I am listening to the position.',
+  'The pressure is building slowly.', 'Not every answer needs to be loud.', 'That was a useful trade.', 'The board is starting to open.', 'Let us see where this goes.'
+];
+const hometownLeadIns = [
+  'Back in {home}, we learned to stay patient.', 'From {home}, I brought a steady hand.', 'In {home}, a crowded board does not scare me.', 'I carry the pace of {home} with me.', 'The long games in {home} taught me this.',
+  '{home} taught me to watch every angle.', 'I learned not to force the issue in {home}.', 'There is a little {home} in this move.', 'In {home}, we respect a patient plan.', '{home} is still on my mind at this table.'
+];
+
+async function speakAIEvent(side, message) {
   const profile = aiProfiles[side];
   if (!voiceState.available || !voiceState.enabled || !profile || !message) return;
-  const utterance = new SpeechSynthesisUtterance(message);
-  const index = Number(profile.portrait) || 0;
-  const selectedVoice = voiceForProfile(profile);
-  if (selectedVoice) utterance.voice = selectedVoice;
-  utterance.volume = voiceState.volume;
-  utterance.rate = 0.9 + (index % 4) * 0.06;
-  utterance.pitch = 0.92 + (index % 5) * 0.04;
   try {
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-  } catch (_) { /* Speech is an optional enhancement. */ }
+    const reply = await fetch('/api/games/carceral-chess/speech', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: message, voice: profile.voice })
+    });
+    if (!reply.ok) return;
+    const audio = new Audio(URL.createObjectURL(await reply.blob()));
+    audio.volume = voiceState.volume;
+    audio.addEventListener('ended', () => URL.revokeObjectURL(audio.src), { once: true });
+    await audio.play();
+  } catch (_) { /* Neural voice is optional until Azure is configured. */ }
 }
 
-function announceAIsAtMatchStart() {
-  const selected = [aiProfiles.white, aiProfiles.black].filter(Boolean);
-  if (!selected.length) return;
-  const description = selected.map((profile) => profile.name).join(" and ");
-  speakAIEvent(selected[0].side, `${description} ${selected.length === 1 ? "is" : "are"} seated at the strategy table.`);
+function maybeSpeakAIFlavorLine(side) {
+  const profile = aiProfiles[side];
+  // Commentary is intentionally occasional, never a mechanical move callout.
+  if (!profile || Math.random() > 0.18 || game.history().length < 6) return;
+  const leadIn = hometownLeadIns[profile.portrait % hometownLeadIns.length].replace('{home}', profile.hometown || 'home');
+  const line = chessVoiceLines[(game.history().length + profile.portrait) % chessVoiceLines.length];
+  speakAIEvent(side, `${leadIn} ${line}`);
 }
 
 function createCellblockRoom() {
@@ -218,6 +233,30 @@ function seatedAvatarMaterialPath(profile) {
     : root + "Male/Male Poses/OBJ/Male_Sitting.mtl";
 }
 
+function seatedAvatarHairPaths(profile) {
+  const root = "assets/avatars/source/posed-background-characters/Posed Background Characters by @Quaternius/";
+  const number = (profile.portrait % 4) + 1;
+  const base = profile.group === "Women" ? "Female/Female Hairstyles/OBJ/Female_Hairstyle_" : "Male/Male Hairstyles/OBJ/Male_Hairstyle_";
+  return { obj: `${root}${base}${number}.obj`, mtl: `${root}${base}${number}.mtl` };
+}
+
+function addSuppliedAvatarHair(avatar, profile) {
+  const paths = seatedAvatarHairPaths(profile);
+  const materialLoader = new MTLLoader();
+  materialLoader.load(paths.mtl, (materials) => {
+    materials.preload();
+    const loader = new OBJLoader();
+    loader.setMaterials(materials);
+    loader.load(paths.obj, (hair) => {
+      // Hairstyles in this CC0 set share the pose model's coordinate system,
+      // so they attach directly to the seated figure without scale or offset.
+      hair.name = `Hair_${profile.name}`;
+      hair.traverse((child) => { if (child.isMesh) { child.castShadow = true; child.receiveShadow = true; } });
+      avatar.add(hair);
+    }, undefined, () => {});
+  }, undefined, () => {});
+}
+
 function varySuppliedAvatarMaterials(avatar, profile) {
   const shirtColor = seatedAvatarShirtPalette[profile.portrait % seatedAvatarShirtPalette.length];
   const skinColor = seatedAvatarSkinPalette[profile.portrait % seatedAvatarSkinPalette.length];
@@ -261,6 +300,7 @@ function addSeatedAvatar(profile) {
       positionAvatarInChair(avatar, profile.side);
       avatar.name = `Seated_${profile.side}_${profile.name}`;
       varySuppliedAvatarMaterials(avatar, profile);
+      addSuppliedAvatarHair(avatar, profile);
       seatedAvatarGroup.add(avatar);
     }, undefined, (error) => console.error("Unable to load seated avatar geometry", error));
   }, undefined, (error) => console.error("Unable to load seated avatar materials", error));
@@ -277,7 +317,7 @@ function positionAvatarInChair(avatar, side) {
     avatar.rotation.set(0, side === "white" ? 0 : Math.PI, 0);
     return;
   }
-  avatar.position.set(anchor.position.x, -1.0, anchor.position.z);
+  avatar.position.set(anchor.position.x, anchor.floorY + 0.01, anchor.position.z);
   // Quaternius' seated OBJ faces the opposite local direction from the
   // original chair meshes, so reverse it to look across the chessboard.
   avatar.rotation.set(0, anchor.rotationY + Math.PI, 0);
@@ -296,8 +336,11 @@ function captureStrategyChairAnchors(model) {
     const quaternion = new THREE.Quaternion();
     chair.getWorldPosition(position);
     chair.getWorldQuaternion(quaternion);
+    const bounds = new THREE.Box3().setFromObject(chair);
+    const center = bounds.getCenter(new THREE.Vector3());
     strategyChairAnchors[side] = {
-      position,
+      position: center,
+      floorY: bounds.min.y,
       rotationY: new THREE.Euler().setFromQuaternion(quaternion, "YXZ").y
     };
   });
@@ -481,7 +524,7 @@ async function smallBotMove() {
   highlightMove();
   setTimeout(() => {
     PromotionCheck(bestMove.slice(0, 2), bestMove.slice(2, 4),out);
-    speakAIEvent(movingSide, `${aiProfiles[movingSide]?.name || "The AI"} has made a move.`);
+    setTimeout(() => maybeSpeakAIFlavorLine(movingSide), 500);
   }, 700);
 }
 const engine = new Worker("stockfish/stockfish.js");
@@ -923,11 +966,9 @@ function MoveTo(from,To,promoPiece){
       if(game.in_checkmate()){
         let Winner=(game.turn()=='w')?"Black":"White";
         const winningSide = Winner.toLowerCase();
-        speakAIEvent(winningSide, `${aiProfiles[winningSide]?.name || Winner} has checkmate.`);
         alert(Winner+" won the match")
       }else{
         const lastMover = move?.color === "w" ? "white" : "black";
-        speakAIEvent(lastMover, game.in_stalemate?.() ? "The game is a stalemate." : "The match is a draw.");
         alert("Its a draw")
       }
       document.getElementById("celebrate").classList.add("active")
@@ -939,7 +980,6 @@ function MoveTo(from,To,promoPiece){
   isCheck()
   if (game.in_check?.()) {
     const checkingSide = move?.color === "w" ? "white" : "black";
-    speakAIEvent(checkingSide, `${aiProfiles[checkingSide]?.name || "The AI"} has placed the king in check.`);
   }
   
 }
@@ -1640,7 +1680,6 @@ function setBotMode(Mode){
       ele.rotation.y+=Math.PI
     })
   }
-  setTimeout(announceAIsAtMatchStart, 350);
   setTimeout(botChecker,1000)
 }
 function setAIDifficulty(profiles) {

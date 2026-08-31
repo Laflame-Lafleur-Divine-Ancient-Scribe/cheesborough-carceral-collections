@@ -85,9 +85,18 @@
         Master: { rating: 2150, note: "Demanding opponent", skill: 20, time: 2800 }
       };
       const aiTierNames = Object.keys(aiTiers);
+      const aiHometowns = [
+        'Atlanta, Georgia', 'Detroit, Michigan', 'Baltimore, Maryland', 'Birmingham, Alabama', 'New Orleans, Louisiana', 'Memphis, Tennessee', 'Chicago, Illinois', 'Philadelphia, Pennsylvania', 'Richmond, Virginia', 'Houston, Texas',
+        'St. Louis, Missouri', 'Cleveland, Ohio', 'Charlotte, North Carolina', 'Jackson, Mississippi', 'Oakland, California', 'Washington, D.C.', 'Milwaukee, Wisconsin', 'Newark, New Jersey', 'Dallas, Texas', 'Kansas City, Missouri',
+        'Los Angeles, California', 'Phoenix, Arizona', 'San Antonio, Texas', 'El Paso, Texas', 'Miami, Florida', 'Tampa, Florida', 'Orlando, Florida', 'Denver, Colorado', 'Las Vegas, Nevada', 'Albuquerque, New Mexico',
+        'Seattle, Washington', 'Portland, Oregon', 'Minneapolis, Minnesota', 'Boston, Massachusetts', 'New York, New York', 'Savannah, Georgia', 'Columbia, South Carolina', 'Little Rock, Arkansas', 'Indianapolis, Indiana', 'Louisville, Kentucky'
+      ];
+      const aiNeuralVoices = ['en-US-Andrew:DragonHDLatestNeural', 'en-US-Brian:DragonHDLatestNeural', 'en-US-Ava:DragonHDLatestNeural', 'en-US-Emma:DragonHDLatestNeural'];
       // An AI's ability belongs to that identity; it is not a player setting.
       avatarRoster.forEach((avatar, index) => {
         avatar.tier = aiTierNames[index % aiTierNames.length];
+        avatar.hometown = aiHometowns[index];
+        avatar.voice = aiNeuralVoices[index % aiNeuralVoices.length];
       });
       let playerSelection = null;
 

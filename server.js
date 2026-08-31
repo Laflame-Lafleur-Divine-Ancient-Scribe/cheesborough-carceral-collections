@@ -372,6 +372,52 @@ function communityJson(response, status, payload) {
     response.end(JSON.stringify(payload));
 }
 
+function escapeSpeechSsml(value) {
+    return String(value || '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[character]);
+}
+
+async function handleChessNeuralSpeech(request, response) {
+    const key = String(process.env.AZURE_SPEECH_KEY || '').trim();
+    const region = String(process.env.AZURE_SPEECH_REGION || '').trim();
+    if (!key || !region) {
+        communityJson(response, 503, { error: 'Azure Neural Speech has not been configured.' });
+        return;
+    }
+    let payload;
+    try {
+        payload = JSON.parse(await readRequestBody(request, 1024) || '{}');
+    } catch {
+        communityJson(response, 400, { error: 'A valid speech request is required.' });
+        return;
+    }
+    const text = String(payload.text || '').trim().slice(0, 360);
+    const permittedVoices = new Set(['en-US-Ava:DragonHDLatestNeural', 'en-US-Andrew:DragonHDLatestNeural', 'en-US-Emma:DragonHDLatestNeural', 'en-US-Brian:DragonHDLatestNeural']);
+    const voice = permittedVoices.has(payload.voice) ? payload.voice : 'en-US-Ava:DragonHDLatestNeural';
+    if (!text) {
+        communityJson(response, 400, { error: 'Speech text is required.' });
+        return;
+    }
+    const ssml = `<speak version="1.0" xml:lang="en-US"><voice name="${voice}"><prosody rate="-4%" pitch="-1st">${escapeSpeechSsml(text)}</prosody></voice></speak>`;
+    const azureResponse = await fetch(`https://${encodeURIComponent(region)}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+        method: 'POST',
+        headers: {
+            'Ocp-Apim-Subscription-Key': key,
+            'Content-Type': 'application/ssml+xml',
+            'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
+            'User-Agent': 'CheesboroughCarceralChess'
+        },
+        body: ssml
+    });
+    if (!azureResponse.ok) {
+        communityJson(response, 502, { error: 'Azure Neural Speech could not synthesize this line.' });
+        return;
+    }
+    const audio = Buffer.from(await azureResponse.arrayBuffer());
+    applyApiCors(request, response);
+    response.writeHead(200, { 'Content-Type': 'audio/mpeg', 'Cache-Control': 'private, max-age=3600', 'Content-Length': audio.length });
+    response.end(audio);
+}
+
 function communityClientIp(request) {
     const forwarded = String(request.headers['x-forwarded-for'] || '').split(',')[0].trim();
     const ip = forwarded || request.socket.remoteAddress || 'unknown';
@@ -1805,6 +1851,15 @@ const server = http.createServer((request, response) => {
             applyApiCors(request, response);
             response.writeHead(503, { 'Cache-Control': 'no-store' });
             response.end();
+        });
+        return;
+    }
+
+    if (request.method === 'POST' && requestUrl.pathname === '/api/games/carceral-chess/speech') {
+        handleChessNeuralSpeech(request, response).catch(() => {
+            applyApiCors(request, response);
+            response.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+            response.end(JSON.stringify({ error: 'Azure Neural Speech is temporarily unavailable.' }));
         });
         return;
     }
