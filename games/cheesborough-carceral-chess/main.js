@@ -249,10 +249,9 @@ function poseDetailedAvatarForChair(avatar) {
 }
 
 function positionDetailedAvatarInChair(avatar, side) {
-  // This Quaternius FBX export is authored in the same unit range as the
-  // bundled OBJ character set. The former centimetre conversion shrank the
-  // selected player to an invisible speck inside the chair.
-  avatar.scale.setScalar(0.38);
+  // The FBX is authored roughly 400 internal units tall. At this scale it is
+  // a seated adult at the same scale as the chess-room furniture.
+  avatar.scale.setScalar(0.0045);
   avatar.userData.detailedSeatedAvatar = true;
   positionAvatarInChair(avatar, side);
 }
@@ -360,9 +359,6 @@ function addSeatedAvatar(profile) {
     if (!seatedAvatarProfiles.some((item) => item.name === expectedName && item.side === expectedSide)) return;
     avatarLoaded = true;
     window.clearTimeout(fallbackTimer);
-    seatedAvatarGroup.children
-      .filter((child) => child.name === `Seated_${profile.side}_${profile.name}`)
-      .forEach((child) => seatedAvatarGroup.remove(child));
     poseDetailedAvatarForChair(avatar);
     positionDetailedAvatarInChair(avatar, profile.side);
     avatar.name = `Seated_${profile.side}_${profile.name}`;
@@ -370,8 +366,21 @@ function addSeatedAvatar(profile) {
       if (!child.isMesh) return;
       child.castShadow = true;
       child.receiveShadow = true;
+      // Animated FBX skin bounds can be stale after posing. Do not let an
+      // incorrect frustum test hide a selected player from the chair.
+      child.frustumCulled = false;
     });
     seatedAvatarGroup.add(avatar);
+    // Kept as a non-interactive diagnostic so local QA can verify the loaded
+    // FBX bounds against the strategy-chair anchors.
+    avatar.updateMatrixWorld(true);
+    const avatarBounds = new THREE.Box3().setFromObject(avatar);
+    window.__cccAvatarDebug = {
+      name: avatar.name,
+      position: avatar.position.toArray(),
+      scale: avatar.scale.toArray(),
+      bounds: { min: avatarBounds.min.toArray(), max: avatarBounds.max.toArray() }
+    };
   }, undefined, () => {
     window.clearTimeout(fallbackTimer);
     useVisibleFallback();
@@ -401,11 +410,13 @@ function positionAvatarInChair(avatar, side) {
 function captureStrategyChairAnchors(model) {
   model.updateMatrixWorld(true);
   const chairMeshes = {};
+  const discoveredChairs = [];
   model.traverse((child) => {
-    if (!child.isMesh) return;
-    if (child.name === "Tables Chair1") chairMeshes.white = child;
-    if (child.name === "Tables Chair2") chairMeshes.black = child;
+    if (/chair/i.test(child.name)) discoveredChairs.push({ name: child.name, type: child.type });
+    if (child.name === "Tables_Chair1" || child.name === "Tables Chair1") chairMeshes.white = child;
+    if (child.name === "Tables_Chair2" || child.name === "Tables Chair2") chairMeshes.black = child;
   });
+  window.__cccChairDebug = discoveredChairs;
   Object.entries(chairMeshes).forEach(([side, chair]) => {
     const position = new THREE.Vector3();
     const quaternion = new THREE.Quaternion();
