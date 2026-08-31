@@ -62,3 +62,31 @@ CREATE TABLE IF NOT EXISTS game_wallet_ledger (
     created_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS game_wallet_ledger_user_time_index ON game_wallet_ledger(user_id,created_at DESC);
+-- The Atum Account is a protected, site-owned fictional-chip ledger. It is
+-- not tied to a person, payment method, withdrawal, or cash value.
+CREATE TABLE IF NOT EXISTS game_house_wallets (
+    account_key varchar(48) PRIMARY KEY,
+    display_name varchar(80) NOT NULL,
+    balance integer NOT NULL DEFAULT 0 CHECK (balance >= 0),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+INSERT INTO game_house_wallets (account_key,display_name,balance)
+VALUES ('atum','Atum Account',0)
+ON CONFLICT (account_key) DO NOTHING;
+CREATE TABLE IF NOT EXISTS game_house_ledger (
+    id bigserial PRIMARY KEY,
+    account_key varchar(48) NOT NULL REFERENCES game_house_wallets(account_key),
+    game_key varchar(48) NOT NULL,
+    amount integer NOT NULL CHECK (amount >= 0),
+    reason varchar(64) NOT NULL,
+    reference_id varchar(80),
+    created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS game_counters (
+    counter_key varchar(80) PRIMARY KEY,
+    value bigint NOT NULL DEFAULT 0 CHECK (value >= 0),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+INSERT INTO game_counters (counter_key,value)
+VALUES ('jail-house-poker:completed-pots',0)
+ON CONFLICT (counter_key) DO NOTHING;

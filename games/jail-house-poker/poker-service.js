@@ -89,7 +89,7 @@ function handRank(cards) {
 function rankName(score) { return ['high card', 'pair', 'two pair', 'three of a kind', 'straight', 'flush', 'full house', 'four of a kind', 'straight flush'][score[0]]; }
 
 function createPokerService(ctx) {
-  const { db: getDb, user: getUser, ensureSchema, parseBody, json, cors, rate } = ctx;
+  const { db: getDb, user: getUser, isOwner, ensureSchema, parseBody, json, cors, rate } = ctx;
   async function wallet(userId) {
     const db = getDb();
     await ensureSchema();
@@ -105,6 +105,21 @@ function createPokerService(ctx) {
       if (!updated.rows[0]) throw Error('INSUFFICIENT_CHIPS');
       await client.query('INSERT INTO game_wallet_ledger (user_id,game_key,amount,balance_after,reason,reference_id) VALUES ($1,$2,$3,$4,$5,$6)', [userId, GAME_KEY, amount, updated.rows[0].balance, reason, referenceId || null]);
       await client.query('COMMIT'); return updated.rows[0].balance;
+    } catch (error) { await client.query('ROLLBACK'); throw error; } finally { client.release(); }
+  }
+  async function recordAtumRake(pot, handId) {
+    const db = getDb(); const client = await db.connect();
+    try {
+      await client.query('BEGIN');
+      const counter = await client.query("INSERT INTO game_counters (counter_key,value) VALUES ('jail-house-poker:completed-pots',1) ON CONFLICT (counter_key) DO UPDATE SET value=game_counters.value+1,updated_at=now() RETURNING value");
+      const completedPots = Number(counter.rows[0].value);
+      const rake = completedPots % 8 === 0 ? Math.floor(Number(pot) * 0.15) : 0;
+      if (rake) {
+        const wallet = await client.query("UPDATE game_house_wallets SET balance=balance+$1,updated_at=now() WHERE account_key='atum' RETURNING balance", [rake]);
+        await client.query("INSERT INTO game_house_ledger (account_key,game_key,amount,reason,reference_id) VALUES ('atum',$1,$2,'eighth_pot_rake',$3)", [GAME_KEY, rake, handId]);
+        await client.query('COMMIT'); return { completedPots, rake, atumBalance: wallet.rows[0].balance };
+      }
+      await client.query('COMMIT'); return { completedPots, rake: 0, atumBalance: null };
     } catch (error) { await client.query('ROLLBACK'); throw error; } finally { client.release(); }
   }
   function roomState(room, viewerId) {
@@ -169,8 +184,10 @@ function createPokerService(ctx) {
   function nextTurn(room) { for (let i = 1; i <= room.players.length; i += 1) { const index = (room.turn + i) % room.players.length; if (!room.players[index].folded && !room.players[index].allIn) { room.turn = index; return; } } }
   async function settle(room, forcedWinner) {
     const candidates = active(room); const best = forcedWinner ? [forcedWinner] : candidates.reduce((winners, player) => { const score = handRank([...player.cards, ...room.board]); if (!winners.length || compareRank(score, handRank([...winners[0].cards, ...room.board])) > 0) return [player]; if (compareRank(score, handRank([...winners[0].cards, ...room.board])) === 0) winners.push(player); return winners; }, []);
-    const share = Math.floor(room.pot / best.length); for (const player of best) { player.stack += share; if (!player.isAI) await applyChips(player.id, share, 'hand_win', room.handId); }
-    room.stage = 'showdown'; room.messages.push(`${best.map((player) => player.name).join(' and ')} won $${room.pot} ${forcedWinner ? 'when the table folded.' : `with ${rankName(handRank([...best[0].cards, ...room.board]))}.`}`); room.updatedAt = Date.now();
+    const atum = await recordAtumRake(room.pot, room.handId); const distributable = room.pot - atum.rake; const share = Math.floor(distributable / best.length); const remainder = distributable % best.length;
+    for (const [index, player] of best.entries()) { const award = share + (index < remainder ? 1 : 0); player.stack += award; if (!player.isAI) await applyChips(player.id, award, 'hand_win', room.handId); }
+    room.stage = 'showdown'; const rakeNotice = atum.rake ? ` The Atum Account retained $${atum.rake} (15% of completed pot ${atum.completedPots}).` : '';
+    room.messages.push(`${best.map((player) => player.name).join(' and ')} won $${distributable} ${forcedWinner ? 'when the table folded.' : `with ${rankName(handRank([...best[0].cards, ...room.board]))}.`}${rakeNotice}`); room.updatedAt = Date.now();
     clearTimeout(room.settleTimer); room.settleTimer = setTimeout(() => deal(room).catch(() => {}), 7000);
   }
   async function finishBetting(room) {
@@ -226,7 +243,14 @@ function createPokerService(ctx) {
     }
     return json(response, 200, { left: true });
   }
-  return { publicState, join, practice, action, leave };
+  async function atumState(request, response) {
+    cors(request, response); const user = await getUser(request); if (!isOwner(user)) return json(response, 403, { error: 'Atum Account access is restricted to the site owner.' });
+    await ensureSchema(); const db = getDb();
+    const [wallet, counter] = await Promise.all([db.query("SELECT display_name,balance,updated_at FROM game_house_wallets WHERE account_key='atum'"), db.query("SELECT value FROM game_counters WHERE counter_key='jail-house-poker:completed-pots'")]);
+    const completedPots = Number(counter.rows[0]?.value || 0);
+    return json(response, 200, { account: { name: wallet.rows[0]?.display_name || 'Atum Account', balance: Number(wallet.rows[0]?.balance || 0), updatedAt: wallet.rows[0]?.updated_at || null, completedPots, rakeEvery: 8, rakePercent: 15, nextRakeOn: completedPots + (completedPots % 8 === 0 ? 8 : 8 - (completedPots % 8)) } });
+  }
+  return { publicState, join, practice, action, leave, atumState };
 }
 
 module.exports = { createPokerService };

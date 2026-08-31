@@ -1706,7 +1706,7 @@ function parseCookies(request) {
 }
 function v2SessionKey(sid) { const secret = process.env.SESSION_SECRET; return secret && /^[a-f0-9]{64}$/.test(sid || '') ? `community:session:${crypto.createHmac('sha256', secret).update(sid).digest('hex')}` : null; }
 async function v2User(request) { const key = v2SessionKey(parseCookies(request).cc_session); const db = communityDb(); if (!key || !db) return null; const session = await redisPipeline([['GET', key]]); if (!session?.[0]) return null; try { const stored = JSON.parse(session[0]); const result = await db.query("SELECT id,display_name,email,role,status,avatar_updated_at FROM community_users WHERE id=$1 AND status='active'", [stored.id]); const user = result.rows[0]; if (!user) return null; const role = user.role === 'owner' && configuredOwnerEmail() === String(user.email).toLowerCase() ? 'owner' : user.role === 'owner' ? 'member' : user.role; return { id:user.id, displayName:user.display_name, role, avatarUpdatedAt:user.avatar_updated_at }; } catch { return null; } }
-const jailHousePoker = createPokerService({ db: communityDb, user: v2User, ensureSchema: ensureCommunitySchema, parseBody: parseCommunityBody, json: communityJson, cors: applyApiCors, rate: v2Rate });
+const jailHousePoker = createPokerService({ db: communityDb, user: v2User, isOwner, ensureSchema: ensureCommunitySchema, parseBody: parseCommunityBody, json: communityJson, cors: applyApiCors, rate: v2Rate });
 function isOwner(user) { return Boolean(user && user.role === 'owner' && configuredOwnerEmail()); }
 function v2Cookie(response, value, maxAge = 604800) {
     // The public site and API are on different HTTPS origins.  A Lax cookie is
@@ -1957,6 +1957,10 @@ const server = http.createServer((request, response) => {
         }
         if (requestUrl.pathname === '/api/poker/state') {
             jailHousePoker.publicState(request, response).catch(() => communityJson(response, 503, { error: 'The poker table is temporarily unavailable.' }));
+            return;
+        }
+        if (requestUrl.pathname === '/api/poker/atum') {
+            jailHousePoker.atumState(request, response).catch(() => communityJson(response, 503, { error: 'The Atum Account is temporarily unavailable.' }));
             return;
         }
         if (requestUrl.pathname === '/api/auth/profile') {
