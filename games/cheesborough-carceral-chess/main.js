@@ -3,6 +3,8 @@ import Stats from "three/addons/libs/stats.module.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { MTLLoader } from "./jsm/loaders/MTLLoader.js";
 import { KTX2Loader } from "./jsm/loaders/KTX2Loader.js";
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { EXRLoader } from 'three/addons/loaders/EXRLoader.js';
@@ -29,6 +31,289 @@ let WhiteStorage=[];
 const Socials=[]
 
 let botMode=0;
+// The selection overlay passes local, transparent skill settings here. These
+// values are intentionally modest so the game remains responsive in a browser.
+let aiDifficulty = {
+  white: { skill: 5, time: 900 },
+  black: { skill: 10, time: 1400 }
+};
+let seatedAvatarGroup = null;
+let seatedAvatarProfiles = [];
+const strategyChairAnchors = { white: null, black: null };
+// The supplied Quaternius sitting figures have four authored material groups:
+// Skin, Shirt, Pants, and Shoes.  Keep them intact; only the shirt gets a
+// small per-profile variation so different opponents do not look identical.
+const seatedAvatarShirtPalette = [0x384b61, 0x5f4938, 0x454357, 0x4e5d43, 0x6a4033, 0x3c5960, 0x605846, 0x494747];
+let cellblockRoom = null;
+let aiProfiles = { white: null, black: null };
+const voiceState = {
+  enabled: true,
+  volume: 0.72,
+  voices: [],
+  available: "speechSynthesis" in window
+};
+
+function initialiseVoice() {
+  if (!voiceState.available) return;
+  try {
+    voiceState.enabled = localStorage.getItem("ccc-voice-enabled") !== "false";
+    const savedVolume = Number(localStorage.getItem("ccc-voice-volume"));
+    if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 1) voiceState.volume = savedVolume;
+  } catch (_) { /* Private browsing can disallow storage; use session defaults. */ }
+  const refreshVoices = () => { voiceState.voices = window.speechSynthesis.getVoices(); updateVoiceControls(); };
+  refreshVoices();
+  window.speechSynthesis.onvoiceschanged = refreshVoices;
+}
+
+function updateVoiceControls() {
+  document.querySelectorAll("[data-voice-toggle]").forEach((input) => {
+    input.checked = voiceState.enabled;
+    input.disabled = !voiceState.available;
+    input.setAttribute("aria-label", voiceState.available ? (voiceState.enabled ? "AI voice on" : "AI voice off") : "AI voice unavailable");
+  });
+  document.querySelectorAll("[data-voice-toggle-label]").forEach((label) => {
+    label.textContent = voiceState.available ? (voiceState.enabled ? "Voice on" : "Voice off") : "Voice unavailable";
+  });
+  document.querySelectorAll("[data-voice-volume]").forEach((input) => {
+    input.value = String(Math.round(voiceState.volume * 100));
+    input.disabled = !voiceState.available || !voiceState.enabled;
+  });
+  document.querySelectorAll("[data-voice-status]").forEach((status) => {
+    status.textContent = voiceState.available ? (voiceState.enabled ? "Voice ready" : "Voice muted") : "Voice unavailable";
+  });
+}
+
+function setVoiceEnabled(enabled) {
+  voiceState.enabled = Boolean(enabled) && voiceState.available;
+  if (!voiceState.enabled && voiceState.available) window.speechSynthesis.cancel();
+  try { localStorage.setItem("ccc-voice-enabled", String(voiceState.enabled)); } catch (_) {}
+  updateVoiceControls();
+}
+
+function setVoiceVolume(percent) {
+  voiceState.volume = Math.max(0, Math.min(1, Number(percent) / 100));
+  try { localStorage.setItem("ccc-voice-volume", String(voiceState.volume)); } catch (_) {}
+  updateVoiceControls();
+}
+
+function voiceForProfile(profile) {
+  if (!profile || !voiceState.voices.length) return null;
+  const EnglishVoices = voiceState.voices.filter((voice) => /^en([_-]|$)/i.test(voice.lang));
+  const pool = EnglishVoices.length ? EnglishVoices : voiceState.voices;
+  return pool[profile.portrait % pool.length] || null;
+}
+
+function speakAIEvent(side, message) {
+  const profile = aiProfiles[side];
+  if (!voiceState.available || !voiceState.enabled || !profile || !message) return;
+  const utterance = new SpeechSynthesisUtterance(message);
+  const index = Number(profile.portrait) || 0;
+  const selectedVoice = voiceForProfile(profile);
+  if (selectedVoice) utterance.voice = selectedVoice;
+  utterance.volume = voiceState.volume;
+  utterance.rate = 0.9 + (index % 4) * 0.06;
+  utterance.pitch = 0.92 + (index % 5) * 0.04;
+  try {
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  } catch (_) { /* Speech is an optional enhancement. */ }
+}
+
+function announceAIsAtMatchStart() {
+  const selected = [aiProfiles.white, aiProfiles.black].filter(Boolean);
+  if (!selected.length) return;
+  const description = selected.map((profile) => profile.name).join(" and ");
+  speakAIEvent(selected[0].side, `${description} ${selected.length === 1 ? "is" : "are"} seated at the strategy table.`);
+}
+
+function createCellblockRoom() {
+  if (cellblockRoom || !scene) return;
+  cellblockRoom = new THREE.Group();
+  cellblockRoom.name = "ProceduralCellblockStrategyRoom";
+  const concrete = new THREE.MeshStandardMaterial({ color: 0x252827, roughness: 0.95, metalness: 0.02 });
+  const concreteEdge = new THREE.MeshStandardMaterial({ color: 0x343632, roughness: 0.88, metalness: 0.03 });
+  const iron = new THREE.MeshStandardMaterial({ color: 0x151a1a, roughness: 0.68, metalness: 0.78 });
+  const brass = new THREE.MeshStandardMaterial({ color: 0x9b762d, roughness: 0.42, metalness: 0.7, emissive: 0x211608, emissiveIntensity: 0.18 });
+  const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x171a19, roughness: 0.94, metalness: 0.02 });
+  const addBox = (name, width, height, depth, x, y, z, material, bevel = false) => {
+    const geometry = bevel ? new THREE.BoxGeometry(width, height, depth, 2, 2, 2) : new THREE.BoxGeometry(width, height, depth);
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = name;
+    mesh.position.set(x, y, z);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    cellblockRoom.add(mesh);
+    return mesh;
+  };
+  const addBar = (x, z, y = 0.72, length = 3.45) => {
+    const mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.032, length, 8), iron);
+    mesh.name = "CellblockIronBar";
+    mesh.position.set(x, y, z);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    cellblockRoom.add(mesh);
+  };
+
+  addBox("CellblockFloor", 7.8, 0.12, 8.4, 0, -1.08, 0.45, floorMaterial);
+  addBox("CellblockWestWall", 0.32, 4.2, 8.2, -3.25, 0.92, 0.45, concrete);
+  addBox("CellblockEastWall", 0.32, 4.2, 8.2, 3.25, 0.92, 0.45, concrete);
+  addBox("CellblockRearWall", 6.8, 4.2, 0.34, 0, 0.92, 4.35, concrete);
+  addBox("CellblockLintel", 6.8, 0.22, 0.52, 0, 2.83, -3.55, concreteEdge);
+  addBox("CellblockUpperRail", 6.8, 0.08, 0.12, 0, 2.35, -3.42, iron);
+  addBox("CellblockLowerRail", 6.8, 0.08, 0.12, 0, -0.2, -3.42, iron);
+  for (let x = -3; x <= 3; x += 0.32) addBar(x, -3.42, 1.06, 3.06);
+  [-2.9, 2.9].forEach((x) => {
+    addBox("CellblockDoorFrame", 0.14, 3.55, 0.22, x, 0.86, -3.42, iron);
+  });
+  [-2.83, 2.83].forEach((x) => {
+    for (let z = -2.7; z <= 3.5; z += 0.48) addBar(x, z, 0.82, 3.52);
+    addBox("CellblockSideRail", 0.12, 0.1, 6.65, x, 2.4, 0.42, iron);
+    addBox("CellblockSideRail", 0.12, 0.1, 6.65, x, -0.2, 0.42, iron);
+  });
+  // Sparse architectural bands keep the scene institutional without turning it into a caricature.
+  [-1.6, 0, 1.6].forEach((x) => addBox("CellblockRearPilaster", 0.22, 3.7, 0.18, x, 0.65, 4.1, concreteEdge));
+  addBox("CellblockRearBand", 6.35, 0.14, 0.14, 0, 1.72, 4.06, concreteEdge);
+  const fixture = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.31, 0.12, 20), brass);
+  fixture.name = "WarmOverheadFixture";
+  fixture.position.set(0, 2.65, -0.2);
+  fixture.castShadow = true;
+  cellblockRoom.add(fixture);
+  const warmLight = new THREE.PointLight(0xd6a844, 10, 9, 2);
+  warmLight.name = "CellblockWarmLight";
+  warmLight.position.set(0, 2.48, -0.15);
+  warmLight.castShadow = !/Mobi|Android/i.test(navigator.userAgent);
+  if (warmLight.castShadow) warmLight.shadow.mapSize.set(512, 512);
+  cellblockRoom.add(warmLight);
+  scene.add(cellblockRoom);
+}
+
+function clearSeatedAvatars() {
+  if (!seatedAvatarGroup) return;
+  while (seatedAvatarGroup.children.length) {
+    const avatar = seatedAvatarGroup.children[0];
+    seatedAvatarGroup.remove(avatar);
+    avatar.traverse((child) => {
+      if (child.isMesh) {
+        child.geometry?.dispose();
+        child.material?.dispose();
+      }
+    });
+  }
+}
+
+function seatedAvatarPath(profile) {
+  const root = "assets/avatars/source/posed-background-characters/Posed Background Characters by @Quaternius/";
+  return profile.group === "Women"
+    ? root + "Female/Female Poses/OBJ/Female_Sitting.obj"
+    : root + "Male/Male Poses/OBJ/Male_Sitting.obj";
+}
+
+function seatedAvatarMaterialPath(profile) {
+  const root = "assets/avatars/source/posed-background-characters/Posed Background Characters by @Quaternius/";
+  return profile.group === "Women"
+    ? root + "Female/Female Poses/OBJ/Female_Sitting.mtl"
+    : root + "Male/Male Poses/OBJ/Male_Sitting.mtl";
+}
+
+function varySuppliedAvatarMaterials(avatar, profile) {
+  const shirtColor = seatedAvatarShirtPalette[profile.portrait % seatedAvatarShirtPalette.length];
+  avatar.traverse((child) => {
+    if (!child.isMesh) return;
+    child.castShadow = true;
+    child.receiveShadow = true;
+    // MTLLoader assigns the supplied named materials to the OBJ's four mesh
+    // groups. Clone only Shirt before varying it; skin, pants, and shoes stay
+    // precisely as authored in the CC0 package.
+    const wasMaterialArray = Array.isArray(child.material);
+    const material = wasMaterialArray ? child.material : [child.material];
+    const updatedMaterials = material.map((source) => {
+      if (!source || source.name !== "Shirt") return source;
+      const shirt = source.clone();
+      shirt.color.setHex(shirtColor);
+      shirt.name = "Shirt";
+      return shirt;
+    });
+    child.material = wasMaterialArray ? updatedMaterials : updatedMaterials[0];
+    if (child.geometry) child.geometry.computeVertexNormals();
+  });
+}
+
+function addSeatedAvatar(profile) {
+  const expectedName = profile.name;
+  const expectedSide = profile.side;
+  const materialLoader = new MTLLoader();
+  materialLoader.load(seatedAvatarMaterialPath(profile), (materials) => {
+    materials.preload();
+    const loader = new OBJLoader();
+    loader.setMaterials(materials);
+    loader.load(seatedAvatarPath(profile), (avatar) => {
+      if (!seatedAvatarProfiles.some((item) => item.name === expectedName && item.side === expectedSide)) return;
+      avatar.scale.setScalar(0.38);
+      positionAvatarInChair(avatar, profile.side);
+      avatar.name = `Seated_${profile.side}_${profile.name}`;
+      varySuppliedAvatarMaterials(avatar, profile);
+      seatedAvatarGroup.add(avatar);
+    }, undefined, (error) => console.error("Unable to load seated avatar geometry", error));
+  }, undefined, (error) => console.error("Unable to load seated avatar materials", error));
+}
+
+function positionAvatarInChair(avatar, side) {
+  const anchor = strategyChairAnchors[side];
+  // The sitting models have their feet at their local origin.  The original
+  // chairs are on the model floor at y = -1, so use their world x/z but keep
+  // that floor contact rather than placing the character at the chair mesh
+  // origin (which is partway up the seat geometry).
+  if (!anchor) {
+    avatar.position.set(0, -1.0, side === "white" ? -1.42 : 1.42);
+    avatar.rotation.set(0, side === "white" ? Math.PI : 0, 0);
+    return;
+  }
+  avatar.position.set(anchor.position.x, -1.0, anchor.position.z);
+  avatar.rotation.set(0, anchor.rotationY, 0);
+}
+
+function captureStrategyChairAnchors(model) {
+  model.updateMatrixWorld(true);
+  const chairMeshes = {};
+  model.traverse((child) => {
+    if (!child.isMesh) return;
+    if (child.name === "Tables Chair1") chairMeshes.white = child;
+    if (child.name === "Tables Chair2") chairMeshes.black = child;
+  });
+  Object.entries(chairMeshes).forEach(([side, chair]) => {
+    const position = new THREE.Vector3();
+    const quaternion = new THREE.Quaternion();
+    chair.getWorldPosition(position);
+    chair.getWorldQuaternion(quaternion);
+    strategyChairAnchors[side] = {
+      position,
+      rotationY: new THREE.Euler().setFromQuaternion(quaternion, "YXZ").y
+    };
+  });
+  seatedAvatarGroup?.children.forEach((avatar) => {
+    const side = avatar.name.includes("Seated_white_") ? "white" : "black";
+    positionAvatarInChair(avatar, side);
+  });
+}
+
+function setSeatedAvatars(profiles) {
+  seatedAvatarProfiles = Array.isArray(profiles) ? profiles : [];
+  if (!scene) return;
+  if (!seatedAvatarGroup) {
+    seatedAvatarGroup = new THREE.Group();
+    seatedAvatarGroup.name = "SelectedSeatedAvatars";
+    scene.add(seatedAvatarGroup);
+  }
+  clearSeatedAvatars();
+  seatedAvatarProfiles.forEach(addSeatedAvatar);
+}
+
+// Preserve the original chess table composition exactly.  The cellblock is a
+// surrounding room, not a replacement for the board, chairs, table, pieces,
+// storage, or turn indicators.  Only these known office decorations are hidden.
+function isLegacyOfficeDecorMesh(name = "") {
+  return /^(?:Others Flower|Others vaze|flowers|TheFlowers|SideItems Plants Grid|SideItems Walls|SideItems TheDoor|Door classic|Floor|Tables (?:Linkedin|Insta|Github))$/.test(name);
+}
 
 function saveOriginalTransform(obj) {
     obj.userData.MainScale = obj.scale.clone();
@@ -38,12 +323,12 @@ function saveOriginalTransform(obj) {
 function initializeScene() {
   const container = document.getElementById("container");
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x7692e7);
+  scene.background = new THREE.Color(0x111312);
   container.appendChild(renderer.domElement);
-  const ambient = new THREE.AmbientLight(0xFFE4B6, 0.5);
+  const ambient = new THREE.HemisphereLight(0x59615d, 0x131514, 0.62);
   scene.add(ambient);
 
-  const dirLight = new THREE.DirectionalLight(0xFFE4B6, 1); 
+  const dirLight = new THREE.DirectionalLight(0xd7b165, 0.7);
   dirLight.position.set(18.130, 15.780, 17.951);
   const isMobile = /Mobi|Android/i.test(navigator.userAgent);
   dirLight.castShadow = !isMobile;
@@ -52,6 +337,7 @@ function initializeScene() {
     dirLight.shadow.mapSize.height = 512;
   }
   scene.add(dirLight);
+  createCellblockRoom();
 }
 function initializeCamera() {
   camera = new THREE.PerspectiveCamera(
@@ -70,7 +356,8 @@ function initializeRenderer() {
   const isMobile = /Mobi|Android/i.test(navigator.userAgent);
   renderer.setPixelRatio(isMobile ? 2.5 : window.devicePixelRatio);
   renderer.setSize(Sizes.Width, Sizes.Height);
-  renderer.toneMappingExposure = 2.5;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.12;
 }
 
 
@@ -90,14 +377,19 @@ function initializeEnvironment() {
   pmremGenerator = new THREE.PMREMGenerator(renderer);
 
   new EXRLoader()
-    .setPath('assets/') 
-    .load('TheHdr.exr', function (texture) {
+    .setPath('assets/environment/')
+    .load('abandoned_hall_01_4k.exr', function (texture) {
       const envMap = pmremGenerator.fromEquirectangular(texture).texture;
       scene.environment = envMap;
       scene.background = envMap; 
+      scene.backgroundBlurriness = 0.5;
+      scene.backgroundIntensity = 0.32;
       texture.dispose();
       pmremGenerator.dispose();
-      
+    }, undefined, () => {
+      // The architectural room remains fully functional if an older browser
+      // cannot decode EXR. No remote asset is requested as a fallback.
+      scene.background = new THREE.Color(0x111312);
     });
 }
 
@@ -164,9 +456,9 @@ let ques=0;
 
 async function smallBotMove() {
   if (game.game_over()) {
-    alert('Game Over!');
     return;
   }
+  const movingSide = game.turn() === "w" ? "white" : "black";
   const bestMove = await askStockfishMove();
   let out =bestMove[4]
   out=((out)?out:"q")
@@ -178,6 +470,7 @@ async function smallBotMove() {
   highlightMove();
   setTimeout(() => {
     PromotionCheck(bestMove.slice(0, 2), bestMove.slice(2, 4),out);
+    speakAIEvent(movingSide, `${aiProfiles[movingSide]?.name || "The AI"} has made a move.`);
   }, 700);
 }
 const engine = new Worker("stockfish/stockfish.js");
@@ -187,8 +480,10 @@ const engine = new Worker("stockfish/stockfish.js");
 function askStockfishMove() {
   return new Promise((resolve) => {
     const fen = game.fen();
+    const profile = game.turn() === 'w' ? aiDifficulty.white : aiDifficulty.black;
+    engine.postMessage("setoption name Skill Level value " + profile.skill);
     engine.postMessage("position fen " + fen);
-    engine.postMessage("go movetime 2000");
+    engine.postMessage("go movetime " + profile.time);
 
 
     engine.onmessage = function (event) {
@@ -616,8 +911,12 @@ function MoveTo(from,To,promoPiece){
     setTimeout(()=>{
       if(game.in_checkmate()){
         let Winner=(game.turn()=='w')?"Black":"White";
+        const winningSide = Winner.toLowerCase();
+        speakAIEvent(winningSide, `${aiProfiles[winningSide]?.name || Winner} has checkmate.`);
         alert(Winner+" won the match")
       }else{
+        const lastMover = move?.color === "w" ? "white" : "black";
+        speakAIEvent(lastMover, game.in_stalemate?.() ? "The game is a stalemate." : "The match is a draw.");
         alert("Its a draw")
       }
       document.getElementById("celebrate").classList.add("active")
@@ -627,6 +926,10 @@ function MoveTo(from,To,promoPiece){
   }
   
   isCheck()
+  if (game.in_check?.()) {
+    const checkingSide = move?.color === "w" ? "white" : "black";
+    speakAIEvent(checkingSide, `${aiProfiles[checkingSide]?.name || "The AI"} has placed the king in check.`);
+  }
   
 }
 
@@ -1052,6 +1355,10 @@ function load3D() {
         scene.add(model);
         model.traverse((child) => {
           if (!child.isMesh) return;
+          if (isLegacyOfficeDecorMesh(child.name)) {
+            child.visible = false;
+            return;
+          }
           for (const key of Object.keys(textureKey)) {
             if (child.name.includes(key)) {
               texturesToLoad++;
@@ -1059,9 +1366,11 @@ function load3D() {
             }
           }
         });
+        captureStrategyChairAnchors(model);
     
         model.traverse((child) => {
           if (!child.isMesh) return;
+          if (isLegacyOfficeDecorMesh(child.name)) return;
           for (const [key, path] of Object.entries(textureKey)) {
             if (child.name.includes(key)) {
               ktx2Loader.load(path, (tex) => {
@@ -1204,9 +1513,6 @@ function load3D() {
           }else if(child.name.includes("WStorage")){
             let index=parseInt(child.name.split("e")[1])
             WhiteStorage[index]=child;
-          }else if(child.name.includes("Flower")||child.name.includes("vaze")){
-            targetObjects.push(child);
-            saveOriginalTransform(child);
           }
           
         });
@@ -1317,7 +1623,19 @@ function setBotMode(Mode){
       ele.rotation.y+=Math.PI
     })
   }
+  setTimeout(announceAIsAtMatchStart, 350);
   setTimeout(botChecker,1000)
+}
+function setAIDifficulty(profiles) {
+  if (profiles && profiles.white && profiles.black) {
+    aiDifficulty = profiles;
+  }
+}
+function setAIProfiles(profiles) {
+  aiProfiles = {
+    white: profiles?.white ? { ...profiles.white, side: "white" } : null,
+    black: profiles?.black ? { ...profiles.black, side: "black" } : null
+  };
 }
 function ReloadGame(){
   if(confirm("Are u sure you want to restart the game?")){
@@ -1346,6 +1664,13 @@ function CameraTop() {
 window.load3D = load3D;
 window.CameraTop = CameraTop;
 window.setBotMode = setBotMode;
+window.setAIDifficulty = setAIDifficulty;
+window.setAIProfiles = setAIProfiles;
+window.setSeatedAvatars = setSeatedAvatars;
+window.setVoiceEnabled = setVoiceEnabled;
+window.setVoiceVolume = setVoiceVolume;
+window.updateVoiceControls = updateVoiceControls;
+window.addEventListener("DOMContentLoaded", initialiseVoice);
 window.WinnerShowCase=WinnerShowCase
 window.savePromotion=savePromotion
 window.ReloadGame=ReloadGame

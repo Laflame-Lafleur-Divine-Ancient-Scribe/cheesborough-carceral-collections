@@ -10,7 +10,6 @@
     <meta property="og:description" content="A playable 3D strategy table from Cheesborough Carceral Collections.">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="assets/Logo192x192.png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js"></script>
     <meta
       name="viewport"
       content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
@@ -32,13 +31,19 @@
       <button class="about-toggle" type="button" aria-controls="game-about" aria-expanded="false">About This Game</button>
       <a class="collection-link" href="../../index.html#games">Games Index</a>
     </div>
+    <aside class="voice-panel" aria-label="AI voice settings">
+      <span class="voice-panel-label">AI Voice</span>
+      <label class="voice-switch"><input data-voice-toggle type="checkbox" onchange="setVoiceEnabled(this.checked)" checked aria-label="AI voice on"><span data-voice-toggle-label>Voice on</span></label>
+      <label class="voice-volume"><span class="sr-only">AI voice volume</span><input data-voice-volume type="range" min="0" max="100" value="72" oninput="setVoiceVolume(this.value)"></label>
+      <span class="voice-status" data-voice-status aria-live="polite">Voice ready</span>
+    </aside>
     <button class="ViewPoint" onclick="CameraTop()">
       <span class="sr-only">View board from above</span>
-      <ion-icon name="color-wand-outline"></ion-icon>
+      <span aria-hidden="true">⌁</span>
     </button>
     <button class="Reset" onclick="ReloadGame()">
       <span class="sr-only">Restart game</span>
-      <ion-icon name="refresh-outline"></ion-icon>
+      <span aria-hidden="true">↻</span>
     </button>
     <aside class="game-about" id="game-about" aria-label="About Cheesborough Carceral Chess" hidden>
       <button class="about-close" type="button" aria-label="Close game information">×</button>
@@ -66,32 +71,127 @@
     </div>
 
     <div id="info"></div>
+    <div id="player-identity-strip" aria-live="polite" aria-label="Selected players" hidden></div>
     <script>
+      const avatarRoster = [
+        ["Marcus \"Mack\" Holloway", "Men"], ["Darnell Bishop", "Men"], ["Leon \"Red\" Carter", "Men"], ["Terrence Wallace", "Men"], ["Calvin \"Keys\" Mercer", "Men"], ["Raymond Givens", "Men"], ["Andre \"Dre\" Collins", "Men"], ["Victor Salazar", "Men"], ["Luis Mendoza", "Men"], ["Hector Ramirez", "Men"], ["Elijah Boone", "Men"], ["Travis McCall", "Men"], ["Curtis \"C.J.\" Jackson", "Men"], ["Malcolm Reed", "Men"], ["Jerome Tate", "Men"], ["Isaiah \"Zay\" Freeman", "Men"], ["Nathaniel Brooks", "Men"], ["Corey \"Slim\" Daniels", "Men"], ["Desmond Price", "Men"], ["Maurice Granger", "Men"],
+        ["Tasha Monroe", "Women"], ["Renee \"Ray\" Carter", "Women"], ["Monique Ellis", "Women"], ["Keisha Grant", "Women"], ["Angela Mercer", "Women"], ["Dominique Price", "Women"], ["Yolanda Brooks", "Women"], ["Vanessa \"Vee\" Cole", "Women"], ["Brianna Tate", "Women"], ["Rochelle Givens", "Women"], ["Marisol Vega", "Women"], ["Carmen Salazar", "Women"], ["Elena Ramirez", "Women"], ["Latoya Bishop", "Women"], ["Nicole \"Nikki\" Wallace", "Women"], ["Jasmine Reed", "Women"], ["Felicia Boone", "Women"], ["Shanice Holloway", "Women"], ["Teresa McCall", "Women"], ["Candace \"Candy\" Daniels", "Women"]
+      ].map(([name, group], index) => ({ name, group, portrait: index, model: null }));
+      const aiTiers = {
+        Learning: { rating: 900, note: "Developing patterns", skill: 2, time: 550 },
+        Steady: { rating: 1250, note: "Measured play", skill: 5, time: 900 },
+        Tactical: { rating: 1550, note: "Sees combinations", skill: 10, time: 1400 },
+        Advanced: { rating: 1850, note: "Strong positional play", skill: 15, time: 2000 },
+        Master: { rating: 2150, note: "Demanding opponent", skill: 20, time: 2800 }
+      };
+      let playerSelection = null;
+
+      // Local vector markers identify the forty AI opponents before their
+      // matching CC0 seated 3D avatars are placed at the chess table.
+      function portraitMarkup(index) {
+        const tones = ['#5a3929', '#754b34', '#8d6047', '#a87858', '#c38e68', '#d8aa82', '#e4bea0'];
+        const cloth = ['#5b6e71', '#766851', '#604f62', '#6e7862', '#7d5e4b', '#53656a', '#746f69', '#625b48'];
+        const lights = ['#9d7a42', '#667e82', '#855d4e', '#7b755d', '#7b6657'];
+        const hair = [
+          'M29 37c3-12 19-14 23 0v7H29z', 'M27 39c2-15 26-17 28 1l-5 4H31z', 'M31 34c6-10 16-10 20 1v9H31z', 'M28 42c-1-13 25-20 27-1l-4 2H32z',
+          'M30 36c4-7 18-8 21 1v5H30z', 'M27 40c4-18 26-14 29 1l-6 3H32z', 'M29 39c5-12 18-13 24 0v5H29z', 'M31 36c3-6 16-9 20 3v7H31z'
+        ];
+        const faceShape = ['rx="13" ry="16"', 'rx="12" ry="17"', 'rx="14" ry="15"', 'rx="11" ry="17"', 'rx="13" ry="15"'];
+        const collar = ['M17 94c3-22 14-31 24-31s21 9 24 31z', 'M14 94c5-20 14-29 27-29s22 9 27 29z', 'M18 94c1-18 11-30 23-30s22 12 23 30z', 'M13 94c4-25 16-31 28-31s24 6 28 31z', 'M16 94c2-23 13-28 25-28s23 5 25 28z'];
+        const tone = tones[index % tones.length];
+        const shirt = cloth[(index * 3) % cloth.length];
+        const light = lights[(index * 2) % lights.length];
+        const face = faceShape[index % faceShape.length];
+        const pattern = index % 4 === 0 ? '<path d="M8 17h66M8 27h66" stroke="rgba(248,239,217,.18)" />' : index % 4 === 1 ? '<path d="M10 10l63 64M31 7l43 43" stroke="rgba(248,239,217,.12)" />' : index % 4 === 2 ? '<circle cx="17" cy="22" r="7" fill="rgba(248,239,217,.12)"/><circle cx="65" cy="66" r="7" fill="rgba(248,239,217,.12)"/>' : '<path d="M8 68L73 9M8 49L53 9" stroke="rgba(248,239,217,.12)" />';
+        return `<svg class="avatar-portrait" viewBox="0 0 82 100" role="img" aria-label="Illustrated player profile marker ${index + 1}"><rect width="82" height="100" fill="#151917"/><rect x="5" y="5" width="72" height="90" fill="${light}" opacity=".38"/>${pattern}<path d="M7 94h68" stroke="#c9a961" stroke-opacity=".7"/><path d="${collar[index % collar.length]}" fill="${shirt}"/><rect x="28" y="30" width="26" height="35" ${face} fill="${tone}"/><path d="${hair[index % hair.length]}" fill="#1d1917"/><path d="M35 51h3m7 0h3" stroke="#171514" stroke-width="1.5" stroke-linecap="round"/><path d="M37 59c3 2 6 2 9 0" stroke="#55362d" stroke-width="1.3" fill="none" stroke-linecap="round"/><text x="10" y="87" fill="#f8efd9" font-size="7" font-family="Georgia, serif" letter-spacing="1">${String(index + 1).padStart(2, '0')}</text></svg>`;
+      }
+
       function active() {
         stopFacts()
         document.getElementById("LoadingBox").style.justifyContent='center';
         document.getElementById("LoadingBox").innerHTML=`
           <div>
             <p class="mode-heading">Select Player Mode</p>
-            <div><button class="btn options" onclick="ModeSet(0)"><i class="animation"></i>Player 1 vs Player 2<i class="animation"></i></button></div>
-            <div><button class="btn options" onclick="VsBot()"><i class="animation"></i>Player 1 vs AI<i class="animation"></i></button></div>
-            <div><button class="btn options" onclick="ModeSet(3)"><i class="animation"></i>AI V. AI<i class="animation"></i></button></div>
+            <div><button class="btn options" onclick="startHumanMatch()"><i class="animation"></i>Player 1 vs Player 2<i class="animation"></i></button></div>
+            <div><button class="btn options" onclick="beginAISelection('pvai')"><i class="animation"></i>Player 1 vs AI<i class="animation"></i></button></div>
+            <div><button class="btn options" onclick="beginAISelection('aivai')"><i class="animation"></i>AI V. AI<i class="animation"></i></button></div>
           </div>`;
       }
       function ModeSet(Mode){
         document.getElementById("LoadingBox").classList.add("Open");
         setBotMode(Mode)
       }
-
-
-
       function VsBot(){
-        document.getElementById("LoadingBox").innerHTML=`
-          <div>
-            <p class="mode-heading">Choose your side</p>
-            <div><button class="btn options" onclick="ModeSet(2)" style="color: black;background-color: white;"><i class=""></i>White<i class=""></i></button></div>
-            <div><button class="btn options" onclick="ModeSet(1)"><i class=""></i>Black<i class=""></i></button></div>
-          </div>`
+        beginAISelection('pvai');
+      }
+
+      function startHumanMatch() {
+        if (window.setSeatedAvatars) window.setSeatedAvatars([]);
+        if (window.setAIProfiles) window.setAIProfiles({});
+        const strip = document.getElementById('player-identity-strip');
+        strip.hidden = true;
+        ModeSet(0);
+      }
+
+      function beginAISelection(mode) {
+        const slots = mode === 'pvai'
+          ? [{ label: 'AI Opponent', kind: 'AI' }]
+          : [{ label: 'AI White', kind: 'AI', side: 'white' }, { label: 'AI Black', kind: 'AI', side: 'black' }];
+        playerSelection = { mode, slots, selected: Array(slots.length).fill(null), activeSlot: 0, filter: 'All', query: '', side: 'white', tiers: mode === 'pvai' ? ['Tactical'] : ['Steady', 'Tactical'] };
+        renderPlayerSelection();
+      }
+
+      function voiceControlMarkup(extraClass = '') {
+        return `<div class="voice-panel ${extraClass}" aria-label="AI voice settings"><span class="voice-panel-label">AI Voice</span><label class="voice-switch"><input data-voice-toggle type="checkbox" onchange="setVoiceEnabled(this.checked)" checked aria-label="AI voice on"><span data-voice-toggle-label>Voice on</span></label><label class="voice-volume"><span class="sr-only">AI voice volume</span><input data-voice-volume type="range" min="0" max="100" value="72" oninput="setVoiceVolume(this.value)"></label><span class="voice-status" data-voice-status aria-live="polite">Voice ready</span></div>`;
+      }
+
+      function renderPlayerSelection() {
+        const state = playerSelection;
+        const filtered = avatarRoster.filter((avatar) =>
+          (state.filter === 'All' || avatar.group === state.filter) && avatar.name.toLowerCase().includes(state.query.toLowerCase())
+        );
+        const modeTitle = state.mode === 'pvai' ? 'Select an AI Opponent' : 'Select AI Players';
+        const slots = state.slots.map((slot, index) => {
+          const avatar = state.selected[index];
+          const tier = aiTiers[state.tiers[index]];
+          const tierControl = slot.kind === 'AI' ? `<label class="tier-label">Ability <select onchange="setAITier(${index}, this.value)">${Object.keys(aiTiers).map((name) => `<option ${name === state.tiers[index] ? 'selected' : ''}>${name}</option>`).join('')}</select><span>${tier.rating} / ${tier.note}</span></label>` : '';
+          return `<article class="selection-slot ${state.activeSlot === index ? 'active' : ''}"><button class="slot-activate" onclick="setActiveSlot(${index})" type="button"><span class="slot-number">0${index + 1}</span><span class="slot-copy"><strong>${slot.label}</strong><em>${avatar ? avatar.name : 'Choose an AI identity'}</em></span></button>${tierControl}</article>`;
+        }).join('');
+        const cards = filtered.map((avatar) => {
+          const selectedBy = state.selected.findIndex((chosen) => chosen && chosen.name === avatar.name);
+          return `<button class="avatar-card ${selectedBy >= 0 ? 'selected' : ''}" onclick="chooseAvatar(${avatarRoster.indexOf(avatar)})" type="button" aria-pressed="${selectedBy >= 0}">${portraitMarkup(avatar.portrait)}<strong>${avatar.name}</strong>${selectedBy >= 0 ? `<small>Assigned to ${state.slots[selectedBy].label}</small>` : '<small>Choose AI identity</small>'}</button>`;
+        }).join('');
+        const sideControl = state.mode === 'pvai' ? `<fieldset class="side-control"><legend>Player 1 plays</legend><label><input type="radio" name="side" value="white" onchange="setPlayerSide('white')" ${state.side === 'white' ? 'checked' : ''}> White</label><label><input type="radio" name="side" value="black" onchange="setPlayerSide('black')" ${state.side === 'black' ? 'checked' : ''}> Black</label></fieldset>` : '';
+        document.getElementById('LoadingBox').innerHTML = `<section class="player-select" aria-labelledby="player-select-title"><div class="player-select-heading"><p class="mode-heading">Cheesborough Carceral Chess / AI Opponents</p><h1 id="player-select-title">${modeTitle}</h1><p>Choose the AI identity or identities seated at the strategy table. Their selected ability tier controls the computer’s move strength.</p></div>${voiceControlMarkup('selection-voice-panel')}<div class="selection-slots">${slots}</div>${sideControl}<div class="roster-tools"><div class="roster-tabs" role="tablist"><button class="${state.filter === 'All' ? 'active' : ''}" onclick="setRosterFilter('All')" type="button">All <span>40</span></button><button class="${state.filter === 'Men' ? 'active' : ''}" onclick="setRosterFilter('Men')" type="button">Men <span>20</span></button><button class="${state.filter === 'Women' ? 'active' : ''}" onclick="setRosterFilter('Women')" type="button">Women <span>20</span></button></div><label class="roster-search"><span class="sr-only">Search AI identities</span><input type="search" value="${state.query}" oninput="setRosterQuery(this.value)" placeholder="Search AI identities"></label></div><div class="avatar-grid" aria-live="polite">${cards}</div><div class="selection-footer"><p>${state.selected.every(Boolean) ? `${state.selected.length} AI ${state.selected.length === 1 ? 'identity' : 'identities'} selected. Confirm when ready.` : `Select an AI identity for ${state.slots[state.activeSlot].label}.`}</p><button class="btn confirm-players" onclick="confirmAISelection()" type="button" ${state.selected.every(Boolean) ? '' : 'disabled'}><i class="animation"></i>Confirm AI<i class="animation"></i></button></div></section>`;
+        if (window.updateVoiceControls) window.updateVoiceControls();
+      }
+      function setActiveSlot(index) { playerSelection.activeSlot = index; renderPlayerSelection(); }
+      function setRosterFilter(filter) { playerSelection.filter = filter; renderPlayerSelection(); }
+      function setRosterQuery(query) { const search = document.activeElement; const caret = search && search.selectionStart; playerSelection.query = query; renderPlayerSelection(); requestAnimationFrame(() => { const nextSearch = document.querySelector('.roster-search input'); if (nextSearch) { nextSearch.focus(); const position = typeof caret === 'number' ? caret : nextSearch.value.length; nextSearch.setSelectionRange(position, position); } }); }
+      function setPlayerSide(side) { playerSelection.side = side; renderPlayerSelection(); }
+      function setAITier(index, tier) { playerSelection.tiers[index] = tier; renderPlayerSelection(); }
+      function chooseAvatar(index) { const avatar = avatarRoster[index]; const assignedSlot = playerSelection.selected.findIndex((chosen) => chosen && chosen.name === avatar.name); if (assignedSlot >= 0 && assignedSlot !== playerSelection.activeSlot) playerSelection.selected[assignedSlot] = null; playerSelection.selected[playerSelection.activeSlot] = avatar; const nextOpen = playerSelection.selected.findIndex((chosen) => !chosen); if (nextOpen >= 0) playerSelection.activeSlot = nextOpen; renderPlayerSelection(); }
+      function confirmAISelection() {
+        const state = playerSelection;
+        const whiteTier = state.mode === 'aivai' ? state.tiers[0] : (state.side === 'black' ? state.tiers[0] : 'Learning');
+        const blackTier = state.mode === 'aivai' ? state.tiers[1] : (state.side === 'white' ? state.tiers[0] : 'Learning');
+        if (window.setAIDifficulty) window.setAIDifficulty({ white: aiTiers[whiteTier], black: aiTiers[blackTier] });
+        const boardMode = state.mode === 'aivai' ? 3 : (state.side === 'white' ? 2 : 1);
+        const seated = state.mode === 'aivai' ? [
+          { ...state.selected[0], side: 'white' }, { ...state.selected[1], side: 'black' }
+        ] : [{ ...state.selected[0], side: state.side === 'white' ? 'black' : 'white' }];
+        if (window.setSeatedAvatars) window.setSeatedAvatars(seated);
+        const profiles = state.mode === 'aivai'
+          ? { white: state.selected[0], black: state.selected[1] }
+          : state.side === 'white'
+            ? { black: state.selected[0] }
+            : { white: state.selected[0] };
+        if (window.setAIProfiles) window.setAIProfiles(profiles);
+        const identities = state.selected.map((avatar, index) => `${state.slots[index].label}: ${avatar.name} (${state.tiers[index]} ${aiTiers[state.tiers[index]].rating})`);
+        const strip = document.getElementById('player-identity-strip');
+        strip.textContent = identities.join('  •  ');
+        strip.hidden = false;
+        ModeSet(boardMode);
       }
 
       window.addEventListener("load", function () {
@@ -161,8 +261,8 @@
       }
       startFacts();
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="vendor/gsap-3.12.2.min.js"></script>
+    <script src="vendor/chess-0.10.3.min.js"></script>
     <script type="importmap">
       {
         "imports": {
@@ -186,13 +286,5 @@
       aboutClose.addEventListener('click', () => setAbout(false));
       document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setAbout(false); });
     </script>
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
-    ></script>
   </body>
 </html>
