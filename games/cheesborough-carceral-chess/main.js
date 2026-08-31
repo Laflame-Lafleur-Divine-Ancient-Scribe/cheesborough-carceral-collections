@@ -43,7 +43,7 @@ const strategyChairAnchors = { white: null, black: null };
 // The supplied Quaternius sitting figures have four authored material groups:
 // Skin, Shirt, Pants, and Shoes. Profile palettes keep their supplied mesh
 // groups intact while making each seated identity visually distinct.
-const seatedAvatarShirtPalette = [0x384b61, 0x5f4938, 0x454357, 0x4e5d43, 0x6a4033, 0x3c5960, 0x605846, 0x494747];
+const seatedAvatarShirtPalette = [0x58799a, 0x8a623f, 0x725b82, 0x547b5a, 0x9a5849, 0x447a86, 0x85764f, 0x7a5454];
 const seatedAvatarSkinPalette = [0x5a3929, 0x754b34, 0x8d6047, 0xa87858, 0xc38e68, 0xd8aa82, 0xe4bea0];
 const seatedAvatarPantsPalette = [0x252d35, 0x34302a, 0x2e3038, 0x26332c, 0x3d2b28, 0x27363b, 0x38352c, 0x302c2a];
 const seatedAvatarShoePalette = [0x181818, 0x29231d, 0x20242a, 0x25201e];
@@ -321,6 +321,9 @@ function positionAvatarInChair(avatar, side) {
   // Quaternius' seated OBJ faces the opposite local direction from the
   // original chair meshes, so reverse it to look across the chessboard.
   avatar.rotation.set(0, anchor.rotationY + Math.PI, 0);
+  // The seated OBJ's geometry center is 0.34 units behind its origin. Offset
+  // the origin forward so the body center lands on the chair cushion.
+  avatar.translateZ(0.34);
 }
 
 function captureStrategyChairAnchors(model) {
@@ -366,7 +369,7 @@ function setSeatedAvatars(profiles) {
 // surrounding room, not a replacement for the board, chairs, table, pieces,
 // storage, or turn indicators.  Only these known office decorations are hidden.
 function isLegacyOfficeDecorMesh(name = "") {
-  return /^(?:Others Flower|Others vaze|flowers|TheFlowers|SideItems Plants Grid|SideItems Walls|SideItems TheDoor|Door classic|Floor|Tables (?:Linkedin|Insta|Github))$/.test(name);
+  return /flower|vaze|vase|plant/i.test(name) || /^(?:SideItems Walls|SideItems TheDoor|Door classic|Floor|Tables (?:Linkedin|Insta|Github))$/.test(name);
 }
 
 function saveOriginalTransform(obj) {
@@ -1418,6 +1421,13 @@ function load3D() {
         model.traverse((child) => {
           if (isLegacyOfficeDecorMesh(child.name)) {
             child.visible = false;
+            child.traverse((descendant) => {
+              if (descendant.isMesh) {
+                descendant.visible = false;
+                descendant.castShadow = false;
+                descendant.receiveShadow = false;
+              }
+            });
             return;
           }
           if (!child.isMesh) return;
