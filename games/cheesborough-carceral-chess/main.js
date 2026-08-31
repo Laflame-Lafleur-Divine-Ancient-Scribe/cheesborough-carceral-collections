@@ -249,15 +249,10 @@ function poseDetailedAvatarForChair(avatar) {
 }
 
 function positionDetailedAvatarInChair(avatar, side) {
-  // FBX characters are authored in centimetres. Normalize their feet and
-  // body center first so chair placement remains stable across all outfits.
-  avatar.scale.setScalar(0.01);
-  avatar.updateMatrixWorld(true);
-  const bounds = new THREE.Box3().setFromObject(avatar);
-  const center = bounds.getCenter(new THREE.Vector3());
-  avatar.position.x -= center.x;
-  avatar.position.z -= center.z;
-  avatar.position.y -= bounds.min.y;
+  // This Quaternius FBX export is authored in the same unit range as the
+  // bundled OBJ character set. The former centimetre conversion shrank the
+  // selected player to an invisible speck inside the chair.
+  avatar.scale.setScalar(0.38);
   avatar.userData.detailedSeatedAvatar = true;
   positionAvatarInChair(avatar, side);
 }
