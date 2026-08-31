@@ -5,6 +5,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { MTLLoader } from "./jsm/loaders/MTLLoader.js";
+import { FBXLoader } from "./jsm/loaders/FBXLoader.js";
 import { KTX2Loader } from "./jsm/loaders/KTX2Loader.js";
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { EXRLoader } from 'three/addons/loaders/EXRLoader.js';
@@ -226,6 +227,41 @@ function seatedAvatarPath(profile) {
     : root + "Male/Male Poses/OBJ/Male_Sitting.obj";
 }
 
+// The supplied Animated Men pack includes complete, clothed characters with
+// separate body, eye, hair, shirt, pants, and shoe geometry. Keep its files
+// local to the site and vary the outfit by the selected identity.
+function detailedMaleAvatarPath(profile) {
+  const outfits = ["Smooth_Male_Casual.fbx", "Smooth_Male_LongSleeve.fbx", "Smooth_Male_Shirt.fbx", "Smooth_Male_Suit.fbx"];
+  return `../FBX/${outfits[profile.portrait % outfits.length]}`;
+}
+
+function poseDetailedAvatarForChair(avatar) {
+  const sittingClip = avatar.animations?.find((clip) => /sitt?ing/i.test(clip.name));
+  if (!sittingClip) return;
+  const mixer = new THREE.AnimationMixer(avatar);
+  const action = mixer.clipAction(sittingClip);
+  action.play();
+  // The supplied clip is a seated loop. Sample it once rather than running an
+  // animation that could pull the player out of the chair during a match.
+  mixer.update(Math.min(Math.max(sittingClip.duration * 0.25, 0.05), 0.5));
+  action.paused = true;
+  avatar.userData.animationMixer = mixer;
+}
+
+function positionDetailedAvatarInChair(avatar, side) {
+  // FBX characters are authored in centimetres. Normalize their feet and
+  // body center first so chair placement remains stable across all outfits.
+  avatar.scale.setScalar(0.01);
+  avatar.updateMatrixWorld(true);
+  const bounds = new THREE.Box3().setFromObject(avatar);
+  const center = bounds.getCenter(new THREE.Vector3());
+  avatar.position.x -= center.x;
+  avatar.position.z -= center.z;
+  avatar.position.y -= bounds.min.y;
+  avatar.userData.detailedSeatedAvatar = true;
+  positionAvatarInChair(avatar, side);
+}
+
 function seatedAvatarMaterialPath(profile) {
   const root = "assets/avatars/source/posed-background-characters/Posed Background Characters by @Quaternius/";
   return profile.group === "Women"
@@ -287,6 +323,23 @@ function varySuppliedAvatarMaterials(avatar, profile) {
 }
 
 function addSeatedAvatar(profile) {
+  if (profile.group === "Men") {
+    const expectedName = profile.name;
+    const expectedSide = profile.side;
+    new FBXLoader().load(detailedMaleAvatarPath(profile), (avatar) => {
+      if (!seatedAvatarProfiles.some((item) => item.name === expectedName && item.side === expectedSide)) return;
+      poseDetailedAvatarForChair(avatar);
+      positionDetailedAvatarInChair(avatar, profile.side);
+      avatar.name = `Seated_${profile.side}_${profile.name}`;
+      avatar.traverse((child) => {
+        if (!child.isMesh) return;
+        child.castShadow = true;
+        child.receiveShadow = true;
+      });
+      seatedAvatarGroup.add(avatar);
+    }, undefined, (error) => console.error("Unable to load detailed seated avatar", error));
+    return;
+  }
   const expectedName = profile.name;
   const expectedSide = profile.side;
   const materialLoader = new MTLLoader();
@@ -318,12 +371,12 @@ function positionAvatarInChair(avatar, side) {
     return;
   }
   avatar.position.set(anchor.position.x, anchor.floorY + 0.01, anchor.position.z);
-  // Quaternius' seated OBJ faces the opposite local direction from the
-  // original chair meshes, so reverse it to look across the chessboard.
+  // Both the supplied FBX and legacy OBJ figures face opposite the original
+  // chair meshes, so reverse them to look across the chessboard.
   avatar.rotation.set(0, anchor.rotationY + Math.PI, 0);
-  // The seated OBJ's geometry center is 0.34 units behind its origin. Offset
-  // the origin forward so the body center lands on the chair cushion.
-  avatar.translateZ(0.34);
+  // The legacy OBJ is centered behind its origin. The detailed FBX was
+  // centered above, so it needs no additional drift from the chair cushion.
+  if (!avatar.userData.detailedSeatedAvatar) avatar.translateZ(0.34);
 }
 
 function captureStrategyChairAnchors(model) {
@@ -1439,6 +1492,9 @@ function load3D() {
           }
         });
         captureStrategyChairAnchors(model);
+        // Decorative plants are removed above. Rebuild the shadow map once so
+        // no cached vase/plant silhouette remains on the strategy table.
+        renderer.shadowMap.needsUpdate = true;
     
         model.traverse((child) => {
           if (!child.isMesh) return;

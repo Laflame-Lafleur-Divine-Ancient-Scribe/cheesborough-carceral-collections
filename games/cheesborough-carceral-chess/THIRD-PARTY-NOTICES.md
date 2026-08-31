@@ -6,7 +6,7 @@ Environment lighting: *Abandoned Hall 01* by Poly Haven, stored locally at `asse
 
 Cellblock room: the concrete walls, barred openings, iron framing, fixture, and lighting are original procedural Three.js geometry created for Cheesborough Carceral Chess. The linked Sketchfab *Prison Cell* model was not downloaded or incorporated because a lawful local download was not available during this integration.
 
-Voice: optional AI announcements use the visitor's browser-provided Web Speech API (`speechSynthesis`) only. No voice recording, external text-to-speech service, API key, or personal data is transmitted by this feature.
+Voice: optional AI commentary uses the site's Azure Speech endpoint only when the administrator configures an Azure Speech key on the server. No voice recording or player personal data is transmitted by this feature.
 
 Based on 3D Chess Game by Abhin M (mrabhin03), adapted for Cheesborough Carceral Collections; MIT License.
 
