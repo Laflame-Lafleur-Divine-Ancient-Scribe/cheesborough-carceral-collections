@@ -1347,6 +1347,17 @@ function load3D() {
     .setTranscoderPath("jsm/libs/basis/")
     .detectSupport(renderer);
 
+  // The menu and chessboard must remain available if a nonessential KTX2
+  // material is slow to decode. Textures can continue arriving after play
+  // begins instead of holding the entire game on its loading screen.
+  let renderLoopStarted = false;
+  const startRenderLoop = () => {
+    if (renderLoopStarted) return;
+    renderLoopStarted = true;
+    renderer.compile(scene, camera);
+    renderer.setAnimationLoop(animate);
+  };
+
     loader.load(
       "assets/ChessGLB.glb",
       (gltf) => {
@@ -1431,8 +1442,7 @@ function load3D() {
 
                 texturesLoaded++;
                 if (texturesLoaded === texturesToLoad) {
-                  renderer.compile(scene, camera);
-                  renderer.setAnimationLoop(animate);
+                  startRenderLoop();
                 }
               });
               break;
@@ -1518,11 +1528,7 @@ function load3D() {
         });
         // setTimeout(makeBotMove, 1000);
         setTimeout(()=>{TurnDisplay(0)}, 1000);
-        if (texturesToLoad === 0) {
-          renderer.compile(scene, camera);
-          renderer.setAnimationLoop(animate);
-          
-        }
+        startRenderLoop();
       },
       undefined,
       console.error
