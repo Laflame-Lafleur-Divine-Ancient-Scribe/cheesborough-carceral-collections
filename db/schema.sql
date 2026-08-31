@@ -36,3 +36,29 @@ CREATE TABLE IF NOT EXISTS community_audit_log (id bigserial PRIMARY KEY, user_i
 CREATE TABLE IF NOT EXISTS community_moderation_actions (id bigserial PRIMARY KEY, actor_id uuid NOT NULL REFERENCES community_users(id), target_user_id uuid REFERENCES community_users(id), comment_id uuid REFERENCES community_comments(id), action varchar(48) NOT NULL, reason varchar(500), previous_state jsonb, new_state jsonb, created_at timestamptz NOT NULL DEFAULT now());
 CREATE INDEX IF NOT EXISTS community_audit_log_event_time_index ON community_audit_log(event_type,created_at DESC);
 CREATE INDEX IF NOT EXISTS community_comments_status_time_index ON community_comments(status,created_at DESC);
+-- Jail House Poker uses fictional, non-redeemable game chips only. These
+-- records are deliberately separate from community accounts and contain no
+-- payment, withdrawal, or prize information.
+CREATE TABLE IF NOT EXISTS game_wallets (
+    user_id uuid PRIMARY KEY REFERENCES community_users(id) ON DELETE CASCADE,
+    balance integer NOT NULL DEFAULT 10000 CHECK (balance >= 0),
+    issued_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+-- Issue the initial fictional balance to every existing active community
+-- member exactly once. New members receive the same amount when their wallet
+-- record is first created.
+INSERT INTO game_wallets (user_id,balance)
+SELECT id,10000 FROM community_users WHERE status='active'
+ON CONFLICT (user_id) DO NOTHING;
+CREATE TABLE IF NOT EXISTS game_wallet_ledger (
+    id bigserial PRIMARY KEY,
+    user_id uuid NOT NULL REFERENCES community_users(id) ON DELETE CASCADE,
+    game_key varchar(48) NOT NULL,
+    amount integer NOT NULL,
+    balance_after integer NOT NULL CHECK (balance_after >= 0),
+    reason varchar(64) NOT NULL,
+    reference_id varchar(80),
+    created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS game_wallet_ledger_user_time_index ON game_wallet_ledger(user_id,created_at DESC);

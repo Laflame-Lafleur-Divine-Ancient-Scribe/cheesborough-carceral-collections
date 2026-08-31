@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Jail House Poker is a live, fictional-chip Texas Hold'em table from Cheesborough Carceral Collections.">
+  <title>Jail House Poker | Cheesborough Carceral Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="poker.css">
+  <script src="../../community-auth.js" defer></script>
+  <script src="poker.js" defer></script>
+</head>
+<body class="poker-page" data-poker-root>
+  <a class="skip-link" href="#poker-main">Skip to the poker table</a>
+  <header class="poker-masthead">
+    <a class="wordmark" href="../../index.html" aria-label="Return to Cheesborough Carceral Collections home">
+      <span>Cheesborough Carceral Collections</span>
+      <strong>Games Desk</strong>
+    </a>
+    <p class="file-label">Game File 02 <i aria-hidden="true">/</i> Live Table</p>
+    <nav aria-label="Game navigation">
+      <a href="../../GAMES.html">Games Index</a>
+      <a href="../../PROFILE.html" data-profile-link>Account</a>
+    </nav>
+  </header>
+
+  <main id="poker-main">
+    <section class="auth-gate" data-auth-gate aria-labelledby="sign-in-title" hidden>
+      <p class="eyebrow">Restricted Table / Community Members</p>
+      <h1 id="sign-in-title">Sign In To Take A Seat.</h1>
+      <p>Jail House Poker is played with fictional, non-redeemable game chips. Sign in to receive your game balance and enter the table.</p>
+      <a class="button button--brass" data-login-link href="../../LOGIN.html">Sign In To Play</a>
+      <p class="fine-print">No deposits. No withdrawals. No prizes. No real-money gambling.</p>
+    </section>
+
+    <section class="poker-app" data-poker-app hidden>
+      <header class="game-intro">
+        <div>
+          <p class="eyebrow">After-Hours Card Room</p>
+          <h1>Jail House Poker</h1>
+          <p>Texas Hold’em at a live strategy table. Read the room, protect your stack, and make the next decision count.</p>
+        </div>
+        <aside class="wallet" aria-live="polite">
+          <span class="wallet__label">Fictional Game Balance</span>
+          <strong data-wallet-balance>—</strong>
+          <small data-wallet-note>Loading account ledger…</small>
+        </aside>
+      </header>
+
+      <section class="lobby" data-poker-lobby aria-labelledby="lobby-title">
+        <div class="section-heading">
+          <p class="eyebrow">Intake Desk</p>
+          <h2 id="lobby-title">Find A Table</h2>
+        </div>
+        <div class="lobby-grid">
+          <section class="live-tables" aria-labelledby="live-tables-title">
+            <div class="subheading"><h3 id="live-tables-title">Live Tables</h3><span data-online-count>Checking seats…</span></div>
+            <div class="table-list" data-live-tables aria-live="polite">
+              <p class="table-list__message" data-table-loading>Checking the live room…</p>
+            </div>
+            <button class="text-button" type="button" data-refresh-tables>Refresh live tables</button>
+          </section>
+          <section class="practice-panel" aria-labelledby="practice-title">
+            <p class="evidence-tag">Practice File</p>
+            <h3 id="practice-title">Practice With An AI</h3>
+            <p>Each named opponent holds an unrevealed betting pattern, from rookie to intermediate. The cards are still dealt at random.</p>
+            <label for="ai-opponent">Choose an opponent</label>
+            <select id="ai-opponent" data-ai-opponent aria-describedby="ai-opponent-note">
+              <option value="Marcus Mack Holloway">Marcus “Mack” Holloway</option>
+              <option value="Darnell Bishop">Darnell Bishop</option>
+              <option value="Leon Red Carter">Leon “Red” Carter</option>
+              <option value="Tasha Monroe">Tasha Monroe</option>
+              <option value="Marisol Vega">Marisol Vega</option>
+              <option value="Carmen Salazar">Carmen Salazar</option>
+            </select>
+            <p id="ai-opponent-note" class="small-note">Tendency and skill remain concealed until the game reveals them through play.</p>
+            <button class="button button--outline" type="button" data-start-practice>Open Practice Table</button>
+          </section>
+        </div>
+      </section>
+
+      <section class="table-stage" data-poker-stage aria-labelledby="table-title" hidden>
+        <header class="table-stage__header">
+          <div><p class="eyebrow" data-table-kind>Live Table</p><h2 id="table-title" data-table-name>Table Status</h2></div>
+          <div class="pot"><span>Current Pot</span><strong data-pot>0</strong></div>
+          <button class="leave-button" type="button" data-leave-table>Leave Table</button>
+        </header>
+
+        <div class="felt-frame">
+          <div class="felt-table" data-felt-table>
+            <div class="table-mark" aria-hidden="true"><span>JHP</span><small>Texas Hold’em / Fictional Chips</small></div>
+            <div class="community-cards" data-community-cards aria-label="Community cards">
+              <span class="card card--down" data-community-card></span><span class="card card--down" data-community-card></span><span class="card card--down" data-community-card></span><span class="card card--down" data-community-card></span><span class="card card--down" data-community-card></span>
+            </div>
+            <div class="dealer-button" data-dealer-button aria-label="Dealer position">D</div>
+            <div class="seat seat--north" data-seat="0"></div>
+            <div class="seat seat--north-east" data-seat="1"></div>
+            <div class="seat seat--south-east" data-seat="2"></div>
+            <div class="seat seat--south" data-seat="3"></div>
+            <div class="seat seat--south-west" data-seat="4"></div>
+            <div class="seat seat--north-west" data-seat="5"></div>
+          </div>
+        </div>
+
+        <section class="player-hand" aria-label="Your cards">
+          <div><p class="eyebrow">Your Hand</p><strong data-player-name>Player</strong></div>
+          <div class="hole-cards" data-hole-cards><span class="card card--down" data-hole-card></span><span class="card card--down" data-hole-card></span></div>
+          <p class="hand-status" data-hand-status>Waiting for the next hand.</p>
+        </section>
+
+        <form class="action-bar" data-action-bar aria-label="Betting actions">
+          <p class="turn-note" data-turn-note>Table is waiting for players.</p>
+          <div class="action-buttons">
+            <button type="button" class="action-button action-button--fold" data-poker-action="fold">Fold</button>
+            <button type="button" class="action-button" data-poker-action="check-call">Check / Call</button>
+            <label class="raise-control"><span>Raise</span><input type="number" min="0" step="25" inputmode="numeric" value="100" data-raise-amount aria-label="Raise amount"><button type="button" class="action-button action-button--raise" data-poker-action="raise">Place Bet</button></label>
+          </div>
+        </form>
+      </section>
+
+      <section class="lower-record">
+        <section class="activity" aria-labelledby="activity-title">
+          <div class="subheading"><h2 id="activity-title">Table Record</h2><span data-connection-state>Connecting…</span></div>
+          <ol data-activity-feed aria-live="polite"><li>The table record will appear here.</li></ol>
+        </section>
+        <aside class="rules-note" aria-labelledby="rules-title">
+          <p class="evidence-tag">Terms Of Play</p>
+          <h2 id="rules-title">Fictional Chips Only.</h2>
+          <p>Your balance is a non-redeemable game record. It cannot be purchased, withdrawn, transferred outside a table, or exchanged for a prize.</p>
+          <p>Hands use randomly dealt cards. Player choices and the selected AI’s hidden strategy shape the play; no outcome is guaranteed.</p>
+        </aside>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" data-toast role="status" aria-live="polite" hidden></div>
+</body>
+</html>
