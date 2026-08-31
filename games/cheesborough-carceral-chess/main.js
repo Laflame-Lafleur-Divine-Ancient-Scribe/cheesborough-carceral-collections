@@ -41,9 +41,12 @@ let seatedAvatarGroup = null;
 let seatedAvatarProfiles = [];
 const strategyChairAnchors = { white: null, black: null };
 // The supplied Quaternius sitting figures have four authored material groups:
-// Skin, Shirt, Pants, and Shoes.  Keep them intact; only the shirt gets a
-// small per-profile variation so different opponents do not look identical.
+// Skin, Shirt, Pants, and Shoes. Profile palettes keep their supplied mesh
+// groups intact while making each seated identity visually distinct.
 const seatedAvatarShirtPalette = [0x384b61, 0x5f4938, 0x454357, 0x4e5d43, 0x6a4033, 0x3c5960, 0x605846, 0x494747];
+const seatedAvatarSkinPalette = [0x5a3929, 0x754b34, 0x8d6047, 0xa87858, 0xc38e68, 0xd8aa82, 0xe4bea0];
+const seatedAvatarPantsPalette = [0x252d35, 0x34302a, 0x2e3038, 0x26332c, 0x3d2b28, 0x27363b, 0x38352c, 0x302c2a];
+const seatedAvatarShoePalette = [0x181818, 0x29231d, 0x20242a, 0x25201e];
 let cellblockRoom = null;
 let aiProfiles = { white: null, black: null };
 const voiceState = {
@@ -217,21 +220,27 @@ function seatedAvatarMaterialPath(profile) {
 
 function varySuppliedAvatarMaterials(avatar, profile) {
   const shirtColor = seatedAvatarShirtPalette[profile.portrait % seatedAvatarShirtPalette.length];
+  const skinColor = seatedAvatarSkinPalette[profile.portrait % seatedAvatarSkinPalette.length];
+  const pantsColor = seatedAvatarPantsPalette[profile.portrait % seatedAvatarPantsPalette.length];
+  const shoeColor = seatedAvatarShoePalette[profile.portrait % seatedAvatarShoePalette.length];
   avatar.traverse((child) => {
     if (!child.isMesh) return;
     child.castShadow = true;
     child.receiveShadow = true;
     // MTLLoader assigns the supplied named materials to the OBJ's four mesh
-    // groups. Clone only Shirt before varying it; skin, pants, and shoes stay
-    // precisely as authored in the CC0 package.
+    // groups. Clone them per profile so one loaded source asset never changes
+    // another AI's face/skin or clothing.
     const wasMaterialArray = Array.isArray(child.material);
     const material = wasMaterialArray ? child.material : [child.material];
     const updatedMaterials = material.map((source) => {
-      if (!source || source.name !== "Shirt") return source;
-      const shirt = source.clone();
-      shirt.color.setHex(shirtColor);
-      shirt.name = "Shirt";
-      return shirt;
+      if (!source) return source;
+      const colorByMaterial = { Skin: skinColor, Shirt: shirtColor, Pants: pantsColor, Shoes: shoeColor };
+      const color = colorByMaterial[source.name];
+      if (color === undefined) return source;
+      const material = source.clone();
+      material.color.setHex(color);
+      material.name = source.name;
+      return material;
     });
     child.material = wasMaterialArray ? updatedMaterials : updatedMaterials[0];
     if (child.geometry) child.geometry.computeVertexNormals();
@@ -265,11 +274,13 @@ function positionAvatarInChair(avatar, side) {
   // origin (which is partway up the seat geometry).
   if (!anchor) {
     avatar.position.set(0, -1.0, side === "white" ? -1.42 : 1.42);
-    avatar.rotation.set(0, side === "white" ? Math.PI : 0, 0);
+    avatar.rotation.set(0, side === "white" ? 0 : Math.PI, 0);
     return;
   }
   avatar.position.set(anchor.position.x, -1.0, anchor.position.z);
-  avatar.rotation.set(0, anchor.rotationY, 0);
+  // Quaternius' seated OBJ faces the opposite local direction from the
+  // original chair meshes, so reverse it to look across the chessboard.
+  avatar.rotation.set(0, anchor.rotationY + Math.PI, 0);
 }
 
 function captureStrategyChairAnchors(model) {
@@ -1365,11 +1376,11 @@ function load3D() {
         model.position.set(0, -1, 0);
         scene.add(model);
         model.traverse((child) => {
-          if (!child.isMesh) return;
           if (isLegacyOfficeDecorMesh(child.name)) {
             child.visible = false;
             return;
           }
+          if (!child.isMesh) return;
           for (const key of Object.keys(textureKey)) {
             if (child.name.includes(key)) {
               texturesToLoad++;

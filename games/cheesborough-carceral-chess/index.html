@@ -84,6 +84,11 @@
         Advanced: { rating: 1850, note: "Strong positional play", skill: 15, time: 2000 },
         Master: { rating: 2150, note: "Demanding opponent", skill: 20, time: 2800 }
       };
+      const aiTierNames = Object.keys(aiTiers);
+      // An AI's ability belongs to that identity; it is not a player setting.
+      avatarRoster.forEach((avatar, index) => {
+        avatar.tier = aiTierNames[index % aiTierNames.length];
+      });
       let playerSelection = null;
 
       // Local vector markers identify the forty AI opponents before their
@@ -137,7 +142,7 @@
         const slots = mode === 'pvai'
           ? [{ label: 'AI Opponent', kind: 'AI' }]
           : [{ label: 'AI White', kind: 'AI', side: 'white' }, { label: 'AI Black', kind: 'AI', side: 'black' }];
-        playerSelection = { mode, slots, selected: Array(slots.length).fill(null), activeSlot: 0, filter: 'All', query: '', side: 'white', tiers: mode === 'pvai' ? ['Tactical'] : ['Steady', 'Tactical'] };
+        playerSelection = { mode, slots, selected: Array(slots.length).fill(null), activeSlot: 0, filter: 'All', query: '', side: 'white' };
         renderPlayerSelection();
       }
 
@@ -153,28 +158,30 @@
         const modeTitle = state.mode === 'pvai' ? 'Select an AI Opponent' : 'Select AI Players';
         const slots = state.slots.map((slot, index) => {
           const avatar = state.selected[index];
-          const tier = aiTiers[state.tiers[index]];
-          const tierControl = slot.kind === 'AI' ? `<label class="tier-label">Ability <select onchange="setAITier(${index}, this.value)">${Object.keys(aiTiers).map((name) => `<option ${name === state.tiers[index] ? 'selected' : ''}>${name}</option>`).join('')}</select><span>${tier.rating} / ${tier.note}</span></label>` : '';
-          return `<article class="selection-slot ${state.activeSlot === index ? 'active' : ''}"><button class="slot-activate" onclick="setActiveSlot(${index})" type="button"><span class="slot-number">0${index + 1}</span><span class="slot-copy"><strong>${slot.label}</strong><em>${avatar ? avatar.name : 'Choose an AI identity'}</em></span></button>${tierControl}</article>`;
+          const tier = avatar ? aiTiers[avatar.tier] : null;
+          const tierDisplay = tier ? `<span class="tier-label">Fixed ability <b>${avatar.tier}</b><span>${tier.rating} / ${tier.note}</span></span>` : '<span class="tier-label">Choose an AI to reveal their fixed ability.</span>';
+          return `<article class="selection-slot ${state.activeSlot === index ? 'active' : ''}"><button class="slot-activate" onclick="setActiveSlot(${index})" type="button"><span class="slot-number">0${index + 1}</span><span class="slot-copy"><strong>${slot.label}</strong><em>${avatar ? avatar.name : 'Choose an AI identity'}</em></span></button>${tierDisplay}</article>`;
         }).join('');
         const cards = filtered.map((avatar) => {
           const selectedBy = state.selected.findIndex((chosen) => chosen && chosen.name === avatar.name);
-          return `<button class="avatar-card ${selectedBy >= 0 ? 'selected' : ''}" onclick="chooseAvatar(${avatarRoster.indexOf(avatar)})" type="button" aria-pressed="${selectedBy >= 0}">${portraitMarkup(avatar.portrait)}<strong>${avatar.name}</strong>${selectedBy >= 0 ? `<small>Assigned to ${state.slots[selectedBy].label}</small>` : '<small>Choose AI identity</small>'}</button>`;
+          const tier = aiTiers[avatar.tier];
+          return `<button class="avatar-card ${selectedBy >= 0 ? 'selected' : ''}" onclick="chooseAvatar(${avatarRoster.indexOf(avatar)})" type="button" aria-pressed="${selectedBy >= 0}">${portraitMarkup(avatar.portrait)}<strong>${avatar.name}</strong><small>${avatar.tier} ${tier.rating} · ${tier.note}</small>${selectedBy >= 0 ? `<small>Assigned to ${state.slots[selectedBy].label}</small>` : ''}</button>`;
         }).join('');
         const sideControl = state.mode === 'pvai' ? `<fieldset class="side-control"><legend>Player 1 plays</legend><label><input type="radio" name="side" value="white" onchange="setPlayerSide('white')" ${state.side === 'white' ? 'checked' : ''}> White</label><label><input type="radio" name="side" value="black" onchange="setPlayerSide('black')" ${state.side === 'black' ? 'checked' : ''}> Black</label></fieldset>` : '';
         document.getElementById('LoadingBox').innerHTML = `<section class="player-select" aria-labelledby="player-select-title"><div class="player-select-heading"><p class="mode-heading">Cheesborough Carceral Chess / AI Opponents</p><h1 id="player-select-title">${modeTitle}</h1><p>Choose the AI identity or identities seated at the strategy table. Their selected ability tier controls the computer’s move strength.</p></div>${voiceControlMarkup('selection-voice-panel')}<div class="selection-slots">${slots}</div>${sideControl}<div class="roster-tools"><div class="roster-tabs" role="tablist"><button class="${state.filter === 'All' ? 'active' : ''}" onclick="setRosterFilter('All')" type="button">All <span>40</span></button><button class="${state.filter === 'Men' ? 'active' : ''}" onclick="setRosterFilter('Men')" type="button">Men <span>20</span></button><button class="${state.filter === 'Women' ? 'active' : ''}" onclick="setRosterFilter('Women')" type="button">Women <span>20</span></button></div><label class="roster-search"><span class="sr-only">Search AI identities</span><input type="search" value="${state.query}" oninput="setRosterQuery(this.value)" placeholder="Search AI identities"></label></div><div class="avatar-grid" aria-live="polite">${cards}</div><div class="selection-footer"><p>${state.selected.every(Boolean) ? `${state.selected.length} AI ${state.selected.length === 1 ? 'identity' : 'identities'} selected. Confirm when ready.` : `Select an AI identity for ${state.slots[state.activeSlot].label}.`}</p><button class="btn confirm-players" onclick="confirmAISelection()" type="button" ${state.selected.every(Boolean) ? '' : 'disabled'}><i class="animation"></i>Confirm AI<i class="animation"></i></button></div></section>`;
+        const selectionDescription = document.querySelector('.player-select-heading p:last-child');
+        if (selectionDescription) selectionDescription.textContent = 'Choose the AI identity or identities seated at the strategy table. Each identity has a fixed ability tier that controls the computer’s move strength.';
         if (window.updateVoiceControls) window.updateVoiceControls();
       }
       function setActiveSlot(index) { playerSelection.activeSlot = index; renderPlayerSelection(); }
       function setRosterFilter(filter) { playerSelection.filter = filter; renderPlayerSelection(); }
       function setRosterQuery(query) { const search = document.activeElement; const caret = search && search.selectionStart; playerSelection.query = query; renderPlayerSelection(); requestAnimationFrame(() => { const nextSearch = document.querySelector('.roster-search input'); if (nextSearch) { nextSearch.focus(); const position = typeof caret === 'number' ? caret : nextSearch.value.length; nextSearch.setSelectionRange(position, position); } }); }
       function setPlayerSide(side) { playerSelection.side = side; renderPlayerSelection(); }
-      function setAITier(index, tier) { playerSelection.tiers[index] = tier; renderPlayerSelection(); }
       function chooseAvatar(index) { const avatar = avatarRoster[index]; const assignedSlot = playerSelection.selected.findIndex((chosen) => chosen && chosen.name === avatar.name); if (assignedSlot >= 0 && assignedSlot !== playerSelection.activeSlot) playerSelection.selected[assignedSlot] = null; playerSelection.selected[playerSelection.activeSlot] = avatar; const nextOpen = playerSelection.selected.findIndex((chosen) => !chosen); if (nextOpen >= 0) playerSelection.activeSlot = nextOpen; renderPlayerSelection(); }
       function confirmAISelection() {
         const state = playerSelection;
-        const whiteTier = state.mode === 'aivai' ? state.tiers[0] : (state.side === 'black' ? state.tiers[0] : 'Learning');
-        const blackTier = state.mode === 'aivai' ? state.tiers[1] : (state.side === 'white' ? state.tiers[0] : 'Learning');
+        const whiteTier = state.mode === 'aivai' ? state.selected[0].tier : (state.side === 'black' ? state.selected[0].tier : 'Learning');
+        const blackTier = state.mode === 'aivai' ? state.selected[1].tier : (state.side === 'white' ? state.selected[0].tier : 'Learning');
         if (window.setAIDifficulty) window.setAIDifficulty({ white: aiTiers[whiteTier], black: aiTiers[blackTier] });
         const boardMode = state.mode === 'aivai' ? 3 : (state.side === 'white' ? 2 : 1);
         const seated = state.mode === 'aivai' ? [
@@ -187,7 +194,7 @@
             ? { black: state.selected[0] }
             : { white: state.selected[0] };
         if (window.setAIProfiles) window.setAIProfiles(profiles);
-        const identities = state.selected.map((avatar, index) => `${state.slots[index].label}: ${avatar.name} (${state.tiers[index]} ${aiTiers[state.tiers[index]].rating})`);
+        const identities = state.selected.map((avatar, index) => `${state.slots[index].label}: ${avatar.name} (${avatar.tier} ${aiTiers[avatar.tier].rating})`);
         const strip = document.getElementById('player-identity-strip');
         strip.textContent = identities.join('  •  ');
         strip.hidden = false;
