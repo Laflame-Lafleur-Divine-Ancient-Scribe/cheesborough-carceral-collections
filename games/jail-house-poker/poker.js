@@ -119,6 +119,29 @@
     catch (error) { toast(error.message); setConnection('Unable to enter table', true); }
     finally { state.busy = false; }
   }
+  async function startSelectedSoloTable(aiIds) {
+    if (state.busy) return;
+    state.busy = true;
+    setConnection(state.table?.mode === 'solo' ? 'Closing the current solo table…' : 'Taking your seat…');
+    try {
+      // A solo room persists for the signed-in player. Leave it first so a
+      // changed selection never silently reuses its previous AI lineup.
+      if (state.table?.mode === 'solo') {
+        await request('/api/poker/leave', { method: 'POST', body: '{}' });
+        clearInterval(state.poll);
+        state.table = null;
+      }
+      setConnection('Seating your selected opponents…');
+      const payload = await request('/api/poker/practice', { method: 'POST', body: JSON.stringify({ aiIds }) });
+      renderTable(payload.table || payload);
+      startPolling();
+    } catch (error) {
+      toast(error.message);
+      setConnection('Unable to seat the selected lineup', true);
+    } finally {
+      state.busy = false;
+    }
+  }
   async function action(kind) {
     if (!state.table?.id || state.busy) return;
     const amount = Number($('[data-raise-amount]').value || 0);
@@ -174,7 +197,7 @@
     $('[data-start-practice]').addEventListener('click', () => {
       const aiIds = $$('input:checked', $('[data-ai-opponents]')).map((input) => input.value).slice(0, 8);
       if (!aiIds.length) { toast('Choose at least one opponent.'); return; }
-      enter('/api/poker/practice', { aiIds });
+      startSelectedSoloTable(aiIds);
     });
     $('[data-live-tables]').addEventListener('click', (event) => { const button = event.target.closest('[data-join-table]'); if (button) enter('/api/poker/join', { tableId: button.dataset.joinTable }); });
     $$('[data-poker-action]').forEach((button) => button.addEventListener('click', () => action(button.dataset.pokerAction)));
