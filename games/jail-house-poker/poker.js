@@ -113,6 +113,8 @@
     if (!tables.length) container.innerHTML = '<p class="table-list__message">No live table is open yet. Take a solo seat while the room fills.</p>';
     tables.forEach((table) => container.append(tableRow(table)));
     $('[data-online-count]').textContent = `${payload.onlineCount ?? payload.onlinePlayers ?? 0} online`;
+    const roster = payload.onlinePlayers || [];
+    $('[data-online-roster]').textContent = roster.length ? `Online now: ${roster.map((player) => player.displayName || player.name).join(', ')}` : 'No signed-in players are in the Poker lobby yet.';
     if (payload.balance !== undefined) { $('[data-wallet-balance]').textContent = `$${money(payload.balance)}`; $('[data-wallet-note]').textContent = 'For gameplay only'; }
   }
   async function request(route, options) { return window.CCCCommunity.request(route, options); }

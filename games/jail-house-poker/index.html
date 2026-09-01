@@ -70,6 +70,7 @@
         <div class="lobby-grid">
           <section class="live-tables" aria-labelledby="live-tables-title">
             <div class="subheading"><h3 id="live-tables-title">Live Tables</h3><span data-online-count>Checking seats…</span></div>
+            <p class="online-roster" data-online-roster>Signed-in players in the Poker lobby will appear here.</p>
             <div class="table-list" data-live-tables aria-live="polite">
               <p class="table-list__message" data-table-loading>Checking the live room…</p>
             </div>
@@ -81,12 +82,12 @@
             <p>Choose one to eight named opponents and play for the pot. Every player has a distinct table identity, betting style, and way of reading the hand.</p>
             <label class="picker-label" for="solo-stakes">Choose your stakes</label>
             <select class="stakes-picker" id="solo-stakes" data-solo-stakes>
-              <option value="little-stakes">Little Stakes — $1 / $2 blinds</option>
-              <option value="low-stakes" selected>Low Stakes — $5 / $10 blinds</option>
-              <option value="middle-stakes">Middle Stakes — $20 / $40 blinds</option>
-              <option value="big-stakes">Big Stakes — $100 / $200 blinds</option>
-              <option value="high-stakes">High Stakes — $250 / $500 blinds</option>
-              <option value="top-stakes">Top Stakes — $500 / $1,000 blinds</option>
+              <option value="parchmont-yard">Parchmont Yard — $1 / $2 blinds</option>
+              <option value="angora-parish" selected>Angora Parish — $5 / $10 blinds</option>
+              <option value="brushy-hollow">Brushy Hollow — $20 / $40 blinds</option>
+              <option value="talladega-range">Talladega Range — $100 / $200 blinds</option>
+              <option value="atlanta-pen">Atlanta Pen — $250 / $500 blinds</option>
+              <option value="leavenworth-line">Leavenworth Line — $500 / $1,000 blinds</option>
             </select>
             <p class="picker-label" id="ai-opponents-label">Choose 1–8 opponents</p>
             <div class="ai-picker" data-ai-opponents role="group" aria-labelledby="ai-opponents-label" aria-describedby="ai-opponent-note ai-selection-count">

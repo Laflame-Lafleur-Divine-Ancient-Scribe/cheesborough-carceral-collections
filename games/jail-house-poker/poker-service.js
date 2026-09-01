@@ -8,7 +8,7 @@ const crypto = require('node:crypto');
 const GAME_KEY = 'jail-house-poker';
 const STARTING_BALANCE = 10000;
 const OWNER_STARTING_BALANCE = 100000000000;
-const DEFAULT_STAKES = { id: 'low-5-10', label: 'Low Stakes Room', smallBlind: 5, bigBlind: 10 };
+const DEFAULT_STAKES = { id: 'angora-parish', label: 'Angora Parish Room', smallBlind: 5, bigBlind: 10 };
 const LEGACY_AI_ROSTER = [
   ['Marcus “Mack” Holloway', 'rookie', 'cautious'], ['Darnell Bishop', 'rookie', 'calling-station'],
   ['Leon “Red” Carter', 'intermediate', 'pressure'], ['Terrence Wallace', 'rookie', 'selective'],
@@ -43,12 +43,12 @@ const suits = ['S', 'H', 'D', 'C'];
 const rooms = new Map();
 const playerRoom = new Map();
 const LIVE_TABLES = [
-  { id: 'little-stakes', label: 'Little Stakes Room', smallBlind: 1, bigBlind: 2 },
-  { id: 'low-stakes', label: 'Low Stakes Room', smallBlind: 5, bigBlind: 10 },
-  { id: 'middle-stakes', label: 'Middle Stakes Room', smallBlind: 20, bigBlind: 40 },
-  { id: 'big-stakes', label: 'Big Stakes Room', smallBlind: 100, bigBlind: 200 },
-  { id: 'high-stakes', label: 'High Stakes Room', smallBlind: 250, bigBlind: 500 },
-  { id: 'top-stakes', label: 'Top Stakes Room', smallBlind: 500, bigBlind: 1000 },
+  { id: 'parchmont-yard', label: 'Parchmont Yard Room', smallBlind: 1, bigBlind: 2 },
+  { id: 'angora-parish', label: 'Angora Parish Room', smallBlind: 5, bigBlind: 10 },
+  { id: 'brushy-hollow', label: 'Brushy Hollow Room', smallBlind: 20, bigBlind: 40 },
+  { id: 'talladega-range', label: 'Talladega Range Room', smallBlind: 100, bigBlind: 200 },
+  { id: 'atlanta-pen', label: 'Atlanta Pen Room', smallBlind: 250, bigBlind: 500 },
+  { id: 'leavenworth-line', label: 'Leavenworth Line Room', smallBlind: 500, bigBlind: 1000 },
 ];
 
 function randomInt(max) { return crypto.randomInt(0, max); }
@@ -141,6 +141,12 @@ function createPokerService(ctx) {
       await client.query('COMMIT'); return updated.rows[0].balance;
     } catch (error) { await client.query('ROLLBACK'); throw error; } finally { client.release(); }
   }
+  async function touchPresence(user) {
+    const db = getDb();
+    await db.query("INSERT INTO game_presence (game_key,user_id,last_seen) VALUES ($1,$2,now()) ON CONFLICT (game_key,user_id) DO UPDATE SET last_seen=EXCLUDED.last_seen", [GAME_KEY, user.id]);
+    const result = await db.query("SELECT u.id,u.display_name FROM game_presence p JOIN community_users u ON u.id=p.user_id WHERE p.game_key=$1 AND p.last_seen > now() - interval '45 seconds' AND u.status='active' ORDER BY p.last_seen DESC LIMIT 24", [GAME_KEY]);
+    return result.rows.map((row) => ({ id: row.id, displayName: row.display_name }));
+  }
   async function recordAtumRake(pot, handId) {
     const db = getDb(); const client = await db.connect();
     try {
@@ -184,8 +190,8 @@ function createPokerService(ctx) {
   async function publicState(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required.' });
     const balance = await wallet(user.id, user.role === 'owner'); const room = playerRoom.get(user.id) ? rooms.get(playerRoom.get(user.id)) : null;
-    const onlineCount = LIVE_TABLES.reduce((count, definition) => count + getRoom(definition.id).players.filter((player) => !player.isAI).length, 0);
-    return json(response, 200, { balance: balance.balance, tables: tableList(), onlineCount, aiCount: AI_ROSTER.length, table: room ? uiTable(room, user.id) : null });
+    const onlinePlayers = await touchPresence(user);
+    return json(response, 200, { balance: balance.balance, tables: tableList(), onlineCount: onlinePlayers.length, onlinePlayers, aiCount: AI_ROSTER.length, table: room ? uiTable(room, user.id) : null });
   }
   async function join(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required to join a table.' });

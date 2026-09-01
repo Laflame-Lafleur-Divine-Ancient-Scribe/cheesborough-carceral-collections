@@ -93,3 +93,12 @@ CREATE TABLE IF NOT EXISTS game_counters (
 INSERT INTO game_counters (counter_key,value)
 VALUES ('jail-house-poker:completed-pots',0)
 ON CONFLICT (counter_key) DO NOTHING;
+-- Poker lobby presence is refreshed while a signed-in player has the game
+-- open. It expires automatically, so stale tablets never remain online.
+CREATE TABLE IF NOT EXISTS game_presence (
+    game_key varchar(48) NOT NULL,
+    user_id uuid NOT NULL REFERENCES community_users(id) ON DELETE CASCADE,
+    last_seen timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (game_key,user_id)
+);
+CREATE INDEX IF NOT EXISTS game_presence_game_seen_index ON game_presence(game_key,last_seen DESC);
