@@ -61,7 +61,7 @@
     if (seat.isTurn) node.classList.add('seat--active');
     const name = document.createElement('strong'); name.className = 'seat__name'; name.textContent = seat.displayName || seat.name || 'Player';
     const chips = document.createElement('span'); chips.className = 'seat__chips'; chips.textContent = `${money(seat.chips ?? seat.stack)} chips`;
-    const status = document.createElement('span'); status.className = 'seat__state'; status.textContent = seat.folded ? 'Folded' : (seat.status || (seat.isTurn ? 'Acting' : 'In hand'));
+    const status = document.createElement('span'); status.className = 'seat__state'; status.textContent = seat.folded ? 'Folded' : (seat.allIn ? 'All in' : (seat.status || (seat.isTurn ? 'Acting' : 'In hand')));
     node.append(name, chips, status);
   }
   function renderActivity(items) {

@@ -270,7 +270,13 @@ function createPokerService(ctx) {
     else if (room.stage === 'flop') { room.board.push(room.deck.pop()); room.stage = 'turn'; }
     else if (room.stage === 'turn') { room.board.push(room.deck.pop()); room.stage = 'river'; }
     else return settle(room);
-    room.turn = 0; room.messages.push(`${room.stage[0].toUpperCase() + room.stage.slice(1)} is on the table.`); room.updatedAt = Date.now(); await advanceAIs(room);
+    room.messages.push(`${room.stage[0].toUpperCase() + room.stage.slice(1)} is on the table.`); room.updatedAt = Date.now();
+    // Nobody with chips can act: run the remaining board immediately and
+    // settle the hand. This prevents an all-in river from stalling on a
+    // player who has no chips left to wager.
+    const nextActor = room.players.findIndex((player) => !player.folded && !player.allIn);
+    if (nextActor === -1) return finishBetting(room);
+    room.turn = nextActor; await advanceAIs(room);
   }
   async function perform(room, player, action, raiseBy = 0) {
     if (player.folded || player.allIn) return; const toCall = Math.max(0, room.currentBet - player.roundBet);
