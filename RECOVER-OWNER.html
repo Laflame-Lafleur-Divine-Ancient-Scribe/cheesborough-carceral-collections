@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Owner Account Recovery | Cheesborough Carceral Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community-auth.css">
+  <script src="community-auth.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form'), message = document.querySelector('#message'), submit = form.querySelector('button');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        message.textContent = '';
+        const data = Object.fromEntries(new FormData(form));
+        if (String(data.password || '').length < 12) { message.textContent = 'Use a new password of at least 12 characters.'; return; }
+        submit.disabled = true;
+        try {
+          const result = await CCCCommunity.request('/api/auth/owner-recovery', { method: 'POST', body: JSON.stringify(data) });
+          message.classList.remove('auth-error'); message.classList.add('community-thread-status');
+          message.textContent = 'Owner account recovered. Opening your account…';
+          setTimeout(() => { location.href = 'GAMES.html'; }, 900);
+        } catch (error) { message.classList.remove('community-thread-status'); message.classList.add('auth-error'); message.textContent = error.message || 'Recovery could not be completed.'; }
+        finally { submit.disabled = false; }
+      });
+    });
+  </script>
+</head>
+<body class="community-auth-page">
+  <main class="auth-layout">
+    <aside class="auth-archive">
+      <a class="auth-brand" href="index.html">Cheesborough Carceral<br>Collections</a>
+      <p class="auth-accession"><strong>Owner credential</strong><br>Secure account recovery<br>One-time access procedure</p>
+    </aside>
+    <section class="auth-panel" aria-labelledby="recovery-title">
+      <div class="auth-card">
+        <p class="auth-kicker">Owner account recovery</p>
+        <h1 id="recovery-title">Restore the Atum account.</h1>
+        <p class="auth-intro">Use the owner email, a new private password, and the one-time recovery code stored in Railway.</p>
+        <form class="auth-form" novalidate>
+        <label class="field-label">Owner email address
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label class="field-label password-wrap">New password
+          <input type="password" name="password" required minlength="12" autocomplete="new-password">
+        </label>
+        <label class="field-label">Railway recovery code
+          <input type="password" name="recoveryToken" required minlength="32" autocomplete="off">
+        </label>
+        <p id="message" class="auth-error" role="alert"></p>
+        <button class="auth-submit" type="submit">Restore owner account</button>
+        </form>
+        <p class="auth-rules">After a successful recovery, remove <code>OWNER_RECOVERY_TOKEN</code> from Railway immediately.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
