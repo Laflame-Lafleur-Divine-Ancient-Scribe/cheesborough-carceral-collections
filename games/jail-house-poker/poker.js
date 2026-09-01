@@ -6,6 +6,13 @@
   const state = { user: null, table: null, poll: null, busy: false };
   const opponentNames = ['Marcus "Mack" Holloway','Darnell Bishop','Leon "Red" Carter','Terrence Wallace','Calvin "Keys" Mercer','Raymond Givens','Andre "Dre" Collins','Victor Salazar','Luis Mendoza','Hector Ramirez','Elijah Boone','Travis McCall','Curtis "C.J." Jackson','Malcolm Reed','Jerome Tate','Isaiah "Zay" Freeman','Nathaniel Brooks','Corey "Slim" Daniels','Desmond Price','Maurice Granger','Tasha Monroe','Renee "Ray" Carter','Monique Ellis','Keisha Grant','Angela Mercer','Dominique Price','Yolanda Brooks','Vanessa "Vee" Cole','Brianna Tate','Rochelle Givens','Marisol Vega','Carmen Salazar','Elena Ramirez','Latoya Bishop','Nicole "Nikki" Wallace','Jasmine Reed','Felicia Boone','Shanice Holloway','Teresa McCall','Candace "Candy" Daniels'];
   const opponentCategories = ['Tight','Caller','Maverick','Tight','Strategist','Rookie','Maverick','Tight','Strategist','Caller'];
+  const seatPositions = [
+    { left: '36%', top: '3%', transform: 'translateX(-50%)' }, { right: '17%', top: '10%' },
+    { right: '2%', top: '36%' }, { right: '17%', bottom: '7%' },
+    { left: '50%', bottom: '3%', transform: 'translateX(-50%)' }, { left: '17%', bottom: '7%' },
+    { left: '2%', top: '36%' }, { left: '17%', top: '10%' },
+    { left: '64%', top: '3%', transform: 'translateX(-50%)' },
+  ];
   const root = $('[data-poker-root]');
   const app = $('[data-poker-app]');
   const gate = $('[data-auth-gate]');
@@ -47,6 +54,8 @@
     const node = $(`[data-seat="${index}"]`);
     if (!node) return;
     node.className = `seat seat--position-${index}`;
+    const position = seatPositions[index];
+    Object.assign(node.style, { left: position.left || 'auto', right: position.right || 'auto', top: position.top || 'auto', bottom: position.bottom || 'auto', transform: position.transform || 'none' });
     node.textContent = '';
     if (!seat) { node.classList.add('seat--empty'); node.textContent = 'Open seat'; return; }
     if (seat.isTurn) node.classList.add('seat--active');
