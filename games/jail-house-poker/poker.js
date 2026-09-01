@@ -72,6 +72,8 @@
     $('[data-poker-lobby]').hidden = true;
     $('[data-table-kind]').textContent = table.mode === 'solo' ? 'Solo Table / House Opponents' : 'Live Table';
     $('[data-table-name]').textContent = table.name || (table.mode === 'solo' ? 'Solo Table' : 'Live Table');
+    const bigBlind = Number(table.stakes?.bigBlind || 10);
+    $('[data-table-stakes]').textContent = `Blinds $${money(table.stakes?.smallBlind || 5)} / $${money(bigBlind)}`;
     $('[data-pot]').textContent = `$${money(table.pot)}`;
     $('[data-player-name]').textContent = table.localPlayer?.displayName || state.user?.displayName || 'Player';
     $('[data-hand-status]').textContent = table.handLabel || table.status || 'Waiting for the next hand.';
@@ -83,7 +85,10 @@
     renderActivity(table.activity || table.events);
     const allowed = table.isYourTurn && !state.busy;
     $$('[data-poker-action]').forEach((button) => { button.disabled = !allowed; button.classList.toggle('is-disabled', !allowed); });
-    $('[data-raise-amount]').disabled = !allowed;
+    const raiseInput = $('[data-raise-amount]');
+    raiseInput.min = String(bigBlind); raiseInput.step = String(bigBlind);
+    if (Number(raiseInput.value || 0) < bigBlind) raiseInput.value = String(bigBlind);
+    raiseInput.disabled = !allowed;
   }
   function tableRow(table) {
     const row = document.createElement('article'); row.className = 'live-table-row';
@@ -119,7 +124,7 @@
     catch (error) { toast(error.message); setConnection('Unable to enter table', true); }
     finally { state.busy = false; }
   }
-  async function startSelectedSoloTable(aiIds) {
+  async function startSelectedSoloTable(aiIds, stakesId) {
     if (state.busy) return;
     state.busy = true;
     setConnection(state.table?.mode === 'solo' ? 'Closing the current solo table…' : 'Taking your seat…');
@@ -132,7 +137,7 @@
         state.table = null;
       }
       setConnection('Seating your selected opponents…');
-      const payload = await request('/api/poker/practice', { method: 'POST', body: JSON.stringify({ aiIds }) });
+      const payload = await request('/api/poker/practice', { method: 'POST', body: JSON.stringify({ aiIds, stakesId }) });
       renderTable(payload.table || payload);
       startPolling();
     } catch (error) {
@@ -197,7 +202,7 @@
     $('[data-start-practice]').addEventListener('click', () => {
       const aiIds = $$('input:checked', $('[data-ai-opponents]')).map((input) => input.value).slice(0, 8);
       if (!aiIds.length) { toast('Choose at least one opponent.'); return; }
-      startSelectedSoloTable(aiIds);
+      startSelectedSoloTable(aiIds, $('[data-solo-stakes]').value);
     });
     $('[data-live-tables]').addEventListener('click', (event) => { const button = event.target.closest('[data-join-table]'); if (button) enter('/api/poker/join', { tableId: button.dataset.joinTable }); });
     $$('[data-poker-action]').forEach((button) => button.addEventListener('click', () => action(button.dataset.pokerAction)));

@@ -8,8 +8,7 @@ const crypto = require('node:crypto');
 const GAME_KEY = 'jail-house-poker';
 const STARTING_BALANCE = 10000;
 const OWNER_STARTING_BALANCE = 100000000000;
-const ANTE = 100;
-const MAX_RAISE = 1000;
+const DEFAULT_STAKES = { id: 'low-5-10', label: 'Low Stakes Room', smallBlind: 5, bigBlind: 10 };
 const LEGACY_AI_ROSTER = [
   ['Marcus “Mack” Holloway', 'rookie', 'cautious'], ['Darnell Bishop', 'rookie', 'calling-station'],
   ['Leon “Red” Carter', 'intermediate', 'pressure'], ['Terrence Wallace', 'rookie', 'selective'],
@@ -44,9 +43,12 @@ const suits = ['S', 'H', 'D', 'C'];
 const rooms = new Map();
 const playerRoom = new Map();
 const LIVE_TABLES = [
-  { id: 'yard-table', label: 'The Yard Table' },
-  { id: 'north-block', label: 'North Block Table' },
-  { id: 'visiting-room', label: 'Visiting Room Table' },
+  { id: 'little-stakes', label: 'Little Stakes Room', smallBlind: 1, bigBlind: 2 },
+  { id: 'low-stakes', label: 'Low Stakes Room', smallBlind: 5, bigBlind: 10 },
+  { id: 'middle-stakes', label: 'Middle Stakes Room', smallBlind: 20, bigBlind: 40 },
+  { id: 'big-stakes', label: 'Big Stakes Room', smallBlind: 100, bigBlind: 200 },
+  { id: 'high-stakes', label: 'High Stakes Room', smallBlind: 250, bigBlind: 500 },
+  { id: 'top-stakes', label: 'Top Stakes Room', smallBlind: 500, bigBlind: 1000 },
 ];
 
 function randomInt(max) { return crypto.randomInt(0, max); }
@@ -69,8 +71,11 @@ function shuffledDeck() {
   return deck;
 }
 function cardLabel(card) { return `${({ T: '10', J: 'J', Q: 'Q', K: 'K', A: 'A' })[card[0]] || card[0]}${({ S: '♠', H: '♥', D: '♦', C: '♣' })[card[1]]}`; }
-function newRoom(id, label) { return { id, label, players: [], deck: [], board: [], pot: 0, currentBet: ANTE, stage: 'waiting', turn: 0, messages: ['Table is open. Two players are needed to deal.'], handId: null, settleTimer: null, updatedAt: Date.now() }; }
-function getRoom(id = 'yard-table', label) { if (!rooms.has(id)) rooms.set(id, newRoom(id, label || LIVE_TABLES.find((table) => table.id === id)?.label || 'Solo Table')); return rooms.get(id); }
+function stakesFor(id) { const table = LIVE_TABLES.find((item) => item.id === id); return table ? { id: table.id, label: table.label, smallBlind: table.smallBlind, bigBlind: table.bigBlind } : DEFAULT_STAKES; }
+function stakesLabel(stakes) { return `$${stakes.smallBlind}/$${stakes.bigBlind}`; }
+function tableBuyIn(stakes) { return stakes.bigBlind * 100; }
+function newRoom(id, label, stakes = stakesFor(id)) { return { id, label, stakes, players: [], deck: [], board: [], pot: 0, currentBet: stakes.bigBlind, stage: 'waiting', turn: 0, messages: [`Table is open at ${stakesLabel(stakes)}. Two players are needed to deal.`], handId: null, settleTimer: null, updatedAt: Date.now() }; }
+function getRoom(id = 'low-stakes', label, stakes) { if (!rooms.has(id)) rooms.set(id, newRoom(id, label || LIVE_TABLES.find((table) => table.id === id)?.label || 'Solo Table', stakes)); return rooms.get(id); }
 function visibleCard(card) { return card ? { code: card, label: cleanCardLabel(card), suit: card[1], rank: card[0] } : null; }
 function nowISO() { return new Date().toISOString(); }
 
@@ -153,7 +158,7 @@ function createPokerService(ctx) {
   }
   function roomState(room, viewerId) {
     const me = room.players.find((player) => player.id === viewerId);
-    return { room: { id: room.id, label: room.label, stage: room.stage, pot: room.pot, currentBet: room.currentBet, board: room.board.map(visibleCard), turnPlayerId: room.players[room.turn]?.id || null, handId: room.handId, updatedAt: room.updatedAt }, players: room.players.map((player) => ({ id: player.id, name: player.name, isAI: player.isAI, stack: player.stack, folded: player.folded, allIn: player.allIn, roundBet: player.roundBet, isTurn: room.players[room.turn]?.id === player.id, cards: player.id === viewerId || room.stage === 'showdown' ? player.cards.map(visibleCard) : [{ hidden: true }, { hidden: true }] })), me: me ? { cards: me.cards.map(visibleCard), canAct: room.players[room.turn]?.id === viewerId && !me.folded && !me.allIn } : null, messages: room.messages.slice(-8) };
+    return { room: { id: room.id, label: room.label, stakes: room.stakes, stage: room.stage, pot: room.pot, currentBet: room.currentBet, board: room.board.map(visibleCard), turnPlayerId: room.players[room.turn]?.id || null, handId: room.handId, updatedAt: room.updatedAt }, players: room.players.map((player) => ({ id: player.id, name: player.name, isAI: player.isAI, stack: player.stack, folded: player.folded, allIn: player.allIn, roundBet: player.roundBet, isTurn: room.players[room.turn]?.id === player.id, cards: player.id === viewerId || room.stage === 'showdown' ? player.cards.map(visibleCard) : [{ hidden: true }, { hidden: true }] })), me: me ? { cards: me.cards.map(visibleCard), canAct: room.players[room.turn]?.id === viewerId && !me.folded && !me.allIn } : null, messages: room.messages.slice(-8) };
   }
   function uiTable(room, viewerId) {
     const raw = roomState(room, viewerId);
@@ -167,7 +172,7 @@ function createPokerService(ctx) {
       seats[seatIndex] = opponents[opponentIndex] || null;
     });
     return {
-      id: room.id, name: room.label, mode: room.players.some((player) => player.isAI) ? 'solo' : 'live', pot: room.pot,
+      id: room.id, name: room.label, stakes: room.stakes, mode: room.players.some((player) => player.isAI) ? 'solo' : 'live', pot: room.pot,
       communityCards: raw.room.board, holeCards: raw.me?.cards || [], seats: seats.map((player) => player ? ({ ...player, displayName: player.name, chips: player.stack }) : null),
       localPlayer: { displayName: raw.players.find((player) => player.id === viewerId)?.name || '' }, isYourTurn: Boolean(raw.me?.canAct),
       handLabel: room.stage === 'waiting' ? 'Waiting for a second player.' : `${room.stage[0].toUpperCase() + room.stage.slice(1)} hand`,
@@ -175,7 +180,7 @@ function createPokerService(ctx) {
       activity: raw.messages.map((message) => ({ message, createdAt: nowISO() })),
     };
   }
-  function tableList() { return LIVE_TABLES.map((definition) => { const room = getRoom(definition.id, definition.label); return { id: room.id, name: room.label, playerCount: room.players.length, maxPlayers: 6, canJoin: room.players.length < 6, status: room.stage === 'waiting' ? 'Table Talk On' : `${room.stage[0].toUpperCase() + room.stage.slice(1)} hand`, stakesLabel: `Ante $${ANTE}` }; }); }
+  function tableList() { return LIVE_TABLES.map((definition) => { const room = getRoom(definition.id, definition.label, definition); return { id: room.id, name: room.label, playerCount: room.players.length, maxPlayers: 6, canJoin: room.players.length < 6, status: room.stage === 'waiting' ? 'Table Talk On' : `${room.stage[0].toUpperCase() + room.stage.slice(1)} hand`, stakesLabel: `Blinds ${stakesLabel(room.stakes)}` }; }); }
   async function publicState(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required.' });
     const balance = await wallet(user.id, user.role === 'owner'); const room = playerRoom.get(user.id) ? rooms.get(playerRoom.get(user.id)) : null;
@@ -191,24 +196,32 @@ function createPokerService(ctx) {
     const room = getRoom(definition.id, definition.label);
     if (playerRoom.has(user.id)) return json(response, 200, { table: uiTable(rooms.get(playerRoom.get(user.id)), user.id), balance: (await wallet(user.id, user.role === 'owner')).balance });
     if (room.players.length >= 6) return json(response, 409, { error: 'That table is full.' });
-    const balance = await wallet(user.id, user.role === 'owner'); room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: balance.balance, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
+    const balance = await wallet(user.id, user.role === 'owner'); const buyIn = tableBuyIn(room.stakes);
+    if (Number(balance.balance) < buyIn) return json(response, 409, { error: `You need $${buyIn.toLocaleString()} available chips for this table.` });
+    await applyChips(user.id, -buyIn, 'table_buy_in', room.id);
+    room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: buyIn, cards: [], roundBet: 0, handContribution: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
     room.messages.push(`${user.displayName} took a seat.`); room.updatedAt = Date.now();
     if (room.players.length >= 2 && room.stage === 'waiting') await deal(room);
-    return json(response, 200, { table: uiTable(room, user.id), balance: balance.balance });
+    return json(response, 200, { table: uiTable(room, user.id), balance: (await wallet(user.id, user.role === 'owner')).balance });
   }
   async function practice(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required to take a solo seat.' });
     const body = await parseBody(request);
     if (playerRoom.has(user.id) && !String(playerRoom.get(user.id)).startsWith('solo-')) return json(response, 409, { error: 'Leave your live table before taking a solo seat.' });
-    const room = getRoom(playerRoom.get(user.id) || `solo-${user.id}`, 'Solo Table');
+    const requestedStakes = stakesFor(String(body?.stakesId || DEFAULT_STAKES.id));
+    const room = getRoom(playerRoom.get(user.id) || `solo-${user.id}-${requestedStakes.id}`, `${requestedStakes.label} / Solo Table`, requestedStakes);
     if (!playerRoom.has(user.id)) {
-      const balance = await wallet(user.id, user.role === 'owner'); room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: balance.balance, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
+      const balance = await wallet(user.id, user.role === 'owner'); const buyIn = tableBuyIn(room.stakes);
+      if (Number(balance.balance) < buyIn) return json(response, 409, { error: `You need $${buyIn.toLocaleString()} available chips for this table.` });
+      await applyChips(user.id, -buyIn, 'table_buy_in', room.id);
+      room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: buyIn, cards: [], roundBet: 0, handContribution: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
     }
     if (room.players.length < 2) {
       const requestedIds = Array.isArray(body?.aiIds) ? body.aiIds : [body?.aiId || body?.opponentName].filter(Boolean);
       const chosen = [...new Map(requestedIds.map((id) => AI_ROSTER.find((ai) => ai.id === String(id))).filter(Boolean).map((ai) => [ai.id, ai])).values()].slice(0, 8);
       if (!chosen.length) chosen.push(AI_ROSTER[randomInt(AI_ROSTER.length)]);
-      chosen.forEach((ai) => room.players.push({ ...ai, isAI: true, stack: STARTING_BALANCE, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }));
+      const aiBuyIn = tableBuyIn(room.stakes);
+      chosen.forEach((ai) => room.players.push({ ...ai, isAI: true, stack: aiBuyIn, cards: [], roundBet: 0, handContribution: 0, folded: false, allIn: false, acted: false }));
       room.messages.push(`${chosen.map((ai) => ai.name).join(', ')} took a seat at the solo table.`);
     }
     if (room.stage === 'waiting') await deal(room);
@@ -216,18 +229,37 @@ function createPokerService(ctx) {
   }
   async function deal(room) {
     if (room.players.length < 2) return;
-    room.deck = shuffledDeck(); room.board = []; room.pot = 0; room.currentBet = ANTE; room.stage = 'preflop'; room.handId = crypto.randomUUID();
-    for (const player of room.players) { player.cards = [room.deck.pop(), room.deck.pop()]; player.roundBet = 0; player.folded = false; player.allIn = false; player.acted = false; const ante = Math.min(ANTE, player.stack); player.stack -= ante; player.roundBet = ante; room.pot += ante; if (!player.isAI) await applyChips(player.id, -ante, 'ante', room.handId); }
-    room.turn = 0; room.messages.push(`Hand dealt. Ante: $${ANTE} chips.`); room.updatedAt = Date.now(); await advanceAIs(room);
+    room.deck = shuffledDeck(); room.board = []; room.pot = 0; room.currentBet = room.stakes.bigBlind; room.stage = 'preflop'; room.handId = crypto.randomUUID();
+    for (const player of room.players) { player.cards = [room.deck.pop(), room.deck.pop()]; player.roundBet = 0; player.handContribution = 0; player.folded = false; player.allIn = false; player.acted = false; }
+    const postBlind = async (player, amount) => { const payment = Math.min(amount, player.stack); player.stack -= payment; player.roundBet = payment; player.handContribution += payment; room.pot += payment; player.allIn = player.stack === 0; };
+    await postBlind(room.players[0], room.stakes.smallBlind);
+    await postBlind(room.players[1], room.stakes.bigBlind);
+    room.turn = room.players.length === 2 ? 0 : 2; room.messages.push(`Hand dealt. Blinds: ${stakesLabel(room.stakes)}.`); room.updatedAt = Date.now(); await advanceAIs(room);
   }
-  function active(room) { return room.players.filter((player) => !player.folded && !player.allIn); }
+  function active(room) { return room.players.filter((player) => !player.folded); }
   function nextTurn(room) { for (let i = 1; i <= room.players.length; i += 1) { const index = (room.turn + i) % room.players.length; if (!room.players[index].folded && !room.players[index].allIn) { room.turn = index; return; } } }
   async function settle(room, forcedWinner) {
-    const candidates = active(room); const best = forcedWinner ? [forcedWinner] : candidates.reduce((winners, player) => { const score = handRank([...player.cards, ...room.board]); if (!winners.length || compareRank(score, handRank([...winners[0].cards, ...room.board])) > 0) return [player]; if (compareRank(score, handRank([...winners[0].cards, ...room.board])) === 0) winners.push(player); return winners; }, []);
-    const atum = await recordAtumRake(room.pot, room.handId); const distributable = room.pot - atum.rake; const share = Math.floor(distributable / best.length); const remainder = distributable % best.length;
-    for (const [index, player] of best.entries()) { const award = share + (index < remainder ? 1 : 0); player.stack += award; if (!player.isAI) await applyChips(player.id, award, 'hand_win', room.handId); }
+    const contenders = active(room); if (!contenders.length) return;
+    const atum = await recordAtumRake(room.pot, room.handId); let rakeRemaining = atum.rake;
+    const levels = [...new Set(room.players.map((player) => Number(player.handContribution || 0)).filter(Boolean))].sort((a, b) => a - b);
+    const awards = new Map(); let previous = 0;
+    for (const level of levels) {
+      const contributors = room.players.filter((player) => Number(player.handContribution || 0) >= level);
+      const potSlice = (level - previous) * contributors.length; previous = level;
+      const eligible = forcedWinner ? [forcedWinner] : contenders.filter((player) => Number(player.handContribution || 0) >= level);
+      if (!eligible.length) continue;
+      const best = forcedWinner ? eligible : eligible.reduce((winners, player) => { const score = handRank([...player.cards, ...room.board]); if (!winners.length || compareRank(score, handRank([...winners[0].cards, ...room.board])) > 0) return [player]; if (compareRank(score, handRank([...winners[0].cards, ...room.board])) === 0) winners.push(player); return winners; }, []);
+      const distributable = potSlice - Math.min(rakeRemaining, potSlice); rakeRemaining -= Math.min(rakeRemaining, potSlice);
+      best.forEach((player, index) => awards.set(player, (awards.get(player) || 0) + Math.floor(distributable / best.length) + (index < distributable % best.length ? 1 : 0)));
+    }
+    for (const [player, award] of awards) player.stack += award;
+    const winners = [...awards.keys()]; const distributable = room.pot - atum.rake;
     room.stage = 'showdown'; const rakeNotice = atum.rake ? ` The Atum Account retained $${atum.rake} (15% of completed pot ${atum.completedPots}).` : '';
-    room.messages.push(`${best.map((player) => player.name).join(' and ')} won $${distributable} ${forcedWinner ? 'when the table folded.' : `with ${rankName(handRank([...best[0].cards, ...room.board]))}.`}${rakeNotice}`); room.updatedAt = Date.now();
+    room.messages.push(`${winners.map((player) => player.name).join(' and ')} won $${distributable} ${forcedWinner ? 'when the table folded.' : 'at showdown.'}${rakeNotice}`);
+    const busted = room.players.filter((player) => !player.isAI && player.stack <= 0);
+    busted.forEach((player) => { playerRoom.delete(player.id); room.messages.push(`${player.name} lost the all-in and was removed from the table. They may buy back in from their account balance.`); });
+    room.players = room.players.filter((player) => player.isAI || player.stack > 0);
+    room.updatedAt = Date.now();
     clearTimeout(room.settleTimer); room.settleTimer = setTimeout(() => deal(room).catch(() => {}), 7000);
   }
   async function finishBetting(room) {
@@ -244,8 +276,8 @@ function createPokerService(ctx) {
     if (player.folded || player.allIn) return; const toCall = Math.max(0, room.currentBet - player.roundBet);
     if (action === 'fold') { player.folded = true; player.acted = true; room.messages.push(`${player.name} folded.`); }
     else {
-      let payment = toCall; if (action === 'raise') { const cappedRaise = Math.max(ANTE, Math.min(MAX_RAISE, Number(raiseBy) || ANTE)); payment += cappedRaise; room.currentBet = player.roundBet + payment; room.players.forEach((other) => { if (other !== player && !other.folded) other.acted = false; }); room.messages.push(`${player.name} raised $${cappedRaise}.`); } else room.messages.push(`${player.name} ${toCall ? `called $${toCall}` : 'checked'}.`);
-      payment = Math.min(payment, player.stack); player.stack -= payment; player.roundBet += payment; room.pot += payment; player.allIn = player.stack === 0; player.acted = true; if (!player.isAI && payment) await applyChips(player.id, -payment, action === 'raise' ? 'raise' : 'call', room.handId);
+      let payment = toCall; if (action === 'raise') { const minimumRaise = room.stakes.bigBlind; const maximumRaise = Math.max(minimumRaise * 100, 1000); const cappedRaise = Math.max(minimumRaise, Math.min(maximumRaise, Number(raiseBy) || minimumRaise)); payment += cappedRaise; room.currentBet = player.roundBet + payment; room.players.forEach((other) => { if (other !== player && !other.folded) other.acted = false; }); room.messages.push(`${player.name} raised $${cappedRaise}.`); } else room.messages.push(`${player.name} ${toCall ? `called $${toCall}` : 'checked'}.`);
+      payment = Math.min(payment, player.stack); player.stack -= payment; player.roundBet += payment; player.handContribution += payment; room.pot += payment; player.allIn = player.stack === 0; player.acted = true;
     }
     room.updatedAt = Date.now(); nextTurn(room); await finishBetting(room); await advanceAIs(room);
   }
@@ -256,7 +288,7 @@ function createPokerService(ctx) {
     const suited = player.cards[0]?.[1] === player.cards[1]?.[1]; const connected = Math.abs(values[0] - values[1]) <= 2;
     const high = Math.max(...values, 0); let strength = (high - 2) * 3 + (pair ? 34 : 0) + (boardMatch ? 25 : 0) + (suited ? 7 : 0) + (connected ? 6 : 0);
     strength += (player.skill || 40) * 0.22 + randomInt(18) - 9;
-    const pressure = needed / Math.max(ANTE, player.stack || 1) * 100;
+    const pressure = needed / Math.max(room.stakes.bigBlind, player.stack || 1) * 100;
     return { strength, pressure };
   }
   async function advanceAIs(room) {
@@ -264,9 +296,10 @@ function createPokerService(ctx) {
     clearTimeout(room.aiTimer); room.aiTimer = setTimeout(() => {
       const needed = Math.max(0, room.currentBet - player.roundBet); const { strength, pressure } = pokerSense(player, room, needed);
       const callThreshold = 36 + (player.discipline || 45) * 0.35 + (player.aggression || 45) * 0.14 - pressure;
-      const bluff = randomInt(100) < (player.bluff || 20) && needed <= ANTE * 3;
-      const action = needed && strength < callThreshold && !bluff ? 'fold' : strength > 72 - (player.aggression || 45) * 0.2 && player.stack > needed + ANTE ? 'raise' : 'call';
-      const raiseBy = ANTE * (1 + Math.floor((player.aggression || 45) / 32) + randomInt(2));
+      const unit = room.stakes.bigBlind;
+      const bluff = randomInt(100) < (player.bluff || 20) && needed <= unit * 3;
+      const action = needed && strength < callThreshold && !bluff ? 'fold' : strength > 72 - (player.aggression || 45) * 0.2 && player.stack > needed + unit ? 'raise' : 'call';
+      const raiseBy = unit * (1 + Math.floor((player.aggression || 45) / 32) + randomInt(2));
       perform(room, player, action, raiseBy).catch(() => {});
     }, 750 + randomInt(900));
   }
@@ -289,7 +322,9 @@ function createPokerService(ctx) {
         departing.folded = true; room.messages.push(`${user.displayName} folded and left the hand.`);
         if (active(room).length === 1) await settle(room, active(room)[0]);
       }
-      room.players = room.players.filter((player) => player.id !== user.id); playerRoom.delete(user.id); room.messages.push(`${user.displayName} left the table.`); room.updatedAt = Date.now();
+      if (departing?.stack > 0) await applyChips(user.id, departing.stack, 'table_cash_out', room.id);
+      room.players = room.players.filter((player) => player.id !== user.id); playerRoom.delete(user.id); room.messages.push(`${user.displayName} left the table with their remaining chips.`); room.updatedAt = Date.now();
+      if (room.id.startsWith('solo-')) { clearTimeout(room.settleTimer); clearTimeout(room.aiTimer); rooms.delete(room.id); }
       if (room.players.length < 2) { room.stage = 'waiting'; room.pot = 0; clearTimeout(room.settleTimer); clearTimeout(room.aiTimer); }
     }
     return json(response, 200, { left: true });

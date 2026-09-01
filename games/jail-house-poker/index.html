@@ -79,6 +79,15 @@
             <p class="evidence-tag">Solo Table</p>
             <h3 id="practice-title">Build Your Table</h3>
             <p>Choose one to eight named opponents and play for the pot. Every player has a distinct table identity, betting style, and way of reading the hand.</p>
+            <label class="picker-label" for="solo-stakes">Choose your stakes</label>
+            <select class="stakes-picker" id="solo-stakes" data-solo-stakes>
+              <option value="little-stakes">Little Stakes — $1 / $2 blinds</option>
+              <option value="low-stakes" selected>Low Stakes — $5 / $10 blinds</option>
+              <option value="middle-stakes">Middle Stakes — $20 / $40 blinds</option>
+              <option value="big-stakes">Big Stakes — $100 / $200 blinds</option>
+              <option value="high-stakes">High Stakes — $250 / $500 blinds</option>
+              <option value="top-stakes">Top Stakes — $500 / $1,000 blinds</option>
+            </select>
             <p class="picker-label" id="ai-opponents-label">Choose 1–8 opponents</p>
             <div class="ai-picker" data-ai-opponents role="group" aria-labelledby="ai-opponents-label" aria-describedby="ai-opponent-note ai-selection-count">
               <option value="Marcus Mack Holloway">Marcus “Mack” Holloway</option>
@@ -98,7 +107,7 @@
 
       <section class="table-stage" data-poker-stage aria-labelledby="table-title" hidden>
         <header class="table-stage__header">
-          <div><p class="eyebrow" data-table-kind>Live Table</p><h2 id="table-title" data-table-name>Table Status</h2></div>
+          <div><p class="eyebrow" data-table-kind>Live Table</p><h2 id="table-title" data-table-name>Table Status</h2><p class="table-stakes" data-table-stakes>Blinds</p></div>
           <div class="pot"><span>Current Pot</span><strong data-pot>0</strong></div>
           <button class="leave-button" type="button" data-leave-table>Leave Table</button>
         </header>
