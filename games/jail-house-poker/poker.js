@@ -46,7 +46,7 @@
   function renderSeat(seat, index) {
     const node = $(`[data-seat="${index}"]`);
     if (!node) return;
-    node.className = `seat seat--${['north','north-east','south-east','south','south-west','north-west','west','east','south-center'][index]}`;
+    node.className = `seat seat--position-${index}`;
     node.textContent = '';
     if (!seat) { node.classList.add('seat--empty'); node.textContent = 'Open seat'; return; }
     if (seat.isTurn) node.classList.add('seat--active');

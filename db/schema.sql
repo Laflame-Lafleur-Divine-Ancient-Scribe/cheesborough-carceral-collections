@@ -41,7 +41,7 @@ CREATE INDEX IF NOT EXISTS community_comments_status_time_index ON community_com
 -- payment, withdrawal, or prize information.
 CREATE TABLE IF NOT EXISTS game_wallets (
     user_id uuid PRIMARY KEY REFERENCES community_users(id) ON DELETE CASCADE,
-    balance integer NOT NULL DEFAULT 10000 CHECK (balance >= 0),
+    balance bigint NOT NULL DEFAULT 10000 CHECK (balance >= 0),
     issued_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now()
 );
@@ -55,13 +55,16 @@ CREATE TABLE IF NOT EXISTS game_wallet_ledger (
     id bigserial PRIMARY KEY,
     user_id uuid NOT NULL REFERENCES community_users(id) ON DELETE CASCADE,
     game_key varchar(48) NOT NULL,
-    amount integer NOT NULL,
-    balance_after integer NOT NULL CHECK (balance_after >= 0),
+    amount bigint NOT NULL,
+    balance_after bigint NOT NULL CHECK (balance_after >= 0),
     reason varchar(64) NOT NULL,
     reference_id varchar(80),
     created_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS game_wallet_ledger_user_time_index ON game_wallet_ledger(user_id,created_at DESC);
+ALTER TABLE game_wallets ALTER COLUMN balance TYPE bigint USING balance::bigint;
+ALTER TABLE game_wallet_ledger ALTER COLUMN amount TYPE bigint USING amount::bigint;
+ALTER TABLE game_wallet_ledger ALTER COLUMN balance_after TYPE bigint USING balance_after::bigint;
 -- The Atum Account is a protected, site-owned fictional-chip ledger. It is
 -- not tied to a person, payment method, withdrawal, or cash value.
 CREATE TABLE IF NOT EXISTS game_house_wallets (

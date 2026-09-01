@@ -7,6 +7,7 @@ const crypto = require('node:crypto');
 
 const GAME_KEY = 'jail-house-poker';
 const STARTING_BALANCE = 10000;
+const OWNER_STARTING_BALANCE = 100000000000;
 const ANTE = 100;
 const MAX_RAISE = 1000;
 const LEGACY_AI_ROSTER = [
@@ -102,10 +103,26 @@ function rankName(score) { return ['high card', 'pair', 'two pair', 'three of a 
 
 function createPokerService(ctx) {
   const { db: getDb, user: getUser, isOwner, ensureSchema, parseBody, json, cors, rate } = ctx;
-  async function wallet(userId) {
+  async function wallet(userId, isOwnerAccount = false) {
     const db = getDb();
     await ensureSchema();
     await db.query('INSERT INTO game_wallets (user_id,balance) VALUES ($1,$2) ON CONFLICT (user_id) DO NOTHING', [userId, STARTING_BALANCE]);
+    if (isOwnerAccount) {
+      const client = await db.connect();
+      try {
+        await client.query('BEGIN');
+        await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`owner-bankroll:${userId}`]);
+        const issued = await client.query("SELECT 1 FROM game_wallet_ledger WHERE user_id=$1 AND game_key=$2 AND reason='owner_bankroll_load' LIMIT 1 FOR UPDATE", [userId, GAME_KEY]);
+        if (!issued.rows.length) {
+          const current = await client.query('SELECT balance FROM game_wallets WHERE user_id=$1 FOR UPDATE', [userId]);
+          const previousBalance = Number(current.rows[0]?.balance || 0);
+          const loadAmount = OWNER_STARTING_BALANCE - previousBalance;
+          await client.query('UPDATE game_wallets SET balance=$1,updated_at=now() WHERE user_id=$2', [OWNER_STARTING_BALANCE, userId]);
+          await client.query('INSERT INTO game_wallet_ledger (user_id,game_key,amount,balance_after,reason,reference_id) VALUES ($1,$2,$3,$4,$5,$6)', [userId, GAME_KEY, loadAmount, OWNER_STARTING_BALANCE, 'owner_bankroll_load', 'atum-owner-initial-load']);
+        }
+        await client.query('COMMIT');
+      } catch (error) { await client.query('ROLLBACK'); throw error; } finally { client.release(); }
+    }
     return (await db.query('SELECT balance FROM game_wallets WHERE user_id=$1', [userId])).rows[0];
   }
   async function applyChips(userId, amount, reason, referenceId) {
@@ -140,9 +157,18 @@ function createPokerService(ctx) {
   }
   function uiTable(room, viewerId) {
     const raw = roomState(room, viewerId);
+    const localPlayer = raw.players.find((player) => player.id === viewerId);
+    const opponents = raw.players.filter((player) => player.id !== viewerId);
+    const seats = Array(9).fill(null);
+    // Keep the signed-in player at the near edge of the table and distribute
+    // opponents around the remaining distinct seats.
+    seats[4] = localPlayer || null;
+    [0, 1, 2, 3, 5, 6, 7, 8].forEach((seatIndex, opponentIndex) => {
+      seats[seatIndex] = opponents[opponentIndex] || null;
+    });
     return {
       id: room.id, name: room.label, mode: room.players.some((player) => player.isAI) ? 'solo' : 'live', pot: room.pot,
-      communityCards: raw.room.board, holeCards: raw.me?.cards || [], seats: raw.players.map((player) => ({ ...player, displayName: player.name, chips: player.stack })),
+      communityCards: raw.room.board, holeCards: raw.me?.cards || [], seats: seats.map((player) => player ? ({ ...player, displayName: player.name, chips: player.stack }) : null),
       localPlayer: { displayName: raw.players.find((player) => player.id === viewerId)?.name || '' }, isYourTurn: Boolean(raw.me?.canAct),
       handLabel: room.stage === 'waiting' ? 'Waiting for a second player.' : `${room.stage[0].toUpperCase() + room.stage.slice(1)} hand`,
       turnMessage: raw.me?.canAct ? 'Your turn: fold, check/call, or place a raise.' : 'Waiting for the next action.',
@@ -152,7 +178,7 @@ function createPokerService(ctx) {
   function tableList() { return LIVE_TABLES.map((definition) => { const room = getRoom(definition.id, definition.label); return { id: room.id, name: room.label, playerCount: room.players.length, maxPlayers: 6, canJoin: room.players.length < 6, status: room.stage === 'waiting' ? 'Table Talk On' : `${room.stage[0].toUpperCase() + room.stage.slice(1)} hand`, stakesLabel: `Ante $${ANTE}` }; }); }
   async function publicState(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required.' });
-    const balance = await wallet(user.id); const room = playerRoom.get(user.id) ? rooms.get(playerRoom.get(user.id)) : null;
+    const balance = await wallet(user.id, user.role === 'owner'); const room = playerRoom.get(user.id) ? rooms.get(playerRoom.get(user.id)) : null;
     const onlineCount = LIVE_TABLES.reduce((count, definition) => count + getRoom(definition.id).players.filter((player) => !player.isAI).length, 0);
     return json(response, 200, { balance: balance.balance, tables: tableList(), onlineCount, aiCount: AI_ROSTER.length, table: room ? uiTable(room, user.id) : null });
   }
@@ -163,9 +189,9 @@ function createPokerService(ctx) {
     const definition = LIVE_TABLES.find((table) => table.id === requestedTable);
     if (!definition) return json(response, 400, { error: 'Choose an available live table.' });
     const room = getRoom(definition.id, definition.label);
-    if (playerRoom.has(user.id)) return json(response, 200, { table: uiTable(rooms.get(playerRoom.get(user.id)), user.id), balance: (await wallet(user.id)).balance });
+    if (playerRoom.has(user.id)) return json(response, 200, { table: uiTable(rooms.get(playerRoom.get(user.id)), user.id), balance: (await wallet(user.id, user.role === 'owner')).balance });
     if (room.players.length >= 6) return json(response, 409, { error: 'That table is full.' });
-    const balance = await wallet(user.id); room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: balance.balance, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
+    const balance = await wallet(user.id, user.role === 'owner'); room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: balance.balance, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
     room.messages.push(`${user.displayName} took a seat.`); room.updatedAt = Date.now();
     if (room.players.length >= 2 && room.stage === 'waiting') await deal(room);
     return json(response, 200, { table: uiTable(room, user.id), balance: balance.balance });
@@ -176,7 +202,7 @@ function createPokerService(ctx) {
     if (playerRoom.has(user.id) && !String(playerRoom.get(user.id)).startsWith('solo-')) return json(response, 409, { error: 'Leave your live table before taking a solo seat.' });
     const room = getRoom(playerRoom.get(user.id) || `solo-${user.id}`, 'Solo Table');
     if (!playerRoom.has(user.id)) {
-      const balance = await wallet(user.id); room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: balance.balance, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
+      const balance = await wallet(user.id, user.role === 'owner'); room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: balance.balance, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
     }
     if (room.players.length < 2) {
       const requestedIds = Array.isArray(body?.aiIds) ? body.aiIds : [body?.aiId || body?.opponentName].filter(Boolean);
@@ -186,7 +212,7 @@ function createPokerService(ctx) {
       room.messages.push(`${chosen.map((ai) => ai.name).join(', ')} took a seat at the solo table.`);
     }
     if (room.stage === 'waiting') await deal(room);
-    return json(response, 200, { table: uiTable(room, user.id), balance: (await wallet(user.id)).balance });
+    return json(response, 200, { table: uiTable(room, user.id), balance: (await wallet(user.id, user.role === 'owner')).balance });
   }
   async function deal(room) {
     if (room.players.length < 2) return;
@@ -251,7 +277,7 @@ function createPokerService(ctx) {
     if (!room || room.stage === 'waiting') return json(response, 409, { error: 'Join a table before playing.' });
     const player = room.players.find((seat) => seat.id === user.id); if (!player || room.players[room.turn] !== player) return json(response, 409, { error: 'It is not your turn.' });
     const kind = ['fold', 'call', 'raise'].includes(body?.action) ? body.action : null; if (!kind) return json(response, 400, { error: 'Choose fold, check/call, or raise.' });
-    try { await perform(room, player, kind, body?.raiseBy || body?.amount); return json(response, 200, { table: uiTable(room, user.id), balance: (await wallet(user.id)).balance }); }
+    try { await perform(room, player, kind, body?.raiseBy || body?.amount); return json(response, 200, { table: uiTable(room, user.id), balance: (await wallet(user.id, user.role === 'owner')).balance }); }
     catch (error) { return json(response, error.message === 'INSUFFICIENT_CHIPS' ? 409 : 503, { error: error.message === 'INSUFFICIENT_CHIPS' ? 'You do not have enough chips for that wager.' : 'The table is temporarily unavailable.' }); }
   }
   async function leave(request, response) {
