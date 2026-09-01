@@ -282,8 +282,19 @@ function createPokerService(ctx) {
     if (player.folded || player.allIn) return; const toCall = Math.max(0, room.currentBet - player.roundBet);
     if (action === 'fold') { player.folded = true; player.acted = true; room.messages.push(`${player.name} folded.`); }
     else {
-      let payment = toCall; if (action === 'raise') { const minimumRaise = room.stakes.bigBlind; const maximumRaise = Math.max(minimumRaise * 100, 1000); const cappedRaise = Math.max(minimumRaise, Math.min(maximumRaise, Number(raiseBy) || minimumRaise)); payment += cappedRaise; room.currentBet = player.roundBet + payment; room.players.forEach((other) => { if (other !== player && !other.folded) other.acted = false; }); room.messages.push(`${player.name} raised $${cappedRaise}.`); } else room.messages.push(`${player.name} ${toCall ? `called $${toCall}` : 'checked'}.`);
-      payment = Math.min(payment, player.stack); player.stack -= payment; player.roundBet += payment; player.handContribution += payment; room.pot += payment; player.allIn = player.stack === 0; player.acted = true;
+      let payment = toCall;
+      if (action === 'raise') {
+        const minimumRaise = room.stakes.bigBlind; const maximumRaise = Math.max(minimumRaise * 100, 1000);
+        const requestedRaise = Math.max(minimumRaise, Math.min(maximumRaise, Number(raiseBy) || minimumRaise));
+        payment = Math.min(toCall + requestedRaise, player.stack);
+        const actualRaise = Math.max(0, payment - toCall);
+        if (actualRaise > 0) {
+          room.currentBet = player.roundBet + payment;
+          room.players.forEach((other) => { if (other !== player && !other.folded) other.acted = false; });
+          room.messages.push(`${player.name} raised $${actualRaise}${payment < toCall + requestedRaise ? ' all in' : ''}.`);
+        } else room.messages.push(`${player.name} called $${payment} all in.`);
+      } else { payment = Math.min(toCall, player.stack); room.messages.push(`${player.name} ${toCall ? `called $${payment}${payment < toCall ? ' all in' : ''}` : 'checked'}.`); }
+      player.stack -= payment; player.roundBet += payment; player.handContribution += payment; room.pot += payment; player.allIn = player.stack === 0; player.acted = true;
     }
     room.updatedAt = Date.now(); nextTurn(room); await finishBetting(room); await advanceAIs(room);
   }
