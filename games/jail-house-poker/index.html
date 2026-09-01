@@ -13,6 +13,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="poker.css">
+  <style>
+    .card:not(.card--down){display:grid;grid-template:1fr / 1fr;isolation:isolate;overflow:hidden}.card:not(.card--down)::before,.card:not(.card--down)::after{content:none}.card__corner,.card__pip{position:relative;z-index:1}.card__corner{align-self:start;font:700 clamp(.48rem,1vw,.73rem)/.9 var(--serif);justify-self:start;letter-spacing:-.06em;padding:.18rem .2rem}.card__corner--bottom{align-self:end;justify-self:end;transform:rotate(180deg)}.card__pip{align-self:center;font-size:clamp(1.45rem,3.4vw,2.65rem);grid-area:1/1;justify-self:center}.card[data-card-suit="♥"],.card[data-card-suit="♦"]{color:#b2282d}.card[data-card-suit="♠"],.card[data-card-suit="♣"]{color:#171716}.practice-panel select[multiple]{height:13.4rem;padding:.22rem}.practice-panel option{border-bottom:1px solid rgba(241,229,208,.12);padding:.42rem .5rem}.practice-panel option:checked{background:var(--brass);color:var(--ink)}.seat--west{left:1%;top:48%;transform:translateY(-50%)}.seat--east{right:1%;top:48%;transform:translateY(-50%)}.seat--south-center{bottom:2%;left:50%;transform:translateX(-50%)}@media(max-width:800px){.seat--west{left:-1%;top:49%}.seat--east{right:-1%;top:49%}.seat--south-center{bottom:2%}}@media(max-width:480px){.seat--west{left:-.75rem;top:48%}.seat--east{right:-.75rem;top:48%}.seat--south-center{bottom:1%;width:4.35rem}.practice-panel select[multiple]{height:12rem}}
+  </style>
+  <style>
+    .picker-label{font:700 .7rem var(--sans);letter-spacing:.07em;margin:1rem 0 .45rem;text-transform:uppercase}.ai-picker{display:grid;gap:.38rem;grid-template-columns:repeat(2,minmax(0,1fr));max-height:17.5rem;overflow:auto;padding-right:.2rem}.ai-picker__option{align-items:center;background:rgba(17,22,20,.72);border:1px solid rgba(241,229,208,.24);cursor:pointer;display:flex;gap:.5rem;min-height:3.3rem;padding:.42rem}.ai-picker__option:has(input:checked){background:rgba(198,154,61,.19);border-color:var(--brass)}.ai-picker__option:has(input:disabled){cursor:not-allowed;opacity:.46}.ai-picker__option input{accent-color:var(--brass);height:1rem;margin:0;width:1rem}.ai-picker__copy{display:grid;line-height:1.05;min-width:0}.ai-picker__copy strong{font:600 .74rem var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ai-picker__copy small{color:var(--brass);font:.56rem var(--mono);letter-spacing:.06em;margin-top:.18rem;text-transform:uppercase}.selected-opponents{display:flex;flex-wrap:wrap;gap:.35rem;margin:.65rem 0 .1rem}.selected-opponents:empty{display:none}.selected-opponents__chip{background:rgba(17,22,20,.82);border:1px solid rgba(198,154,61,.62);color:var(--chalk);cursor:pointer;font:500 .59rem var(--mono);letter-spacing:.02em;padding:.32rem .42rem;text-align:left}.selected-opponents__chip:hover,.selected-opponents__chip:focus-visible{background:var(--brass);color:var(--ink);outline:2px solid var(--paper);outline-offset:1px}.seat--north{left:50%;top:3%}.seat--north-east{right:8%;top:11%}.seat--south-east{right:1%;top:39%}.seat--south{bottom:3%;left:auto;right:24%;transform:none}.seat--south-west{bottom:3%;left:24%}.seat--north-west{left:1%;top:39%}.seat--west{left:8%;top:11%;transform:none}.seat--east{right:3%;top:64%;transform:none}.seat--south-center{bottom:3%;left:50%;transform:translateX(-50%)}@media(max-width:800px){.seat{min-height:3rem;width:4.8rem}.seat__name{max-width:4.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.seat--north-east{right:4%;top:9%}.seat--north-west{left:1%;top:36%}.seat--west{left:4%;top:9%}.seat--south-east{right:1%;top:38%}.seat--east{right:2%;top:64%}.seat--south{right:18%;bottom:2%}.seat--south-west{left:18%;bottom:2%}.seat--south-center{bottom:2%}}@media(max-width:480px){.ai-picker{grid-template-columns:1fr;max-height:15.5rem}.ai-picker__option{min-height:2.8rem}.seat{min-height:2.5rem;width:4.1rem}.seat__name{max-width:3.7rem}.seat__chips{font-size:.41rem}.seat__state{display:none}.seat--north{top:2%}.seat--north-east{right:2%;top:8%}.seat--west{left:2%;top:8%}.seat--south-east{right:0;top:36%}.seat--north-west{left:0;top:36%}.seat--east{right:1%;top:63%}.seat--south{right:15%;bottom:2%}.seat--south-west{left:15%;bottom:2%}.seat--south-center{bottom:2%}}
+  </style>
+  <style>
+    .felt-table{background:linear-gradient(105deg,rgba(7,12,10,.68),rgba(7,12,10,.24) 50%,rgba(7,12,10,.7)),url("../../01_Photos/ShareImages/PokerBack.png") center/cover no-repeat}
+  </style>
   <script src="../../community-auth.js" defer></script>
   <script src="poker.js" defer></script>
 </head>
@@ -68,18 +77,20 @@
           </section>
           <section class="practice-panel" aria-labelledby="practice-title">
             <p class="evidence-tag">Solo Table</p>
-            <h3 id="practice-title">Play Head-To-Head</h3>
-            <p>Take a seat across from one of our house opponents. Every player has a different personality, betting style, level of aggression, and way of reading the table. Their tendencies are yours to discover one hand at a time.</p>
-            <label for="ai-opponent">Choose an opponent</label>
-            <select id="ai-opponent" data-ai-opponent aria-describedby="ai-opponent-note">
+            <h3 id="practice-title">Build Your Table</h3>
+            <p>Choose one to eight named opponents and play for the pot. Every player has a distinct table identity, betting style, and way of reading the hand.</p>
+            <p class="picker-label" id="ai-opponents-label">Choose 1–8 opponents</p>
+            <div class="ai-picker" data-ai-opponents role="group" aria-labelledby="ai-opponents-label" aria-describedby="ai-opponent-note ai-selection-count">
               <option value="Marcus Mack Holloway">Marcus “Mack” Holloway</option>
               <option value="Darnell Bishop">Darnell Bishop</option>
               <option value="Leon Red Carter">Leon “Red” Carter</option>
               <option value="Tasha Monroe">Tasha Monroe</option>
               <option value="Marisol Vega">Marisol Vega</option>
               <option value="Carmen Salazar">Carmen Salazar</option>
-            </select>
-            <p id="ai-opponent-note" class="small-note">You will not know exactly how your opponent plays until the cards are on the table.</p>
+            </div>
+            <p id="ai-selection-count" class="small-note" data-ai-selection-count>1 selected / 8 seats available</p>
+            <div class="selected-opponents" data-selected-opponents aria-live="polite" aria-label="Selected opponents"></div>
+            <p id="ai-opponent-note" class="small-note">Choose the players you want around the felt. Their profiles are visible; their next move is not.</p>
             <button class="button button--outline" type="button" data-start-practice>Take A Seat</button>
           </section>
         </div>
@@ -105,6 +116,9 @@
             <div class="seat seat--south" data-seat="3"></div>
             <div class="seat seat--south-west" data-seat="4"></div>
             <div class="seat seat--north-west" data-seat="5"></div>
+            <div class="seat seat--west" data-seat="6"></div>
+            <div class="seat seat--east" data-seat="7"></div>
+            <div class="seat seat--south-center" data-seat="8"></div>
           </div>
         </div>
 

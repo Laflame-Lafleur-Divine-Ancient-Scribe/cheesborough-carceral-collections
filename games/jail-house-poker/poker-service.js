@@ -1,6 +1,6 @@
 'use strict';
 
-// Server-authoritative, fictional-chip Texas Hold'em service.  It intentionally
+// Server-authoritative Texas Hold'em chip service. It intentionally
 // has no payment, cashout, or prize code.  The live table lives in process while
 // balances and the audit ledger remain in PostgreSQL.
 const crypto = require('node:crypto');
@@ -30,13 +30,13 @@ const LEGACY_AI_ROSTER = [
   ['Nicole “Nikki” Wallace', 'intermediate', 'pressure'], ['Jasmine Reed', 'rookie', 'loose'],
   ['Felicia Boone', 'intermediate', 'cautious'], ['Shanice Holloway', 'rookie', 'calling-station'],
   ['Teresa McCall', 'intermediate', 'patient'], ['Candace “Candy” Daniels', 'rookie', 'selective'],
-].map(([name, level, tendency], index) => ({ id: `ai-${index + 1}`, name, level, tendency }));
+].map(([name, level, tendency], index) => ({ id: `ai-${index + 1}`, name, level, tendency, ...aiProfile(level, tendency) }));
 const AI_ROSTER = [
   ['Marcus "Mack" Holloway', 'rookie', 'cautious'], ['Darnell Bishop', 'rookie', 'calling-station'], ['Leon "Red" Carter', 'intermediate', 'pressure'], ['Terrence Wallace', 'rookie', 'selective'], ['Calvin "Keys" Mercer', 'intermediate', 'patient'], ['Raymond Givens', 'rookie', 'loose'], ['Andre "Dre" Collins', 'intermediate', 'pressure'], ['Victor Salazar', 'rookie', 'cautious'], ['Luis Mendoza', 'intermediate', 'patient'], ['Hector Ramirez', 'rookie', 'calling-station'],
   ['Elijah Boone', 'intermediate', 'selective'], ['Travis McCall', 'rookie', 'loose'], ['Curtis "C.J." Jackson', 'intermediate', 'pressure'], ['Malcolm Reed', 'rookie', 'cautious'], ['Jerome Tate', 'intermediate', 'patient'], ['Isaiah "Zay" Freeman', 'rookie', 'loose'], ['Nathaniel Brooks', 'intermediate', 'selective'], ['Corey "Slim" Daniels', 'rookie', 'calling-station'], ['Desmond Price', 'intermediate', 'pressure'], ['Maurice Granger', 'rookie', 'cautious'],
   ['Tasha Monroe', 'intermediate', 'patient'], ['Renee "Ray" Carter', 'rookie', 'selective'], ['Monique Ellis', 'intermediate', 'pressure'], ['Keisha Grant', 'rookie', 'loose'], ['Angela Mercer', 'intermediate', 'cautious'], ['Dominique Price', 'rookie', 'calling-station'], ['Yolanda Brooks', 'intermediate', 'patient'], ['Vanessa "Vee" Cole', 'rookie', 'selective'], ['Brianna Tate', 'intermediate', 'pressure'], ['Rochelle Givens', 'rookie', 'loose'],
   ['Marisol Vega', 'intermediate', 'cautious'], ['Carmen Salazar', 'rookie', 'calling-station'], ['Elena Ramirez', 'intermediate', 'patient'], ['Latoya Bishop', 'rookie', 'selective'], ['Nicole "Nikki" Wallace', 'intermediate', 'pressure'], ['Jasmine Reed', 'rookie', 'loose'], ['Felicia Boone', 'intermediate', 'cautious'], ['Shanice Holloway', 'rookie', 'calling-station'], ['Teresa McCall', 'intermediate', 'patient'], ['Candace "Candy" Daniels', 'rookie', 'selective'],
-].map(([name, level, tendency], index) => ({ id: `ai-${index + 1}`, name, level, tendency }));
+].map(([name, level, tendency], index) => ({ id: `ai-${index + 1}`, name, level, tendency, ...aiProfile(level, tendency) }));
 
 const ranks = '23456789TJQKA';
 const suits = ['S', 'H', 'D', 'C'];
@@ -49,6 +49,18 @@ const LIVE_TABLES = [
 ];
 
 function randomInt(max) { return crypto.randomInt(0, max); }
+function aiProfile(level, tendency) {
+  const base = level === 'intermediate' ? { skill: 62, discipline: 65 } : { skill: 35, discipline: 38 };
+  const traits = {
+    cautious: { category: 'Tight', aggression: 28, bluff: 12 },
+    'calling-station': { category: 'Caller', aggression: 38, bluff: 18 },
+    pressure: { category: 'Maverick', aggression: 78, bluff: 58 },
+    patient: { category: 'Strategist', aggression: 54, bluff: 28 },
+    selective: { category: 'Tight', aggression: 42, bluff: 20 },
+    loose: { category: 'Rookie', aggression: 63, bluff: 48 },
+  };
+  return { ...base, ...traits[tendency] };
+}
 function cleanCardLabel(card) { const faces = { T: '10', J: 'J', Q: 'Q', K: 'K', A: 'A' }; const marks = { S: String.fromCharCode(0x2660), H: String.fromCharCode(0x2665), D: String.fromCharCode(0x2666), C: String.fromCharCode(0x2663) }; return `${faces[card[0]] || card[0]}${marks[card[1]]}`; }
 function shuffledDeck() {
   const deck = suits.flatMap((suit) => [...ranks].map((rank) => `${rank}${suit}`));
@@ -57,7 +69,7 @@ function shuffledDeck() {
 }
 function cardLabel(card) { return `${({ T: '10', J: 'J', Q: 'Q', K: 'K', A: 'A' })[card[0]] || card[0]}${({ S: '♠', H: '♥', D: '♦', C: '♣' })[card[1]]}`; }
 function newRoom(id, label) { return { id, label, players: [], deck: [], board: [], pot: 0, currentBet: ANTE, stage: 'waiting', turn: 0, messages: ['Table is open. Two players are needed to deal.'], handId: null, settleTimer: null, updatedAt: Date.now() }; }
-function getRoom(id = 'yard-table', label) { if (!rooms.has(id)) rooms.set(id, newRoom(id, label || LIVE_TABLES.find((table) => table.id === id)?.label || 'Private Practice Table')); return rooms.get(id); }
+function getRoom(id = 'yard-table', label) { if (!rooms.has(id)) rooms.set(id, newRoom(id, label || LIVE_TABLES.find((table) => table.id === id)?.label || 'Solo Table')); return rooms.get(id); }
 function visibleCard(card) { return card ? { code: card, label: cleanCardLabel(card), suit: card[1], rank: card[0] } : null; }
 function nowISO() { return new Date().toISOString(); }
 
@@ -129,7 +141,7 @@ function createPokerService(ctx) {
   function uiTable(room, viewerId) {
     const raw = roomState(room, viewerId);
     return {
-      id: room.id, name: room.label, mode: room.players.some((player) => player.isAI) ? 'practice' : 'live', pot: room.pot,
+      id: room.id, name: room.label, mode: room.players.some((player) => player.isAI) ? 'solo' : 'live', pot: room.pot,
       communityCards: raw.room.board, holeCards: raw.me?.cards || [], seats: raw.players.map((player) => ({ ...player, displayName: player.name, chips: player.stack })),
       localPlayer: { displayName: raw.players.find((player) => player.id === viewerId)?.name || '' }, isYourTurn: Boolean(raw.me?.canAct),
       handLabel: room.stage === 'waiting' ? 'Waiting for a second player.' : `${room.stage[0].toUpperCase() + room.stage.slice(1)} hand`,
@@ -142,7 +154,7 @@ function createPokerService(ctx) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required.' });
     const balance = await wallet(user.id); const room = playerRoom.get(user.id) ? rooms.get(playerRoom.get(user.id)) : null;
     const onlineCount = LIVE_TABLES.reduce((count, definition) => count + getRoom(definition.id).players.filter((player) => !player.isAI).length, 0);
-    return json(response, 200, { balance: balance.balance, tables: tableList(), onlineCount, aiCount: AI_ROSTER.length, table: room ? uiTable(room, user.id) : null, fictionalOnly: true });
+    return json(response, 200, { balance: balance.balance, tables: tableList(), onlineCount, aiCount: AI_ROSTER.length, table: room ? uiTable(room, user.id) : null });
   }
   async function join(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required to join a table.' });
@@ -161,15 +173,17 @@ function createPokerService(ctx) {
   async function practice(request, response) {
     cors(request, response); const user = await getUser(request); if (!user) return json(response, 401, { error: 'Sign in is required to take a solo seat.' });
     const body = await parseBody(request);
-    if (playerRoom.has(user.id) && !String(playerRoom.get(user.id)).startsWith('practice-')) return json(response, 409, { error: 'Leave your live table before taking a solo seat.' });
-    const room = getRoom(playerRoom.get(user.id) || `practice-${user.id}`, 'Private Solo Table');
+    if (playerRoom.has(user.id) && !String(playerRoom.get(user.id)).startsWith('solo-')) return json(response, 409, { error: 'Leave your live table before taking a solo seat.' });
+    const room = getRoom(playerRoom.get(user.id) || `solo-${user.id}`, 'Solo Table');
     if (!playerRoom.has(user.id)) {
       const balance = await wallet(user.id); room.players.push({ id: user.id, name: user.displayName, isAI: false, stack: balance.balance, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); playerRoom.set(user.id, room.id);
     }
     if (room.players.length < 2) {
-      const requested = String(body?.aiId || body?.opponentName || '').replace(/[^a-z]/gi, '').toLowerCase();
-      const chosen = AI_ROSTER.find((ai) => ai.id === String(body?.aiId || '') || ai.name.replace(/[^a-z]/gi, '').toLowerCase() === requested) || AI_ROSTER[randomInt(AI_ROSTER.length)];
-      room.players.push({ ...chosen, isAI: true, stack: STARTING_BALANCE, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }); room.messages.push(`${chosen.name} took a seat at the solo table.`);
+      const requestedIds = Array.isArray(body?.aiIds) ? body.aiIds : [body?.aiId || body?.opponentName].filter(Boolean);
+      const chosen = [...new Map(requestedIds.map((id) => AI_ROSTER.find((ai) => ai.id === String(id))).filter(Boolean).map((ai) => [ai.id, ai])).values()].slice(0, 8);
+      if (!chosen.length) chosen.push(AI_ROSTER[randomInt(AI_ROSTER.length)]);
+      chosen.forEach((ai) => room.players.push({ ...ai, isAI: true, stack: STARTING_BALANCE, cards: [], roundBet: 0, folded: false, allIn: false, acted: false }));
+      room.messages.push(`${chosen.map((ai) => ai.name).join(', ')} took a seat at the solo table.`);
     }
     if (room.stage === 'waiting') await deal(room);
     return json(response, 200, { table: uiTable(room, user.id), balance: (await wallet(user.id)).balance });
@@ -209,14 +223,25 @@ function createPokerService(ctx) {
     }
     room.updatedAt = Date.now(); nextTurn(room); await finishBetting(room); await advanceAIs(room);
   }
+  function pokerSense(player, room, needed) {
+    const values = player.cards.map((card) => ranks.indexOf(card[0]) + 2);
+    const boardValues = room.board.map((card) => ranks.indexOf(card[0]) + 2);
+    const pair = values[0] === values[1]; const boardMatch = values.some((value) => boardValues.includes(value));
+    const suited = player.cards[0]?.[1] === player.cards[1]?.[1]; const connected = Math.abs(values[0] - values[1]) <= 2;
+    const high = Math.max(...values, 0); let strength = (high - 2) * 3 + (pair ? 34 : 0) + (boardMatch ? 25 : 0) + (suited ? 7 : 0) + (connected ? 6 : 0);
+    strength += (player.skill || 40) * 0.22 + randomInt(18) - 9;
+    const pressure = needed / Math.max(ANTE, player.stack || 1) * 100;
+    return { strength, pressure };
+  }
   async function advanceAIs(room) {
     const player = room.players[room.turn]; if (!player?.isAI || room.stage === 'waiting' || room.stage === 'showdown') return;
     clearTimeout(room.aiTimer); room.aiTimer = setTimeout(() => {
-      const needed = Math.max(0, room.currentBet - player.roundBet); const roll = randomInt(100); const tendency = player.tendency;
-      const foldAt = tendency === 'cautious' ? 48 : tendency === 'pressure' ? 18 : tendency === 'loose' ? 8 : 30;
-      const raiseAt = tendency === 'pressure' ? 68 : tendency === 'loose' ? 88 : tendency === 'patient' ? 82 : 92;
-      const action = needed && roll < foldAt ? 'fold' : roll > raiseAt && player.stack > needed + ANTE ? 'raise' : 'call';
-      perform(room, player, action, ANTE * (1 + randomInt(3))).catch(() => {});
+      const needed = Math.max(0, room.currentBet - player.roundBet); const { strength, pressure } = pokerSense(player, room, needed);
+      const callThreshold = 36 + (player.discipline || 45) * 0.35 + (player.aggression || 45) * 0.14 - pressure;
+      const bluff = randomInt(100) < (player.bluff || 20) && needed <= ANTE * 3;
+      const action = needed && strength < callThreshold && !bluff ? 'fold' : strength > 72 - (player.aggression || 45) * 0.2 && player.stack > needed + ANTE ? 'raise' : 'call';
+      const raiseBy = ANTE * (1 + Math.floor((player.aggression || 45) / 32) + randomInt(2));
+      perform(room, player, action, raiseBy).catch(() => {});
     }, 750 + randomInt(900));
   }
   async function action(request, response) {

@@ -5,6 +5,7 @@
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const state = { user: null, table: null, poll: null, busy: false };
   const opponentNames = ['Marcus "Mack" Holloway','Darnell Bishop','Leon "Red" Carter','Terrence Wallace','Calvin "Keys" Mercer','Raymond Givens','Andre "Dre" Collins','Victor Salazar','Luis Mendoza','Hector Ramirez','Elijah Boone','Travis McCall','Curtis "C.J." Jackson','Malcolm Reed','Jerome Tate','Isaiah "Zay" Freeman','Nathaniel Brooks','Corey "Slim" Daniels','Desmond Price','Maurice Granger','Tasha Monroe','Renee "Ray" Carter','Monique Ellis','Keisha Grant','Angela Mercer','Dominique Price','Yolanda Brooks','Vanessa "Vee" Cole','Brianna Tate','Rochelle Givens','Marisol Vega','Carmen Salazar','Elena Ramirez','Latoya Bishop','Nicole "Nikki" Wallace','Jasmine Reed','Felicia Boone','Shanice Holloway','Teresa McCall','Candace "Candy" Daniels'];
+  const opponentCategories = ['Tight','Caller','Maverick','Tight','Strategist','Rookie','Maverick','Tight','Strategist','Caller'];
   const root = $('[data-poker-root]');
   const app = $('[data-poker-app]');
   const gate = $('[data-auth-gate]');
@@ -26,18 +27,26 @@
   }
   function cardMarkup(card, target) {
     target.className = 'card';
+    target.replaceChildren();
     if (!card || card.hidden) {
       target.classList.add('card--down');
       target.removeAttribute('data-card-rank'); target.removeAttribute('data-card-suit');
       return;
     }
-    target.dataset.cardRank = card.rank || card[0] || '';
-    target.dataset.cardSuit = card.suit || card[1] || '';
+    const rank = (card.rank || card[0] || '') === 'T' ? '10' : (card.rank || card[0] || '');
+    const suitCode = card.suit || card[1] || '';
+    const suit = { S: '♠', H: '♥', D: '♦', C: '♣' }[suitCode] || suitCode;
+    target.dataset.cardRank = rank;
+    target.dataset.cardSuit = suit;
+    const corner = document.createElement('span'); corner.className = 'card__corner'; corner.textContent = `${rank}${suit}`;
+    const pip = document.createElement('span'); pip.className = 'card__pip'; pip.textContent = suit;
+    const cornerBottom = document.createElement('span'); cornerBottom.className = 'card__corner card__corner--bottom'; cornerBottom.textContent = `${rank}${suit}`;
+    target.append(corner, pip, cornerBottom);
   }
   function renderSeat(seat, index) {
     const node = $(`[data-seat="${index}"]`);
     if (!node) return;
-    node.className = `seat seat--${['north','north-east','south-east','south','south-west','north-west'][index]}`;
+    node.className = `seat seat--${['north','north-east','south-east','south','south-west','north-west','west','east','south-center'][index]}`;
     node.textContent = '';
     if (!seat) { node.classList.add('seat--empty'); node.textContent = 'Open seat'; return; }
     if (seat.isTurn) node.classList.add('seat--active');
@@ -61,8 +70,8 @@
     state.table = table;
     $('[data-poker-stage]').hidden = false;
     $('[data-poker-lobby]').hidden = true;
-    $('[data-table-kind]').textContent = table.mode === 'practice' ? 'Solo Table / House Opponent' : 'Live Table';
-    $('[data-table-name]').textContent = table.name || (table.mode === 'practice' ? 'Solo Table' : 'Live Table');
+    $('[data-table-kind]').textContent = table.mode === 'solo' ? 'Solo Table / House Opponents' : 'Live Table';
+    $('[data-table-name]').textContent = table.name || (table.mode === 'solo' ? 'Solo Table' : 'Live Table');
     $('[data-pot]').textContent = `$${money(table.pot)}`;
     $('[data-player-name]').textContent = table.localPlayer?.displayName || state.user?.displayName || 'Player';
     $('[data-hand-status]').textContent = table.handLabel || table.status || 'Waiting for the next hand.';
@@ -70,7 +79,7 @@
     $$('.card[data-community-card]').forEach((node, index) => cardMarkup((table.communityCards || [])[index], node));
     $$('.card[data-hole-card]').forEach((node, index) => cardMarkup((table.holeCards || [])[index], node));
     const seats = table.seats || table.players || [];
-    for (let i = 0; i < 6; i += 1) renderSeat(seats[i], i);
+    for (let i = 0; i < 9; i += 1) renderSeat(seats[i], i);
     renderActivity(table.activity || table.events);
     const allowed = table.isYourTurn && !state.busy;
     $$('[data-poker-action]').forEach((button) => { button.disabled = !allowed; button.classList.toggle('is-disabled', !allowed); });
@@ -127,9 +136,33 @@
   async function init() {
     const returnTo = `${location.pathname}${location.search}`;
     $('[data-login-link]').href = `../../LOGIN.html?returnTo=${encodeURIComponent(returnTo)}`;
-    const selector = $('[data-ai-opponent]');
+    $('[data-felt-table] .table-mark small').textContent = 'Texas Hold’em / Solo & Live Play';
+    const selector = $('[data-ai-opponents]');
+    const selectedTray = $('[data-selected-opponents]');
     selector.textContent = '';
-    opponentNames.forEach((name) => { const option = document.createElement('option'); option.value = name; option.textContent = name; selector.append(option); });
+    opponentNames.forEach((name, index) => {
+      const id = `ai-${index + 1}`; const category = opponentCategories[index % opponentCategories.length];
+      const label = document.createElement('label'); label.className = 'ai-picker__option';
+      const input = document.createElement('input'); input.type = 'checkbox'; input.value = id; input.checked = index === 0; input.dataset.aiName = name; input.dataset.aiCategory = category;
+      const copy = document.createElement('span'); copy.className = 'ai-picker__copy';
+      const title = document.createElement('strong'); title.textContent = name;
+      const tag = document.createElement('small'); tag.textContent = category;
+      copy.append(title, tag); label.append(input, copy); selector.append(label);
+    });
+    const updateSelectionCount = () => {
+      const selected = $$('input:checked', selector);
+      const count = selected.length;
+      $$('input', selector).forEach((input) => { input.disabled = count >= 8 && !input.checked; });
+      $('[data-ai-selection-count]').textContent = `${count} selected / 8 seats available`;
+      selectedTray.textContent = '';
+      selected.forEach((input) => {
+        const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'selected-opponents__chip'; remove.dataset.removeAi = input.value;
+        remove.setAttribute('aria-label', `Remove ${input.dataset.aiName}`); remove.textContent = `${input.dataset.aiName} · ${input.dataset.aiCategory} ×`;
+        selectedTray.append(remove);
+      });
+    };
+    selector.addEventListener('change', updateSelectionCount); updateSelectionCount();
+    selectedTray.addEventListener('click', (event) => { const button = event.target.closest('[data-remove-ai]'); if (!button) return; const input = $(`input[value="${button.dataset.removeAi}"]`, selector); if (input) { input.checked = false; updateSelectionCount(); } });
     const user = await window.CCCCommunity.restoreSession();
     if (!user) { gate.hidden = false; return; }
     state.user = user; app.hidden = false; gate.hidden = true;
@@ -138,7 +171,11 @@
   }
   document.addEventListener('DOMContentLoaded', () => {
     $('[data-refresh-tables]').addEventListener('click', loadLobby);
-    $('[data-start-practice]').addEventListener('click', () => enter('/api/poker/practice', { opponentName: $('[data-ai-opponent]').value }));
+    $('[data-start-practice]').addEventListener('click', () => {
+      const aiIds = $$('input:checked', $('[data-ai-opponents]')).map((input) => input.value).slice(0, 8);
+      if (!aiIds.length) { toast('Choose at least one opponent.'); return; }
+      enter('/api/poker/practice', { aiIds });
+    });
     $('[data-live-tables]').addEventListener('click', (event) => { const button = event.target.closest('[data-join-table]'); if (button) enter('/api/poker/join', { tableId: button.dataset.joinTable }); });
     $$('[data-poker-action]').forEach((button) => button.addEventListener('click', () => action(button.dataset.pokerAction)));
     $('[data-leave-table]').addEventListener('click', leave);
