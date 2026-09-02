@@ -78,23 +78,11 @@
       slot.textContent = '';
       if (user) {
         const profile = document.createElement('a');
-        profile.className = 'account-avatar-link';
+        profile.className = 'account-link';
         profile.href = 'PROFILE.html';
         profile.title = `${user.displayName}: open profile`;
         profile.setAttribute('aria-label', `${user.displayName}: open profile`);
-        const fallback = document.createElement('span');
-        fallback.className = 'account-avatar-initials';
-        fallback.textContent = initials(user.displayName);
-        const src = avatarUrl(user);
-        if (src) {
-          const image = document.createElement('img');
-          image.src = src;
-          image.alt = '';
-          image.onload = () => fallback.hidden = true;
-          image.onerror = () => { image.remove(); fallback.hidden = false; };
-          profile.append(image);
-        }
-        profile.append(fallback);
+        profile.textContent = 'Profile';
         slot.append(profile);
       } else {
         const link = document.createElement('a');
