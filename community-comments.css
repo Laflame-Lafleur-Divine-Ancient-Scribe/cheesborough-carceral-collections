@@ -21,4 +21,5 @@
 .community-comment-form button,.community-comment-signin{background:#0f2c4a;border:1px solid #0f2c4a;color:#fff;cursor:pointer;display:inline-block;font:700 .78rem/1.1 sans-serif;letter-spacing:.06em;padding:.75rem 1rem;text-decoration:none;width:max-content}
 .community-comment-form button:hover,.community-comment-signin:hover{background:#8d362d;border-color:#8d362d}
 .community-comment-form [role="status"]{font-size:.9rem;margin:0}
+.community-discussion .avatar{display:none}.community-discussion .comment{display:block}
 @media(max-width:620px){.community-discussion{margin-top:2rem;padding:1.1rem}.community-comment-list{padding:.8rem}}
