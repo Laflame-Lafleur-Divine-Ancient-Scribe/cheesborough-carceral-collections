@@ -1,13 +1,26 @@
-/* Image-led phone cards. Desktop stations retain their existing yard layout. */
-.station-art{display:none}
+/* Image-led game files: the supplied art is visible at every viewport. */
+.station-section{padding-bottom:clamp(3.5rem,7vw,6.4rem);padding-top:clamp(3.5rem,7vw,5.2rem)}
+.station-section>header{align-items:end;border-bottom:4px solid var(--navy);column-gap:2rem;display:grid;grid-template-columns:1fr auto;margin-bottom:1.65rem}
+.station-section>header .eyebrow{grid-column:1/-1}
+.station-section>header h2{margin-bottom:1.1rem}
+.station-lede{font-family:Georgia,serif;font-size:.95rem;margin:0 0 1.2rem;max-width:22rem}
+.station-card{display:flex;flex-direction:column;min-width:0;padding:0 1.35rem 1.35rem}
+.station-art{aspect-ratio:1/1;border-bottom:1px solid var(--line);display:block!important;margin:0 -1.35rem 1.35rem;object-fit:cover;object-position:center top;width:calc(100% + 2.7rem)}
+.station-copy{display:flex;flex:1;flex-direction:column}
+.station-number{margin:0 0 .8rem}
+.station-copy>p:not(.station-number){font-size:.97rem;margin:1rem 0 1.35rem}
+.station-card .station-play{background:var(--navy);border:1px solid var(--navy);color:#fffaf0!important;display:block;font-family:Georgia,serif!important;font-size:.82rem!important;font-style:normal!important;font-weight:bold;letter-spacing:.055em;margin-top:auto;padding:.82rem .9rem;text-align:center;text-decoration:none!important;text-transform:uppercase;transition:background .18s,border-color .18s,color .18s}
+.station-card--poker .station-play{background:#765b36;border-color:#765b36}
+.station-card--dice .station-play{background:var(--red);border-color:var(--red)}
+.station-card .station-play:hover,.station-card .station-play:focus-visible{background:var(--gold-pale)!important;border-color:var(--gold-pale)!important;color:var(--deep)!important}
 
 @media (max-width:760px){
-  .station-list{border-left:1px solid var(--line);border-right:1px solid var(--line)}
-  .station-card{display:flex;flex-direction:column;min-height:0;padding:1.25rem}
-  .station-art{aspect-ratio:1;display:block;object-fit:cover;order:-2;width:100%}
-  .station-number{margin:1.15rem 0 .65rem}
-  .station-card h3{font-size:clamp(1.65rem,8vw,2.2rem)}
-  .station-card>p:not(.station-number){font-size:1rem;margin:.7rem 0 1.2rem}
-  .station-card .station-play{background:var(--navy);color:#fffaf0;display:block;font-family:Georgia,serif;font-size:1rem;font-style:normal;letter-spacing:.05em;margin-top:auto;padding:.85rem 1rem;text-align:center;text-decoration:none;text-transform:uppercase}
-  .station-card .station-play:hover,.station-card .station-play:focus-visible{background:var(--red);color:#fff}
+  .station-section>header{display:block}
+  .station-lede{margin:.15rem 0 1.1rem}
+  .station-card{min-height:0;padding:0 1rem 1rem}
+  .station-card+.station-card{border-left:0;border-top:1px solid var(--line)}
+  .station-art{margin:0 -1rem 1rem;width:calc(100% + 2rem)}
+  .station-number{margin:.1rem 0 .65rem}
+  .station-copy>p:not(.station-number){margin:.75rem 0 1.1rem}
+  .station-card .station-play{font-size:.92rem!important;margin-top:1.25rem;padding:.9rem 1rem}
 }
