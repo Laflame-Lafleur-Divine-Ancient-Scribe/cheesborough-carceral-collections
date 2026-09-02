@@ -86,6 +86,8 @@ const CCC_VIDEO_CATALOG = [
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    if (document.body.dataset.videoPage === 'browse') browse(); else watch();
+    if (document.body.dataset.videoPage === 'browse') {
+      if (typeof CCC_TODAYS_VIDEOS === 'undefined') browse();
+    } else watch();
   });
 })();
