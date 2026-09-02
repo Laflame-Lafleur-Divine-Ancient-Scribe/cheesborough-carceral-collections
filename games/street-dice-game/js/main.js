@@ -1,3 +1,4 @@
+import '../../game-auth.js';
 import * as CANNON from 'cannon-es';
 import * as THREE from 'three';
 import { OrbitControls } from 'OrbitControls';
