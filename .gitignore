@@ -4,6 +4,7 @@ Thumbs.db
 *.tmp
 *.log
 .env
+data/video-editions.generated.json
 .env.*
 
 # Archive files

@@ -35,14 +35,60 @@ const CCC_VIDEO_CATALOG = [
     url.searchParams.set('origin', location.origin);
     return url.href;
   };
+  const playerFallback = (film) => `<div class="source-poster player-fallback" role="status"><strong>This video could not start in the embedded player.</strong><span>Open the original public video on YouTube to continue watching.</span><a class="action-btn" href="${link(film)}" target="_blank" rel="noreferrer">Watch on YouTube &#8599;</a></div>`;
+  const verifyEmbeddedPlayback = (film) => {
+    if (!film.embed || film.embeddable === false) return;
+    const mount = document.querySelector('#youtube-player');
+    if (!mount) return;
+    let settled = false;
+    let failureTimer;
+    const showFallback = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(failureTimer);
+      const frame = document.querySelector('#youtube-player');
+      if (frame) frame.outerHTML = playerFallback(film);
+    };
+    const connect = () => {
+      if (!window.YT || typeof window.YT.Player !== 'function') return false;
+      new window.YT.Player('youtube-player', {
+        events: {
+          onReady: () => { settled = true; clearTimeout(failureTimer); },
+          onError: showFallback
+        }
+      });
+      return true;
+    };
+    const scriptId = 'youtube-iframe-api';
+    const start = () => {
+      if (connect()) return;
+      const retry = window.setInterval(() => {
+        if (connect()) window.clearInterval(retry);
+      }, 100);
+      window.setTimeout(() => window.clearInterval(retry), 5000);
+    };
+    if (document.getElementById(scriptId)) start();
+    else {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.async = true;
+      script.addEventListener('load', start, { once: true });
+      script.addEventListener('error', showFallback, { once: true });
+      document.head.append(script);
+    }
+    failureTimer = window.setTimeout(showFallback, 15000);
+  };
   const hydrateCatalog = () => {
     if (metadataRequest) return metadataRequest;
     const ids = [...new Set(CCC_VIDEO_CATALOG.map((film) => film.embed).filter(Boolean))];
     if (!ids.length) return Promise.resolve();
-    metadataRequest = fetch(`${apiBase}/api/youtube/videos?ids=${encodeURIComponent(ids.join(','))}`)
+    const batches = Array.from({ length: Math.ceil(ids.length / 50) }, (_, index) => ids.slice(index * 50, (index + 1) * 50));
+    metadataRequest = Promise.all(batches.map((batch) => fetch(`${apiBase}/api/youtube/videos?ids=${encodeURIComponent(batch.join(','))}`)
       .then((response) => response.ok ? response.json() : null)
-      .then((payload) => {
-        const details = new Map((payload?.videos || []).map((video) => [video.id, video]));
+      .catch(() => null)))
+      .then((payloads) => {
+        const details = new Map(payloads.flatMap((payload) => payload?.videos || []).map((video) => [video.id, video]));
         CCC_VIDEO_CATALOG.forEach((film) => Object.assign(film, details.get(film.embed) || {}));
       })
       .catch(() => {});
@@ -104,6 +150,7 @@ const CCC_VIDEO_CATALOG = [
     const related = CCC_VIDEO_CATALOG.filter((entry) => entry.id !== film.id).slice(0,7);
     const player = !film.embed ? '<div class="source-poster">Video source unavailable</div>' : film.embeddable === false ? '<div class="source-poster"><strong>This publisher does not permit embedded playback.</strong><span>Use Watch on YouTube to open the original video.</span></div>' : `<iframe id="youtube-player" src="${esc(embedUrl(film))}" title="${esc(film.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
     root.innerHTML = `<a class="watch-back" href="VIDEOS.html">&larr; Back to CrimeNewsTV</a><section class="record-masthead" aria-labelledby="watch-heading"><div class="record-primary"><p class="record-kicker">CrimeNewsTV</p><h1 id="watch-heading">${esc(film.title)}</h1><p class="record-deck">${esc(film.deck || 'A selected video from the CrimeNewsTV desk.')}</p></div><aside class="record-slip"><span>Video category</span><strong>${esc(film.category)}</strong><p>Watch the video, review the source, and add to the conversation.</p></aside></section><div class="watch-layout"><article class="watch-main"><section class="player-frame"><div class="player">${player}</div></section><h2 class="watch-title">${esc(film.title)}</h2><p class="watch-meta">${esc(film.category)} &middot; CrimeNewsTV</p><div class="watch-actions"><a class="action-btn" href="${link(film)}" target="_blank" rel="noreferrer">Watch on YouTube &#8599;</a><a class="action-btn secondary" href="#discussion">Comments</a></div><p class="watch-description">${esc(film.description)}</p><p class="embed-note">If YouTube does not allow this embedded player to load, use <strong>Watch on YouTube</strong> to open the original public video.</p><section class="community-discussion" id="discussion" aria-label="Community discussion"><p class="community-discussion-kicker">Community discussion</p><h2 id="discussion-heading">Community conversation</h2><p class="community-discussion-intro">Published comments are visible to every reader. Signed-in members can join the conversation below.</p><p id="comment-status" class="community-thread-status" aria-live="polite"></p><div id="comment-list" class="community-comment-list" aria-live="polite"></div><div class="community-comment-compose"><form id="comment-form" class="community-comment-form"><label for="comment-field">Your comment</label><textarea id="comment-field" maxlength="1200" placeholder="Share a respectful, evidence-based response." required></textarea><button type="submit">Post comment</button></form></div></section></article><aside class="related-videos" aria-label="Related Videos"><h2>Related Videos</h2><p>More from CrimeNewsTV.</p>${related.map((entry) => `<a class="next-card" href="VIDEO.html?id=${encodeURIComponent(entry.id)}">${thumb(entry, 'loading="lazy"')}<div><h3>${esc(entry.title)}</h3><p>${esc(entry.category)}</p></div></a>`).join('')}</aside></div>`;
+    verifyEmbeddedPlayback(film);
     window.CCCCommunity.renderNav();
     comments(film);
   }
