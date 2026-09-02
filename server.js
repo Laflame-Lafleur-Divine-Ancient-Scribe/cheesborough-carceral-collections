@@ -13,6 +13,8 @@ const { createPokerService } = require('./games/jail-house-poker/poker-service')
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
 const searxngUrl = process.env.SEARXNG_URL || 'http://localhost:8888';
+const youtubeApiKey = String(process.env.YOUTUBE_API_KEY || '').trim();
+const youtubeVideoCache = new Map();
 const allowedOrigins = new Set([
     ...(process.env.ALLOWED_ORIGINS || 'https://carceralcollections.org,https://www.carceralcollections.org').split(',').map((origin) => origin.trim()).filter(Boolean),
     'http://localhost:8080',
@@ -1385,6 +1387,59 @@ async function fetchJson(url) {
     return fetchJsonWithin(url, 10000);
 }
 
+function youtubeVideoIds(value) {
+    return [...new Set(String(value || '').split(',').map((id) => id.trim()).filter((id) => /^[A-Za-z0-9_-]{6,20}$/.test(id)))].slice(0, 50);
+}
+
+function youtubeVideoRecord(item) {
+    const snippet = item?.snippet || {};
+    return {
+        id: String(item?.id || ''),
+        title: String(snippet.title || ''),
+        channelTitle: String(snippet.channelTitle || ''),
+        publishedAt: String(snippet.publishedAt || ''),
+        thumbnail: String(snippet.thumbnails?.high?.url || snippet.thumbnails?.medium?.url || snippet.thumbnails?.default?.url || ''),
+        duration: String(item?.contentDetails?.duration || ''),
+        embeddable: item?.status?.embeddable !== false,
+        privacyStatus: String(item?.status?.privacyStatus || ''),
+    };
+}
+
+async function handleYouTubeVideos(requestUrl, response) {
+    const ids = youtubeVideoIds(requestUrl.searchParams.get('ids'));
+    if (!ids.length) {
+        response.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'Provide one or more valid YouTube video IDs.' }));
+        return;
+    }
+    if (!youtubeApiKey) {
+        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ configured: false, videos: [] }));
+        return;
+    }
+    const cacheKey = ids.slice().sort().join(',');
+    const cached = youtubeVideoCache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) {
+        response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=900' });
+        response.end(JSON.stringify({ configured: true, cached: true, videos: cached.videos }));
+        return;
+    }
+    const endpoint = new URL('https://www.googleapis.com/youtube/v3/videos');
+    endpoint.searchParams.set('part', 'snippet,status,contentDetails');
+    endpoint.searchParams.set('id', ids.join(','));
+    endpoint.searchParams.set('key', youtubeApiKey);
+    const payload = await fetchJsonWithin(endpoint.href, 8000);
+    if (!payload || !Array.isArray(payload.items)) {
+        response.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+        response.end(JSON.stringify({ error: 'YouTube metadata is temporarily unavailable.' }));
+        return;
+    }
+    const videos = payload.items.map(youtubeVideoRecord).filter((video) => video.id);
+    youtubeVideoCache.set(cacheKey, { expiresAt: Date.now() + (15 * 60 * 1000), videos });
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'public, max-age=900' });
+    response.end(JSON.stringify({ configured: true, cached: false, videos }));
+}
+
 async function fetchJsonWithin(url, timeoutMs) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
@@ -2015,6 +2070,14 @@ const server = http.createServer((request, response) => {
             handleNews(requestUrl, response).catch(() => {
                 response.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8' });
                 response.end(JSON.stringify({ error: 'The live news service is unavailable.' }));
+            });
+            return;
+        }
+        if (requestUrl.pathname === '/api/youtube/videos') {
+            applyApiCors(request, response);
+            handleYouTubeVideos(requestUrl, response).catch(() => {
+                response.writeHead(502, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+                response.end(JSON.stringify({ error: 'YouTube metadata is temporarily unavailable.' }));
             });
             return;
         }

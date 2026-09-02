@@ -28,5 +28,7 @@ CCC_VIDEO_CATALOG.push(...CCC_TODAYS_VIDEOS);
     filters.addEventListener('click', event => { const button = event.target.closest('button[data-category]'); if (!button) return; activeCategory = button.dataset.category; filters.querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === button))); render(); });
     search.addEventListener('input', render); render();
   }
-  document.addEventListener('DOMContentLoaded', renderDatedBrowse);
+  document.addEventListener('DOMContentLoaded', () => {
+    Promise.resolve(window.CCCVideoData?.hydrateCatalog?.()).finally(renderDatedBrowse);
+  });
 })();

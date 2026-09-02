@@ -3,6 +3,8 @@
 Thumbs.db
 *.tmp
 *.log
+.env
+.env.*
 
 # Archive files
 *.zip

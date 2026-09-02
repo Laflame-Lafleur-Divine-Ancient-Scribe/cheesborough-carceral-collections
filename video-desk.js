@@ -24,8 +24,24 @@ const CCC_VIDEO_CATALOG = [
 
 (() => {
   const esc = (value) => String(value || '').replace(/[&<>"']/g, (character) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
-  const thumb = (film, loading = '') => film.embed ? `<img src="https://i.ytimg.com/vi/${encodeURIComponent(film.embed)}/hqdefault.jpg" alt="${esc(film.title)} video thumbnail" ${loading}>` : '<span class="source-poster">Source unavailable</span>';
+  const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://serviceapi-production-f574.up.railway.app';
+  let metadataRequest;
+  const thumb = (film, loading = '') => film.embed ? `<img src="${esc(film.thumbnail || `https://i.ytimg.com/vi/${encodeURIComponent(film.embed)}/hqdefault.jpg`)}" alt="${esc(film.title)} video thumbnail" ${loading}>` : '<span class="source-poster">Source unavailable</span>';
   const link = (film) => `https://www.youtube.com/watch?v=${encodeURIComponent(film.embed)}`;
+  const hydrateCatalog = () => {
+    if (metadataRequest) return metadataRequest;
+    const ids = [...new Set(CCC_VIDEO_CATALOG.map((film) => film.embed).filter(Boolean))];
+    if (!ids.length) return Promise.resolve();
+    metadataRequest = fetch(`${apiBase}/api/youtube/videos?ids=${encodeURIComponent(ids.join(','))}`)
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload) => {
+        const details = new Map((payload?.videos || []).map((video) => [video.id, video]));
+        CCC_VIDEO_CATALOG.forEach((film) => Object.assign(film, details.get(film.embed) || {}));
+      })
+      .catch(() => {});
+    return metadataRequest;
+  };
+  window.CCCVideoData = { hydrateCatalog };
 
   function browse() {
     const grid = document.querySelector('#video-grid');
@@ -79,15 +95,17 @@ const CCC_VIDEO_CATALOG = [
     if (!film && /^[A-Za-z0-9_-]{6,20}$/.test(id || '')) film = {id,embed:id,title:'CrimeNewsTV Selection',category:'Video Record',deck:'A curated public video selected for the CrimeNewsTV desk.',description:'This public YouTube video is provided for viewing and discussion. Availability remains under the original publisher’s control.'};
     if (!film) { root.innerHTML = '<section class="not-found"><h1>Video not found</h1><p>That video is not in the CrimeNewsTV catalog.</p><a href="VIDEOS.html">Return to CrimeNewsTV</a></section>'; return; }
     const related = CCC_VIDEO_CATALOG.filter((entry) => entry.id !== film.id).slice(0,7);
-    const player = film.embed ? `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(film.embed)}?rel=0" title="${esc(film.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>` : '<div class="source-poster">Video source unavailable</div>';
+    const player = !film.embed ? '<div class="source-poster">Video source unavailable</div>' : film.embeddable === false ? '<div class="source-poster"><strong>This publisher does not permit embedded playback.</strong><span>Use Watch on YouTube to open the original video.</span></div>' : `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(film.embed)}?rel=0" title="${esc(film.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
     root.innerHTML = `<a class="watch-back" href="VIDEOS.html">&larr; Back to CrimeNewsTV</a><section class="record-masthead" aria-labelledby="watch-heading"><div class="record-primary"><p class="record-kicker">CrimeNewsTV</p><h1 id="watch-heading">${esc(film.title)}</h1><p class="record-deck">${esc(film.deck || 'A selected video from the CrimeNewsTV desk.')}</p></div><aside class="record-slip"><span>Video category</span><strong>${esc(film.category)}</strong><p>Watch the video, review the source, and add to the conversation.</p></aside></section><div class="watch-layout"><article class="watch-main"><section class="player-frame"><div class="player">${player}</div></section><h2 class="watch-title">${esc(film.title)}</h2><p class="watch-meta">${esc(film.category)} &middot; CrimeNewsTV</p><div class="watch-actions"><a class="action-btn" href="${link(film)}" target="_blank" rel="noreferrer">Watch on YouTube &#8599;</a><a class="action-btn secondary" href="#discussion">Comments</a></div><p class="watch-description">${esc(film.description)}</p><p class="embed-note">If YouTube does not allow this embedded player to load, use <strong>Watch on YouTube</strong> to open the original public video.</p><section class="community-discussion" id="discussion" aria-label="Community discussion"><p class="community-discussion-kicker">Community discussion</p><h2 id="discussion-heading">Community conversation</h2><p class="community-discussion-intro">Published comments are visible to every reader. Signed-in members can join the conversation below.</p><p id="comment-status" class="community-thread-status" aria-live="polite"></p><div id="comment-list" class="community-comment-list" aria-live="polite"></div><div class="community-comment-compose"><form id="comment-form" class="community-comment-form"><label for="comment-field">Your comment</label><textarea id="comment-field" maxlength="1200" placeholder="Share a respectful, evidence-based response." required></textarea><button type="submit">Post comment</button></form></div></section></article><aside class="related-videos" aria-label="Related Videos"><h2>Related Videos</h2><p>More from CrimeNewsTV.</p>${related.map((entry) => `<a class="next-card" href="VIDEO.html?id=${encodeURIComponent(entry.id)}">${thumb(entry, 'loading="lazy"')}<div><h3>${esc(entry.title)}</h3><p>${esc(entry.category)}</p></div></a>`).join('')}</aside></div>`;
     window.CCCCommunity.renderNav();
     comments(film);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    if (document.body.dataset.videoPage === 'browse') {
-      if (typeof CCC_TODAYS_VIDEOS === 'undefined') browse();
-    } else watch();
+    hydrateCatalog().finally(() => {
+      if (document.body.dataset.videoPage === 'browse') {
+        if (typeof CCC_TODAYS_VIDEOS === 'undefined') browse();
+      } else watch();
+    });
   });
 })();
