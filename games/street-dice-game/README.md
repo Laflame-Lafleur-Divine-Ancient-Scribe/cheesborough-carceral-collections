@@ -27,4 +27,4 @@ This project uses [Three.js](https://threejs.org/) and [Cannon-es](https://pmndr
 
 ## Responsible play
 
-This game uses virtual chips for entertainment and educational purposes only. No real-money wagering is offered. Unlicensed street gambling may violate state or local law. Know the rules where you live.
+Street Dice is built for the Cheesborough Games Desk.

@@ -1,1 +1,10 @@
-.lobby-grid{grid-template-areas:'account account' 'art table' 'live live';grid-template-columns:minmax(0,1fr) minmax(20rem,1fr)}.account-card{grid-area:account}.table-card{grid-area:table}.live-card{grid-area:live}.dice-lobby-art{background:#151e26;border:1px solid #c69a45a6;box-shadow:5px 6px 0 #0005;grid-area:art;margin:0;min-height:100%;overflow:hidden;position:relative}.dice-lobby-art img{display:block;height:100%;min-height:27rem;object-fit:cover;width:100%}.dice-lobby-art figcaption{background:#101c2be8;bottom:0;color:#e8d9b5;font:700 .7rem Georgia,serif;left:0;letter-spacing:.1em;padding:.55rem .7rem;position:absolute;text-transform:uppercase}@media(max-width:800px){.lobby-grid{grid-template-areas:'account' 'art' 'table' 'live';grid-template-columns:1fr}.dice-lobby-art{min-height:0}.dice-lobby-art img{height:auto;min-height:0;max-height:25rem}.dice-lobby h1{font-size:clamp(2rem,12vw,3.4rem);overflow-wrap:anywhere}.dice-lobby>header{max-width:100%;overflow:hidden}}
+/* These selectors intentionally outrank base.css, which is parsed after this import. */
+body .dice-lobby{margin-left:auto;margin-right:auto;max-width:1160px}
+body .dice-lobby .lobby-grid{display:grid;gap:1rem;grid-template-areas:'account account' 'art table' 'live live';grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+body .dice-lobby .account-card{grid-area:account}
+body .dice-lobby .table-card{grid-area:table}
+body .dice-lobby .live-card{grid-area:live}
+body .dice-lobby .dice-lobby-art{background:#151e26;border:1px solid #c69a45a6;box-shadow:5px 6px 0 #0005;grid-area:art;margin:0;min-height:100%;overflow:hidden;position:relative}
+body .dice-lobby .dice-lobby-art img{display:block;height:100%;min-height:27rem;object-fit:cover;width:100%}
+body .dice-lobby .dice-lobby-art figcaption{background:#101c2be8;bottom:0;color:#e8d9b5;font:700 .7rem Georgia,serif;left:0;letter-spacing:.1em;padding:.55rem .7rem;position:absolute;text-transform:uppercase}
+@media (max-width:800px){body .dice-lobby .lobby-grid{grid-template-areas:'account' 'art' 'table' 'live';grid-template-columns:minmax(0,1fr)}body .dice-lobby .dice-lobby-art{min-height:0}body .dice-lobby .dice-lobby-art img{height:auto;min-height:0;max-height:25rem}body .dice-lobby h1{font-size:clamp(2rem,12vw,3.4rem);overflow-wrap:anywhere}body .dice-lobby>header{max-width:100%;overflow:hidden}}

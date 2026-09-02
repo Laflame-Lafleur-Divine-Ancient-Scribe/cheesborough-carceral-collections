@@ -1,0 +1,13 @@
+/* Image-led phone cards. Desktop stations retain their existing yard layout. */
+.station-art{display:none}
+
+@media (max-width:760px){
+  .station-list{border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  .station-card{display:flex;flex-direction:column;min-height:0;padding:1.25rem}
+  .station-art{aspect-ratio:1;display:block;object-fit:cover;order:-2;width:100%}
+  .station-number{margin:1.15rem 0 .65rem}
+  .station-card h3{font-size:clamp(1.65rem,8vw,2.2rem)}
+  .station-card>p:not(.station-number){font-size:1rem;margin:.7rem 0 1.2rem}
+  .station-card .station-play{background:var(--navy);color:#fffaf0;display:block;font-family:Georgia,serif;font-size:1rem;font-style:normal;letter-spacing:.05em;margin-top:auto;padding:.85rem 1rem;text-align:center;text-decoration:none;text-transform:uppercase}
+  .station-card .station-play:hover,.station-card .station-play:focus-visible{background:var(--red);color:#fff}
+}
