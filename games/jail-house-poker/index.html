@@ -22,6 +22,36 @@
   <style>
     .felt-table{background:linear-gradient(105deg,rgba(7,12,10,.68),rgba(7,12,10,.24) 50%,rgba(7,12,10,.7)),url("../../01_Photos/ShareImages/PokerBack.png") center/cover no-repeat}
   </style>
+  <style>
+    /* Final phone overrides stay after the legacy inline seat rules. */
+    @media(max-width:480px){
+      html,body{max-width:100%;overflow-x:clip}
+      main,.poker-app,.table-stage{min-width:0;width:100%}
+      .poker-masthead{grid-template-columns:minmax(0,1fr) auto}
+      .wordmark span{font-size:.52rem;letter-spacing:.08em}.wordmark strong{font-size:.95rem}
+      .poker-masthead nav a{font-size:.58rem;padding:.48rem}.poker-masthead nav a:last-child{display:none}
+      .table-stage__header{align-items:stretch;display:grid;gap:.55rem;grid-template-columns:minmax(0,1fr)}
+      .table-stage__header>div:first-child{min-width:0}.table-stage h2{font-size:1.28rem;overflow-wrap:anywhere}
+      .table-stage__header .pot{grid-column:1;text-align:left}.pot strong{font-size:1.35rem}
+      .leave-button{grid-column:1;min-height:2.75rem;padding:.48rem .58rem;width:100%}
+      .felt-frame{margin:0;max-width:100%;padding:.38rem}
+      .felt-table{aspect-ratio:1.48 / 1;min-height:0;width:100%}
+      .felt-table .seat{min-height:2.4rem;padding:.14rem .12rem;width:3.65rem}
+      .felt-table .seat__name{font-size:.56rem;max-width:3.45rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      .felt-table .seat__chips{font-size:.4rem}.felt-table .seat__state{display:none}
+      .felt-table .seat--position-0{left:36%;top:2%;transform:translateX(-50%)}.felt-table .seat--position-8{left:64%;top:2%;transform:translateX(-50%)}
+      .felt-table .seat--position-7{left:1%;top:22%}.felt-table .seat--position-1{right:1%;top:22%}
+      .felt-table .seat--position-6{left:1%;top:50%}.felt-table .seat--position-2{right:1%;top:50%}
+      .felt-table .seat--position-5{bottom:2%;left:12%}.felt-table .seat--position-4{bottom:2%;left:50%;transform:translateX(-50%)}.felt-table .seat--position-3{bottom:2%;right:12%}
+      .felt-table .community-cards{gap:.12rem}.felt-table .card{height:2.8rem;width:1.92rem}
+      .felt-table .table-mark span{font-size:3.3rem}.felt-table .table-mark small{font-size:.42rem;letter-spacing:.08em}
+      .felt-table .dealer-button{height:1.55rem;right:26%;top:34%;width:1.55rem}
+      .player-hand,.action-bar{margin:0;min-width:0}.player-hand{gap:.65rem;padding:.8rem}.player-hand strong{font-size:1rem}
+      .hole-cards{gap:.35rem}.hole-cards .card{height:3rem;width:2.1rem}.hand-status{font-size:.8rem}
+      .action-bar{gap:.75rem;padding:.8rem}.action-buttons{gap:.45rem;grid-template-columns:1fr}.action-button{min-height:2.75rem;padding:.58rem .28rem}
+      .raise-control{grid-column:auto;grid-template-columns:3.1rem minmax(0,1fr) minmax(5.7rem,auto)}.raise-control input{font-size:.86rem}.turn-note{font-size:.8rem}
+    }
+  </style>
   <script src="../../community-auth.js" defer></script>
   <script src="poker.js" defer></script>
 </head>
