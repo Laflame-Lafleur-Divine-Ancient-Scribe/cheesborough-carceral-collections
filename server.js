@@ -42,10 +42,14 @@ const stripeMonthlySupport = {
     full_member: { priceVariable: 'STRIPE_PRICE_FULL_MEMBER' },
     legacy_circle: { priceVariable: 'STRIPE_PRICE_LEGACY_CIRCLE' },
 };
+const stripeManagedPaymentsApiVersion = '2026-02-25.preview';
+const stripeDonationCatalogKey = 'one_time_support';
+const stripeDonationTaxCode = 'txcd_10103100';
 const stripeCheckoutRate = new Map();
 let communityPool;
 let communitySchemaPromise;
 let stripeClient;
+let stripeDonationProductPromise;
 function communityDb() {
     if (!process.env.DATABASE_URL) return null;
     if (!communityPool) communityPool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined });
@@ -497,8 +501,133 @@ async function parseCommunityBody(request, maximumLength = 4096) {
 function stripeApi() {
     const secret = String(process.env.STRIPE_SECRET_KEY || '').trim();
     if (!secret) return null;
-    if (!stripeClient) stripeClient = new Stripe(secret);
+    if (!stripeClient) stripeClient = new Stripe(secret, { apiVersion: stripeManagedPaymentsApiVersion });
     return stripeClient;
+}
+
+function stripeId(value, prefix) {
+    const id = typeof value === 'string' ? value : value?.id;
+    return typeof id === 'string' && id.startsWith(prefix) ? id : null;
+}
+
+function stripeCustomerId(value) {
+    return stripeId(value, 'cus_');
+}
+
+function stripeAccountMode() {
+    return String(process.env.STRIPE_SECRET_KEY || '').trim().startsWith('sk_live_') ? 'live' : 'test';
+}
+
+async function donationCatalogProduct(stripe) {
+    const db = communityDb();
+    if (!db) throw new Error('Donation records require DATABASE_URL.');
+    await ensureCommunitySchema();
+    const catalogKey = `${stripeDonationCatalogKey}:${stripeAccountMode()}`;
+    const existing = await db.query('SELECT stripe_product_id FROM stripe_catalog_resources WHERE resource_key=$1', [catalogKey]);
+    const storedProductId = existing.rows[0]?.stripe_product_id;
+    if (storedProductId) return storedProductId;
+
+    if (!stripeDonationProductPromise) {
+        stripeDonationProductPromise = (async () => {
+            const saved = await db.query('SELECT stripe_product_id FROM stripe_catalog_resources WHERE resource_key=$1', [catalogKey]);
+            if (saved.rows[0]?.stripe_product_id) return saved.rows[0].stripe_product_id;
+            const product = await stripe.products.create({
+                name: 'One-time support for Carceral Collections',
+                description: 'A one-time contribution supporting research, preservation, and access.',
+                tax_code: stripeDonationTaxCode,
+                default_price_data: { unit_amount: 1000, currency: 'usd' },
+                metadata: { source: 'carceralcollections.org', catalog_key: catalogKey },
+            });
+            const productId = stripeId(product, 'prod_');
+            if (!productId) throw new Error('Stripe did not return a donation product ID.');
+            const defaultPriceId = stripeId(product.default_price, 'price_');
+            await db.query(
+                `INSERT INTO stripe_catalog_resources (resource_key,stripe_product_id,stripe_price_id,updated_at)
+                 VALUES ($1,$2,$3,now())
+                 ON CONFLICT (resource_key) DO UPDATE
+                 SET stripe_product_id=EXCLUDED.stripe_product_id,stripe_price_id=EXCLUDED.stripe_price_id,updated_at=now()`,
+                [catalogKey, productId, defaultPriceId],
+            );
+            return productId;
+        })().catch((error) => {
+            stripeDonationProductPromise = null;
+            throw error;
+        });
+    }
+    return stripeDonationProductPromise;
+}
+
+async function checkoutSupporter(request) {
+    const db = communityDb();
+    if (!db) return { userId: null, customerId: null };
+    const user = await v2User(request);
+    if (!user?.id) return { userId: null, customerId: null };
+    const result = await db.query('SELECT stripe_customer_id FROM community_users WHERE id=$1', [user.id]);
+    return { userId: user.id, customerId: stripeCustomerId(result.rows[0]?.stripe_customer_id) };
+}
+
+async function recordStripeCheckout(session, details) {
+    const db = communityDb();
+    if (!db) throw new Error('Donation records require DATABASE_URL.');
+    await db.query(
+        `INSERT INTO stripe_checkout_records (checkout_session_id,community_user_id,stripe_customer_id,stripe_payment_intent_id,stripe_subscription_id,support_kind,support_tier,amount_cents,currency,payment_status,subscription_status,updated_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,now())
+         ON CONFLICT (checkout_session_id) DO UPDATE SET
+           community_user_id=COALESCE(EXCLUDED.community_user_id,stripe_checkout_records.community_user_id),
+           stripe_customer_id=COALESCE(EXCLUDED.stripe_customer_id,stripe_checkout_records.stripe_customer_id),
+           stripe_payment_intent_id=COALESCE(EXCLUDED.stripe_payment_intent_id,stripe_checkout_records.stripe_payment_intent_id),
+           stripe_subscription_id=COALESCE(EXCLUDED.stripe_subscription_id,stripe_checkout_records.stripe_subscription_id),
+           payment_status=EXCLUDED.payment_status,subscription_status=EXCLUDED.subscription_status,updated_at=now()`,
+        [
+            session.id, details.userId || null, stripeCustomerId(session.customer), stripeId(session.payment_intent, 'pi_'), stripeId(session.subscription, 'sub_'),
+            details.kind, details.tier || null, session.amount_total || details.amount || null, String(session.currency || 'usd').toLowerCase(),
+            String(session.payment_status || 'created'), session.subscription ? 'created' : null,
+        ],
+    );
+}
+
+async function handleStripeWebhook(request, response) {
+    const stripe = stripeApi();
+    const signingSecret = String(process.env.STRIPE_WEBHOOK_SECRET || '').trim();
+    const signature = String(request.headers['stripe-signature'] || '');
+    if (!stripe || !signingSecret || !signature) return communityJson(response, 400, { error: 'Stripe webhook is not configured.' });
+
+    let event;
+    try {
+        event = stripe.webhooks.constructEvent(await readRequestBody(request, 256 * 1024), signature, signingSecret);
+    } catch (error) {
+        console.warn('Stripe webhook signature verification failed:', String(error?.message || 'unknown error').slice(0, 240));
+        return communityJson(response, 400, { error: 'Invalid Stripe signature.' });
+    }
+
+    if (event.type !== 'checkout.session.completed') return communityJson(response, 200, { received: true });
+    const session = event.data?.object;
+    if (!stripeId(session, 'cs_')) return communityJson(response, 400, { error: 'Invalid Checkout Session event.' });
+    const db = communityDb();
+    if (!db) return communityJson(response, 503, { error: 'Donation records are unavailable.' });
+
+    try {
+        await ensureCommunitySchema();
+        const metadata = session.metadata || {};
+        const userId = /^[0-9a-f-]{36}$/i.test(String(metadata.community_user_id || '')) ? String(metadata.community_user_id) : null;
+        const customerId = stripeCustomerId(session.customer);
+        await db.query(
+            `INSERT INTO stripe_checkout_records (checkout_session_id,stripe_event_id,community_user_id,stripe_customer_id,stripe_payment_intent_id,stripe_subscription_id,support_kind,support_tier,amount_cents,currency,payment_status,subscription_status,checkout_completed_at,updated_at)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,now(),now())
+             ON CONFLICT (checkout_session_id) DO UPDATE SET
+               stripe_event_id=EXCLUDED.stripe_event_id,community_user_id=COALESCE(EXCLUDED.community_user_id,stripe_checkout_records.community_user_id),
+               stripe_customer_id=COALESCE(EXCLUDED.stripe_customer_id,stripe_checkout_records.stripe_customer_id),
+               stripe_payment_intent_id=COALESCE(EXCLUDED.stripe_payment_intent_id,stripe_checkout_records.stripe_payment_intent_id),
+               stripe_subscription_id=COALESCE(EXCLUDED.stripe_subscription_id,stripe_checkout_records.stripe_subscription_id),
+               payment_status=EXCLUDED.payment_status,subscription_status=EXCLUDED.subscription_status,checkout_completed_at=now(),updated_at=now()`,
+            [session.id, event.id, userId, customerId, stripeId(session.payment_intent, 'pi_'), stripeId(session.subscription, 'sub_'), String(metadata.giving_type || 'one_time'), metadata.tier || null, session.amount_total || null, String(session.currency || 'usd').toLowerCase(), String(session.payment_status || 'paid'), session.subscription ? 'active' : null],
+        );
+        if (userId && customerId) await db.query('UPDATE community_users SET stripe_customer_id=$1 WHERE id=$2', [customerId, userId]);
+        return communityJson(response, 200, { received: true });
+    } catch (error) {
+        console.error('Stripe checkout completion could not be recorded:', String(error?.message || 'unknown error').slice(0, 500));
+        return communityJson(response, 503, { error: 'Donation records are temporarily unavailable.' });
+    }
 }
 
 function publicSiteUrl() {
@@ -532,14 +661,18 @@ async function handleStripeCheckout(request, response) {
     if (!stripe) return communityJson(response, 503, { error: 'Donations are not configured yet.' });
     if (!permitStripeCheckout(request)) return communityJson(response, 429, { error: 'Please wait a few minutes before trying again.' });
 
+    const db = communityDb();
+    if (!db) return communityJson(response, 503, { error: 'Donations are not configured yet.' });
+    try { await ensureCommunitySchema(); } catch { return communityJson(response, 503, { error: 'Donations are temporarily unavailable.' }); }
     const body = await parseCommunityBody(request);
     const kind = String(body?.kind || '');
+    const supporter = await checkoutSupporter(request);
     const siteUrl = publicSiteUrl();
     const common = {
         success_url: `${siteUrl}/DONATE.html?donation=success&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${siteUrl}/DONATE.html?donation=cancelled`,
         billing_address_collection: 'auto',
-        metadata: { source: 'carceralcollections.org' },
+        metadata: { source: 'carceralcollections.org', ...(supporter.userId ? { community_user_id: supporter.userId } : {}) },
     };
 
     try {
@@ -548,22 +681,24 @@ async function handleStripeCheckout(request, response) {
             if (!Number.isSafeInteger(amount) || amount < 100 || amount > 1000000) {
                 return communityJson(response, 400, { error: 'Enter an amount from $1.00 to $10,000.00.' });
             }
+            const productId = await donationCatalogProduct(stripe);
             const session = await stripe.checkout.sessions.create({
                 ...common,
                 mode: 'payment',
-                // A custom, voluntary donation is not a Managed Payments product sale.
-                managed_payments: { enabled: false },
+                managed_payments: { enabled: true },
                 submit_type: 'donate',
+                ...(supporter.customerId ? { customer: supporter.customerId } : { customer_creation: 'always' }),
                 payment_intent_data: { metadata: { source: 'carceralcollections.org', giving_type: 'one_time' } },
                 line_items: [{
                     quantity: 1,
                     price_data: {
                         currency: 'usd',
                         unit_amount: amount,
-                        product_data: { name: 'One-time support for Carceral Collections' },
+                        product: productId,
                     },
                 }],
             });
+            await recordStripeCheckout(session, { userId: supporter.userId, kind: 'one_time', amount });
             return communityJson(response, 200, { url: session.url });
         }
 
@@ -577,11 +712,14 @@ async function handleStripeCheckout(request, response) {
             const session = await stripe.checkout.sessions.create({
                 ...common,
                 mode: 'subscription',
+                managed_payments: { enabled: true },
                 submit_type: 'subscribe',
+                ...(supporter.customerId ? { customer: supporter.customerId } : {}),
                 subscription_data: { metadata: { source: 'carceralcollections.org', giving_type: 'monthly', tier: String(body.tier) } },
                 // Use the catalog price, including its Managed Payments tax code.
                 line_items: [{ price, quantity: 1 }],
             });
+            await recordStripeCheckout(session, { userId: supporter.userId, kind: 'monthly', tier: String(body.tier) });
             return communityJson(response, 200, { url: session.url });
         }
     } catch (error) {
@@ -2018,6 +2156,13 @@ const server = http.createServer((request, response) => {
     } catch {
         response.writeHead(400);
         response.end('Bad Request');
+        return;
+    }
+
+    // Stripe signs this server-to-server callback instead of sending a browser Origin header.
+    // Verify its signature in handleStripeWebhook before accepting the event.
+    if (request.method === 'POST' && requestUrl.pathname === '/api/stripe/webhook') {
+        handleStripeWebhook(request, response).catch(() => communityJson(response, 503, { error: 'Stripe webhook is temporarily unavailable.' }));
         return;
     }
 

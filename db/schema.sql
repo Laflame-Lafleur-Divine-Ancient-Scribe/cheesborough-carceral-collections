@@ -22,11 +22,39 @@ ALTER TABLE community_users ADD COLUMN IF NOT EXISTS email_verified_at timestamp
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS suspension_reason varchar(500);
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS suspension_expires_at timestamptz;
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS admin_notes varchar(2000);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS stripe_customer_id varchar(255);
 ALTER TABLE community_users DROP CONSTRAINT IF EXISTS community_users_role_check;
 UPDATE community_users SET role='member' WHERE role='user';
 ALTER TABLE community_users ADD CONSTRAINT community_users_role_check CHECK (role IN ('member','moderator','admin','owner'));
 CREATE UNIQUE INDEX IF NOT EXISTS community_users_display_name_unique_index ON community_users (lower(display_name));
 CREATE UNIQUE INDEX IF NOT EXISTS community_users_username_unique_index ON community_users (lower(username)) WHERE username IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS community_users_stripe_customer_unique_index ON community_users (stripe_customer_id) WHERE stripe_customer_id IS NOT NULL;
+CREATE TABLE IF NOT EXISTS stripe_catalog_resources (
+    resource_key varchar(80) PRIMARY KEY,
+    stripe_product_id varchar(255) NOT NULL UNIQUE,
+    stripe_price_id varchar(255),
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS stripe_checkout_records (
+    checkout_session_id varchar(255) PRIMARY KEY,
+    stripe_event_id varchar(255) UNIQUE,
+    community_user_id uuid REFERENCES community_users(id) ON DELETE SET NULL,
+    stripe_customer_id varchar(255),
+    stripe_payment_intent_id varchar(255),
+    stripe_subscription_id varchar(255),
+    support_kind varchar(24) NOT NULL CHECK (support_kind IN ('one_time','monthly')),
+    support_tier varchar(32),
+    amount_cents integer,
+    currency varchar(3) NOT NULL DEFAULT 'usd',
+    payment_status varchar(32) NOT NULL DEFAULT 'created',
+    subscription_status varchar(32),
+    checkout_completed_at timestamptz,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS stripe_checkout_records_user_time_index ON stripe_checkout_records(community_user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS stripe_checkout_records_customer_index ON stripe_checkout_records(stripe_customer_id);
 CREATE TABLE IF NOT EXISTS community_comments (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), content_type varchar(16) NOT NULL CHECK (content_type IN ('video','article')), content_id varchar(151) NOT NULL, author_id uuid NOT NULL REFERENCES community_users(id), body varchar(1200) NOT NULL, status varchar(16) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','published','rejected')), created_at timestamptz NOT NULL DEFAULT now());
 CREATE INDEX IF NOT EXISTS community_comments_public_index ON community_comments(content_type,content_id,created_at) WHERE status='published';
 CREATE TABLE IF NOT EXISTS community_bookmarks (user_id uuid REFERENCES community_users(id), content_type varchar(16) NOT NULL, content_id varchar(151) NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(user_id,content_type,content_id));

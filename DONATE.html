@@ -243,7 +243,7 @@
       checkoutButton.disabled = true;
       status.textContent = 'Opening secure checkout…';
       try {
-        const response = await fetch(`${apiBase}/api/donations/checkout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const response = await fetch(`${apiBase}/api/donations/checkout`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         const result = await response.json();
         if (!response.ok || !result.url) throw new Error(result.error || 'Checkout could not be started.');
         location.assign(result.url);
