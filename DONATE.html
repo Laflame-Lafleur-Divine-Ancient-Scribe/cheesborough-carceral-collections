@@ -28,13 +28,23 @@
     .content h2 { color: var(--navy); font-size: 1.8rem; margin-top: 0; }
     .content p { font-size: 1.08rem; line-height: 1.65; }
     .reasons { border-top: 5px solid var(--red); padding-top: 1rem; }
-    .reasons li { line-height: 1.5; margin: 1rem 0; }
+    .reasons ul { list-style: none; margin: 1.3rem 0 0; padding: 0; }
+    .reasons li { border-bottom: 1px solid #d8d0c3; line-height: 1.5; margin: 0; padding: 0.9rem 0 0.9rem 2.1rem; position: relative; }
+    .reasons li::before { color: var(--red); content: "0" counter(item); counter-increment: item; font: 700 0.85rem "Libre Baskerville", serif; left: 0; letter-spacing: 0.04em; position: absolute; top: 1rem; }
+    .reasons ul { counter-reset: item; }
     .levels { background: #fff; border-top: 5px solid var(--gold); padding: 1.5rem; }
     .level { border-bottom: 1px solid #d8d0c3; padding: 1rem 0; }
     .level:last-child { border-bottom: 0; }
     .level strong { color: var(--navy); display: block; font: 700 1.2rem "Libre Baskerville", serif; }
     .level span { display: block; margin-top: 0.35rem; }
-    .cta { background: var(--navy); color: #fff; display: inline-block; font-weight: 700; margin-top: 1rem; padding: 0.85rem 1.2rem; }
+    .support-note { color: #5d554b; font-size: 0.96rem; margin: 1.25rem 0 0; }
+    .cta, .subscribe-option { border: 0; font: 700 1rem "Source Sans 3", sans-serif; letter-spacing: 0.02em; text-align: left; width: 100%; }
+    .cta { background: var(--navy); color: #fff; cursor: not-allowed; display: block; margin-top: 1rem; padding: 0.95rem 1.2rem; }
+    .cta:disabled { opacity: 0.72; }
+    .subscription-title { color: var(--red); font: 700 0.9rem "Source Sans 3", sans-serif; letter-spacing: 0.13em; margin: 1.8rem 0 0.25rem; text-transform: uppercase; }
+    .subscribe-option { background: transparent; border-bottom: 1px solid #d8d0c3; color: var(--navy); cursor: not-allowed; display: block; padding: 0.85rem 0; }
+    .subscribe-option span { color: #5d554b; display: block; font-size: 0.93rem; font-weight: 400; letter-spacing: 0; margin-top: 0.15rem; }
+    button:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
     footer { background: var(--deep); color: #fff; padding: 1rem; text-align: center; }
     @media (max-width: 800px) { .content { grid-template-columns: 1fr; } .topbar a { font-size: 0.72rem; padding: 0 0.3rem; } }
   </style>
@@ -47,34 +57,40 @@
     <a href="index.html">HOME</a><a href="ABOUT.html">ABOUT</a><a href="SEARCH.html">SEARCH</a><a href="COLLECTIONS.html">COLLECTIONS</a><a href="RESEARCH.html">RESEARCH</a><a href="LAW-LIBRARY.html">LAW LIBRARY</a><a href="NEWS.html">NEWS</a><a href="CONTACT.html">CONTACT</a><a class="active" href="DONATE.html">DONATE</a>
   </nav>
   <header class="hero">
-    <div class="eyebrow">Independent stewardship / Public access</div>
-    <h1>Support the preservation of the record.</h1>
-    <p>The Cheesborough Carceral Collections is developing an open, carefully described repository for photographs, legal materials, manuscripts, and personal histories used by researchers and communities.</p>
+    <div class="eyebrow">Help keep the record within reach</div>
+    <h1>Help us preserve the evidence and keep the conversation moving.</h1>
+    <p>Carceral Collections follows the paper trail: court files, photographs, prison records, newspapers, family materials, and the stories tied to them.</p>
   </header>
   <main class="content">
     <section>
-      <h2>Why independent support matters</h2>
-      <p>Archives shape what can be remembered, questioned, and taught. Independent support allows this collection to develop with scholarly care rather than being narrowed by commercial priorities or short funding cycles.</p>
-      <p>Your contribution helps preserve vulnerable materials, improve their descriptions, and make them more discoverable to students, graduate researchers, advocates, families, and the public.</p>
+      <h2>Help keep the digging going</h2>
+      <p>Good records do not always come easy. They are tucked into courthouse files, old newspapers, family collections, archives, and places most people never get a chance to see. This work brings them into view.</p>
+      <p>Support helps cover record requests, research trips, scanning, document care, website upkeep, and the long hours it takes to connect the dots. It helps make sure the people inside these stories are not reduced to a case number or left out of the record.</p>
       <div class="reasons">
         <h2>What your support makes possible</h2>
         <ul>
-          <li>Digitizing photographs, manuscripts, and fragile primary sources.</li>
-          <li>Creating accurate metadata, finding aids, and research guides.</li>
-          <li>Maintaining public access to an independently organized collection.</li>
-          <li>Supporting scholarship that approaches carceral history with context and care.</li>
+          <li>More public records, hard-to-find documents, and overlooked leads.</li>
+          <li>Careful scanning and preservation for photographs, files, and family history.</li>
+          <li>Stories that give context to the people, places, and choices behind the paperwork.</li>
+          <li>A public home for readers who want to look at the evidence for themselves.</li>
         </ul>
       </div>
     </section>
     <aside class="levels">
-      <h2>Direct your support</h2>
-      <div class="level"><strong>$25 / Preservation start</strong><span>Helps prepare a small group of photographs for archival description.</span></div>
-      <div class="level"><strong>$75 / Research access</strong><span>Supports cataloging and finding-aid work that helps others locate sources.</span></div>
-      <div class="level"><strong>$250 / Collection care</strong><span>Contributes to scanning, file preservation, and long-term digital stewardship.</span></div>
-      <p>We are preparing secure contribution processing for this independent archive.</p>
-      <a class="cta" href="mailto:research@cheesborough.org?subject=Support%20the%20archive">Begin a support conversation</a>
+      <h2>Back the work</h2>
+      <div class="level"><strong>Keep records moving</strong><span>Pitch in toward document requests, archive access, and the small costs that add up behind every story.</span></div>
+      <div class="level"><strong>Keep the collection open</strong><span>Help make room for more primary sources, better context, and more ways for people to find their way in.</span></div>
+      <!-- FUTURE DONATE CONFIGURATION: replace this disabled placeholder with the approved donation provider link or embed. -->
+      <button class="cta" type="button" disabled aria-describedby="donate-status">Donate — coming soon</button>
+      <p class="support-note" id="donate-status">Secure donation options are being set up. Check back soon.</p>
+
+      <p class="subscription-title">Stay in the loop</p>
+      <!-- FUTURE SUBSCRIPTION CONFIGURATION: connect these disabled choices to the selected membership or email provider. -->
+      <button class="subscribe-option" type="button" disabled>Monthly supporter<span>For people who want to keep the work moving month to month.</span></button>
+      <button class="subscribe-option" type="button" disabled>Annual supporter<span>For a once-a-year show of support when the time is right.</span></button>
+      <button class="subscribe-option" type="button" disabled>Just send updates<span>Get word when new research, records, and stories land.</span></button>
     </aside>
   </main>
-  <footer>The Cheesborough Carceral Collections | SUPPORT THE ARCHIVE</footer>
+  <footer>The Cheesborough Carceral Collections | Help us keep digging.</footer>
 <script src="title-case.js"></script></body>
 </html>
