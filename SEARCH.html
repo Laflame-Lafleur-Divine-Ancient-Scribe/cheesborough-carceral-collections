@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Search Archive | The Cheesborough Carceral Collections</title>
-    <meta name="description" content="Search the Cheesborough Carceral Collections: primary documents, forensic reports, census spreadsheets, case law, photographs, and research briefs." />
+    <meta name="description" content="Search names, places, and stories in Carceral Collections. Explore court files, prison records, photographs, and original documents." />
     <meta name="robots" content="noindex,follow" />
     <link rel="canonical" href="https://carceralcollections.org/SEARCH.html" />
     <meta property="og:title" content="Search the Cheesborough Carceral Collections" />
-    <meta property="og:description" content="Search primary documents, research briefs, case law, photographs, and other archival records." />
+    <meta property="og:description" content="Follow the paper trail through court files, photographs, prison records, and the stories behind them." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://carceralcollections.org/SEARCH.html" />
     <meta property="og:site_name" content="Cheesborough Carceral Collections" />
@@ -17,7 +17,7 @@
     <meta name="tags" content="search, archive, research, primary sources, pdfs, datasets, case law" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
     <style>
       :root {
         --navy: #102c4c;
@@ -68,7 +68,7 @@
       .topbar a.active { border-bottom: 2px solid #fff; }
 
       .hero {
-        background: linear-gradient(rgba(9, 30, 54, 0.92), rgba(9, 30, 54, 0.96)), url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2200&q=85") center/cover no-repeat;
+        background: var(--deep);
         color: #fff;
         padding: clamp(2.5rem, 5vw, 4.5rem) 1.2rem 3rem;
         border-bottom: 5px solid var(--gold);
@@ -88,7 +88,7 @@
       }
       h1.search-title {
         color: #fff;
-        font-family: "Libre Baskerville", Georgia, serif;
+        font-family: "DM Serif Display", Georgia, serif;
         font-size: clamp(1.8rem, 4.2vw, 2.8rem);
         font-weight: 700;
         line-height: 1.2;
@@ -234,7 +234,7 @@
       }
       .filter-box h3 {
         color: var(--navy);
-        font-family: "Libre Baskerville", Georgia, serif;
+        font-family: "DM Serif Display", Georgia, serif;
         font-size: 1.05rem;
         margin-bottom: 0.85rem;
         padding-bottom: 0.4rem;
@@ -346,7 +346,7 @@
       }
       .results-count strong {
         color: var(--navy);
-        font-family: "Libre Baskerville", Georgia, serif;
+        font-family: "DM Serif Display", Georgia, serif;
       }
       .query-pill-active {
         background: var(--gold-bg);
@@ -442,7 +442,7 @@
       .card-dot { color: var(--line-dark); }
 
       .card-title {
-        font-family: "Libre Baskerville", Georgia, serif;
+        font-family: "DM Serif Display", Georgia, serif;
         font-size: 1.28rem;
         font-weight: 700;
         line-height: 1.32;
@@ -532,7 +532,7 @@
       }
       .empty-title {
         color: var(--navy);
-        font-family: "Libre Baskerville", Georgia, serif;
+        font-family: "DM Serif Display", Georgia, serif;
         font-size: 1.4rem;
         margin-bottom: 0.5rem;
       }
@@ -559,7 +559,7 @@
       }
       .online-results-title {
         color: var(--navy);
-        font-family: "Libre Baskerville", Georgia, serif;
+        font-family: "DM Serif Display", Georgia, serif;
         font-size: 1.35rem;
         margin-bottom: 0.35rem;
       }
@@ -581,7 +581,7 @@
       .online-live-results { display: flex; flex-direction: column; gap: 0.7rem; margin: 1rem 0; }
       .online-result-card { border: 1px solid var(--line); border-left: 4px solid var(--gold); padding: 0.85rem 1rem; }
       .online-result-card:hover { background: var(--paper-hover); }
-      .online-result-title { color: var(--navy); font-family: "Libre Baskerville", Georgia, serif; font-size: 1.05rem; line-height: 1.35; }
+      .online-result-title { color: var(--navy); font-family: "DM Serif Display", Georgia, serif; font-size: 1.05rem; line-height: 1.35; }
       .online-result-title:hover { color: var(--gold); }
       .online-result-url { color: #1b6343; display: block; font-size: 0.8rem; margin-top: 0.25rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .online-result-url:hover { color: var(--gold); }
@@ -609,7 +609,7 @@
       }
       body.search-loading #page-loader { display: flex; }
       .page-loader-spinner { border: 4px solid var(--line); border-top-color: var(--gold); border-radius: 50%; height: 2.4rem; width: 2.4rem; animation: search-spin 0.8s linear infinite; }
-      .page-loader-label { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.05rem; }
+      .page-loader-label { font-family: "DM Serif Display", Georgia, serif; font-size: 1.05rem; }
       @keyframes search-spin { to { transform: rotate(360deg); } }
       @media (max-width: 600px) { .online-source-list { grid-template-columns: 1fr; } }
 
@@ -623,12 +623,92 @@
         margin-top: auto;
       }
       footer a { color: var(--gold-light); }
+
+      /* The search desk: paper, ink, and a clear next lead. */
+      .topbar { background:var(--navy); gap:.2rem 1.4rem; border-bottom:1px solid #476078; }
+      .topbar a { min-height:36px; display:inline-flex; align-items:center; }
+      .hero { padding:3.6rem max(1.2rem,calc((100vw - 1240px)/2)) 2.6rem; background-image:linear-gradient(90deg,transparent 96%,rgba(194,155,83,.08) 96%); background-size:64px 100%; }
+      .hero-inner { max-width:1240px; text-align:left; }
+      h1.search-title { font-weight:400; font-size:clamp(2.5rem,5.2vw,4.5rem); letter-spacing:-.025em; max-width:900px; }
+      h1.search-title em { color:var(--gold-light); font-weight:400; }
+      .hero-desc { margin:1.1rem 0 1.5rem; max-width:700px; font-size:1.15rem; }
+      .search-box-wrap { margin:0 0 1rem; max-width:930px; padding:.45rem; background:var(--paper); border:1px solid var(--gold); box-shadow:6px 6px 0 var(--gold); }
+      .search-box-wrap::before,.search-box-wrap::after { display:none; }
+      .search-box-wrap input { color:var(--navy); font-size:1.1rem; }
+      .search-box-wrap input::placeholder { color:#65615a; }
+      .search-box-wrap:focus-within { outline:3px solid var(--gold-light); outline-offset:5px; }
+      .search-submit-btn { background:var(--navy); color:white; font:700 1rem "Source Sans 3",sans-serif; min-height:50px; border-radius:0; }
+      .search-submit-btn:hover { background:#9b3d32; color:white; transform:none; }
+      .clear-btn { color:var(--navy); min-height:44px; min-width:44px; }
+      .clear-btn:hover { color:#9b3d32; }
+      .quick-tags { justify-content:flex-start; max-width:none; margin:1.4rem 0 0; }
+      .tag-chip { border-radius:2px; padding:.55rem .8rem; min-height:44px; font-size:.9rem; }
+      .search-help { max-width:930px; color:#e0e6eb; font-size:.95rem; margin-top:1.3rem; }
+      .search-help summary { cursor:pointer; min-height:44px; padding:.5rem 0; list-style:none; display:flex; justify-content:space-between; border-bottom:1px solid #65717a; }
+      .search-help p { padding:.8rem 0; max-width:740px; }
+      .search-help[open] summary span { transform:rotate(45deg); }
+      .desk-strip { max-width:1240px; width:calc(100% - 2.4rem); margin:auto; padding:1.2rem 0; border-bottom:1px solid var(--line-dark); display:flex; justify-content:space-between; gap:1rem; font-size:.95rem; }
+      .desk-strip a { font-weight:700; white-space:nowrap; }
+      .main-layout { max-width:1240px; gap:2.6rem; padding-top:2rem; }
+      .filter-intro { padding:0 0 1.2rem; border-bottom:3px solid var(--navy); margin-bottom:1rem; }
+      .filter-intro .eyebrow { color:#824327; font-size:.7rem; }
+      .filter-intro h2,.results-topline h2 { font-family:"DM Serif Display",Georgia,serif; font-weight:400; color:var(--navy); }
+      .filter-intro h2 { font-size:1.6rem; }
+      .reset-filters { background:none; border:0; border-bottom:1px solid var(--navy); color:var(--navy); font:600 .95rem "Source Sans 3",sans-serif; min-height:44px; cursor:pointer; }
+      .filter-box { box-shadow:none; border:0; border-bottom:1px solid var(--line-dark); background:transparent; padding:1rem 0; }
+      .category-item button { min-height:44px; border-radius:0; }
+      .sidebar-tag,.card-tag { min-height:38px; font-size:.82rem; }
+      .results-topline { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:.6rem; }
+      .results-topline h2 { font-size:2.1rem; }
+      .share-search { background:var(--paper); border:1px solid var(--navy); box-shadow:3px 3px 0 var(--gold); color:var(--navy); padding:.6rem .9rem; min-height:44px; cursor:pointer; font:600 .9rem "Source Sans 3",sans-serif; }
+      .share-search:hover { background:var(--navy); color:white; }
+      #share-feedback { font-size:.9rem; color:var(--navy); }
+      #share-fallback input { width:100%; padding:.8rem; font:inherit; }
+      .active-filters { display:flex; gap:.5rem; flex-wrap:wrap; }
+      .active-filters button { background:var(--navy); color:white; border:0; padding:.55rem .8rem; min-height:44px; margin-bottom:.6rem; cursor:pointer; font:inherit; }
+      .results-header { background:transparent; border-top:3px solid var(--navy); padding:1rem 0; gap:1rem; }
+      .results-count { font-size:.95rem; }
+      .result-card { border:0; border-left:3px solid var(--gold); border-bottom:1px solid var(--line-dark); border-radius:0; padding:1.5rem; box-shadow:none; }
+      .result-card:hover { transform:none; border-left-color:#9b3d32; box-shadow:4px 4px 0 #ded7cb; }
+      .card-title { font-size:1.6rem; font-weight:400; }
+      .card-title a:hover { color:#9b3d32; }
+      .card-desc { font-size:1.02rem; }
+      .card-footer-action { justify-content:flex-start; }
+      .action-link { min-height:44px; border-radius:0; border-bottom:3px solid var(--gold); }
+      .badge-category { border-radius:0; }
+      .badge-category.data,.badge-category.law,.badge-category.photo,.badge-category.manuscript { background:var(--navy); }
+      .empty-suggestions .tag-chip { color:var(--navy); border-color:var(--line-dark); background:var(--paper); }
+      .online-result-card { min-width:0; overflow-wrap:anywhere; }
+      .online-result-url { color:var(--navy); }
+      .filter-toggle { display:none; }
+      :focus-visible { outline:3px solid #9b3d32; outline-offset:4px; }
+      .hero :focus-visible { outline-color:var(--gold-light); }
+      [hidden] { display:none!important; }
+      @media(max-width:800px) {
+        .hero { padding-top:2.2rem; }
+        .desk-strip { flex-direction:column; gap:.3rem; }
+        .main-layout { display:block; padding:1.2rem; }
+        .sidebar { width:100%; margin-bottom:1.8rem; }
+        .filter-toggle { display:flex; width:100%; justify-content:space-between; background:var(--navy); color:white; padding:1rem; border:0; font:700 1rem "Source Sans 3",sans-serif; }
+        .js-ready #filter-content { display:none; }
+        .js-ready .sidebar.filters-open #filter-content { display:block; }
+        .filter-intro { padding-top:1rem; }
+        .results-topline { align-items:flex-start; flex-wrap:wrap; }
+        .results-topline h2 { font-size:1.85rem; }
+        .results-header { flex-wrap:wrap; }
+        .search-submit-btn { padding:.6rem .7rem; }
+        .search-box-wrap input { padding:.6rem .35rem; }
+        .result-card { padding:1.15rem; }
+        .hero .quick-tags { gap:.4rem; }
+        .card-title { font-size:1.4rem; }
+      }
+      @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
     </style>
   <link rel="stylesheet" href="desktop-integrity.css">
     <script defer src="site-analytics.js"></script>
 <script src="site-theme.js" defer></script>
 <script src="community-auth.js" defer></script></head>
-  <body class="search-loading">
+  <body>
     <div id="page-loader" role="status" aria-live="polite">
       <span class="page-loader-spinner" aria-hidden="true"></span>
       <span class="page-loader-label">Loading Local And Online Results...</span>
@@ -648,18 +728,19 @@
 
     <header class="hero">
       <div class="hero-inner">
-        <p class="eyebrow">The Cheesborough Carceral Collections / Search Desk</p>
-        <h1 class="search-title">Archival Search &amp; Evidence Query</h1>
-        <p class="hero-desc">Search primary documents, forensic reports, census spreadsheets, case law, photographs, and research briefs across the entire repository.</p>
+        <p class="eyebrow">Carceral Collections / The Search Desk</p>
+        <h1 class="search-title">Every record has a story.<br><em>Find your next lead.</em></h1>
+        <p class="hero-desc">Start with a name, a place, or a question. Follow the paper trail through court files, photographs, prison records, and the stories behind them.</p>
 
         <form class="search-box-wrap" id="main-search-form" role="search" onsubmit="event.preventDefault(); handleSearchSubmit();">
-          <input id="page-search-input" type="search" placeholder="SEARCH DOZIER, POWELL, CENSUS, LAW, OR EVIDENCE..." aria-label="Search archive records and case studies" autocomplete="off" />
+          <input id="page-search-input" type="search" placeholder="Search a name, place, or story..." aria-label="Search archive records and case studies" autocomplete="off" />
           <button type="button" class="clear-btn" id="clear-search-btn" aria-label="Clear search input" title="Clear">✕</button>
-          <button type="submit" class="search-submit-btn" aria-label="Submit search" title="Execute Search">⌕</button>
+          <button type="submit" class="search-submit-btn" aria-label="Submit search" title="Search records">Search &#8599;</button>
         </form>
+        <details class="search-help"><summary>A few ways to follow the paper trail <span aria-hidden="true">+</span></summary><p>Try a full name, a town, or a phrase like &ldquo;convict leasing.&rdquo; Choose a record type or topic to narrow the collection. Web results appear separately and open at their original source. On a keyboard, press <kbd>/</kbd> to jump to search.</p></details>
 
         <div class="quick-tags" aria-label="Popular search topics">
-          <span class="quick-tags-label">Popular Topics:</span>
+          <span class="quick-tags-label">Start a thread:</span>
           <button type="button" class="tag-chip" onclick="executeQuickSearch('Dozier School')">Dozier School</button>
           <button type="button" class="tag-chip" onclick="executeQuickSearch('Fortune Ferguson')">Fortune Ferguson</button>
           <button type="button" class="tag-chip" onclick="executeQuickSearch('American Siberia')">American Siberia</button>
@@ -673,17 +754,21 @@
       </div>
     </header>
 
+    <div class="desk-strip"><span><strong>Open records. Open questions.</strong> Search our collection, then follow sources across the web.</span><a href="COLLECTIONS.html">Browse the collections &#8599;</a></div>
     <div class="main-layout">
       <!-- Sidebar Filters -->
-      <aside class="sidebar">
+      <aside class="sidebar" aria-label="Search filters">
+        <button class="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-content" id="filter-toggle">Narrow your search <span aria-hidden="true">+</span></button>
+        <div id="filter-content">
+        <div class="filter-intro"><span class="eyebrow">Follow the evidence</span><h2>Refine your leads</h2><button type="button" class="reset-filters" onclick="resetFilters()">Clear filters &#8634;</button></div>
         <div class="filter-box">
-          <h3>Categories <span class="total-count-badge" id="total-count-badge"></span></h3>
+          <h3>Record type <span class="total-count-badge" id="total-count-badge"></span></h3>
           <ul class="category-list" id="category-filter-list">
             <li class="category-item"><button type="button" class="active" data-category="all" onclick="setCategoryFilter('all')"><span>All Collections</span> <span class="count-badge" id="cat-count-all">0</span></button></li>
-            <li class="category-item"><button type="button" data-category="Research Brief" onclick="setCategoryFilter('Research Brief')"><span>📖 Research Briefs</span> <span class="count-badge" id="cat-count-brief">0</span></button></li>
-            <li class="category-item"><button type="button" data-category="Primary PDF" onclick="setCategoryFilter('Primary PDF')"><span>📄 Primary PDFs</span> <span class="count-badge" id="cat-count-pdf">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Research Brief" onclick="setCategoryFilter('Research Brief')"><span>Reported Stories</span> <span class="count-badge" id="cat-count-brief">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Primary PDF" onclick="setCategoryFilter('Primary PDF')"><span>Original PDFs</span> <span class="count-badge" id="cat-count-pdf">0</span></button></li>
             <li class="category-item"><button type="button" data-category="Data & Spreadsheet" onclick="setCategoryFilter('Data & Spreadsheet')"><span>📊 Data &amp; Spreadsheets</span> <span class="count-badge" id="cat-count-data">0</span></button></li>
-            <li class="category-item"><button type="button" data-category="Primary Document" onclick="setCategoryFilter('Primary Document')"><span>📑 Primary Documents</span> <span class="count-badge" id="cat-count-doc">0</span></button></li>
+            <li class="category-item"><button type="button" data-category="Primary Document" onclick="setCategoryFilter('Primary Document')"><span>Original Documents</span> <span class="count-badge" id="cat-count-doc">0</span></button></li>
             <li class="category-item"><button type="button" data-category="Law Library" onclick="setCategoryFilter('Law Library')"><span>⚖️ Law Library</span> <span class="count-badge" id="cat-count-law">0</span></button></li>
             <li class="category-item"><button type="button" data-category="Photo Archive" onclick="setCategoryFilter('Photo Archive')"><span>📷 Photography</span> <span class="count-badge" id="cat-count-photo">0</span></button></li>
             <li class="category-item"><button type="button" data-category="Manuscript & Book" onclick="setCategoryFilter('Manuscript & Book')"><span>📚 Books &amp; Manuscripts</span> <span class="count-badge" id="cat-count-books">0</span></button></li>
@@ -693,12 +778,12 @@
         </div>
 
         <div class="filter-box">
-          <h3>Filter by Tag</h3>
+          <h3>Follow a topic</h3>
           <div class="tag-cloud" id="sidebar-tags-cloud"></div>
         </div>
 
         <div class="filter-box">
-          <h3>Interactive Tools</h3>
+          <h3>Open the originals</h3>
           <div class="tools-links">
             <a href="PDF-READER.html?file=02_Books-and-Manuscripts%2FBooks%2F01_Primary-Texts%2FThe%20American%20Siberia%20p.1891_CompleteBook.pdf"><span>📄</span> Open PDF Reader</a>
             <a href="DATA-READER.html?file=RESEARCH%20WEBSITE%20HERO%2FCensus%20Data%2F1880_State_Prison_Staff_Census.xlsx"><span>📊</span> Open Spreadsheet Reader</a>
@@ -706,12 +791,16 @@
             <a href="PHOTOGRAPHY-BY-STATE.html"><span>🗺️</span> 50-State Photography Index</a>
           </div>
         </div>
-      </aside>
+      </div></aside>
 
       <!-- Main Results Column -->
-      <main class="results-area">
+      <main class="results-area" id="search-results">
+        <div class="results-topline"><h2>Inside the collection</h2><button type="button" class="share-search" id="share-search">Copy search link &#8599;</button></div>
+        <p id="share-feedback" role="status"></p>
+        <div id="share-fallback" hidden><label for="share-url">Copy this search address:</label><input id="share-url" readonly type="url" /></div>
+        <div id="active-filters" class="active-filters" aria-label="Active filters"></div>
         <div class="results-header">
-          <div class="results-count" id="results-count-text">Loading repository items...</div>
+          <div class="results-count" id="results-count-text">Opening the records...</div>
           <div class="sort-wrap">
             <label for="sort-select">Sort by:</label>
             <select id="sort-select" class="sort-select" onchange="handleSortChange(this.value)">
@@ -722,12 +811,13 @@
           </div>
         </div>
 
-        <div class="results-list" id="results-list" role="region" aria-live="polite"></div>
+        <noscript><p>Turn on JavaScript to search, or <a href="COLLECTIONS.html">browse the collections</a> to open records directly.</p></noscript>
+        <div class="results-list" id="results-list" role="region" aria-label="Search results" aria-live="polite"></div>
       </main>
     </div>
 
     <footer>
-      <p>The Cheesborough Carceral Collections | Public Memory, Law &amp; Archival Evidence &copy; 2026</p>
+      <p>The Cheesborough Carceral Collections | Uncovering the past to change the future. &copy; 2026</p>
     </footer>
 
     <script>
@@ -742,6 +832,8 @@
       let currentTag = null;
       let currentSort = "relevance";
       let onlineResults = [];
+      let searchRevision = 0;
+      let activeController = null;
       let onlinePage = 1;
       const onlinePageSize = 50;
 
@@ -761,12 +853,25 @@
         currentQuery = qParam;
         currentCategory = catParam;
         currentTag = tagParam;
+        currentSort = ["relevance", "title", "date"].includes(urlParams.get("sort")) ? urlParams.get("sort") : "relevance";
+        document.getElementById("sort-select").value = currentSort;
 
         if (searchInput) {
           searchInput.value = currentQuery;
           toggleClearButton();
         }
 
+        document.body.classList.add("js-ready");
+        document.getElementById("filter-toggle").addEventListener("click", event => {
+          const open = document.querySelector(".sidebar").classList.toggle("filters-open");
+          event.currentTarget.setAttribute("aria-expanded", String(open));
+        });
+        document.getElementById("share-search").addEventListener("click", copySearchLink);
+        document.addEventListener("keydown", event => {
+          if (event.key === "/" && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest("input,textarea,select,[contenteditable]")) {
+            event.preventDefault(); searchInput.focus();
+          }
+        });
         renderCategoryCounts();
         renderSidebarTags();
         updateCategoryActiveUI();
@@ -840,11 +945,13 @@
 
       function handleSortChange(sortVal) {
         currentSort = sortVal;
+        updateUrlParams();
         performSearch({ includeOnline: Boolean(currentQuery) });
       }
 
       function updateCategoryActiveUI() {
         document.querySelectorAll("#category-filter-list button").forEach(btn => {
+          btn.setAttribute("aria-pressed", String(btn.dataset.category.toLowerCase() === currentCategory.toLowerCase()));
           if (btn.dataset.category.toLowerCase() === currentCategory.toLowerCase()) {
             btn.classList.add("active");
           } else {
@@ -858,6 +965,7 @@
         if (currentQuery) params.set("q", currentQuery);
         if (currentCategory && currentCategory !== "all") params.set("category", currentCategory);
         if (currentTag) params.set("tag", currentTag);
+        if (currentSort !== "relevance") params.set("sort", currentSort);
 
         const newUrl = window.location.pathname + (params.toString() ? "?" + params.toString() : "");
         window.history.replaceState({}, "", newUrl);
@@ -898,7 +1006,7 @@
         if (!window.CheesboroughSearch || !sidebarTagsCloud) return;
         const tags = window.CheesboroughSearch.getTags().slice(0, 24);
         sidebarTagsCloud.innerHTML = tags.map(t => `
-          <button type="button" class="sidebar-tag ${currentTag === t.name ? 'active' : ''}" onclick="setTagFilter('${escapeHtml(t.name)}')">
+          <button type="button" class="sidebar-tag ${currentTag === t.name ? 'active' : ''}" data-filter-tag="${escapeHtml(t.name)}" aria-pressed="${currentTag === t.name}">
             ${escapeHtml(t.name)} <span class="sidebar-tag-count">(${t.count})</span>
           </button>
         `).join("");
@@ -937,9 +1045,9 @@
         if (!query) return "";
         return `
           <section class="online-results" aria-labelledby="online-results-title">
-            <h2 class="online-results-title" id="online-results-title">Search Online Legal Sources</h2>
-            <p class="online-results-desc">Searching <strong>${escapeHtml(query)}</strong> across free public repositories and web sources.</p>
-            <div class="online-live-results" id="online-live-results" aria-live="polite">Loading up to 300 online results...</div>
+            <h2 class="online-results-title" id="online-results-title">Beyond our collection</h2>
+            <p class="online-results-desc">Searching <strong>${escapeHtml(query)}</strong> across public websites. These results come from outside Carceral Collections.</p>
+            <div class="online-live-results" id="online-live-results" aria-live="polite">Looking for matching sources across the web...</div>
             <div class="online-results-fallback" id="online-results-fallback" hidden>
               <p class="online-results-desc">Live online results are unavailable right now. Continue your search with one of these public sources:</p>
               <div class="online-source-list">
@@ -950,12 +1058,13 @@
         `;
       }
 
-      async function loadOnlineResults(query) {
+      async function loadOnlineResults(query, revision) {
         if (!query) return true;
         const liveResults = document.getElementById("online-live-results");
         const fallback = document.getElementById("online-results-fallback");
         if (!liveResults || !fallback) return false;
         const controller = new AbortController();
+        activeController = controller;
         const timeout = window.setTimeout(() => controller.abort(), 12000);
 
         try {
@@ -964,12 +1073,14 @@
           const response = await fetch(endpoint, { signal: controller.signal });
           if (!response.ok) throw new Error("Online search service unavailable");
           const payload = await response.json();
-          onlineResults = (payload.results || []).filter(item => !/(?:^|\.)wikipedia\.org(?:\/|$)/i.test(item.url || ''));
+          if (revision !== searchRevision) return false;
+          onlineResults = (Array.isArray(payload.results) ? payload.results : []).filter(item => /^https?:\/\//i.test(item.url || "") && !/(?:^|\.)wikipedia\.org(?:\/|$)/i.test(item.url || ''));
           if (!onlineResults.length) throw new Error("No online results returned");
           onlinePage = 1;
           renderOnlineResultsPage();
           return true;
         } catch (error) {
+          if (revision !== searchRevision) return false;
           const message = error.name === "AbortError" ? "Online search timed out." : error.message;
           liveResults.innerHTML = `<p class="online-results-desc">${escapeHtml(message)} Use the direct provider searches below.</p>`;
           fallback.hidden = false;
@@ -1031,7 +1142,16 @@
       }
 
       async function performSearch({ includeOnline = false } = {}) {
-        if (!window.CheesboroughSearch || !resultsList) return;
+        const revision = ++searchRevision;
+        if (activeController) activeController.abort();
+        onlineResults = [];
+        renderSidebarTags();
+        renderActiveFilters();
+        if (!window.CheesboroughSearch || !resultsList) {
+          if (resultsList) resultsList.innerHTML = '<div class="empty-state"><h2>We could not open the search index.</h2><p>Reload the page or <a href="COLLECTIONS.html">browse the collections</a> to keep exploring.</p></div>';
+          resultsCountText.textContent = 'Search is temporarily unavailable.';
+          return;
+        }
 
         const results = window.CheesboroughSearch.search(currentQuery, {
           category: currentCategory,
@@ -1048,7 +1168,7 @@
         } else if (currentCategory !== "all") {
           countText = `Showing <strong>${results.length}</strong> source${results.length === 1 ? '' : 's'} in <strong>${escapeHtml(currentCategory)}</strong>`;
         } else {
-          countText = `Showing all <strong>${results.length}</strong> cataloged primary sources and research items`;
+          countText = `Showing all <strong>${results.length}</strong> records and stories in our collection`;
         }
 
         if (currentTag) {
@@ -1061,26 +1181,26 @@
           resultsList.innerHTML = `
             <div class="empty-state">
               <div class="empty-icon">📂</div>
-              <h2 class="empty-title">No local records found</h2>
-              <p class="empty-desc">We couldn't find any documents, data, or research briefs matching "<strong>${escapeHtml(currentQuery || currentTag || currentCategory)}</strong>". Try checking your spelling or explore the suggested topics below:</p>
+              <h2 class="empty-title">No matches in our collection yet</h2>
+              <p class="empty-desc">We couldn't find any records or stories matching "<strong>${escapeHtml(currentQuery || currentTag || currentCategory)}</strong>". Try checking your spelling or explore the suggested topics below:</p>
               <div class="empty-suggestions">
                 <button type="button" class="tag-chip" onclick="executeQuickSearch('Dozier School')">Dozier School</button>
                 <button type="button" class="tag-chip" onclick="executeQuickSearch('American Siberia')">American Siberia</button>
                 <button type="button" class="tag-chip" onclick="executeQuickSearch('Fortune Ferguson')">Fortune Ferguson</button>
                 <button type="button" class="tag-chip" onclick="executeQuickSearch('1880 Census')">1880 Census</button>
                 <button type="button" class="tag-chip" onclick="executeQuickSearch('Solitary Confinement')">Solitary Confinement</button>
-                <button type="button" class="tag-chip" onclick="setCategoryFilter('all'); executeQuickSearch('');">View All Sources</button>
+                <button type="button" class="tag-chip" onclick="setCategoryFilter('all'); executeQuickSearch('');">Start fresh</button>
               </div>
             </div>
             ${includeOnline ? renderOnlineSources(currentQuery) : ''}
           `;
-          if (includeOnline) await loadOnlineResults(currentQuery);
+          if (includeOnline) await loadOnlineResults(currentQuery, revision);
           setSearchLoading(false);
           return;
         }
 
         resultsList.innerHTML = results.map(item => `
-          <article class="result-card" data-id="${item.id}">
+          <article class="result-card" data-id="${escapeHtml(item.id)}">
             <div class="card-header-meta">
               <span class="badge-category ${getBadgeClass(item.category)}">${item.icon || '📄'} ${escapeHtml(item.badge || item.category)}</span>
               ${item.date ? `<span class="card-date">📅 ${escapeHtml(item.date)}</span>` : ''}
@@ -1088,25 +1208,58 @@
             </div>
 
             <h2 class="card-title">
-              <a href="${item.url}">${item.highlightedTitle || escapeHtml(item.title)}</a>
+              <a href="${escapeHtml(item.url)}">${item.highlightedTitle || escapeHtml(item.title)}</a>
             </h2>
 
             <p class="card-desc">${item.highlightedDescription || escapeHtml(item.description)}</p>
 
             ${item.tags && item.tags.length ? `
               <div class="card-tags" aria-label="Tags">
-                ${item.tags.map(t => `<button type="button" class="card-tag" onclick="setTagFilter('${escapeHtml(t)}')">#${escapeHtml(t)}</button>`).join('')}
+                ${item.tags.map(t => `<button type="button" class="card-tag" data-filter-tag="${escapeHtml(t)}">#${escapeHtml(t)}</button>`).join('')}
               </div>
             ` : ''}
 
             <div class="card-footer-action">
-              <a class="action-link" href="${item.url}">${escapeHtml(item.actionLabel || 'View Resource →')}</a>
+              <a class="action-link" href="${escapeHtml(item.url)}">${escapeHtml(item.actionLabel || 'View Resource →')}</a>
             </div>
           </article>
         `).join('') + (includeOnline ? renderOnlineSources(currentQuery) : '');
-        if (includeOnline) await loadOnlineResults(currentQuery);
+        if (includeOnline) await loadOnlineResults(currentQuery, revision);
         setSearchLoading(false);
       }
+
+
+      function resetFilters() {
+        currentCategory = "all"; currentTag = null;
+        updateCategoryActiveUI(); updateUrlParams();
+        performSearch({ includeOnline: Boolean(currentQuery) });
+      }
+      function renderActiveFilters() {
+        const node = document.getElementById("active-filters");
+        node.replaceChildren();
+        [[currentCategory !== "all" ? currentCategory : null, () => setCategoryFilter("all")], [currentTag, () => setTagFilter(null)]].forEach(([label, action]) => {
+          if (!label) return;
+          const button = document.createElement("button"); button.type = "button";
+          button.textContent = label + " \u00d7"; button.setAttribute("aria-label", "Remove filter: " + label);
+          button.addEventListener("click", action); node.append(button);
+        });
+      }
+      async function copySearchLink() {
+        const feedback = document.getElementById("share-feedback");
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          feedback.textContent = "Search link copied. Send someone your next lead.";
+          document.getElementById("share-fallback").hidden = true;
+        } catch {
+          document.getElementById("share-fallback").hidden = false;
+          const field = document.getElementById("share-url"); field.value = window.location.href;
+          field.focus(); field.select(); feedback.textContent = "Select and copy the address below.";
+        }
+      }
+      document.addEventListener("click", event => {
+        const tagButton = event.target.closest("[data-filter-tag]");
+        if (tagButton) setTagFilter(tagButton.dataset.filterTag);
+      });
 
       function escapeHtml(str) {
         if (!str) return "";

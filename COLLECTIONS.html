@@ -9,7 +9,7 @@
     <meta name="tags" content="collections, catalog, photography, manuscripts, research, primary sources" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
     <style>
       :root { --navy: #102c4c; --gold: #c29b53; --paper: #f4f0e8; --ink: #202020; }
       * { box-sizing: border-box; }
@@ -47,12 +47,74 @@
         .collection-grid { grid-template-columns: 1fr; }
         .topbar a { font-size: 0.72rem; padding: 0 0.3rem; }
       }
+
+      :root { --deep: #091e36; --red: #9b3d32; --paper: #f5f2eb; --line: #d8d0c3; --muted: #5d554b; }
+      html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+      [hidden] { display: none !important; }
+      .skip-link { position: fixed; top: .5rem; left: .5rem; transform: translateY(-180%); padding: 1rem; background: white; z-index: 100; }
+      .skip-link:focus { transform: none; }
+      a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+      header { padding: 0 1.3rem 3.6rem; background: var(--deep); color: var(--paper); border-bottom: 8px solid var(--gold); }
+      .header-inner { max-width: 1180px; }
+      .topbar { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem 0; background: var(--gold); color: var(--deep); padding: 1rem; margin-bottom: 3.5rem; }
+      .topbar a { font-size: .82rem; font-weight: 700; }
+      .topbar a + a { border-color: #725c37; }
+      .topbar .active { text-decoration: underline; text-underline-offset: 5px; }
+      .eyebrow { color: var(--gold); font-size: .8rem; }
+      .title { align-items: end; gap: 3rem; }
+      .title h1 { color: var(--paper); font: 400 clamp(3.3rem, 6.5vw, 6.4rem)/1.02 "DM Serif Display", serif; letter-spacing: -.025em; margin: 1rem 0 0; }
+      .title h1 em { color: var(--gold); font-weight: 400; }
+      .title p { max-width: 22rem; font-size: 1.17rem; line-height: 1.7; padding-bottom: .25rem; color: #e6dfd1; }
+      .hero-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 48px; background: var(--gold); color: var(--deep); border: 1px solid var(--gold); padding: .85rem 1.2rem; font: 700 1rem "Source Sans 3", sans-serif; box-shadow: 4px 4px 0 #796036; margin-top: 2rem; cursor: pointer; transition: transform .18s, box-shadow .18s; }
+      .hero-link:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #796036; }
+      .catalog { max-width: 1220px; padding-top: 3.5rem; padding-bottom: 4rem; }
+      .catalog-bar { gap: 2rem; align-items: end; border-bottom: 2px solid var(--navy); padding-bottom: 1.7rem; margin-bottom: 1.5rem; }
+      .section-label { margin: 0 0 .65rem; color: var(--red); font-weight: 700; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+      .catalog-bar h2 { color: var(--navy); font: 400 clamp(2.2rem, 3.5vw, 3.3rem)/1.15 "DM Serif Display", serif; }
+      .search-link { max-width: 230px; color: var(--navy); font-weight: 600; line-height: 1.5; text-decoration: underline; text-underline-offset: 4px; }
+      .explore-tools { margin: 0 0 2rem; }
+      .filter-top { display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0 1rem; }
+      .filter-top label { font-weight: 700; color: var(--navy); }
+      .filter-top input { width: min(100%, 420px); padding: .8rem 1rem; border: 1px solid #938777; background: #fffcf5; font: 400 1rem "Source Sans 3", sans-serif; border-radius: 0; }
+      .interest-filters { display: flex; flex-wrap: wrap; gap: .55rem; }
+      .interest-filters button { border: 1px solid #a79b87; background: transparent; color: var(--navy); padding: .65rem 1rem; min-height: 44px; font: 600 .98rem "Source Sans 3", sans-serif; cursor: pointer; transition: background .15s; }
+      .interest-filters button:hover { background: #e8e1d4; }
+      .interest-filters button[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: white; box-shadow: inset 0 -3px 0 var(--gold); }
+      .filter-summary { display: flex; gap: 1rem; justify-content: space-between; align-items: center; min-height: 52px; }
+      .filter-summary p { color: var(--muted); margin: .8rem 0; font-size: .95rem; }
+      .reset-button { background: transparent; border: 0; color: var(--red); min-height: 44px; font: 700 .98rem "Source Sans 3", sans-serif; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+      .collection-grid { gap: 0; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+      .collection { position: relative; color: var(--navy); background: transparent; border: 0; border-bottom: 1px solid var(--line); min-height: 0; padding: 2.2rem 2rem; transition: background .18s; }
+      .collection:nth-child(n) { background: transparent; color: var(--navy); border-left: 0; }
+      .collection:nth-child(even) { border-right: 1px solid var(--line); }
+      .collection:hover { transform: none; background: #ebe4d7; }
+      .number { font: 600 .8rem "Source Sans 3", sans-serif; color: var(--red); letter-spacing: .12em; }
+      .collection h3 { font: 400 clamp(1.65rem, 2.5vw, 2.3rem)/1.15 "DM Serif Display", serif; margin: .75rem 0; }
+      .collection p { max-width: none; font-size: 1.06rem; line-height: 1.6; color: #49433b; }
+      .browse { display: inline-flex; align-self: start; align-items: center; min-height: 44px; border-bottom: 2px solid var(--red); color: var(--navy); font-size: .95rem; text-transform: none; letter-spacing: .015em; padding: .3rem 0; margin-top: 1.2rem; }
+      .browse:hover { color: var(--red); }
+      .collection:first-child { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 2.5rem; grid-column: 1 / -1; padding: 2rem; background: var(--navy); color: white; border-bottom: 5px solid var(--gold); }
+      .collection:first-child .number { color: var(--gold); align-self: end; }
+      .collection:first-child p { color: #e6dfd1; }
+      .collection:first-child .browse { color: var(--gold); border-color: var(--gold); justify-self: start; }
+      .lead-image { grid-column: 1; grid-row: 1 / 4; margin: 0; align-self: center; }
+      .lead-image img { display: block; width: 100%; height: auto; border: 5px solid var(--paper); }
+      .lead-image figcaption { color: #e6dfd1; font-size: .9rem; margin-top: .65rem; font-style: italic; }
+      .empty-state { padding: 2rem; border-left: 5px solid var(--red); background: #e8e1d4; }
+      .empty-state h3 { color: var(--navy); font: 400 2rem "DM Serif Display", serif; margin: 0; }
+      .empty-state p { line-height: 1.6; }
+      .empty-state .hero-link { margin: .5rem 1.5rem 1rem 0; }
+      .empty-state > a { display: inline-block; text-decoration: underline; text-underline-offset: 4px; color: var(--navy); min-height: 44px; padding: .65rem 0; }
+      footer { background: var(--deep); border-top: 5px solid var(--gold); padding: 2rem 1.3rem; }
+      @media (max-width: 768px) { .title { display: block; } .title p { max-width: 36rem; margin-top: 1.5rem; } .topbar { margin-bottom: 2.5rem; padding: .75rem .25rem; } .topbar a { font-size: .73rem; padding: .2rem .45rem; } .catalog-bar { align-items: start; flex-direction: column; gap: 1rem; } .search-link { max-width: none; } .collection-grid { grid-template-columns: 1fr; } .collection:first-child { grid-template-columns: 1fr; padding: 1.3rem; } .lead-image { grid-column: auto; grid-row: auto; margin-bottom: 1.5rem; } .collection:nth-child(even) { border-right: 0; } .collection { padding: 1.7rem .6rem; } .filter-top { align-items: stretch; flex-direction: column; gap: .5rem; } .filter-top input { width: 100%; } }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
     </style>
   <link rel="stylesheet" href="desktop-integrity.css">
     <script defer src="site-analytics.js"></script>
 <script src="site-theme.js" defer></script>
 <script src="community-auth.js" defer></script></head>
   <body>
+    <a class="skip-link" href="#browse-title">Skip to collections</a>
     <header>
       <div class="header-inner">
         <nav class="topbar" aria-label="Primary navigation">
@@ -66,53 +128,67 @@
           <a href="index.html">HOME</a>
           <a href="DONATE.html">DONATE</a>
         </nav>
-        <div class="eyebrow">Catalog / Open access</div>
+        <div class="eyebrow">The collections / Free public access</div>
         <div class="title">
-          <h1>Collections</h1>
-          <p>Primary sources for studying carceral history, law, institutional practice, and lived experience.</p>
+          <h1>Original records.<br><em>Real people.</em></h1>
+          <p>Follow a lead through photographs, letters, books, and newspapers. Look at the records for yourself, and get closer to the people behind them.</p>
         </div>
+        <a class="hero-link" href="#browse-title">Find your starting point <span aria-hidden="true">&#8595;</span></a>
       </div>
     </header>
 
     <main class="catalog">
       <div class="catalog-bar">
-        <h2>Browse the collections</h2>
-        <span>05 divisions / 650+ archival finding aids &amp; issues</span>
+        <div><p class="section-label">Follow the paper trail</p><h2 id="browse-title" tabindex="-1">Where will you begin?</h2></div>
+        <a class="search-link" href="SEARCH.html">Looking for a name or place? Search the archive &#8599;</a>
       </div>
+
+      <div class="explore-tools" id="explore-tools" hidden>
+        <div class="filter-top"><label for="collection-search">Find a collection</label><input id="collection-search" type="search" placeholder="Try photographs, letters, or Dozier" autocomplete="off" /></div>
+        <div class="interest-filters" role="group" aria-label="Explore by interest">
+          <button type="button" data-filter="all" aria-pressed="true">All collections</button>
+          <button type="button" data-filter="photos" aria-pressed="false">Photographs</button>
+          <button type="button" data-filter="records" aria-pressed="false">Written records</button>
+          <button type="button" data-filter="people" aria-pressed="false">Personal stories</button>
+          <button type="button" data-filter="guides" aria-pressed="false">Getting started</button>
+        </div>
+        <div class="filter-summary"><p id="collection-count" role="status" aria-live="polite" aria-atomic="true">Showing all 5 collections</p><button class="reset-button" type="button" id="reset-filters" hidden>Clear filters</button></div>
+      </div>
+      <div class="empty-state" id="empty-state" hidden><h3>No collections match yet.</h3><p>Try a broader word, choose another interest, or clear the filters to see every collection.</p><button class="hero-link" type="button" id="empty-reset">Show all collections</button><a href="SEARCH.html">Search individual records instead &#8599;</a></div>
       <section class="collection-grid" aria-label="Collection divisions">
-        <article class="collection">
-          <span class="number">01</span>
+        <article class="collection" data-interests="photos people">
+          <figure class="lead-image"><img src="01_Photos/01_By-Collection/Historic/Men/SanQuinten.jpg" width="720" height="426" alt="An open historical album showing rows of identification photographs of men" fetchpriority="high" /><figcaption>Behind every number is a person.</figcaption></figure><span class="number">01 / Look closely</span>
           <div>
             <h3>Digital Photography Collections</h3>
-            <p>Photographs documenting places, people, events, and everyday life within histories of incarceration and justice reform.</p>
+            <p>Look closely at the faces, places, and everyday moments in the history of incarceration and justice reform.</p>
           </div>
           <a class="browse" href="PHOTOGRAPHY.html">Explore collection &rarr;</a>
         </article>
-        <article class="collection">
+        <article class="collection" data-interests="guides">
           <span class="number">02</span>
           <div>
             <h3>Research Starters</h3>
-            <p>Guides, timelines, framing questions, and recommended sources for beginning research in law, history, and lived experience.</p>
+            <p>Have a question but need a place to start? Find guides, timelines, and sources to help you take the next step.</p>
           </div>
           <a class="browse" href="RESEARCH-STARTERS.html">Explore collection &rarr;</a>
         </article>
-        <article class="collection">
+        <article class="collection" data-interests="records">
           <span class="number">03</span>
           <div>
             <h3>Books and Manuscripts</h3>
-            <p>Rare books, handwritten materials, published works, and scholarly texts documenting changing ideas about justice and confinement.</p>
+            <p>Read rare books, handwritten pages, and published works. Trace how people wrote about justice and confinement, and how those ideas changed.</p>
           </div>
           <a class="browse" href="BOOKS-AND-MANUSCRIPTS.html">Explore collection &rarr;</a>
         </article>
-        <article class="collection">
+        <article class="collection" data-interests="people records">
           <span class="number">04</span>
           <div>
             <h3>Personal Collections</h3>
-            <p>Stories, memories, letters, and family materials preserved through personal testimony and community knowledge.</p>
+            <p>Start with a letter, a memory, or a family story. Explore materials saved by the people and communities connected to this history.</p>
           </div>
           <a class="browse" href="PERSONAL-COLLECTIONS.html">Explore collection &rarr;</a>
         </article>
-        <article class="collection">
+        <article class="collection" data-interests="records">
           <span class="number">05</span>
           <div>
             <h3>The Dozier School Newspaper Collection - Florida</h3>
@@ -123,6 +199,37 @@
       </section>
     </main>
 
-    <footer>The Cheesborough Carceral Collections | COLLECTIONS</footer>
+    <footer>Cheesborough Carceral Collections | Follow the records. Find the people.</footer>
+
+  <script>
+    (() => {
+      const cards = Array.from(document.querySelectorAll('.collection'));
+      const search = document.querySelector('#collection-search');
+      const buttons = Array.from(document.querySelectorAll('[data-filter]'));
+      const resetButton = document.querySelector('#reset-filters');
+      let interest = 'all';
+      const render = () => {
+        const query = search.value.trim().toLocaleLowerCase();
+        let visible = 0;
+        cards.forEach((card) => {
+          const matches = (interest === 'all' || card.dataset.interests.split(' ').includes(interest)) && card.textContent.toLocaleLowerCase().includes(query);
+          card.hidden = !matches;
+          if (matches) visible += 1;
+        });
+        buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.filter === interest)));
+        document.querySelector('#collection-count').textContent = visible === cards.length ? `Showing all ${cards.length} collections` : `Showing ${visible} of ${cards.length} collections`;
+        document.querySelector('#empty-state').hidden = visible !== 0;
+        resetButton.hidden = interest === 'all' && !query;
+      };
+      const reset = () => { interest = 'all'; search.value = ''; render(); search.focus(); };
+      buttons.forEach((button) => button.addEventListener('click', () => { interest = button.dataset.filter; render(); }));
+      search.addEventListener('input', render);
+      resetButton.addEventListener('click', reset);
+      document.querySelector('#empty-reset').addEventListener('click', reset);
+      document.querySelector('#explore-tools').hidden = false;
+      document.querySelectorAll('h1, h2, h3, button').forEach((element) => { element.dataset.titleCaseApplied = 'true'; });
+      render();
+    })();
+  </script>
   <script src="title-case.js"></script></body>
 </html>
