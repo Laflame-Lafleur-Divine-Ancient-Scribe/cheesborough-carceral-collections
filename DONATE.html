@@ -25,7 +25,7 @@
   <meta name="twitter:image:alt" content="Support the Cheesborough Carceral Collections" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root { --navy: #102c4c; --deep: #091e36; --gold: #c29b53; --paper: #f5f2eb; --ink: #202020; --red: #9b3d32; --line: #d8d0c3; --muted: #5d554b; }
     * { box-sizing: border-box; }
@@ -106,116 +106,195 @@
     button:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
     footer { background: var(--deep); color: #fff; padding: 1rem; text-align: center; }
     @media (max-width: 800px) { .intro-grid, .membership-heading, .tier-card { grid-template-columns: 1fr; } .tier-card.full .tier-copy, .tier-card.full .tier-visual { order: initial; } .tier-copy { align-items: stretch; } .tier-action { margin: 0 auto; width: min(100%, 270px); } .tier-visual { margin-top: 0.25rem; } .topbar a { font-size: 0.72rem; padding: 0 0.3rem; } }
+
+    /* Donation campaign: paper, ink, and the human record. */
+    html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+    body { background: var(--paper); }
+    .skip-link { position: fixed; top: .5rem; left: .5rem; padding: .8rem; background: white; z-index: 100; transform: translateY(-180%); }
+    .skip-link:focus { transform: none; }
+    .topbar { background: var(--gold); color: var(--deep); display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem 0; padding: 1rem; }
+    .topbar a { font-weight: 700; font-size: .83rem; }
+    .topbar a + a { border-color: #725c37; }
+    .topbar .active { text-decoration: underline; text-underline-offset: 5px; }
+    .hero { position: relative; border-bottom: 9px solid var(--gold); padding: clamp(3rem, 6vw, 6rem) max(1.3rem, calc((100% - 1180px) / 2)); background: radial-gradient(ellipse at 100% 0%, #173955 0, transparent 65%), var(--deep); }
+    .hero-layout { grid-template-columns: minmax(0, 1.2fr) minmax(0, .9fr); gap: clamp(2rem, 5vw, 5rem); }
+    .eyebrow { font-size: .8rem; letter-spacing: .11em; line-height: 1.7; text-transform: none; }
+    h1, .content h2, .support-dialog h2, .tier-card h3 { font-family: "DM Serif Display", "Libre Baskerville", serif; font-weight: 400; }
+    h1 { font-size: clamp(2.6rem, 4.4vw, 4.7rem); line-height: 1.05; letter-spacing: -.025em; margin-top: 1.2rem; }
+    .hero p { font-size: 1.09rem; line-height: 1.7; }
+    .hero-art { padding: .7rem; border: 1px solid var(--gold); background: #f5f2eb; box-shadow: 13px 13px 0 #c29b5333; transform: rotate(1.5deg); }
+    .hero-image { width: 100%; height: auto; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+    .campaign-button, .cta { display: inline-flex; justify-content: space-between; align-items: center; gap: 1rem; border: 1px solid var(--gold); background: var(--gold); color: var(--deep); padding: 1rem 1.2rem; font: 700 1rem "Source Sans 3", sans-serif; cursor: pointer; box-shadow: 4px 4px 0 #796036; transition: transform .18s, box-shadow .18s, background .18s; }
+    .campaign-button.secondary { background: transparent; color: var(--paper); box-shadow: 4px 4px 0 #c29b5340; }
+    .campaign-button:hover, .cta:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #796036; }
+    .campaign-button:active, .cta:active { transform: translate(4px, 4px); box-shadow: none; }
+    .campaign-button span { font-size: 1.4rem; line-height: 1; }
+    .content { max-width: 1220px; padding-top: clamp(3rem, 6vw, 5rem); }
+    .content h2 { font-size: clamp(2rem, 3vw, 2.9rem); line-height: 1.14; }
+    .intro-grid { grid-template-columns: minmax(0, 1.25fr) minmax(290px, .75fr); gap: clamp(2rem, 5vw, 5rem); }
+    .reasons { margin-top: 2.5rem; }
+    .reasons h2 { font-size: 1.75rem; margin: .65rem 0; }
+    .reasons li { padding: 1.1rem 0 1.1rem 2.6rem; font-size: 1.04rem; }
+    .reasons li::before { font-size: 1rem; top: 1.2rem; }
+    .reasons strong { color: var(--navy); }
+    .levels { background: var(--deep); color: var(--paper); border: 1px solid var(--gold); border-top: 6px solid var(--gold); padding: clamp(1.4rem, 3vw, 2rem); box-shadow: 8px 8px 0 #d8d0c3; }
+    .levels h2 { color: var(--paper); font-size: 2.3rem; }
+    .level { border-color: #ffffff35; padding: 1.2rem 0; }
+    .level strong { color: var(--gold); font-family: "Source Sans 3", sans-serif; }
+    .level span { line-height: 1.55; }
+    .levels .cta { width: 100%; justify-content: center; }
+    .levels .support-note { color: var(--paper); font-size: .97rem; }
+    .subscription-title { color: var(--gold); }
+    .subscribe-option { color: var(--paper); border-color: #ffffff35; padding: 1rem 0; transition: padding .18s; }
+    .subscribe-option:hover { padding-left: .5rem; color: var(--gold); }
+    .subscribe-option span { color: #dfd7c9; }
+    .membership { border-top: 2px solid var(--navy); }
+    .membership-heading { align-items: end; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .membership-heading h2 { font-size: clamp(2.7rem, 4.2vw, 4rem); }
+    .membership-heading .circle-label { color: var(--red); font-size: .8rem; margin-bottom: 1rem; }
+    .tier-ladder { gap: 2.5rem; counter-reset: tiers; }
+    .tier-card { background: #fffcf5; border: 1px solid var(--line); border-left: 6px solid var(--gold); box-shadow: 7px 7px 0 #e4ddcf; overflow: hidden; }
+    .tier-number { font: 400 4rem/1 "DM Serif Display", serif; color: #9c783e; padding-bottom: .8rem; }
+    .full .tier-number { color: var(--navy); }
+    .legacy .tier-number { color: var(--red); }
+    .tier-price { font-family: "Source Sans 3", sans-serif; font-size: 2.2rem; line-height: 1.2; color: var(--red); }
+    .tier-price span { font-size: 1rem; color: var(--muted); font-weight: 400; }
+    .tier-card h3 { font-size: clamp(2rem, 3vw, 3rem); }
+    .tier-highlights li { font-size: 1rem; line-height: 1.5; }
+    .tier-action { align-self: flex-start; justify-content: center; background: var(--navy); border-color: var(--navy); color: white; width: auto; min-width: 220px; box-shadow: 4px 4px 0 var(--gold); }
+    .tier-action:hover { background: var(--red); }
+    .tier-visual a { position: relative; padding: .45rem; border: 1px solid var(--line); background: white; transition: transform .2s; }
+    .tier-visual a:hover { transform: rotate(-1deg); }
+    .tier-visual a::after { content: "View photograph \2197"; display: block; font-size: .8rem; padding: .55rem .2rem .1rem; color: var(--navy); font-weight: 700; }
+    .tier-visual figcaption { font-size: .98rem; font-style: italic; padding-left: .8rem; border-left: 2px solid var(--gold); margin-top: 1rem; }
+    .library-note { max-width: none; padding: 1.5rem 2rem; }
+    dialog { border-top: 6px solid var(--gold); max-height: 90dvh; overflow-y: auto; }
+    .support-dialog h2 { color: var(--navy); }
+    .support-dialog .cta { width: 100%; justify-content: center; }
+    .dialog-close { min-height: 44px; text-decoration: underline; text-underline-offset: 3px; }
+    .amount-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 1rem 0; }
+    .amount-presets button { cursor: pointer; min-height: 48px; border: 1px solid var(--navy); background: white; color: var(--navy); font: 700 1.05rem "Source Sans 3", sans-serif; }
+    .amount-presets button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--deep); }
+    .amount-presets button:hover { background: #e8e1d4; }
+    footer { border-top: 5px solid var(--gold); padding: 2rem 1.3rem; font-size: 1rem; }
+    @media (prefers-reduced-motion: no-preference) { .hero-copy { animation: arrive .65s ease-out both; } .hero-art { animation: artwork-arrive .8s ease-out both; } @keyframes arrive { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } } @keyframes artwork-arrive { from { opacity: 0; } to { opacity: 1; } } }
+    @media (max-width: 800px) { .hero-layout, .intro-grid, .membership-heading { grid-template-columns: 1fr; } .hero-art { max-width: 540px; margin: .5rem auto; } .hero { padding-bottom: 3.5rem; } .membership-heading { gap: 1rem; } .tier-action { align-self: flex-start; margin: 0; } .topbar a { font-size: .75rem; padding: .25rem .5rem; } }
+    @media (max-width: 420px) { h1 { font-size: 2.65rem; } .hero-actions { flex-direction: column; } .campaign-button { width: 100%; } .tier-card { padding: 1.2rem; } .support-dialog { padding: 1.2rem; } .support-mode { gap: .4rem; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
   </style>
   <link rel="stylesheet" href="desktop-integrity.css">
     <script defer src="site-analytics.js"></script>
 <script src="site-theme.js" defer></script>
 <script src="community-auth.js" defer></script></head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <nav class="topbar" aria-label="Primary navigation">
     <a href="index.html">HOME</a><a href="ABOUT.html">ABOUT</a><a href="SEARCH.html">SEARCH</a><a href="COLLECTIONS.html">COLLECTIONS</a><a href="RESEARCH.html">RESEARCH</a><a href="LAW-LIBRARY.html">LAW LIBRARY</a><a href="NEWS.html">NEWS</a><a href="CONTACT.html">CONTACT</a><a class="active" href="DONATE.html">DONATE</a>
   </nav>
   <header class="hero">
     <div class="hero-layout">
     <div class="hero-copy">
-    <div class="eyebrow">Help keep the record within reach</div>
-    <h1>Help us preserve the evidence and keep the conversation moving.</h1>
-    <p>Carceral Collections follows the paper trail: court files, photographs, prison records, newspapers, family materials, and the stories tied to them.</p>
+    <div class="eyebrow">Uncovering the Past • Building Better Systems</div>
+    <h1>Help Us Uncover the Past to Fix Our Justice System Today.</h1>
+    <p>Carceral Collections follows the paper trail: court files, old photos, prison records, and family stories. We bring these documents to light to show how our justice and youth systems grew into what they are today—and how we can fix them.</p>
+    <div class="hero-actions"><button type="button" class="campaign-button" data-open-support aria-haspopup="dialog">Give once <span aria-hidden="true">&#8599;</span></button><a class="campaign-button secondary" href="#circle-title">Explore monthly membership <span aria-hidden="true">&#8595;</span></a></div>
     </div>
-    <img class="hero-image" src="01_Photos/ShareImages/Donate_Share_Image.png" width="1254" height="1254" fetchpriority="high" alt="Cheesborough Carceral Collections. Donate to support research, preserve history, and expand access." />
+    <div class="hero-art"><img class="hero-image" src="01_Photos/ShareImages/Donate_Share_Image.png" width="1254" height="1254" fetchpriority="high" alt="Cheesborough Carceral Collections. Donate to support research, preserve history, and expand access." /></div>
     </div>
   </header>
-  <main class="content">
+  <main class="content" id="main-content">
     <div class="intro-grid">
     <section aria-labelledby="digging-title">
-      <h2 id="digging-title">Help keep the digging going</h2>
-      <p>Good records do not always come easy. They are tucked into courthouse files, old newspapers, family collections, archives, and places most people never get a chance to see. This work brings them into view.</p>
-      <p>Support helps cover record requests, research trips, scanning, document care, website upkeep, and the long hours it takes to connect the dots. It helps make sure the people inside these stories are not reduced to a case number or left out of the record.</p>
+      <h2 id="digging-title">Turning Hidden History into Real Change</h2>
+      <p>Real reform starts with knowing the truth. The history of adult prisons and youth detention is often buried in old courthouse basements, locked files, and forgotten archives. We dig up these records and make them easy to find so that families, researchers, and community leaders can see the evidence for themselves.</p>
+      <p>Your support helps pay for record fees, scanning tools, travel, and website costs. Most importantly, it ensures that people who were caught up in these systems are remembered as human beings—not just a case number on a piece of paper.</p>
       <div class="reasons">
-        <h2>What your support makes possible</h2>
+        <h2>What Your Support Makes Possible</h2>
         <ul>
-          <li>More public records, hard-to-find documents, and overlooked leads.</li>
-          <li>Careful scanning and preservation for photographs, files, and family history.</li>
-          <li>Stories that give context to the people, places, and choices behind the paperwork.</li>
-          <li>A public home for readers who want to look at the evidence for themselves.</li>
+          <li><strong>Unlocking Records:</strong> Paying government fees to get hidden court papers and state files opened to the public.</li>
+          <li><strong>Saving Family Stories:</strong> Carefully scanning and saving photos, letters, and personal histories before they are lost.</li>
+          <li><strong>Supporting Reform:</strong> Helping people understand the history of adult and youth prisons so we can build fairer policies today.</li>
+          <li><strong>Free Public Access:</strong> Keeping our online search tools and document library free for everyone to read and use.</li>
         </ul>
       </div>
     </section>
     <aside class="levels" aria-label="Donation options">
-      <h2>Back the work</h2>
-      <div class="level"><strong>Keep records moving</strong><span>Pitch in toward document requests, archive access, and the small costs that add up behind every story.</span></div>
-      <div class="level"><strong>Keep the collection open</strong><span>Help make room for more primary sources, better context, and more ways for people to find their way in.</span></div>
+      <h2>Help Fund the Mission</h2>
+      <div class="level"><strong>Get More Records</strong><span>Help cover the small costs—like record fees and archive access—that add up behind every story.</span></div>
+      <div class="level"><strong>Keep the Site Open</strong><span>Keep our collections free and open so anyone can search the documents for themselves.</span></div>
       <button class="cta" type="button" data-open-support aria-haspopup="dialog">Choose your support</button>
       <p class="support-note" id="donate-status" aria-live="polite">Give once in any amount, or join with monthly support.</p>
 
-      <p class="subscription-title">Join the circle</p>
-      <button class="subscribe-option" type="button" data-open-tier="plugged_in">$3/month — Plugged In<span>A little monthly fuel to help keep the work moving.</span></button>
-      <button class="subscribe-option" type="button" data-open-tier="full_member">$6/month — Full Member<span>A steady way to back new records, research, and stories.</span></button>
-      <button class="subscribe-option" type="button" data-open-tier="legacy_circle">$9/month — Legacy Circle<span>Extra support for preserving the record and widening access.</span></button>
+      <p class="subscription-title">Monthly support</p>
+      <button class="subscribe-option" type="button" data-open-tier="plugged_in">$3/month — Plugged In<span>Stay connected to selected reading.</span></button>
+      <button class="subscribe-option" type="button" data-open-tier="full_member">$6/month — Full Member<span>Explore more records and stories.</span></button>
+      <button class="subscribe-option" type="button" data-open-tier="legacy_circle">$9/month — Legacy Circle<span>Help save lost history.</span></button>
     </aside>
     </div>
     <section class="membership" aria-labelledby="circle-title">
       <div class="membership-heading">
         <div>
-          <p class="circle-label">Choose your circle</p>
-          <h2 id="circle-title">Stay close to the records, the stories, and what comes next.</h2>
+          <p class="circle-label">Steady support. Lasting change.</p>
+          <h2 id="circle-title" tabindex="-1">Join as a Monthly Member</h2>
         </div>
-        <p>Monthly members help make the work steadier. Choose the level that feels right: selected premium material, most of the library, or the broadest access and early releases.</p>
+        <p>Monthly members give us steady support so we can keep requesting files, scanning documents, and sharing the truth. Choose the level that feels right for you:</p>
       </div>
       <div class="tier-ladder">
         <article class="tier-card">
           <div class="tier-copy">
-            <p class="tier-price">$3/month</p>
+            <span class="tier-number" aria-hidden="true">01</span><p class="tier-price">$3 <span>/ month</span></p>
             <h3>Plugged In</h3>
-            <p class="tier-lede">An affordable way to help keep new material coming while staying connected to selected premium reading and records.</p>
-            <ul class="tier-highlights" aria-label="Plugged In highlights"><li>Selected members-only articles and digital readings</li><li>Curated documents, featured case files, and rotating collections</li><li>Member updates and selected digital experiences as they arrive</li></ul>
+            <p class="tier-lede">An easy way to help us get new documents while staying connected to selected reading.</p>
+            <ul class="tier-highlights" aria-label="Plugged In highlights"><li>Selected members-only articles and stories</li><li>Featured case files and rotating document updates</li><li>Regular updates on new records we find</li></ul>
             <button class="cta tier-action" type="button" data-open-tier="plugged_in" aria-haspopup="dialog">Join Plugged In</button>
           </div>
           <figure class="tier-visual">
             <a href="01_Photos/GenericWeb/InmateReading.jpg" target="_blank" rel="noopener" aria-label="Open the full-size photograph of an incarcerated person reading in a new tab"><img src="01_Photos/GenericWeb/InmateReading.jpg" alt="Incarcerated person reading a book" width="800" height="533" loading="lazy" /></a>
-            <figcaption>Records of youth incarceration deserve the same care, context, and public attention as every other part of the archive.</figcaption>
+            <figcaption>Children in the legal system deserve care, fairness, and a chance at a better future.</figcaption>
           </figure>
         </article>
         <article class="tier-card full">
           <div class="tier-copy">
-            <p class="tier-price">$6/month</p>
+            <span class="tier-number" aria-hidden="true">02</span><p class="tier-price">$6 <span>/ month</span></p>
             <h3>Full Member</h3>
-            <p class="tier-lede">For readers who want a bigger share of the library and a closer connection to the research, records, and stories being built.</p>
-            <ul class="tier-highlights" aria-label="Full Member highlights"><li>Everything in Plugged In, plus wider library access</li><li>Digital books, longer articles, document sets, photographs, and research files</li><li>More exhibits, interactive projects, and member releases</li></ul>
+            <p class="tier-lede">For readers who want to dive deeper into the history, records, and stories we share.</p>
+            <ul class="tier-highlights" aria-label="Full Member highlights"><li>Everything in $3 level, plus wider access to our collection</li><li>Longer articles, full document sets, photos, and research files</li><li>Early access to new online projects and exhibits</li></ul>
             <button class="cta tier-action" type="button" data-open-tier="full_member" aria-haspopup="dialog">Become a Full Member</button>
           </div>
           <figure class="tier-visual">
             <a href="01_Photos/GenericWeb/FullMemberUse.jpg" target="_blank" rel="noopener" aria-label="Open the full-size photograph of incarcerated men singing together in a new tab"><img src="01_Photos/GenericWeb/FullMemberUse.jpg" alt="Incarcerated men singing together with microphones and lyric sheets" width="2560" height="1961" loading="lazy" /></a>
-            <figcaption>Members help make room for documents and histories that ask readers to look past the headline.</figcaption>
+            <figcaption>Saving history helps everyone look past the news stories to find the real facts.</figcaption>
           </figure>
         </article>
         <article class="tier-card legacy">
           <div class="tier-copy">
-            <p class="tier-price">$9/month</p>
+            <span class="tier-number" aria-hidden="true">03</span><p class="tier-price">$9 <span>/ month</span></p>
             <h3>Legacy Circle</h3>
-            <p class="tier-lede">The deepest level of ongoing support for people who want broad access and want to help preserve what might otherwise stay scattered or forgotten.</p>
-            <ul class="tier-highlights" aria-label="Legacy Circle highlights"><li>Everything in the earlier circles, with the broadest selection</li><li>Full collections, case files, rare publications, and special research releases</li><li>Early looks at major releases and selected Legacy Circle exclusives</li></ul>
+            <p class="tier-lede">Our strongest level of support for people who want full access and want to help save lost history.</p>
+            <ul class="tier-highlights" aria-label="Legacy Circle highlights"><li>Full access to our entire library, rare papers, and special collections</li><li>Complete case files and deep-dive research reports</li><li>Early looks at major new releases</li></ul>
             <button class="cta tier-action" type="button" data-open-tier="legacy_circle" aria-haspopup="dialog">Enter Legacy Circle</button>
           </div>
           <figure class="tier-visual">
             <a href="01_Photos/GenericWeb/LegacyCircle.jpg" target="_blank" rel="noopener" aria-label="Open the full-size photograph of incarcerated people holding hands in a circle in a new tab"><img src="01_Photos/GenericWeb/LegacyCircle.jpg" alt="Incarcerated people holding hands in a circle" width="749" height="500" loading="lazy" /></a>
-            <figcaption>The collection grows through patient work: following evidence, preserving it, and keeping it within reach.</figcaption>
+            <figcaption>Making real change takes steady work: finding the proof, keeping it safe, and sharing it with all.</figcaption>
           </figure>
         </article>
       </div>
-      <p class="library-note"><strong>A candid note:</strong> the members library and access releases are growing. Monthly support helps build what comes next; member access is being developed alongside the collection.</p>
+      <p class="library-note"><strong>A quick note:</strong> Our online library is always growing. Monthly gifts help us request more files and add new features to the site every month.</p>
     </section>
   </main>
   <dialog id="support-dialog" aria-labelledby="support-dialog-title">
     <form class="support-dialog" method="dialog" data-support-form>
       <button class="dialog-close" type="button" data-close-support>Close</button>
-      <h2 id="support-dialog-title">Back the work</h2>
+      <h2 id="support-dialog-title">Help Fund the Mission</h2>
       <p>Choose a one-time amount or a monthly circle. Secure checkout is completed with Stripe.</p>
       <div class="support-mode" aria-label="Support type">
         <button class="support-choice" type="button" data-support-mode="one_time" aria-pressed="true">Give once</button>
         <button class="support-choice" type="button" data-support-mode="monthly" aria-pressed="false">Give monthly</button>
       </div>
       <section class="support-panel" data-support-panel="one_time">
+        <div class="amount-presets" role="group" aria-label="Suggested one-time amounts"><button type="button" data-amount="10" aria-pressed="false">$10</button><button type="button" data-amount="25" aria-pressed="true">$25</button><button type="button" data-amount="50" aria-pressed="false">$50</button><button type="button" data-amount="100" aria-pressed="false">$100</button></div>
         <label for="support-amount">Your one-time amount (USD)</label>
         <input class="support-amount" id="support-amount" name="amount" type="number" min="1" max="10000" step="0.01" inputmode="decimal" value="25" required />
       </section>
@@ -231,7 +310,8 @@
       <button class="cta support-checkout" type="submit" data-checkout-button>Continue securely with Stripe</button>
     </form>
   </dialog>
-  <footer>The Cheesborough Carceral Collections | Help us keep digging.</footer>
+  <footer>Cheesborough Carceral Collections | Uncovering the past to change the future.</footer>
+<script>document.querySelectorAll("h1, h2, h3, button").forEach((element) => { element.dataset.titleCaseApplied = "true"; });</script>
 <script src="title-case.js"></script>
 <script>
   (() => {
@@ -246,6 +326,9 @@
 
     const setMode = (nextMode) => {
       mode = nextMode;
+      amount.disabled = mode !== 'one_time';
+      amount.required = mode === 'one_time';
+      tier.disabled = mode !== 'monthly';
       document.querySelectorAll('[data-support-mode]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.supportMode === mode)));
       document.querySelectorAll('[data-support-panel]').forEach((panel) => { panel.hidden = panel.dataset.supportPanel !== mode; });
       status.textContent = '';
@@ -259,6 +342,9 @@
     document.querySelectorAll('[data-open-support]').forEach((button) => button.addEventListener('click', () => openDialog()));
     document.querySelectorAll('[data-open-tier]').forEach((button) => button.addEventListener('click', () => openDialog(button.dataset.openTier)));
     document.querySelectorAll('[data-support-mode]').forEach((button) => button.addEventListener('click', () => setMode(button.dataset.supportMode)));
+    const updatePresets = () => document.querySelectorAll('[data-amount]').forEach((button) => button.setAttribute('aria-pressed', String(Number(button.dataset.amount) === Number(amount.value))));
+    document.querySelectorAll('[data-amount]').forEach((button) => button.addEventListener('click', () => { amount.value = button.dataset.amount; updatePresets(); }));
+    amount.addEventListener('input', updatePresets);
     document.querySelector('[data-close-support]').addEventListener('click', () => dialog.close());
 
     form.addEventListener('submit', async (event) => {
