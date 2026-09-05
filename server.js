@@ -592,7 +592,7 @@ async function handleStripeCheckout(request, response) {
             StripePermissionError: 'The Stripe test key does not have permission to create Checkout Sessions. Use a standard secret key.',
             StripeInvalidRequestError: 'Stripe rejected the Checkout settings. Check the Railway deployment logs for the request error.',
         }[errorType] || 'Stripe could not create a test Checkout Session. Check the Railway deployment logs.';
-        console.error('Stripe Checkout session could not be created:', errorType);
+        console.error('Stripe Checkout session could not be created:', errorType, String(error?.message || '').replace(/\s+/g, ' ').slice(0, 500));
         return communityJson(response, 502, { error: isTestKey ? testMessage : 'Checkout is temporarily unavailable. Please try again.' });
     }
 
