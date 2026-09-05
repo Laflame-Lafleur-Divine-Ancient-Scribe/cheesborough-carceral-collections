@@ -539,6 +539,9 @@ async function handleStripeCheckout(request, response) {
         success_url: `${siteUrl}/DONATE.html?donation=success&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${siteUrl}/DONATE.html?donation=cancelled`,
         billing_address_collection: 'auto',
+        // These are voluntary contributions, not sales of a managed digital product.
+        // Prevent an account-level Managed Payments default from requiring a product tax code.
+        managed_payments: { enabled: false },
         submit_type: 'donate',
         metadata: { source: 'carceralcollections.org' },
     };
