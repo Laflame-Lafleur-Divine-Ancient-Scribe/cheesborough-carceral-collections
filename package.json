@@ -9,7 +9,8 @@
   "dependencies": {
     "@azure/functions": "^4.0.0",
     "argon2": "^0.45.1",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "stripe": "^22.6.1"
   },
   "main": "src/{index.js,functions/*.js}"
 }

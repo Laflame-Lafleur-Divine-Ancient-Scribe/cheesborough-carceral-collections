@@ -8,6 +8,7 @@ const tls = require('node:tls');
 const crypto = require('node:crypto');
 const { Pool } = require('pg');
 const argon2 = require('argon2');
+const Stripe = require('stripe');
 const { createPokerService } = require('./games/jail-house-poker/poker-service');
 
 const rootDirectory = __dirname;
@@ -36,8 +37,15 @@ const contentTypes = {
     '.svg': 'image/svg+xml',
     '.webp': 'image/webp',
 };
+const stripeMonthlySupport = {
+    plugged_in: { amount: 300, name: 'Plugged In', description: 'Monthly support for Carceral Collections.' },
+    full_member: { amount: 600, name: 'Full Member', description: 'Monthly support for Carceral Collections.' },
+    legacy_circle: { amount: 900, name: 'Legacy Circle', description: 'Monthly support for Carceral Collections.' },
+};
+const stripeCheckoutRate = new Map();
 let communityPool;
 let communitySchemaPromise;
+let stripeClient;
 function communityDb() {
     if (!process.env.DATABASE_URL) return null;
     if (!communityPool) communityPool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined });
@@ -484,6 +492,104 @@ async function permitCommunityAction(request, action, limit, seconds) {
 
 async function parseCommunityBody(request, maximumLength = 4096) {
     try { return JSON.parse(await readRequestBody(request, maximumLength) || '{}'); } catch { return null; }
+}
+
+function stripeApi() {
+    const secret = String(process.env.STRIPE_SECRET_KEY || '').trim();
+    if (!secret) return null;
+    if (!stripeClient) stripeClient = new Stripe(secret);
+    return stripeClient;
+}
+
+function publicSiteUrl() {
+    const fallback = process.env.NODE_ENV === 'production' ? 'https://carceralcollections.org' : 'http://localhost:8080';
+    const configured = String(process.env.PUBLIC_SITE_URL || fallback).trim();
+    try {
+        const url = new URL(configured);
+        if (!['http:', 'https:'].includes(url.protocol)) return fallback;
+        return url.origin;
+    } catch {
+        return fallback;
+    }
+}
+
+function permitStripeCheckout(request) {
+    const key = communityClientIp(request);
+    const now = Date.now();
+    const windowMs = 10 * 60 * 1000;
+    const current = stripeCheckoutRate.get(key) || [];
+    const recent = current.filter((timestamp) => now - timestamp < windowMs);
+    if (recent.length >= 12) return false;
+    recent.push(now);
+    stripeCheckoutRate.set(key, recent);
+    if (stripeCheckoutRate.size > 5000) stripeCheckoutRate.clear();
+    return true;
+}
+
+async function handleStripeCheckout(request, response) {
+    applyApiCors(request, response);
+    const stripe = stripeApi();
+    if (!stripe) return communityJson(response, 503, { error: 'Donations are not configured yet.' });
+    if (!permitStripeCheckout(request)) return communityJson(response, 429, { error: 'Please wait a few minutes before trying again.' });
+
+    const body = await parseCommunityBody(request);
+    const kind = String(body?.kind || '');
+    const siteUrl = publicSiteUrl();
+    const common = {
+        success_url: `${siteUrl}/DONATE.html?donation=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${siteUrl}/DONATE.html?donation=cancelled`,
+        billing_address_collection: 'auto',
+        submit_type: 'donate',
+        metadata: { source: 'carceralcollections.org' },
+    };
+
+    try {
+        if (kind === 'one_time') {
+            const amount = Math.round(Number(body.amount) * 100);
+            if (!Number.isSafeInteger(amount) || amount < 100 || amount > 1000000) {
+                return communityJson(response, 400, { error: 'Enter an amount from $1.00 to $10,000.00.' });
+            }
+            const session = await stripe.checkout.sessions.create({
+                ...common,
+                mode: 'payment',
+                payment_intent_data: { metadata: { source: 'carceralcollections.org', giving_type: 'one_time' } },
+                line_items: [{
+                    quantity: 1,
+                    price_data: {
+                        currency: 'usd',
+                        unit_amount: amount,
+                        product_data: { name: 'One-time support for Carceral Collections' },
+                    },
+                }],
+            });
+            return communityJson(response, 200, { url: session.url });
+        }
+
+        if (kind === 'monthly') {
+            const tier = stripeMonthlySupport[String(body.tier || '')];
+            if (!tier) return communityJson(response, 400, { error: 'Choose a monthly support level.' });
+            const session = await stripe.checkout.sessions.create({
+                ...common,
+                mode: 'subscription',
+                subscription_data: { metadata: { source: 'carceralcollections.org', giving_type: 'monthly', tier: String(body.tier) } },
+                line_items: [{
+                    quantity: 1,
+                    price_data: {
+                        currency: 'usd',
+                        unit_amount: tier.amount,
+                        recurring: { interval: 'month' },
+                        product_data: { name: `${tier.name} — Carceral Collections`, description: tier.description },
+                    },
+                }],
+            });
+            return communityJson(response, 200, { url: session.url });
+        }
+    } catch (error) {
+        console.error('Stripe Checkout session could not be created:', error?.type || error?.name || 'unknown error');
+        return communityJson(response, 502, { error: 'Checkout is temporarily unavailable. Please try again.' });
+    }
+
+    return communityJson(response, 400, { error: 'Choose one-time or monthly support.' });
 }
 
 function studioSessionToken() {
@@ -1928,6 +2034,11 @@ const server = http.createServer((request, response) => {
             response.writeHead(503, { 'Cache-Control': 'no-store' });
             response.end();
         });
+        return;
+    }
+
+    if (request.method === 'POST' && requestUrl.pathname === '/api/donations/checkout') {
+        handleStripeCheckout(request, response).catch(() => communityJson(response, 503, { error: 'Checkout is temporarily unavailable. Please try again.' }));
         return;
     }
 

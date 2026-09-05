@@ -38,12 +38,25 @@
     .level strong { color: var(--navy); display: block; font: 700 1.2rem "Libre Baskerville", serif; }
     .level span { display: block; margin-top: 0.35rem; }
     .support-note { color: #5d554b; font-size: 0.96rem; margin: 1.25rem 0 0; }
-    .cta, .subscribe-option { border: 0; font: 700 1rem "Source Sans 3", sans-serif; letter-spacing: 0.02em; text-align: left; width: 100%; }
-    .cta { background: var(--navy); color: #fff; cursor: not-allowed; display: block; margin-top: 1rem; padding: 0.95rem 1.2rem; }
-    .cta:disabled { opacity: 0.72; }
+    .cta, .subscribe-option, .support-choice { border: 0; font: 700 1rem "Source Sans 3", sans-serif; letter-spacing: 0.02em; text-align: left; width: 100%; }
+    .cta { background: var(--navy); color: #fff; cursor: pointer; display: block; margin-top: 1rem; padding: 0.95rem 1.2rem; }
+    .cta:disabled, .support-choice:disabled { cursor: wait; opacity: 0.72; }
     .subscription-title { color: var(--red); font: 700 0.9rem "Source Sans 3", sans-serif; letter-spacing: 0.13em; margin: 1.8rem 0 0.25rem; text-transform: uppercase; }
-    .subscribe-option { background: transparent; border-bottom: 1px solid #d8d0c3; color: var(--navy); cursor: not-allowed; display: block; padding: 0.85rem 0; }
+    .subscribe-option { background: transparent; border-bottom: 1px solid #d8d0c3; color: var(--navy); cursor: pointer; display: block; padding: 0.85rem 0; }
     .subscribe-option span { color: #5d554b; display: block; font-size: 0.93rem; font-weight: 400; letter-spacing: 0; margin-top: 0.15rem; }
+    dialog { background: var(--paper); border: 0; box-shadow: 0 1.5rem 4rem rgba(9, 30, 54, 0.42); color: var(--ink); max-width: min(94vw, 540px); padding: 0; width: 100%; }
+    dialog::backdrop { background: rgba(9, 30, 54, 0.74); }
+    .support-dialog { padding: clamp(1.3rem, 4vw, 2.2rem); }
+    .support-dialog h2 { font-size: clamp(1.45rem, 4vw, 2rem); margin: 0 0 0.6rem; }
+    .support-dialog p { line-height: 1.55; }
+    .dialog-close { background: transparent; border: 0; color: var(--navy); cursor: pointer; float: right; font: 700 0.9rem "Source Sans 3", sans-serif; padding: 0.4rem; }
+    .support-mode { display: grid; gap: 0.7rem; grid-template-columns: 1fr 1fr; margin: 1.4rem 0; }
+    .support-choice { background: #fff; border: 1px solid #d8d0c3; color: var(--navy); cursor: pointer; padding: 0.8rem; text-align: center; }
+    .support-choice[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .support-panel[hidden] { display: none; }
+    .support-amount { border: 1px solid #9f9485; display: block; font: 600 1rem "Source Sans 3", sans-serif; margin: 0.6rem 0 1rem; padding: 0.85rem; width: 100%; }
+    .support-checkout { margin-top: 0.6rem; text-align: center; }
+    .dialog-status { color: var(--red); font-size: 0.95rem; min-height: 1.5em; }
     button:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
     footer { background: var(--deep); color: #fff; padding: 1rem; text-align: center; }
     @media (max-width: 800px) { .content { grid-template-columns: 1fr; } .topbar a { font-size: 0.72rem; padding: 0 0.3rem; } }
@@ -80,17 +93,89 @@
       <h2>Back the work</h2>
       <div class="level"><strong>Keep records moving</strong><span>Pitch in toward document requests, archive access, and the small costs that add up behind every story.</span></div>
       <div class="level"><strong>Keep the collection open</strong><span>Help make room for more primary sources, better context, and more ways for people to find their way in.</span></div>
-      <!-- FUTURE DONATE CONFIGURATION: replace this disabled placeholder with the approved donation provider link or embed. -->
-      <button class="cta" type="button" disabled aria-describedby="donate-status">Donate — coming soon</button>
-      <p class="support-note" id="donate-status">Secure donation options are being set up. Check back soon.</p>
+      <button class="cta" type="button" data-open-support aria-haspopup="dialog">Choose your support</button>
+      <p class="support-note" id="donate-status" aria-live="polite">Give once in any amount, or join with monthly support.</p>
 
       <p class="subscription-title">Join the circle</p>
-      <!-- FUTURE SUBSCRIPTION CONFIGURATION: connect these disabled choices to the selected membership or email provider. -->
-      <button class="subscribe-option" type="button" disabled>$3/month — Plugged In<span>A little monthly fuel to help keep the work moving.</span></button>
-      <button class="subscribe-option" type="button" disabled>$6/month — Full Member<span>A steady way to back new records, research, and stories.</span></button>
-      <button class="subscribe-option" type="button" disabled>$9/month — Legacy Circle<span>Extra support for preserving the record and widening access.</span></button>
+      <button class="subscribe-option" type="button" data-open-tier="plugged_in">$3/month — Plugged In<span>A little monthly fuel to help keep the work moving.</span></button>
+      <button class="subscribe-option" type="button" data-open-tier="full_member">$6/month — Full Member<span>A steady way to back new records, research, and stories.</span></button>
+      <button class="subscribe-option" type="button" data-open-tier="legacy_circle">$9/month — Legacy Circle<span>Extra support for preserving the record and widening access.</span></button>
     </aside>
   </main>
+  <dialog id="support-dialog" aria-labelledby="support-dialog-title">
+    <form class="support-dialog" method="dialog" data-support-form>
+      <button class="dialog-close" type="button" data-close-support>Close</button>
+      <h2 id="support-dialog-title">Back the work</h2>
+      <p>Choose a one-time amount or a monthly circle. Secure checkout is completed with Stripe.</p>
+      <div class="support-mode" aria-label="Support type">
+        <button class="support-choice" type="button" data-support-mode="one_time" aria-pressed="true">Give once</button>
+        <button class="support-choice" type="button" data-support-mode="monthly" aria-pressed="false">Give monthly</button>
+      </div>
+      <section class="support-panel" data-support-panel="one_time">
+        <label for="support-amount">Your one-time amount (USD)</label>
+        <input class="support-amount" id="support-amount" name="amount" type="number" min="1" max="10000" step="0.01" inputmode="decimal" value="25" required />
+      </section>
+      <section class="support-panel" data-support-panel="monthly" hidden>
+        <label for="support-tier">Choose your monthly circle</label>
+        <select class="support-amount" id="support-tier" name="tier">
+          <option value="plugged_in">$3/month — Plugged In</option>
+          <option value="full_member">$6/month — Full Member</option>
+          <option value="legacy_circle">$9/month — Legacy Circle</option>
+        </select>
+      </section>
+      <p class="dialog-status" data-dialog-status role="status"></p>
+      <button class="cta support-checkout" type="submit" data-checkout-button>Continue securely with Stripe</button>
+    </form>
+  </dialog>
   <footer>The Cheesborough Carceral Collections | Help us keep digging.</footer>
-<script src="title-case.js"></script></body>
+<script src="title-case.js"></script>
+<script>
+  (() => {
+    const dialog = document.querySelector('#support-dialog');
+    const form = document.querySelector('[data-support-form]');
+    const status = document.querySelector('[data-dialog-status]');
+    const checkoutButton = document.querySelector('[data-checkout-button]');
+    const amount = document.querySelector('#support-amount');
+    const tier = document.querySelector('#support-tier');
+    const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://serviceapi-production-f574.up.railway.app';
+    let mode = 'one_time';
+
+    const setMode = (nextMode) => {
+      mode = nextMode;
+      document.querySelectorAll('[data-support-mode]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.supportMode === mode)));
+      document.querySelectorAll('[data-support-panel]').forEach((panel) => { panel.hidden = panel.dataset.supportPanel !== mode; });
+      status.textContent = '';
+    };
+    const openDialog = (selectedTier) => {
+      setMode(selectedTier ? 'monthly' : 'one_time');
+      if (selectedTier) tier.value = selectedTier;
+      if (dialog.showModal) dialog.showModal(); else dialog.setAttribute('open', '');
+    };
+
+    document.querySelectorAll('[data-open-support]').forEach((button) => button.addEventListener('click', () => openDialog()));
+    document.querySelectorAll('[data-open-tier]').forEach((button) => button.addEventListener('click', () => openDialog(button.dataset.openTier)));
+    document.querySelectorAll('[data-support-mode]').forEach((button) => button.addEventListener('click', () => setMode(button.dataset.supportMode)));
+    document.querySelector('[data-close-support]').addEventListener('click', () => dialog.close());
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = mode === 'one_time' ? { kind: 'one_time', amount: amount.value } : { kind: 'monthly', tier: tier.value };
+      checkoutButton.disabled = true;
+      status.textContent = 'Opening secure checkout…';
+      try {
+        const response = await fetch(`${apiBase}/api/donations/checkout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const result = await response.json();
+        if (!response.ok || !result.url) throw new Error(result.error || 'Checkout could not be started.');
+        location.assign(result.url);
+      } catch (error) {
+        status.textContent = error.message || 'Checkout is temporarily unavailable. Please try again.';
+        checkoutButton.disabled = false;
+      }
+    });
+
+    const donationResult = new URLSearchParams(location.search).get('donation');
+    if (donationResult === 'success') document.querySelector('#donate-status').textContent = 'Thank you — your support helps keep the record within reach.';
+    if (donationResult === 'cancelled') document.querySelector('#donate-status').textContent = 'No charge was made. You can choose support whenever you are ready.';
+  })();
+</script></body>
 </html>
