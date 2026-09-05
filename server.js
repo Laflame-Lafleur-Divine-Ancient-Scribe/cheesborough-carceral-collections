@@ -38,9 +38,9 @@ const contentTypes = {
     '.webp': 'image/webp',
 };
 const stripeMonthlySupport = {
-    plugged_in: { amount: 300, name: 'Plugged In', description: 'Monthly support for Carceral Collections.' },
-    full_member: { amount: 600, name: 'Full Member', description: 'Monthly support for Carceral Collections.' },
-    legacy_circle: { amount: 900, name: 'Legacy Circle', description: 'Monthly support for Carceral Collections.' },
+    plugged_in: { priceVariable: 'STRIPE_PRICE_PLUGGED_IN' },
+    full_member: { priceVariable: 'STRIPE_PRICE_FULL_MEMBER' },
+    legacy_circle: { priceVariable: 'STRIPE_PRICE_LEGACY_CIRCLE' },
 };
 const stripeCheckoutRate = new Map();
 let communityPool;
@@ -539,10 +539,6 @@ async function handleStripeCheckout(request, response) {
         success_url: `${siteUrl}/DONATE.html?donation=success&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${siteUrl}/DONATE.html?donation=cancelled`,
         billing_address_collection: 'auto',
-        // These are voluntary contributions, not sales of a managed digital product.
-        // Prevent an account-level Managed Payments default from requiring a product tax code.
-        managed_payments: { enabled: false },
-        submit_type: 'donate',
         metadata: { source: 'carceralcollections.org' },
     };
 
@@ -555,6 +551,9 @@ async function handleStripeCheckout(request, response) {
             const session = await stripe.checkout.sessions.create({
                 ...common,
                 mode: 'payment',
+                // A custom, voluntary donation is not a Managed Payments product sale.
+                managed_payments: { enabled: false },
+                submit_type: 'donate',
                 payment_intent_data: { metadata: { source: 'carceralcollections.org', giving_type: 'one_time' } },
                 line_items: [{
                     quantity: 1,
@@ -571,19 +570,17 @@ async function handleStripeCheckout(request, response) {
         if (kind === 'monthly') {
             const tier = stripeMonthlySupport[String(body.tier || '')];
             if (!tier) return communityJson(response, 400, { error: 'Choose a monthly support level.' });
+            const price = String(process.env[tier.priceVariable] || '').trim();
+            if (!/^price_[A-Za-z0-9]+$/.test(price)) {
+                return communityJson(response, 503, { error: 'Monthly support is being configured. Please try again shortly.' });
+            }
             const session = await stripe.checkout.sessions.create({
                 ...common,
                 mode: 'subscription',
+                submit_type: 'subscribe',
                 subscription_data: { metadata: { source: 'carceralcollections.org', giving_type: 'monthly', tier: String(body.tier) } },
-                line_items: [{
-                    quantity: 1,
-                    price_data: {
-                        currency: 'usd',
-                        unit_amount: tier.amount,
-                        recurring: { interval: 'month' },
-                        product_data: { name: `${tier.name} — Carceral Collections`, description: tier.description },
-                    },
-                }],
+                // Use the catalog price, including its Managed Payments tax code.
+                line_items: [{ price, quantity: 1 }],
             });
             return communityJson(response, 200, { url: session.url });
         }

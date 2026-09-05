@@ -9,6 +9,9 @@ In the Railway service that deploys `server.js`, add these variables:
 ```text
 STRIPE_SECRET_KEY=sk_test_...
 PUBLIC_SITE_URL=https://carceralcollections.org
+STRIPE_PRICE_PLUGGED_IN=price_...
+STRIPE_PRICE_FULL_MEMBER=price_...
+STRIPE_PRICE_LEGACY_CIRCLE=price_...
 ```
 
 Use an `sk_test_...` key while testing. When Stripe account verification and live payouts are ready, replace it in Railway with the live `sk_live_...` key. Do not add either key to a source file, GitHub secret, browser script, or chat.
@@ -19,10 +22,12 @@ Use an `sk_test_...` key while testing. When Stripe account verification and liv
 https://carceralcollections.org,https://www.carceralcollections.org
 ```
 
+The three `STRIPE_PRICE_...` values are not secrets. In Stripe test mode, open each monthly product, copy its recurring monthly **Price ID** (it begins with `price_`), and add it to the matching Railway variable. This keeps the subscriptions connected to the Stripe catalog products and their Managed Payments tax codes.
+
 ## What the checkout supports
 
 - One-time support: donor-entered USD amount from $1.00 through $10,000.00.
-- Monthly support: $3 Plugged In, $6 Full Member, or $9 Legacy Circle.
+- Monthly support: Stripe catalog prices for $3 Plugged In, $6 Full Member, and $9 Legacy Circle.
 - Success and cancel returns: `DONATE.html?donation=success` and `DONATE.html?donation=cancelled`.
 
 ## Test before going live
