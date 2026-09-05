@@ -585,8 +585,15 @@ async function handleStripeCheckout(request, response) {
             return communityJson(response, 200, { url: session.url });
         }
     } catch (error) {
-        console.error('Stripe Checkout session could not be created:', error?.type || error?.name || 'unknown error');
-        return communityJson(response, 502, { error: 'Checkout is temporarily unavailable. Please try again.' });
+        const errorType = error?.type || error?.name || 'unknown error';
+        const isTestKey = String(process.env.STRIPE_SECRET_KEY || '').trim().startsWith('sk_test_');
+        const testMessage = {
+            StripeAuthenticationError: 'Stripe could not authenticate the test key. Replace STRIPE_SECRET_KEY in Railway with a current sk_test key.',
+            StripePermissionError: 'The Stripe test key does not have permission to create Checkout Sessions. Use a standard secret key.',
+            StripeInvalidRequestError: 'Stripe rejected the Checkout settings. Check the Railway deployment logs for the request error.',
+        }[errorType] || 'Stripe could not create a test Checkout Session. Check the Railway deployment logs.';
+        console.error('Stripe Checkout session could not be created:', errorType);
+        return communityJson(response, 502, { error: isTestKey ? testMessage : 'Checkout is temporarily unavailable. Please try again.' });
     }
 
     return communityJson(response, 400, { error: 'Choose one-time or monthly support.' });
