@@ -50,23 +50,27 @@
     .membership-heading h2 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; margin: 0; }
     .membership-heading p { color: var(--muted); margin: 0; }
     .circle-label { color: var(--red); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.15em; margin: 0 0 0.8rem; text-transform: uppercase; }
-    .tier-ladder { display: grid; gap: 1.35rem; }
-    .tier-card { background: #fff; border-left: 6px solid var(--gold); box-shadow: 0 0.55rem 1.35rem rgba(9, 30, 54, 0.06); display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 0.95fr) minmax(210px, 0.75fr) minmax(220px, 0.7fr); padding: clamp(1.3rem, 3vw, 2.1rem); position: relative; }
+    .tier-ladder { display: grid; gap: clamp(2.2rem, 5vw, 4.5rem); }
+    .tier-card { align-items: stretch; background: #fff; border-left: 6px solid var(--gold); box-shadow: 0 0.55rem 1.35rem rgba(9, 30, 54, 0.06); display: grid; gap: clamp(1.5rem, 4vw, 4.5rem); grid-template-columns: minmax(0, 1fr) minmax(290px, 0.82fr); padding: clamp(1.4rem, 4vw, 3rem); position: relative; }
     .tier-card.full { border-left-color: var(--navy); }
     .tier-card.legacy { border-left-color: var(--red); }
+    .tier-card.full .tier-copy { order: 2; }
+    .tier-card.full .tier-visual { order: 1; }
+    .tier-copy { align-items: flex-start; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
     .tier-price { color: var(--red); font: 700 1.05rem "Libre Baskerville", serif; margin: 0 0 0.45rem; }
     .tier-card h3 { color: var(--navy); font: 700 clamp(1.5rem, 2vw, 2rem) "Libre Baskerville", serif; margin: 0; }
     .tier-lede { font-size: 1.02rem; line-height: 1.5; margin: 0.85rem 0 0; }
-    .tier-highlights { border-left: 1px solid var(--line); list-style: none; margin: 0; padding: 0 0 0 1.3rem; }
-    .tier-highlights li { font-size: 0.96rem; line-height: 1.35; margin: 0.3rem 0; padding-left: 1rem; position: relative; }
+    .tier-highlights { list-style: none; margin: 1.2rem 0 1.45rem; padding: 0; }
+    .tier-highlights li { font-size: 0.96rem; line-height: 1.35; margin: 0.5rem 0; padding-left: 1.2rem; position: relative; }
     .tier-highlights li::before { color: var(--red); content: "•"; left: 0; position: absolute; }
-    .tier-action { align-self: end; background: var(--deep); color: #fff; cursor: pointer; padding: 0.85rem 1rem; text-align: center; transition: background 160ms ease, transform 160ms ease; }
+    .tier-action { align-self: center; background: var(--deep); color: #fff; cursor: pointer; width: min(100%, 270px); padding: 0.85rem 1rem; text-align: center; transition: background 160ms ease, transform 160ms ease; }
     .tier-action:hover { background: var(--red); transform: translateY(-2px); }
+    .tier-visual { align-self: center; margin: 0; }
+    .tier-visual a { display: block; }
+    .tier-visual img { border: 1px solid var(--line); display: block; height: auto; object-fit: contain; width: 100%; }
+    .tier-visual a:focus-visible { outline: 3px solid var(--red); outline-offset: 4px; }
+    .tier-visual figcaption { color: var(--muted); font-size: 0.88rem; line-height: 1.45; margin-top: 0.7rem; }
     .library-note { background: #e8e1d4; border-left: 4px solid var(--red); color: #40382e; font-size: 1rem; line-height: 1.55; margin: 2rem 0 0 auto; max-width: 780px; padding: 1rem 1.15rem; }
-    .member-images { display: grid; gap: 1.25rem; grid-template-columns: repeat(3, 1fr); margin-top: clamp(3rem, 6vw, 5rem); }
-    .member-images figure { background: var(--deep); margin: 0; }
-    .member-images img { display: block; height: auto; width: 100%; }
-    .member-images figcaption { color: #f0e8dc; font-size: 0.88rem; line-height: 1.35; padding: 0.8rem 0.9rem 0.95rem; }
     dialog { background: var(--paper); border: 0; box-shadow: 0 1.5rem 4rem rgba(9, 30, 54, 0.42); color: var(--ink); max-width: min(94vw, 540px); padding: 0; width: 100%; }
     dialog::backdrop { background: rgba(9, 30, 54, 0.74); }
     .support-dialog { padding: clamp(1.3rem, 4vw, 2.2rem); }
@@ -82,7 +86,7 @@
     .dialog-status { color: var(--red); font-size: 0.95rem; min-height: 1.5em; }
     button:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
     footer { background: var(--deep); color: #fff; padding: 1rem; text-align: center; }
-    @media (max-width: 800px) { .intro-grid, .membership-heading, .tier-card { grid-template-columns: 1fr; } .tier-highlights { border-left: 0; border-top: 1px solid var(--line); padding: 1rem 0 0; } .member-images { grid-template-columns: 1fr; } .topbar a { font-size: 0.72rem; padding: 0 0.3rem; } }
+    @media (max-width: 800px) { .intro-grid, .membership-heading, .tier-card { grid-template-columns: 1fr; } .tier-card.full .tier-copy, .tier-card.full .tier-visual { order: initial; } .tier-copy { align-items: stretch; } .tier-action { margin: 0 auto; width: min(100%, 270px); } .tier-visual { margin-top: 0.25rem; } .topbar a { font-size: 0.72rem; padding: 0 0.3rem; } }
   </style>
   <link rel="stylesheet" href="desktop-integrity.css">
     <script defer src="site-analytics.js"></script>
@@ -136,27 +140,46 @@
       </div>
       <div class="tier-ladder">
         <article class="tier-card">
-          <div><p class="tier-price">$3/month</p><h3>Plugged In</h3><p class="tier-lede">An affordable way to help keep new material coming while staying connected to selected premium reading and records.</p></div>
-          <ul class="tier-highlights" aria-label="Plugged In highlights"><li>Selected members-only articles and digital readings</li><li>Curated documents, featured case files, and rotating collections</li><li>Member updates and selected digital experiences as they arrive</li></ul>
-          <button class="cta tier-action" type="button" data-open-tier="plugged_in" aria-haspopup="dialog">Join Plugged In</button>
+          <div class="tier-copy">
+            <p class="tier-price">$3/month</p>
+            <h3>Plugged In</h3>
+            <p class="tier-lede">An affordable way to help keep new material coming while staying connected to selected premium reading and records.</p>
+            <ul class="tier-highlights" aria-label="Plugged In highlights"><li>Selected members-only articles and digital readings</li><li>Curated documents, featured case files, and rotating collections</li><li>Member updates and selected digital experiences as they arrive</li></ul>
+            <button class="cta tier-action" type="button" data-open-tier="plugged_in" aria-haspopup="dialog">Join Plugged In</button>
+          </div>
+          <figure class="tier-visual">
+            <a href="01_Photos/GenericWeb/Juvenile%20Male%20Inmates.jpg" target="_blank" rel="noopener" aria-label="Open the full-size historic photograph of juvenile male inmates in a new tab"><img src="01_Photos/GenericWeb/Juvenile%20Male%20Inmates.jpg" alt="Historic photograph of juvenile male inmates" width="1200" height="675" loading="lazy" /></a>
+            <figcaption>Records of youth incarceration deserve the same care, context, and public attention as every other part of the archive.</figcaption>
+          </figure>
         </article>
         <article class="tier-card full">
-          <div><p class="tier-price">$6/month</p><h3>Full Member</h3><p class="tier-lede">For readers who want a bigger share of the library and a closer connection to the research, records, and stories being built.</p></div>
-          <ul class="tier-highlights" aria-label="Full Member highlights"><li>Everything in Plugged In, plus wider library access</li><li>Digital books, longer articles, document sets, photographs, and research files</li><li>More exhibits, interactive projects, and member releases</li></ul>
-          <button class="cta tier-action" type="button" data-open-tier="full_member" aria-haspopup="dialog">Become a Full Member</button>
+          <div class="tier-copy">
+            <p class="tier-price">$6/month</p>
+            <h3>Full Member</h3>
+            <p class="tier-lede">For readers who want a bigger share of the library and a closer connection to the research, records, and stories being built.</p>
+            <ul class="tier-highlights" aria-label="Full Member highlights"><li>Everything in Plugged In, plus wider library access</li><li>Digital books, longer articles, document sets, photographs, and research files</li><li>More exhibits, interactive projects, and member releases</li></ul>
+            <button class="cta tier-action" type="button" data-open-tier="full_member" aria-haspopup="dialog">Become a Full Member</button>
+          </div>
+          <figure class="tier-visual">
+            <a href="01_Photos/GenericWeb/young-black-men-accused-in-the-scottsboro-rape-case.jpg" target="_blank" rel="noopener" aria-label="Open the full-size historic image related to the Scottsboro case in a new tab"><img src="01_Photos/GenericWeb/young-black-men-accused-in-the-scottsboro-rape-case.jpg" alt="Historic image related to the Scottsboro case" width="1200" height="675" loading="lazy" /></a>
+            <figcaption>Members help make room for documents and histories that ask readers to look past the headline.</figcaption>
+          </figure>
         </article>
         <article class="tier-card legacy">
-          <div><p class="tier-price">$9/month</p><h3>Legacy Circle</h3><p class="tier-lede">The deepest level of ongoing support for people who want broad access and want to help preserve what might otherwise stay scattered or forgotten.</p></div>
-          <ul class="tier-highlights" aria-label="Legacy Circle highlights"><li>Everything in the earlier circles, with the broadest selection</li><li>Full collections, case files, rare publications, and special research releases</li><li>Early looks at major releases and selected Legacy Circle exclusives</li></ul>
-          <button class="cta tier-action" type="button" data-open-tier="legacy_circle" aria-haspopup="dialog">Enter Legacy Circle</button>
+          <div class="tier-copy">
+            <p class="tier-price">$9/month</p>
+            <h3>Legacy Circle</h3>
+            <p class="tier-lede">The deepest level of ongoing support for people who want broad access and want to help preserve what might otherwise stay scattered or forgotten.</p>
+            <ul class="tier-highlights" aria-label="Legacy Circle highlights"><li>Everything in the earlier circles, with the broadest selection</li><li>Full collections, case files, rare publications, and special research releases</li><li>Early looks at major releases and selected Legacy Circle exclusives</li></ul>
+            <button class="cta tier-action" type="button" data-open-tier="legacy_circle" aria-haspopup="dialog">Enter Legacy Circle</button>
+          </div>
+          <figure class="tier-visual">
+            <a href="01_Photos/GenericWeb/Groveland-Four-social.jpg" target="_blank" rel="noopener" aria-label="Open the full-size historic image related to the Groveland Four in a new tab"><img src="01_Photos/GenericWeb/Groveland-Four-social.jpg" alt="Historic image related to the Groveland Four" width="1200" height="675" loading="lazy" /></a>
+            <figcaption>The collection grows through patient work: following evidence, preserving it, and keeping it within reach.</figcaption>
+          </figure>
         </article>
       </div>
       <p class="library-note"><strong>A candid note:</strong> the members library and access releases are growing. Monthly support helps build what comes next; member access is being developed alongside the collection.</p>
-      <section class="member-images" aria-label="Stories and records that inform the collection">
-        <figure><img src="01_Photos/GenericWeb/Juvenile%20Male%20Inmates.jpg" alt="Historic photograph of juvenile male inmates" width="1200" height="675" loading="lazy" /><figcaption>Records of youth incarceration deserve the same care, context, and public attention as every other part of the archive.</figcaption></figure>
-        <figure><img src="01_Photos/GenericWeb/young-black-men-accused-in-the-scottsboro-rape-case.jpg" alt="Historic image related to the Scottsboro case" width="1200" height="675" loading="lazy" /><figcaption>Members help make room for documents and histories that ask readers to look past the headline.</figcaption></figure>
-        <figure><img src="01_Photos/GenericWeb/Groveland-Four-social.jpg" alt="Historic image related to the Groveland Four" width="1200" height="675" loading="lazy" /><figcaption>The collection grows through patient work: following evidence, preserving it, and keeping it within reach.</figcaption></figure>
-      </section>
     </section>
   </main>
   <dialog id="support-dialog" aria-labelledby="support-dialog-title">
