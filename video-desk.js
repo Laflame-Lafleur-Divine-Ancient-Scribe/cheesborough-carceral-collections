@@ -28,54 +28,25 @@ const CCC_VIDEO_CATALOG = [
   let metadataRequest;
   const thumb = (film, loading = '') => film.embed ? `<img src="${esc(film.thumbnail || `https://i.ytimg.com/vi/${encodeURIComponent(film.embed)}/hqdefault.jpg`)}" alt="${esc(film.title)} video thumbnail" ${loading}>` : '<span class="source-poster">Source unavailable</span>';
   const link = (film) => `https://www.youtube.com/watch?v=${encodeURIComponent(film.embed)}`;
-  const playerFallback = (film) => `<div class="source-poster player-fallback" role="status"><strong>This video could not start in the embedded player.</strong><span>Open the original public video on YouTube to continue watching.</span><a class="action-btn" href="${link(film)}" target="_blank" rel="noreferrer">Watch on YouTube &#8599;</a></div>`;
   const verifyEmbeddedPlayback = (film) => {
     if (!film.embed || film.embeddable === false) return;
     const mount = document.querySelector('#youtube-player');
     if (!mount) return;
-    let settled = false;
-    let failureTimer;
-    const showFallback = () => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(failureTimer);
-      const frame = document.querySelector('#youtube-player');
-      if (frame) frame.outerHTML = playerFallback(film);
-    };
-    const connect = () => {
-      if (!window.YT || typeof window.YT.Player !== 'function') return false;
-      new window.YT.Player('youtube-player', {
-        videoId: film.embed,
-        playerVars: {
-          rel: 0,
-          origin: location.origin
-        },
-        events: {
-          onReady: () => { clearTimeout(failureTimer); },
-          onError: showFallback
-        }
-      });
-      return true;
-    };
-    const scriptId = 'youtube-iframe-api';
-    const start = () => {
-      if (connect()) return;
-      const retry = window.setInterval(() => {
-        if (connect()) window.clearInterval(retry);
-      }, 100);
-      window.setTimeout(() => window.clearInterval(retry), 5000);
-    };
-    if (document.getElementById(scriptId)) start();
-    else {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://www.youtube.com/iframe_api';
-      script.async = true;
-      script.addEventListener('load', start, { once: true });
-      script.addEventListener('error', showFallback, { once: true });
-      document.head.append(script);
-    }
-    failureTimer = window.setTimeout(showFallback, 15000);
+    const frame = document.createElement('iframe');
+    frame.id = 'youtube-player';
+    frame.className = 'youtube-player-mount';
+    frame.title = film.title + ' - embedded video';
+    frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(film.embed) + '?rel=0&playsinline=1';
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    frame.allowFullscreen = true;
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    mount.replaceWith(frame);
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.className = 'action-btn secondary';
+    retry.textContent = 'Reload player';
+    retry.addEventListener('click', () => { frame.src = frame.src; });
+    document.querySelector('.watch-actions')?.prepend(retry);
   };
   const hydrateCatalog = () => {
     if (metadataRequest) return metadataRequest;

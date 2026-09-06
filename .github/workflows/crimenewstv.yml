@@ -1,0 +1,80 @@
+name: Update CrimeNewsTV twice daily
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+      timezone: America/New_York
+    - cron: '0 16 * * *'
+      timezone: America/New_York
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview selections without publishing'
+        type: boolean
+        default: true
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/crimenewstv.yml'
+      - 'scripts/collect-crimenewstv.py'
+      - 'scripts/test-crimenewstv.py'
+      - 'data/crimenewstv-sources.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crimenewstv-collector
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.collect.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test collection limits and duplicate protection
+        run: python scripts/test-crimenewstv.py
+      - name: Collect verified videos
+        id: collect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          SCHEDULE: ${{ github.event.schedule }}
+        shell: bash
+        run: |
+          args=()
+          if [[ "$EVENT_NAME" == "push" || "$DRY_RUN" == "true" ]]; then args+=(--dry-run); fi
+          if [[ "$SCHEDULE" == "0 9 * * *" ]]; then args+=(--slot 09); fi
+          if [[ "$SCHEDULE" == "0 16 * * *" ]]; then args+=(--slot 16); fi
+          python scripts/collect-crimenewstv.py "${args[@]}"
+      - name: Publish edition data
+        if: steps.collect.outputs.changed == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/crimenewstv-automation.json video-desk-auto.js
+          git commit -m 'Update CrimeNewsTV daily edition'
+          git pull --rebase origin main
+          git push origin main
+
+  deploy:
+    needs: collect
+    if: needs.collect.outputs.changed == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/pages.yml
