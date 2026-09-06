@@ -51,7 +51,7 @@ const CCC_VIDEO_CATALOG = [
           origin: location.origin
         },
         events: {
-          onReady: () => { settled = true; clearTimeout(failureTimer); },
+          onReady: () => { clearTimeout(failureTimer); },
           onError: showFallback
         }
       });
@@ -82,12 +82,16 @@ const CCC_VIDEO_CATALOG = [
     const ids = [...new Set(CCC_VIDEO_CATALOG.map((film) => film.embed).filter(Boolean))];
     if (!ids.length) return Promise.resolve();
     const batches = Array.from({ length: Math.ceil(ids.length / 50) }, (_, index) => ids.slice(index * 50, (index + 1) * 50));
-    metadataRequest = Promise.all(batches.map((batch) => fetch(`${apiBase}/api/youtube/videos?ids=${encodeURIComponent(batch.join(','))}`)
+    metadataRequest = Promise.all(batches.map((batch) => fetch(`${apiBase}/api/youtube/videos?ids=${encodeURIComponent(batch.join(','))}`, { signal: AbortSignal.timeout(8000) })
       .then((response) => response.ok ? response.json() : null)
       .catch(() => null)))
       .then((payloads) => {
         const details = new Map(payloads.flatMap((payload) => payload?.videos || []).map((video) => [video.id, video]));
-        CCC_VIDEO_CATALOG.forEach((film) => Object.assign(film, details.get(film.embed) || {}));
+        CCC_VIDEO_CATALOG.forEach((film) => {
+          const localThumbnail = film.thumbnail?.startsWith('assets/') ? film.thumbnail : null;
+          Object.assign(film, details.get(film.embed) || {});
+          if (localThumbnail) film.thumbnail = localThumbnail;
+        });
       })
       .catch(() => {});
     return metadataRequest;
@@ -156,7 +160,7 @@ const CCC_VIDEO_CATALOG = [
   document.addEventListener('DOMContentLoaded', () => {
     hydrateCatalog().finally(() => {
       if (document.body.dataset.videoPage === 'browse') {
-        if (typeof CCC_TODAYS_VIDEOS === 'undefined') browse();
+        if (!window.CCCVideoBrowse && typeof CCC_TODAYS_VIDEOS === 'undefined') browse();
       } else watch();
     });
   });
