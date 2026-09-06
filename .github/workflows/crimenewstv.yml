@@ -19,6 +19,7 @@ on:
       - 'scripts/collect-crimenewstv.py'
       - 'scripts/test-crimenewstv.py'
       - 'data/crimenewstv-sources.json'
+      - 'data/crimenewstv-trending.json'
 
 permissions:
   contents: read

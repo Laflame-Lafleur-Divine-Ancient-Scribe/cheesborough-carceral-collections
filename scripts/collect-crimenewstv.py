@@ -10,6 +10,7 @@ import re
 import subprocess
 import time
 import xml.etree.ElementTree as ET
+from urllib.parse import quote
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,6 +47,37 @@ def feed(source):
         print('Feed unavailable:', source['name'], type(error).__name__)
         return []
 
+def search_videos(query, sources):
+    """Public YouTube discovery; accept only configured publishers, then verify via API."""
+    try:
+        html = request('https://www.youtube.com/results?search_query=' + quote(query)).decode('utf-8')
+        match = re.search(r'var ytInitialData = (.*?);</script>', html)
+        if not match:
+            raise ValueError('Search data unavailable')
+        trusted = {source['id']: source for source in sources}
+        rows = []
+        def walk(value):
+            if isinstance(value, dict):
+                video = value.get('videoRenderer')
+                if video:
+                    runs = video.get('ownerText', {}).get('runs', [])
+                    channel_ids = [r.get('navigationEndpoint', {}).get('browseEndpoint', {}).get('browseId') for r in runs]
+                    source = next((trusted[c] for c in channel_ids if c in trusted), None)
+                    if source:
+                        rows.append({'id': video['videoId'], 'source': source,
+                                     'title': ''.join(r.get('text','') for r in video.get('title',{}).get('runs',[])),
+                                     'trending': True, 'discoveryQuery': query})
+                for child in value.values():
+                    walk(child)
+            elif isinstance(value, list):
+                for child in value:
+                    walk(child)
+        walk(json.loads(match.group(1)))
+        return rows
+    except Exception as error:
+        print('Search unavailable:', query, type(error).__name__)
+        return []
+
 def published(video):
     try:
         return datetime.fromisoformat(video['publishedAt'].replace('Z', '+00:00'))
@@ -62,7 +94,9 @@ def topic(title):
 
 def category(title):
     special = topic(title)
-    if special in ('Nolan Wells', 'Campus Investigations'):
+    if special == 'Nolan Wells':
+        return 'Trending'
+    if special == 'Campus Investigations':
         return special
     if re.search(r'trial|court|jury|juror|testif|hearing', title, re.I):
         return 'Courtroom Watch'
@@ -82,7 +116,7 @@ process.stdout.write(vm.runInContext('JSON.stringify(CCC_VIDEO_CATALOG)',c));"""
 def select(candidates, existing, maximum, now):
     seen = {v.get('embed') or v['id'] for v in existing}
     selected, channels, topics = [], Counter(), Counter()
-    for v in sorted(candidates, key=published, reverse=True):
+    for v in sorted(candidates, key=lambda v: (bool(v.get('priority')), bool(v.get('trending')), published(v)), reverse=True):
         if v['id'] in seen or not re.fullmatch(r'[A-Za-z0-9_-]{11}', v['id']):
             continue
         if not (now - timedelta(days=7) <= published(v) <= now):
@@ -131,23 +165,37 @@ def main():
     key = local.strftime('%Y-%m-%d') + ':' + slot
     date = local.strftime('%B ') + str(local.day) + local.strftime(', %Y')
     state = json.loads(STATE.read_text(encoding='utf-8'))
-    if key in state['runs']:
+    if key in state['runs'] and not args.dry_run:
         print('Already completed:', key)
         return
     existing = legacy_catalog() + [v for e in state['editions'] for v in e['videos']]
     today_count = len({v.get('embed') or v['id'] for v in existing if v.get('deskDate') == date})
-    maximum = min(9, max(0, 18 - today_count))
+    maximum = 9 if args.dry_run else min(9, max(0, 18 - today_count))
     if not maximum:
         print('Daily limit reached:', date)
         return
     sources = json.loads((ROOT / 'data/crimenewstv-sources.json').read_text())
+    trend_path = ROOT / 'data/crimenewstv-trending.json'
+    trends = json.loads(trend_path.read_text()) if trend_path.exists() else {'priorityTopics':[], 'searchQueries':[]}
     with ThreadPoolExecutor(max_workers=4) as pool:
         rows = [v for batch in pool.map(feed, sources) for v in batch]
     existing_ids = {v.get('embed') or v['id'] for v in existing}
+    existing_ids.update(video_id for adjustment in state.get('editorialAdjustments', []) for video_id in adjustment.get('replaced', []))
     candidates = {v['id']: v for v in rows if v['id'] not in existing_ids and
                   now - timedelta(days=7) <= published(v) <= now and not EXCLUDE.search(v['title']) and
                   (v['source'].get('crimeOnly') or CRIME.search(v['title']))}
-    if not rows:
+    queries = [name + ' latest update' for name in trends['priorityTopics']] + trends['searchQueries']
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        searches = list(pool.map(lambda query: search_videos(query, sources), queries))
+    for batch in searches:
+        for v in batch:
+            if v['id'] not in existing_ids and not EXCLUDE.search(v['title']) and (v['source'].get('crimeOnly') or CRIME.search(v['title'])):
+                candidates[v['id']] = {**candidates.get(v['id'], {}), **v}
+    for v in candidates.values():
+        v['priority'] = any(name.lower() in v['title'].lower() for name in trends['priorityTopics'])
+        if v['priority']:
+            v['trending'] = True
+    if not rows and not candidates:
         raise RuntimeError('All YouTube feeds failed; existing editions left intact.')
     verified = []
     ids = list(candidates)
@@ -171,7 +219,7 @@ def main():
         state['editions'].insert(0, edition)
     for v in picked:
         source = v.pop('source')
-        v.update(embed=v['id'], deskDate=date, category=category(v['title']), runtime='YouTube',
+        v.update(embed=v['id'], deskDate=date, category='Trending' if v.get('trending') else category(v['title']), runtime='YouTube',
                  selectedAt=now.isoformat(), selectionSlot=slot, verifiedAt=now.isoformat(),
                  deck=source['name'] + ' reports. Watch the coverage here.',
                  description='Original coverage from ' + source['name'] + '. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher.')

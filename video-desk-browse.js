@@ -11,6 +11,11 @@
   const datedIds = new Set(editions.flatMap(edition => edition.videos.map(film => film.id)));
   const archive = CCC_VIDEO_CATALOG.filter(film => !datedIds.has(film.id));
   const params = new URLSearchParams(location.search);
+  // Older shared links still resolve to Nolan Wells within the broader Trending category.
+  if (params.get('category') === 'Nolan Wells') {
+    params.set('category', 'Trending');
+    if (!params.get('q')) params.set('q', 'Nolan Wells');
+  }
   const valid = ['all','archive',...editions.map(edition => edition.date)];
   let edition = valid.includes(params.get('edition')) ? params.get('edition') : recent[0]?.date || 'all';
   let limit = 18;
@@ -24,7 +29,8 @@
   const groups = () => edition === 'all' ? [...editions,{date:'Archive selection',videos:archive}] : edition === 'archive' ? [...editions.slice(4),{date:'Archive selection',videos:archive}] : editions.filter(item => item.date === edition);
   const card = film => `<article class="video-card"><a href="${href(film)}"><div class="video-thumb"><img src="${escape(thumbnail(film))}" alt="${escape(film.title)} video thumbnail" loading="lazy"><span class="play-mini" aria-hidden="true">&#9654; Watch</span></div><div class="card-copy"><p class="eyebrow">${escape(film.category)}</p><h3>${escape(film.title)}</h3><p class="publisher">${escape(film.channelTitle || 'Public video')}</p><p class="video-metadata">${escape(videoMeta(film))}</p></div></a></article>`;
   function featured() {
-    const film = groups().flatMap(item => item.videos)[0];
+    const selection = groups().flatMap(item => item.videos);
+    const film = selection.find(item => item.priority) || selection.find(item => item.category === 'Trending') || selection[0];
     const mount = document.querySelector('#featured-film');
     if (!film) { mount.replaceChildren(); return; }
     mount.innerHTML = `<article class="lead-film"><a class="film-visual" href="${href(film)}" aria-label="Watch ${escape(film.title)}"><img src="${escape(thumbnail(film))}" alt="${escape(film.title)} video thumbnail" fetchpriority="high"><span class="play-disc" aria-hidden="true">&#9654;</span></a><div class="lead-copy"><p class="eyebrow">Featured selection / ${escape(film.category)}</p><h2>${escape(film.title)}</h2><p class="feature-publisher">${escape(film.channelTitle || 'From the CrimeNewsTV collection')}</p><p class="video-metadata">${escape(videoMeta(film))}</p><a class="watch-link" href="${href(film)}">Watch the video <span aria-hidden="true">&#8599;</span></a></div></article>`;
@@ -33,7 +39,7 @@
     const query = search.value.trim().toLowerCase();
     let remaining = limit, count = 0;
     const output = groups().map(group => {
-      const matches = group.videos.filter(film => (category.value === 'All' || film.category === category.value) && `${film.title} ${film.category} ${film.channelTitle || ''} ${film.deck || ''}`.toLowerCase().includes(query));
+      const matches = group.videos.filter(film => (category.value === 'All' || film.category === category.value) && `${film.title} ${film.category} ${film.channelTitle || ''} ${film.deck || ''}`.toLowerCase().includes(query)).sort((a,b) => Number(Boolean(b.priority)) - Number(Boolean(a.priority)) || Number(b.category === 'Trending') - Number(a.category === 'Trending'));
       count += matches.length;
       const visible = matches.slice(0,remaining); remaining -= visible.length;
       return visible.length ? `<section class="video-edition"><header class="edition-header"><h3>${escape(group.date)}</h3><span>${matches.length} ${matches.length === 1 ? 'selection' : 'selections'}</span></header><div class="edition-cards">${visible.map(card).join('')}</div></section>` : '';

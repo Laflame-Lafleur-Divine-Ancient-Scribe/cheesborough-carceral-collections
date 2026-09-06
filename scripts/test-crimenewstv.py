@@ -44,6 +44,12 @@ class SelectionTests(unittest.TestCase):
         rows = [self.video(n,title='Lindsay Clancy trial') for n in range(12)]
         self.assertEqual(len(collector.select(rows, [], 9, self.now)), 3)
 
+    def test_priority_case_before_newer_general_crime(self):
+        rows = [self.video(n) for n in range(10)] + [self.video(12,title='Nolan Wells update',priority=True,trending=True)]
+        selected = collector.select(rows, [], 9, self.now)
+        self.assertEqual(selected[0]['id'], '00000000012')
+        self.assertEqual(collector.category(selected[0]['title']), 'Trending')
+
     def test_two_slots_publish_eighteen_and_retry_is_idempotent(self):
         class FrozenDate(datetime):
             @classmethod
