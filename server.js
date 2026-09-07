@@ -11,6 +11,9 @@ const argon2 = require('argon2');
 const Stripe = require('stripe');
 const { createPokerService } = require('./games/jail-house-poker/poker-service');
 const { createOwnerService } = require('./lib/owner-service');
+const { createContactService } = require('./lib/contact-service');
+
+const contactService = createContactService({ parseBody: parseCommunityBody, json: communityJson, rate: permitCommunityAction });
 
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
@@ -2161,6 +2164,12 @@ const server = http.createServer((request, response) => {
 
     if (request.method === 'POST' && requestUrl.pathname === '/api/analytics/event') {
         ownerService.collect(request,response).catch(() => communityJson(response,503,{error:'Analytics temporarily unavailable.'}));
+        return;
+    }
+
+    if (request.method === 'POST' && requestUrl.pathname === '/api/contact') {
+        applyApiCors(request, response);
+        contactService(request, response).catch(() => communityJson(response, 503, { error: 'The inquiry service is temporarily unavailable. Please email Contact@carceralcollections.org directly.' }));
         return;
     }
     if (request.method === 'POST' && requestUrl.pathname === '/api/analytics/collect') {
