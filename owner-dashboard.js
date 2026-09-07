@@ -1,179 +1,82 @@
 (() => {
-  const byId = (id) => document.getElementById(id);
-  const fieldNames = ['members', 'activeToday', 'newThisWeek', 'comments', 'pendingComments', 'pageViews'];
-  const number = (value) => Number.isFinite(Number(value)) ? Number(value).toLocaleString() : '\u2014';
-  const text = (value) => String(value == null ? '' : value);
-  const escape = (value) => text(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-
-  function renderStats(overview) {
-    const stats = overview.stats || overview;
-    fieldNames.forEach((name) => {
-      const target = document.querySelector(`[data-stat="${name}"]`);
-      if (target) target.textContent = number(stats[name]);
-    });
+  const views = {overview:['Overview','Your collection and community at a glance.'],members:['Members','Find accounts and review the private member record.'],comments:['Comments','Review the conversation and manage moderation.'],analytics:['Analytics','Understand readership, discovery, and engagement.'],activity:['Activity','Follow recorded community and visitor activity.'],communications:['Communications','Prepare announcements and review communication records.'],content:['Content','See which pages draw readers and keep their attention.'],security:['Security','Review recorded account and access events.'],audit:['Audit log','Trace administrative changes and their recorded reasons.'],settings:['Settings','Control collection, exclusions, and retention.']};
+  const tabs = ['overview','visitors','geography','sources','pages','engagement','devices','technology','campaigns','search','realtime'];
+  const $ = selector => document.querySelector(selector);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const title = value => String(value).replace(/[_-]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  let authorized = false, state, requestId = 0, report = null, pollTimer, selectedMember, memberRequestId = 0, savedDefaultRange = '30d';
+  const request = (path,options) => window.CCCCommunity.request(path,options);
+  const empty = message => `<div class="empty-record"><span aria-hidden="true">&mdash;</span><p>${esc(message || 'No data yet')}</p></div>`;
+  function readState() { const params = new URLSearchParams(location.search); return {view:views[params.get('view')] ? params.get('view') : 'overview', tab:tabs.includes(params.get('tab')) ? params.get('tab') : 'overview', range:params.get('range') || savedDefaultRange,granularity:params.get('granularity') || 'day',...Object.fromEntries([...params].filter(([key])=>['from','to','country','region','city','source','page','device','identity','returning','q','status'].includes(key)))}; }
+  function urlFor(next) { const url = new URL(location.href); url.search=''; Object.entries(next).forEach(([key,value])=>{if(value)url.searchParams.set(key,value);}); return url.pathname+url.search; }
+  function navigate(next,replace=false) { history[replace?'replaceState':'pushState'](null,'',urlFor(next)); state=readState(); renderRoute(); }
+  const format = (value,type) => {if(value === null || value === undefined || value === '')return 'No data yet'; if(type==='percent')return `${Number(value).toLocaleString(undefined,{maximumFractionDigits:1})}%`; if(type==='seconds'){const seconds=Number(value);return seconds>=60?`${Math.floor(seconds/60)}m ${Math.round(seconds%60)}s`:`${Math.round(seconds)}s`;} return typeof value==='number'?value.toLocaleString(undefined,{maximumFractionDigits:type==='decimal'?2:1}):String(value);};
+  function tableHtml(table,interactive=true) {
+    const columns = table.columns || []; const rows = table.rows || [];
+    if (!rows.length) return `<section class="report-panel"><div class="panel-heading"><h2>${esc(table.title || title(table.key || 'Record'))}</h2></div>${empty()}</section>`;
+    const memberTable = table.key === 'members'; const commentTable = table.key === 'comments'; const draftTable = /draft|communication/.test(table.key || '');
+    const header = columns.map(col=>`<th scope="col">${esc(col.label)}</th>`).join('');
+    const cells = rows.map((row,index)=>`<tr>${columns.map(col=>{let value=row[col.key];if(value===null || value===undefined || value==='')value='No data yet'; if(typeof value==='object')value=JSON.stringify(value); return `<td>${esc(value)}</td>`;}).join('')}${interactive && (memberTable || commentTable || draftTable || row.page_path || row.country || ['source','sources'].includes(table.key) || row.source)?`<td class="row-actions">${draftTable?`<button type="button" data-draft="${esc(row.id)}">View draft</button>`:memberTable?`<button type="button" data-member="${esc(row.id)}">Open record</button>`:commentTable?`<button type="button" data-member="${esc(row.author_id)}">Author</button><select aria-label="Action for comment ${esc(row.id)}" data-comment-action="${esc(row.id)}"><option value="">Moderate...</option><option value="approve">Approve</option><option value="reject">Reject</option><option value="hide">Hide</option><option value="delete">Delete</option></select>${contentLink(row)}`:`<button type="button" data-drill-table="${esc(table.key)}" data-drill-row="${index}">Explore</button>`}</td>`:''}</tr>`).join('');
+    const hasActions = interactive && (memberTable || commentTable || draftTable || rows.some(row=>row.page_path || row.country || ['source','sources'].includes(table.key) || row.source));
+    return `<section class="report-panel"><div class="panel-heading"><h2>${esc(table.title || title(table.key || 'Record'))}</h2><span>${rows.length}${table.total > rows.length ? ' of '+table.total : ''} records</span></div><div class="table-scroll" tabindex="0" role="region" aria-label="${esc(table.title || 'Report table')}"><table><thead><tr>${header}${hasActions?'<th scope="col">Actions</th>':''}</tr></thead><tbody>${cells}</tbody></table></div></section>`;
   }
-
-  function renderPopular(items) {
-    const list = byId('owner-popular-content');
-    if (!list) return;
-    if (!Array.isArray(items) || !items.length) { list.innerHTML = '<li class="owner-empty">No public content activity is available yet.</li>'; return; }
-    list.innerHTML = items.slice(0, 8).map((item) => {
-      const title = escape(item.title || item.name || item.slug || 'Untitled item');
-      const href = text(item.url || item.href || '#');
-      const views = number(item.views ?? item.pageViews ?? item.count);
-      return `<li><a href="${escape(href)}">${title}</a><small>${views === '\u2014' ? 'No count' : `${views} views`}</small></li>`;
-    }).join('');
+  function contentLink(row) {const value=String(row.content_id||'');if(row.content_type==='video')return `<a href="VIDEO.html?id=${encodeURIComponent(value)}" target="_blank" rel="noopener">Video &#8599;</a>`;if(/^[\w/-]+\.html(?:[?#][\w=&%.-]*)?$/i.test(value) && !value.startsWith('//'))return `<a href="${esc(value)}" target="_blank" rel="noopener">Article &#8599;</a>`;return '';}
+  function chartHtml(chart) {
+    const rows=(chart.rows||[]).filter(row=>row.value!==null && Number.isFinite(Number(row.value)));if(!rows.length)return `<section class="report-panel chart-panel"><h2>${esc(chart.title)}</h2>${chart.kind==='map'?'<img class="world-basemap" src="owner-world-map.svg" alt="World basemap with no visitor locations plotted">':''}${empty()}</section>`;
+    const max=Math.max(1,...rows.map(row=>Number(row.value)));let visual='';
+    if(chart.kind==='line') {const points=rows.map((row,i)=>`${35+i*530/Math.max(1,rows.length-1)},${175-Number(row.value)/max*145}`).join(' ');visual=`<svg class="line-chart" viewBox="0 0 600 210" role="img" aria-label="${esc(chart.title)}. Exact values are in the data table below."><path d="M35 20V175H575" fill="none" stroke="#d8d0c3"/><polyline points="${points}" fill="none" stroke="#102c4c" stroke-width="3"/>${rows.map((row,i)=>`<circle cx="${35+i*530/Math.max(1,rows.length-1)}" cy="${175-Number(row.value)/max*145}" r="4" fill="#9b3d32" tabindex="0"><title>${esc(row.label)}: ${esc(format(row.value))}</title></circle>`).join('')}<text x="35" y="200">${esc(rows[0].label)}</text><text x="570" y="200" text-anchor="end">${esc(rows.at(-1).label)}</text></svg>`;
+    } else if(chart.kind==='donut') {const total=rows.reduce((sum,row)=>sum+Math.max(0,Number(row.value)),0);let offset=0;const colors=['#102c4c','#c29b53','#9b3d32','#53718b','#79634b'];visual=total?`<div class="donut-wrap"><svg viewBox="0 0 160 160" role="img" aria-label="${esc(chart.title)}. Exact values below.">${rows.map((row,i)=>{const portion=Math.max(0,Number(row.value))/total*100;const circle=`<circle cx="80" cy="80" r="54" fill="none" stroke="${colors[i%colors.length]}" stroke-width="24" pathLength="100" stroke-dasharray="${portion} ${100-portion}" stroke-dashoffset="${-offset}" transform="rotate(-90 80 80)"><title>${esc(row.label)}: ${esc(format(row.value))}</title></circle>`;offset+=portion;return circle;}).join('')}<text x="80" y="85" text-anchor="middle">${esc(format(total))}</text></svg><ul>${rows.map((row,i)=>`<li><i style="background:${colors[i%colors.length]}"></i>${esc(row.label || 'Unknown')} <strong>${esc(format(row.value))}</strong></li>`).join('')}</ul></div>`:empty();
+    } else if(chart.kind==='map') {const points=rows.filter(row=>Number.isFinite(Number(row.latitude))&&Number.isFinite(Number(row.longitude))&&row.latitude!=null&&row.longitude!=null);visual=points.length?`<p class="chart-note">Approximate visitor locations. Basemap: Natural Earth (public domain).</p><svg class="coordinate-chart" viewBox="0 0 600 300" role="img" aria-label="Reported locations by longitude and latitude"><image href="owner-world-map.svg" x="0" y="0" width="600" height="300"/>${points.map(row=>`<circle cx="${(Number(row.longitude)+180)/360*600}" cy="${(90-Number(row.latitude))/180*300}" r="${Math.min(18,4+Number(row.value)/max*14)}" fill="#9b3d32" opacity=".8"><title>${esc(row.label)}: ${esc(row.value)}</title></circle>`).join('')}<text x="5" y="290">180 W</text><text x="550" y="290">180 E</text></svg>`:'<img class="world-basemap" src="owner-world-map.svg" alt="World basemap with no visitor locations plotted">'+empty('No geographic coordinates yet');
+    } else {visual=`<div class="bar-chart">${rows.slice(0,12).map(row=>`<div class="bar-row" title="${esc(row.label)}: ${esc(format(row.value))}"><span>${esc(row.label || 'Unknown')}</span><div class="bar-track"><i style="width:${Math.max(0,Number(row.value)/max*100)}%"></i></div><strong>${esc(format(row.value))}</strong></div>`).join('')}</div>`;}
+    return `<section class="report-panel chart-panel"><h2>${esc(chart.title)}</h2>${visual}<details class="chart-data"><summary>View exact data (${rows.length} rows)</summary><div class="table-scroll"><table><thead><tr><th>Label</th><th>Value</th></tr></thead><tbody>${rows.map(row=>`<tr><td>${esc(row.label || 'Unknown')}</td><td>${esc(format(row.value))}</td></tr>`).join('')}</tbody></table></div></details></section>`;
   }
-
-  function renderActivity(items) {
-    const list = byId('owner-activity-list');
-    if (!list) return;
-    if (!Array.isArray(items) || !items.length) { list.innerHTML = '<li class="owner-empty">No activity summary is available yet.</li>'; return; }
-    list.innerHTML = items.slice(0, 8).map((item) => `<li>${escape(item.summary || item.message || item.label || item)}</li>`).join('');
+  function renderReport(data) {
+    report=data;if(data.settings?.defaultRange)savedDefaultRange=data.settings.defaultRange;const metrics=data.metrics||[],charts=data.charts||[],tables=data.tables||[];
+    let html=metrics.length?`<div class="metric-grid">${metrics.map(metric=>`<article class="metric"><p>${esc(metric.label)}</p><strong>${esc(format(metric.value,metric.format))}</strong>${metric.previous!=null?`<small>Previous period: ${esc(format(metric.previous,metric.format))}</small>`:''}${metric.comparison!=null?`<small>${typeof metric.comparison==='number' ? (metric.comparison>0?'+':'')+metric.comparison.toLocaleString(undefined,{maximumFractionDigits:1})+'% vs previous period' : esc(metric.comparison)}</small>`:''}<span class="metric-definition" tabindex="0" title="${esc(metric.definition || (String(metric.key).toLowerCase().includes('active')?'Active reflects the selected reporting window. Realtime shows the service\'s recent activity window.':'Values reflect recorded service data within the selected date range.'))}">About this metric</span></article>`).join('')}</div>`:'';
+    html+=charts.length?`<div class="chart-grid">${charts.map(chartHtml).join('')}</div>`:'';
+    if(state.view==='activity'){const types=[...new Set(tables.flatMap(table=>(table.rows||[]).map(row=>row.event_type||row.type||row.action).filter(Boolean)))];if(types.length)html+=`<label class="activity-group">Filter by recorded event type<select id="activity-event-type"><option value="">All recorded events</option>${types.map(type=>`<option value="${esc(type)}" ${state.q===type?'selected':''}>${esc(title(type))}</option>`).join('')}</select></label>`;}
+    html+=tables.map(table=>tableHtml(table)).join('');
+    if(state.view==='communications')html=composeHtml()+html;
+    if(state.view==='settings')html=settingsHtml(data.settings);
+    if(!html)html=empty();
+    $('#dashboard-content').innerHTML=html;
+    $('#range-context').textContent=data.range?`${data.range.from || ''} to ${data.range.displayTo || (data.range.to ? new Date(new Date(data.range.to).getTime()-86400000).toISOString().slice(0,10) : '')} / ${data.range.timezone || 'Service timezone'}`:'';
+    $('#updated-at').textContent=data.updatedAt?'Updated '+new Date(data.updatedAt).toLocaleString():'';
+    $('#owner-status').textContent=data.notice || (state.view==='analytics'&&state.tab==='realtime'?'Realtime refreshes every 30 seconds while this view is visible. Recent activity is different from all visitors active during a selected date range.':'');
+    bindActions();
   }
-
-  let selectedMember = null;
-
-  function memberName(member) {
-    return text(member.displayName || member.username || member.name || 'Unnamed member');
+  async function load() {
+    if(!authorized)return;const id=++requestId;$('#dashboard-content').setAttribute('aria-busy','true');$('#owner-status').textContent='Loading the record...';$('#export-dashboard').disabled=true;
+    try {let data;if(state.view==='members'){const [dashboard,result]=await Promise.all([request('/api/owner/dashboard?'+new URLSearchParams(state)),request('/api/owner/members?q='+encodeURIComponent(state.q||''))]);data={...dashboard,tables:[...(dashboard.tables||[]).filter(table=>table.key!=='members'),{key:'members',title:'Member directory',columns:[{key:'displayName',label:'Name'},{key:'username',label:'Username'},{key:'email',label:'Email'},{key:'role',label:'Role'},{key:'status',label:'Status'},{key:'createdAt',label:'Joined'},{key:'lastLoginAt',label:'Last login'},{key:'lastActivityAt',label:'Last activity'}],rows:(result.members||[]).map(member=>({...member,displayName:member.displayName||member.display_name,createdAt:member.createdAt||member.created_at,lastLoginAt:member.lastLoginAt||member.last_login_at,lastActivityAt:member.lastActivityAt||member.last_activity_at}))}]};}else data=await request('/api/owner/dashboard?'+new URLSearchParams(state));if(id!==requestId||!authorized)return;renderReport(data);$('#export-dashboard').disabled=false;}
+    catch(error){if(id!==requestId)return;report=null;$('#dashboard-content').innerHTML=empty('The record could not be loaded. Use Refresh to try again.');$('#owner-status').textContent=error.message;}
+    finally{if(id===requestId)$('#dashboard-content').setAttribute('aria-busy','false');}
   }
-
-  function memberRole(member) {
-    const role = text(member.role || 'member').toLowerCase();
-    return ['member', 'moderator', 'admin'].includes(role) ? role : 'member';
+  function renderRoute() {
+    clearInterval(pollTimer);report=null;$('#dashboard-content').replaceChildren();$('#view-title').textContent=views[state.view][0];$('#view-description').textContent=views[state.view][1];$('#view-kicker').textContent='Owner record / '+views[state.view][0];document.title=views[state.view][0]+' | Owner Record';
+    $('#owner-navigation').innerHTML=Object.entries(views).map(([key,[label]],index)=>`<a href="${urlFor({...state,view:key,tab:'overview',q:'',status:''})}" data-view="${key}" ${state.view===key?'aria-current="page"':''}><span>${String(index+1).padStart(2,'0')}</span>${label}</a>`).join('');
+    $('#analytics-tabs').hidden=state.view!=='analytics';$('#analytics-tabs').innerHTML=tabs.map(tab=>`<a href="${urlFor({...state,tab})}" data-tab="${tab}" ${state.tab===tab?'aria-current="page"':''}>${title(tab)}</a>`).join('');
+    const form=$('#report-filters');form.hidden=['settings','communications'].includes(state.view);for(const element of form.elements){if(element.name)element.value=state[element.name]||'';}$('#report-range').value=state.range;form.elements.granularity.value=state.granularity;form.elements.status.value=state.status||'all';document.querySelectorAll('.custom-date').forEach(el=>el.hidden=state.range!=='custom');$('#advanced-filters').hidden=!['analytics','overview','content'].includes(state.view);$('#comment-status-filter').hidden=state.view!=='comments';load();
+    if(state.view==='analytics'&&state.tab==='realtime')pollTimer=setInterval(()=>{if(!document.hidden)load();},30000);
   }
-
-  function memberStatus(member) {
-    const status = text(member.status || member.accountStatus || 'active').toLowerCase();
-    return ['active', 'suspended', 'banned'].includes(status) ? status : 'active';
+  function settingsHtml(settings) {if(!settings)return empty('Settings are not available yet.');const bools={enabled:'Collect analytics',geoEnabled:'Approximate country and region',cityEnabled:'Approximate city',excludeOwner:'Exclude owner traffic',excludeBots:'Exclude recognized bots',excludeDevelopment:'Exclude development traffic'};return `<form id="settings-form" class="report-panel action-form"><h2>Collection &amp; privacy</h2><p class="chart-note">Changes are saved to the service and recorded in the audit log. <a href="ANALYTICS-PRIVACY.html" target="_blank" rel="noopener">Read the public analytics notice</a>.</p><div class="settings-grid">${Object.entries(bools).map(([key,label])=>`<label class="checkbox-label"><input type="checkbox" name="${key}" ${settings[key]?'checked':''}>${label}</label>`).join('')}<label>Analytics retention (days)<input type="number" name="retentionDays" value="${esc(settings.retentionDays)}" min="1" max="730" required></label><label>Security retention (days)<input type="number" name="securityRetentionDays" value="${esc(settings.securityRetentionDays)}" min="1" max="730" required></label><label>Reporting timezone<input name="timezone" value="${esc(settings.timezone)}" required></label><label>Default date range<select name="defaultRange">${['today','yesterday','7d','30d','90d','thismonth','lastmonth','year','all'].map(range=>`<option value="${range}" ${settings.defaultRange===range?'selected':''}>${range}</option>`).join('')}</select></label></div><button class="primary-button" type="submit">Save settings</button><p class="form-status" role="status"></p></form><section class="report-panel"><h2>This browser</h2><label class="checkbox-label"><input id="browser-exclusion" type="checkbox">Exclude visits from this browser</label><p class="chart-note">This preference applies to this browser only. Owner dashboard visits are always excluded.</p><p id="browser-exclusion-status" role="status"></p></section>`;}
+  function composeHtml(){return `<details class="report-panel composer"><summary>Compose a communication draft</summary><form id="communication-form" class="action-form"><label>Title<input name="title" maxlength="160" required></label><div class="settings-grid"><label>Type<select name="type"><option value="announcement">Announcement</option><option value="email">Email</option><option value="notice">Notice</option></select></label><label>Audience<input name="audience" placeholder="For example: all members" required maxlength="80"></label></div><label>Message<textarea name="body" rows="6" required maxlength="10000"></textarea></label><p class="chart-note">Save a draft for review. This action does not send a message.</p><button type="submit" class="primary-button">Save draft</button><p class="form-status" role="status"></p></form></details>`;}
+  function bindActions(){
+    document.querySelectorAll('[data-draft]').forEach(button=>button.addEventListener('click',async()=>{const dialog=$('#member-dialog');$('#member-dialog-title').textContent='Communication draft';$('#member-record').textContent='Loading draft...';dialog.showModal();try{const data=await request('/api/owner/communications/'+encodeURIComponent(button.dataset.draft));const draft=data.draft||data.communication||(typeof data.message==='object'?data.message:data);$('#member-record').innerHTML=`<h3>${esc(draft.title || 'Draft')}</h3><p class="chart-note">${esc(draft.type || '')} / ${esc(draft.audience || '')}</p><div class="draft-body">${esc(draft.body || '')}</div><p class="chart-note">Draft preview. No message has been sent by this action.</p>`;}catch(error){$('#member-record').textContent=error.message;}}));
+    $('#activity-event-type')?.addEventListener('change',event=>navigate({...state,q:event.target.value}));
+    document.querySelectorAll('[data-member]').forEach(button=>button.addEventListener('click',()=>openMember(button.dataset.member)));
+    document.querySelectorAll('[data-comment-action]').forEach(select=>select.addEventListener('change',async()=>{const action=select.value;if(!action)return;if(action==='delete'&&!confirm('Permanently delete this comment?')){select.value='';return;}const reason=prompt('Reason for this moderation action:');if(reason===null){select.value='';return;}select.disabled=true;try{await request('/api/owner/comments/'+encodeURIComponent(select.dataset.commentAction),{method:'POST',body:JSON.stringify({action,reason})});await load();}catch(error){$('#owner-status').textContent=error.message;select.disabled=false;select.value='';}}));
+    document.querySelectorAll('[data-drill-table]').forEach(button=>button.addEventListener('click',()=>{const row=report.tables.find(table=>table.key===button.dataset.drillTable)?.rows[Number(button.dataset.drillRow)];if(row?.page_path)navigate({...state,view:'analytics',tab:'pages',page:row.page_path});else if(row?.country)navigate({...state,view:'analytics',tab:'geography',country:row.country,region:row.region||'',city:row.city||''});else if(row?.source || ['source','sources'].includes(button.dataset.drillTable))navigate({...state,view:'analytics',tab:'sources',source:row.source||row.label||''});}));
+    $('#communication-form')?.addEventListener('submit',event=>submitForm(event,'/api/owner/communications','POST',Object.fromEntries(new FormData(event.currentTarget))));
+    $('#settings-form')?.addEventListener('submit',event=>{const form=event.currentTarget;const body={};['enabled','geoEnabled','cityEnabled','excludeOwner','excludeBots','excludeDevelopment'].forEach(key=>body[key]=form.elements[key].checked);['retentionDays','securityRetentionDays'].forEach(key=>body[key]=Number(form.elements[key].value));['timezone','defaultRange'].forEach(key=>body[key]=form.elements[key].value);submitForm(event,'/api/owner/settings','PUT',body);});
+    const exclude=$('#browser-exclusion');if(exclude){try{exclude.checked=localStorage.getItem('ccc-analytics-excluded')==='1';}catch{}exclude.addEventListener('change',()=>{try{if(exclude.checked){localStorage.setItem('ccc-analytics-excluded','1');localStorage.removeItem('cheesborough-anonymous-visitor');localStorage.removeItem('ccc-analytics-session');}else localStorage.removeItem('ccc-analytics-excluded');$('#browser-exclusion-status').textContent='Browser preference saved.';}catch{$('#browser-exclusion-status').textContent='This browser could not save the preference.';}});}
   }
-
-  function setMemberDetail(member) {
-    const detail = byId('owner-member-detail');
-    const empty = byId('owner-member-empty');
-    const updateStatus = byId('owner-member-update-status');
-    selectedMember = member || null;
-    if (!member) { detail.hidden = true; empty.hidden = false; return; }
-    empty.hidden = true; detail.hidden = false;
-    byId('owner-member-id').value = text(member.id);
-    byId('owner-member-detail-heading').textContent = memberName(member);
-    byId('owner-member-handle').textContent = member.username ? `@${member.username}` : 'No public username';
-    byId('owner-member-email').textContent = member.email || 'No email address recorded';
-    byId('owner-member-role').value = memberRole(member);
-    byId('owner-member-state').value = memberStatus(member);
-    byId('owner-member-reason').value = '';
-    updateStatus.textContent = '';
-    detail.focus({ preventScroll: true });
-  }
-
-  function renderMembers(payload) {
-    const result = byId('owner-member-results');
-    const members = Array.isArray(payload) ? payload : (payload.members || payload.results || []);
-    const emptyRow = (message) => {
-      const row = document.createElement('tr');
-      const cell = document.createElement('td');
-      cell.colSpan = 4;
-      cell.className = 'owner-table-empty';
-      cell.textContent = message;
-      row.append(cell);
-      result.replaceChildren(row);
-    };
-    if (!members.length) {
-      emptyRow('No matching member records were found.');
-      setMemberDetail(null);
-      return;
-    }
-    const fragment = document.createDocumentFragment();
-    members.forEach((member) => {
-      const row = document.createElement('tr');
-      const memberCell = document.createElement('td');
-      const name = document.createElement('strong');
-      name.textContent = memberName(member);
-      memberCell.append(name);
-      if (member.username) {
-        memberCell.append(document.createElement('br'));
-        const handle = document.createElement('small');
-        handle.textContent = `@${text(member.username)}`;
-        memberCell.append(handle);
-      }
-      const roleCell = document.createElement('td');
-      roleCell.textContent = memberRole(member);
-      const statusCell = document.createElement('td');
-      statusCell.textContent = memberStatus(member);
-      const actionCell = document.createElement('td');
-      const choose = document.createElement('button');
-      choose.type = 'button';
-      choose.textContent = 'Select';
-      choose.addEventListener('click', () => setMemberDetail(member));
-      actionCell.append(choose);
-      row.append(memberCell, roleCell, statusCell, actionCell);
-      fragment.append(row);
-    });
-    result.replaceChildren(fragment);
-  }
-
-  async function searchMembers(event) {
-    event?.preventDefault();
-    const status = byId('owner-member-status');
-    const query = byId('owner-member-query').value.trim();
-    const submit = document.querySelector('#owner-member-search button');
-    status.textContent = 'Searching the member record…';
-    submit.disabled = true;
-    try {
-      const payload = await window.CCCCommunity.request(`/api/owner/members?q=${encodeURIComponent(query)}`);
-      renderMembers(payload);
-      const members = Array.isArray(payload) ? payload : (payload.members || payload.results || []);
-      status.textContent = members.length ? `${members.length} member record${members.length === 1 ? '' : 's'} found.` : 'No matching member records were found.';
-    } catch (error) {
-      status.textContent = `Member records are temporarily unavailable. ${error.message || 'Please try again shortly.'}`;
-      renderMembers({ members: [] });
-      byId('owner-member-results').querySelector('.owner-table-empty').textContent = 'Member records are unavailable.';
-    } finally { submit.disabled = false; }
-  }
-
-  async function updateMember(event) {
-    event.preventDefault();
-    if (!selectedMember || !selectedMember.id) return;
-    const role = byId('owner-member-role').value;
-    const statusValue = byId('owner-member-state').value;
-    const reason = byId('owner-member-reason').value.trim();
-    const message = byId('owner-member-update-status');
-    const confirm = byId('owner-member-confirm');
-    if (statusValue !== memberStatus(selectedMember) && !reason) { message.textContent = 'Please record a reason before changing account status.'; byId('owner-member-reason').focus(); return; }
-    if (!window.confirm(`Confirm changes to ${memberName(selectedMember)}?`)) return;
-    confirm.disabled = true; message.textContent = 'Saving this account action…';
-    try {
-      const payload = await window.CCCCommunity.request(`/api/owner/members/${encodeURIComponent(selectedMember.id)}`, { method: 'POST', body: JSON.stringify({ role, status: statusValue, reason }) });
-      const updated = payload.member || payload.user || { ...selectedMember, role, status: statusValue };
-      selectedMember = { ...selectedMember, ...updated };
-      setMemberDetail(selectedMember);
-      message.textContent = 'Account action recorded.';
-      searchMembers();
-    } catch (error) { message.textContent = `This account action could not be saved. ${error.message || 'Please try again shortly.'}`; }
-    finally { confirm.disabled = false; }
-  }
-
-  async function boot() {
-    const status = byId('owner-status');
-    const root = document.querySelector('.owner-layout');
-    const user = await window.CCCCommunity.restoreSession();
-    if (!user || user.role !== 'owner') { location.replace('PROFILE.html'); return; }
-    byId('owner-logout').addEventListener('click', () => window.CCCCommunity.logout());
-    byId('owner-member-search').addEventListener('submit', searchMembers);
-    byId('owner-member-update').addEventListener('submit', updateMember);
-    searchMembers();
-    try {
-      const overview = await window.CCCCommunity.request('/api/owner/overview');
-      const data = overview.overview || overview;
-      renderStats(data);
-      renderPopular(data.popularContent || data.popular || data.content);
-      renderActivity((data.recentOwnerActivity || data.activity || data.recentActivity || []).map((item) => ({ summary: item.summary || item.event || item })));
-      status.textContent = 'Owner record loaded.';
-    } catch (error) {
-      status.textContent = `The owner record is temporarily unavailable. ${error.message || 'Please try again shortly.'}`;
-      renderPopular([]); renderActivity([]);
-    } finally { root.setAttribute('aria-busy', 'false'); }
-  }
-
-  document.addEventListener('DOMContentLoaded', boot);
+  async function submitForm(event,path,method,body){event.preventDefault();const form=event.currentTarget;const status=form.querySelector('.form-status'),button=form.querySelector('[type=submit]');button.disabled=true;status.textContent='Saving...';try{const result=await request(path,{method,body:JSON.stringify(body)});status.textContent=typeof result.message==='string'?result.message:'Saved.';if(path==='/api/owner/settings')savedDefaultRange=body.defaultRange;}catch(error){status.textContent=error.message;}finally{button.disabled=false;}}
+  async function openMember(id){const memberRequest=++memberRequestId;const dialog=$('#member-dialog');$('#member-record').innerHTML='<p>Loading member record...</p>';if(!dialog.open)dialog.showModal();try{const data=await request('/api/owner/members/'+encodeURIComponent(id));if(!dialog.open || memberRequest!==memberRequestId)return;selectedMember=data.member;const member=data.member||{};$('#member-dialog-title').textContent=member.display_name||member.displayName||member.username||'Member';$('#member-record').innerHTML=`<p>${esc(member.email || '')}</p><p class="chart-note">Account ${esc(member.id)} / ${esc(member.role)} / ${esc(member.status||'active')}</p><dl class="member-dates"><dt>Joined</dt><dd>${esc(member.createdAt||member.created_at||'No data yet')}</dd><dt>Last login</dt><dd>${esc(member.lastLoginAt||member.last_login_at||'No data yet')}</dd><dt>Last activity</dt><dd>${esc(member.lastActivityAt||member.last_activity_at||'No data yet')}</dd></dl>${member.role==='owner'?'<p>This owner account cannot be modified here.</p>':`<form id="member-update-form" class="action-form"><label>Role<select name="role">${['member','moderator','admin'].map(role=>`<option ${member.role===role?'selected':''}>${role}</option>`).join('')}</select></label><label>Status<select name="status">${['active','suspended','banned'].map(status=>`<option ${(member.status||'active')===status?'selected':''}>${status}</option>`).join('')}</select></label><label>Reason<textarea name="reason" rows="3" maxlength="500" placeholder="Required when changing account status"></textarea></label><button class="primary-button" type="submit">Save account changes</button><p class="form-status" role="status"></p></form>`}${['membership','security','comments','activity'].map(key=>{const value=data[key];if(!value || Array.isArray(value)&&!value.length)return `<section><h3>${title(key)}</h3><p class="chart-note">No data yet</p></section>`;const rows=Array.isArray(value)?value:[value];const columns=[...new Set(rows.flatMap(row=>Object.keys(row)))].filter(key=>!/(password|token|secret)/i.test(key)).map(key=>({key,label:title(key)}));return tableHtml({key,title:title(key),columns,rows},false);}).join('')}`;$('#member-update-form')?.addEventListener('submit',async event=>{event.preventDefault();const form=event.currentTarget;const body=Object.fromEntries(new FormData(form));if(body.status!==(selectedMember.status||'active')&&!body.reason.trim()){form.querySelector('.form-status').textContent='A reason is required for a status change.';return;}await submitForm(event,'/api/owner/members/'+encodeURIComponent(id),'POST',body);});}catch(error){if(memberRequest===memberRequestId)$('#member-record').textContent=error.message;}}
+  function exportCsv(){if(!report)return;const safe=value=>{let text=String(value??'');if(/^[\s]*[=+@-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';};const rows=[['Report',views[state.view][0]],['Range',report.range?.from||'',report.range?.to||'']];(report.metrics||[]).forEach(metric=>rows.push([metric.label,metric.value]));(report.tables||[]).forEach(table=>{const columns=(table.columns||[]).filter(col=>!/(password|token|secret)/i.test(col.key));rows.push([], [table.title],columns.map(col=>col.label));(table.rows||[]).forEach(row=>rows.push(columns.map(col=>row[col.key])));});const url=URL.createObjectURL(new Blob(['\ufeff'+rows.map(row=>row.map(safe).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`owner-${state.view}-${new Date().toISOString().slice(0,10)}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  document.addEventListener('click',event=>{const link=event.target.closest('[data-view],[data-tab]');if(!link||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();navigate(link.dataset.view?{...state,view:link.dataset.view,tab:'overview',q:'',status:''}:{...state,tab:link.dataset.tab});});
+  $('#report-filters').addEventListener('submit',event=>{event.preventDefault();const values=Object.fromEntries(new FormData(event.currentTarget));if(values.range==='custom'&&(!values.from||!values.to||values.from>values.to)){$('#owner-status').textContent='Choose a valid start and end date.';return;}navigate({...state,...values});});
+  $('#report-range').addEventListener('change',event=>document.querySelectorAll('.custom-date').forEach(el=>el.hidden=event.target.value!=='custom'));
+  $('#reset-report').addEventListener('click',()=>navigate({view:state.view,tab:state.tab,range:savedDefaultRange,granularity:'day'}));$('#refresh-dashboard').addEventListener('click',load);$('#export-dashboard').addEventListener('click',exportCsv);$('[data-close-dialog]').addEventListener('click',()=>$('#member-dialog').close());$('#owner-logout').addEventListener('click',()=>{authorized=false;requestId++;clearInterval(pollTimer);$('#owner-app').hidden=true;report=null;window.CCCCommunity.logout();});addEventListener('popstate',()=>{state=readState();renderRoute();});
+  async function start(){try{const user=await window.CCCCommunity.restoreSession();if(!user || user.role!=='owner'){$('#access-gate h1').textContent='Owner access required.';$('#access-status').innerHTML='<a href="LOGIN.html?returnTo=%2FOWNER.html">Sign in to your owner account</a> or <a href="PROFILE.html">return to your profile</a>.';return;}authorized=true;if(!new URLSearchParams(location.search).has('range')){try{const defaults=await request('/api/owner/dashboard?view=settings');if(defaults.settings?.defaultRange)savedDefaultRange=defaults.settings.defaultRange;}catch{}}$('#access-gate').hidden=true;$('#owner-app').hidden=false;state=readState();renderRoute();}catch(error){$('#access-status').textContent=error.message;}}
+  start();
 })();

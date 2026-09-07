@@ -10,6 +10,7 @@ const { Pool } = require('pg');
 const argon2 = require('argon2');
 const Stripe = require('stripe');
 const { createPokerService } = require('./games/jail-house-poker/poker-service');
+const { createOwnerService } = require('./lib/owner-service');
 
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
@@ -223,6 +224,7 @@ function hasTrustedRequestOrigin(request) {
 
 function requireTrustedRequestOrigin(request, response) {
     if (hasTrustedRequestOrigin(request)) return true;
+    ownerService.recordSecurity('blocked_origin').catch(() => {});
     communityJson(response, 403, { error: 'This request is not allowed from that site.' });
     return false;
 }
@@ -2013,6 +2015,7 @@ function parseCookies(request) {
 function v2SessionKey(sid) { const secret = process.env.SESSION_SECRET; return secret && /^[a-f0-9]{64}$/.test(sid || '') ? `community:session:${crypto.createHmac('sha256', secret).update(sid).digest('hex')}` : null; }
 async function v2User(request) { const key = v2SessionKey(parseCookies(request).cc_session); const db = communityDb(); if (!key || !db) return null; const session = await redisPipeline([['GET', key]]); if (!session?.[0]) return null; try { const stored = JSON.parse(session[0]); const result = await db.query("SELECT id,display_name,email,role,status,avatar_updated_at FROM community_users WHERE id=$1 AND status='active'", [stored.id]); const user = result.rows[0]; if (!user) return null; const matchesConfiguredOwner = configuredOwnerEmail() === String(user.email).toLowerCase(); const role = matchesConfiguredOwner ? 'owner' : user.role === 'owner' ? 'member' : user.role; return { id:user.id, displayName:user.display_name, role, avatarUpdatedAt:user.avatar_updated_at }; } catch { return null; } }
 const jailHousePoker = createPokerService({ db: communityDb, user: v2User, isOwner, ensureSchema: ensureCommunitySchema, parseBody: parseCommunityBody, json: communityJson, cors: applyApiCors, rate: v2Rate });
+const ownerService = createOwnerService({ db: communityDb, user: v2User, isOwner, ensureSchema: ensureCommunitySchema, parseBody: parseCommunityBody, json: communityJson, cors: applyApiCors, rate: v2Rate });
 function isOwner(user) { return Boolean(user && user.role === 'owner' && configuredOwnerEmail()); }
 function v2Cookie(response, value, maxAge = 604800) {
     // The public site and API are on different HTTPS origins.  A Lax cookie is
@@ -2021,7 +2024,7 @@ function v2Cookie(response, value, maxAge = 604800) {
     const secure = process.env.NODE_ENV === 'production' ? '; Secure; SameSite=None; Partitioned' : '; SameSite=Lax';
     response.setHeader('Set-Cookie', `cc_session=${value}; Path=/; HttpOnly; Max-Age=${maxAge}${secure}`);
 }
-async function v2Rate(request, action, limit, seconds) { return permitCommunityAction(request, action, limit, seconds); }
+async function v2Rate(request, action, limit, seconds) { const allowed = await permitCommunityAction(request, action, limit, seconds); if (!allowed) ownerService.recordSecurity('rate_limit_' + action.split(':')[0]).catch(() => {}); return allowed; }
 async function v2Register(request, response) {
     applyApiCors(request, response); const db = communityDb();
     if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' });
@@ -2112,32 +2115,8 @@ async function v2OwnerMembers(request, requestUrl, response) {
 }
 async function v2OwnerMemberUpdate(request, response, id) {
     applyApiCors(request, response);
-    const owner = await v2User(request), db = communityDb();
-    if (!isOwner(owner)) return communityJson(response, 403, { error: 'Owner access is required.' });
-    if (!/^[0-9a-f-]{36}$/i.test(id)) return communityJson(response, 400, { error: 'A valid member is required.' });
-    const body = await parseCommunityBody(request, 4096);
-    const role = ['member', 'moderator', 'admin'].includes(body?.role) ? body.role : null;
-    const status = ['active', 'suspended', 'banned'].includes(body?.status) ? body.status : null;
-    const reason = String(body?.reason || '').trim().slice(0, 500) || null;
-    const expiresAt = body?.suspensionExpiresAt ? new Date(body.suspensionExpiresAt) : null;
-    if (!role && !status) return communityJson(response, 400, { error: 'Choose a valid role or account status.' });
-    if (expiresAt && Number.isNaN(expiresAt.getTime())) return communityJson(response, 400, { error: 'Use a valid suspension expiration.' });
-    try {
-        await ensureCommunitySchema();
-        const targetResult = await db.query('SELECT id,display_name,email,role,status,suspension_expires_at,suspension_reason FROM community_users WHERE id=$1', [id]);
-        const target = targetResult.rows[0];
-        if (!target) return communityJson(response, 404, { error: 'Member not found.' });
-        if (target.id === owner.id || target.role === 'owner' || String(target.email).toLowerCase() === configuredOwnerEmail()) return communityJson(response, 403, { error: 'The protected owner account cannot be modified.' });
-        const nextRole = role || target.role, nextStatus = status || target.status;
-        if (nextStatus !== target.status && !reason) return communityJson(response, 400, { error: 'Record a reason before changing account status.' });
-        const result = await db.query("UPDATE community_users SET role=$1,status=$2,suspension_reason=$3,suspension_expires_at=$4 WHERE id=$5 RETURNING id,display_name,username,email,role,status,created_at,last_login_at,last_activity_at,email_verified_at,suspension_expires_at,suspension_reason", [nextRole, nextStatus, nextStatus === 'suspended' ? reason : null, nextStatus === 'suspended' && expiresAt ? expiresAt.toISOString() : null, id]);
-        const action = role && status ? 'role_and_status_updated' : role ? 'role_updated' : `account_${nextStatus}`;
-        const before = { role: target.role, status: target.status, suspensionExpiresAt: target.suspension_expires_at, suspensionReason: target.suspension_reason };
-        const after = { role: nextRole, status: nextStatus, suspensionExpiresAt: nextStatus === 'suspended' && expiresAt ? expiresAt.toISOString() : null, suspensionReason: nextStatus === 'suspended' ? reason : null };
-        await db.query('INSERT INTO community_moderation_actions (actor_id,target_user_id,action,reason,previous_state,new_state) VALUES ($1,$2,$3,$4,$5,$6)', [owner.id, id, action, reason, JSON.stringify(before), JSON.stringify(after)]);
-        await db.query('INSERT INTO community_audit_log (user_id,event_type,metadata) VALUES ($1,$2,$3)', [owner.id, 'owner_member_updated', JSON.stringify({ targetUserId: id, action, reason, previousState: before, newState: after })]);
-        return communityJson(response, 200, { member: ownerMemberRecord(result.rows[0]), message: 'Member record updated and logged.' });
-    } catch { return communityJson(response, 503, { error: 'The member record could not be updated.' }); }
+    try { return await ownerService.admin(request,response,new URL('/api/owner/members/'+encodeURIComponent(id),'https://carceralcollections.org')); }
+    catch { return communityJson(response,503,{error:'The member record could not be updated.'}); }
 }
 function v2AvatarResponse(response, status, body, type) { response.writeHead(status, { 'Content-Type': type || 'text/plain; charset=utf-8', 'Cache-Control': status === 200 ? 'private, max-age=300' : 'no-store', 'Vary': 'Cookie', 'X-Content-Type-Options': 'nosniff' }); response.end(body); }
 async function v2AvatarGet(request, requestUrl, response) { const id = String(requestUrl.pathname.split('/').pop() || ''); const user = await v2User(request), db = communityDb(); if (!db || !user || user.id !== id || !/^[0-9a-f-]{36}$/i.test(id)) return v2AvatarResponse(response, 404, 'Not found'); try { const result = await db.query('SELECT avatar_data,avatar_mime_type FROM community_users WHERE id=$1', [id]); const avatar = result.rows[0]; return avatar?.avatar_data && avatar?.avatar_mime_type ? v2AvatarResponse(response, 200, avatar.avatar_data, avatar.avatar_mime_type) : v2AvatarResponse(response, 404, 'Not found'); } catch { return v2AvatarResponse(response, 503, 'Unavailable'); } }
@@ -2180,12 +2159,23 @@ const server = http.createServer((request, response) => {
         return;
     }
 
+    if (request.method === 'POST' && requestUrl.pathname === '/api/analytics/event') {
+        ownerService.collect(request,response).catch(() => communityJson(response,503,{error:'Analytics temporarily unavailable.'}));
+        return;
+    }
     if (request.method === 'POST' && requestUrl.pathname === '/api/analytics/collect') {
-        handleAnalyticsCollect(request, response, requestUrl).catch(() => {
-            applyApiCors(request, response);
-            response.writeHead(503, { 'Cache-Control': 'no-store' });
-            response.end();
-        });
+        // Retain historical Redis totals; retired clients must not keep inflating them.
+        applyApiCors(request,response); response.writeHead(204,{'Cache-Control':'no-store'}); response.end();
+        return;
+    }
+    if (request.method === 'GET' && requestUrl.pathname === '/api/owner/dashboard') {
+        applyApiCors(request,response);
+        ownerService.dashboard(request,response,requestUrl).catch(error => communityJson(response,error.status||503,{error:error.status===400?error.message:'Owner reports temporarily unavailable.'}));
+        return;
+    }
+    if (['/api/owner/settings','/api/owner/communications'].includes(requestUrl.pathname) || /^\/api\/owner\/comments\//.test(requestUrl.pathname) || /^\/api\/owner\/communications\//.test(requestUrl.pathname) || (request.method==='GET' && /^\/api\/owner\/members\//.test(requestUrl.pathname))) {
+        applyApiCors(request,response);
+        ownerService.admin(request,response,requestUrl).catch(() => communityJson(response,503,{error:'Owner action temporarily unavailable.'}));
         return;
     }
 

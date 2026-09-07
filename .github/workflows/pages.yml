@@ -30,6 +30,9 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Add lightweight public analytics collection
+        run: node scripts/prepare-analytics.cjs
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
