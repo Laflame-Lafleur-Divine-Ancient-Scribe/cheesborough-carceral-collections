@@ -1,0 +1,7 @@
+body.newspaper-reader .reader-container { overflow:auto; padding:16px; align-items:flex-start; }
+body.newspaper-reader .pdf-pages-canvas-list { width:max-content; min-width:100%; max-width:none; align-items:flex-start; }
+.newspaper-page { margin:0 auto; flex:none; background:#fff; box-shadow:0 8px 30px #0006; }
+.newspaper-page img { display:block; width:100%; max-width:none; height:auto; }
+.newspaper-page-label { width: min(90vw, 600px); margin:12px auto; color:#e5ded2; text-align:center; }
+body.newspaper-reader .btn-control { min-height:44px; }
+body.newspaper-reader .header-nav { flex-wrap:wrap; }

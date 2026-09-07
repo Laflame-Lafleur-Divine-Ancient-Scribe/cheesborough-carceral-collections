@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="newspaper-reader.css?v=20260907">
   <style>
     :root {
       --navy: #102c4c;
@@ -313,7 +314,7 @@
     <div id="status-overlay" class="reader-status-overlay">
       <div class="spinner" id="spinner"></div>
       <h2 class="status-title" id="status-heading">Loading Archival Text...</h2>
-      <p class="status-text" id="status-desc">Rendering pages for in-browser scholarly review.</p>
+      <p class="status-text" id="status-desc">Opening your document. Large scans may take a little longer.</p>
     </div>
 
     <div class="pdf-pages-canvas-list" id="pdf-pages-list"></div>
@@ -324,9 +325,7 @@
   </footer>
 
   <script type="module">
-    import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
-
-    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+    let pdfjsLib;
 
     const params = new URLSearchParams(window.location.search);
     const rawFile = params.get("file");
@@ -387,7 +386,7 @@
       if (rawFile.includes("02_Books-and-Manuscripts") || rawFile.includes("Books") || rawFile.includes("CompleteBook")) {
         docKicker.textContent = "Books & Manuscripts &bull; Complete Text";
       } else if (rawFile.includes("Dozier")) {
-        docKicker.textContent = "Dozier School Collection &bull; Primary Record";
+        docKicker.textContent = "Dozier School Collection ? Primary Record";
       } else if (rawFile.includes("Census")) {
         docKicker.textContent = "Census & Demographic Record &bull; Primary Source";
       } else if (rawFile.includes("FORTUNE")) {
@@ -395,6 +394,13 @@
       }
 
       try {
+        if (rawFile.replaceAll("\\", "/").includes("TheYellowjacket_DozierPaper/")) {
+          const { openNewspaper } = await import("./newspaper-reader.js?v=20260907");
+          await openNewspaper(rawFile);
+          return;
+        }
+        pdfjsLib = await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs");
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
         const fileUrl = toFileUrl(rawFile);
         const loadingTask = pdfjsLib.getDocument(fileUrl);
         currentPdf = await loadingTask.promise;
@@ -405,7 +411,15 @@
         statusOverlay.hidden = true;
         await renderPage(1);
       } catch (err) {
-        console.warn("PDF.js direct fetch notice (falling back to embedded canvas/object reader):", err);
+        if (rawFile.replaceAll("\\", "/").includes("TheYellowjacket_DozierPaper/")) {
+          spinner.hidden = true;
+          statusOverlay.hidden = false;
+          statusHeading.textContent = "This newspaper could not load";
+          statusDesc.textContent = "Please refresh to try again. You can also return to the newspaper collection and choose another issue.";
+          controlsWrap.hidden = true;
+          return;
+        }
+        console.warn("PDF reader failed:", err);
         const fileUrl = toFileUrl(rawFile);
         statusOverlay.hidden = true;
         controlsWrap.hidden = true;
