@@ -29,23 +29,15 @@ const CCC_VIDEO_CATALOG = [
   const thumb = (film, loading = '') => film.embed ? `<img src="${esc(film.thumbnail || `https://i.ytimg.com/vi/${encodeURIComponent(film.embed)}/hqdefault.jpg`)}" alt="${esc(film.title)} video thumbnail" ${loading}>` : '<span class="source-poster">Source unavailable</span>';
   const link = (film) => `https://www.youtube.com/watch?v=${encodeURIComponent(film.embed)}`;
   const verifyEmbeddedPlayback = (film) => {
-    if (!film.embed || film.embeddable === false) return;
-    const mount = document.querySelector('#youtube-player');
-    if (!mount) return;
-    const frame = document.createElement('iframe');
-    frame.id = 'youtube-player';
-    frame.className = 'youtube-player-mount';
-    frame.title = film.title + ' - embedded video';
-    frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(film.embed) + '?rel=0&playsinline=1';
-    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-    frame.allowFullscreen = true;
-    frame.referrerPolicy = 'strict-origin-when-cross-origin';
-    mount.replaceWith(frame);
+    if (!film.embed) return;
+    const mount = document.querySelector('.player');
+    if (!mount || !window.CCCYouTubePlayer) return;
+    const player = window.CCCYouTubePlayer.mount(mount, film);
     const retry = document.createElement('button');
     retry.type = 'button';
     retry.className = 'action-btn secondary';
     retry.textContent = 'Reload player';
-    retry.addEventListener('click', () => { frame.src = frame.src; });
+    retry.addEventListener('click', () => player.reload());
     document.querySelector('.watch-actions')?.prepend(retry);
   };
   const hydrateCatalog = () => {
