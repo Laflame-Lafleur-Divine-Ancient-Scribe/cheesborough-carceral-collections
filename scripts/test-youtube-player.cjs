@@ -20,7 +20,7 @@ function setup({ api = true, embeddable = true } = {}) {
     this.frame = frame; this.events = options.events; this.destroy = () => { this.destroyed = true; };
     players.push(this);
   } };
-  vm.runInNewContext(source, { window, document: { head, createElement: tag => new Element(tag) },
+  vm.runInNewContext(source, { window, document: { head, createElement: tag => new Element(tag), addEventListener() {} },
     location: { origin: 'https://carceralcollections.org' }, URLSearchParams,
     setTimeout(fn, ms) { timers.set(++timerID, { fn, ms }); return timerID; },
     clearTimeout(id) { timers.delete(id); }
@@ -44,7 +44,7 @@ test('identifies the site, keeps privacy enhanced embedding, and clears the conn
   assert.equal(s.container.children[0].tag, 'iframe');
 });
 
-for (const code of [2, 5, 100, 101, 150, 153, 999]) {
+for (const code of [2, 100, 101, 150, 153, 999]) {
   test(`YouTube error ${code} removes the failed frame and offers the correct original video`, async () => {
     const s = setup(); await flush();
     s.players[0].events.onError({ data: code });
@@ -61,6 +61,16 @@ for (const code of [2, 5, 100, 101, 150, 153, 999]) {
     assert.equal(s.container.children[0].tag, 'iframe', 'stale errors cannot replace a new player');
   });
 }
+test('HTML5 playback failure retries once, then recovers without looping', async () => {
+  const s = setup(); await flush();
+  s.players[0].events.onError({ data: 5 }); await flush();
+  assert.equal(s.players.length, 2);
+  assert.equal(s.players[0].destroyed, true);
+  assert.equal(s.container.children[0].tag, 'iframe');
+  s.players[1].events.onError({ data: 5 }); await flush();
+  assert.equal(s.players.length, 2);
+  assert.match(text(s.container), /could not play/);
+});
 test('known publisher restrictions skip the iframe', async () => {
   const s = setup({ embeddable: false }); await flush();
   assert.equal(s.players.length, 0);

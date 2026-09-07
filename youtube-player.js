@@ -22,7 +22,7 @@
 
   window.CCCYouTubePlayer = {
     mount(container, film) {
-      let player, timer, generation = 0;
+      let player, timer, generation = 0, retried = false;
       const watchURL = `https://www.youtube.com/watch?v=${encodeURIComponent(film.embed)}`;
       const clearPlayer = () => {
         clearTimeout(timer);
@@ -48,7 +48,7 @@
         retry.type = 'button';
         retry.className = 'action-btn secondary';
         retry.textContent = 'Try player again';
-        retry.addEventListener('click', start);
+        retry.addEventListener('click', () => { retried = false; start(); });
         panel.append(heading, detail, watch, retry);
         container.replaceChildren(panel);
       };
@@ -86,6 +86,11 @@
               onError: (event) => {
                 if (attempt !== generation) return;
                 const code = Number(event.data);
+                if (code === 5 && !retried) {
+                  retried = true;
+                  start();
+                  return;
+                }
                 const message = [101, 150].includes(code)
                   ? 'The publisher does not allow this video to play on other websites.'
                   : code === 100
@@ -102,7 +107,15 @@
         }
       }
       start();
-      return { reload: start, destroy() { generation++; clearPlayer(); } };
+      return { reload() { retried = false; return start(); }, destroy() { generation++; clearPlayer(); } };
     }
   };
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-youtube-id]').forEach((container) => {
+      window.CCCYouTubePlayer.mount(container, {
+        embed: container.dataset.youtubeId,
+        title: container.dataset.youtubeTitle || 'YouTube video'
+      });
+    });
+  });
 })();
