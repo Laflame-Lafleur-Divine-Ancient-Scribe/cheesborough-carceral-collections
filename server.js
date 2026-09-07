@@ -12,6 +12,11 @@ const Stripe = require('stripe');
 const { createPokerService } = require('./games/jail-house-poker/poker-service');
 const { createOwnerService } = require('./lib/owner-service');
 const { createContactService } = require('./lib/contact-service');
+const { createEmailDelivery } = require('./lib/email-delivery');
+const { createBillingService } = require('./lib/billing-service');
+const billingService = createBillingService({db:communityDb,ensureSchema:ensureCommunitySchema,user:v2User,stripe:stripeApi,rate:permitCommunityAction,json:communityJson,siteUrl:publicSiteUrl});
+const { createAccountEmailService } = require('./lib/account-email-service');
+const accountEmailService = createAccountEmailService({db:communityDb,ensureSchema:ensureCommunitySchema,parseBody:parseCommunityBody,json:communityJson,rate:permitCommunityAction,rateEmail:permitResetEmail,mail:createEmailDelivery(),hashPassword:password=>argon2.hash(password,{type:argon2.argon2id}),siteUrl:publicSiteUrl});
 
 const contactService = createContactService({ parseBody: parseCommunityBody, json: communityJson, rate: permitCommunityAction });
 
@@ -497,6 +502,12 @@ async function permitCommunityAction(request, action, limit, seconds) {
     const key = `community:rate:${action}:${communityClientIp(request)}:${Math.floor(Date.now() / (seconds * 1000))}`;
     const reply = await redisPipeline([['INCR', key], ['EXPIRE', key, seconds + 5]]);
     return Boolean(reply && Number(reply[0]) <= limit);
+}
+
+async function permitResetEmail(emailHash) {
+    const key = `community:reset-email:${emailHash}:${Math.floor(Date.now()/3600000)}`;
+    const reply = await redisPipeline([['INCR',key],['EXPIRE',key,3605]]);
+    return Boolean(reply && Number(reply[0])<=3);
 }
 
 async function parseCommunityBody(request, maximumLength = 4096) {
@@ -2016,7 +2027,7 @@ function parseCookies(request) {
     return cookies;
 }
 function v2SessionKey(sid) { const secret = process.env.SESSION_SECRET; return secret && /^[a-f0-9]{64}$/.test(sid || '') ? `community:session:${crypto.createHmac('sha256', secret).update(sid).digest('hex')}` : null; }
-async function v2User(request) { const key = v2SessionKey(parseCookies(request).cc_session); const db = communityDb(); if (!key || !db) return null; const session = await redisPipeline([['GET', key]]); if (!session?.[0]) return null; try { const stored = JSON.parse(session[0]); const result = await db.query("SELECT id,display_name,email,role,status,avatar_updated_at FROM community_users WHERE id=$1 AND status='active'", [stored.id]); const user = result.rows[0]; if (!user) return null; const matchesConfiguredOwner = configuredOwnerEmail() === String(user.email).toLowerCase(); const role = matchesConfiguredOwner ? 'owner' : user.role === 'owner' ? 'member' : user.role; return { id:user.id, displayName:user.display_name, role, avatarUpdatedAt:user.avatar_updated_at }; } catch { return null; } }
+async function v2User(request) { const key = v2SessionKey(parseCookies(request).cc_session); const db = communityDb(); if (!key || !db) return null; const session = await redisPipeline([['GET', key]]); if (!session?.[0]) return null; try { await ensureCommunitySchema(); const stored = JSON.parse(session[0]); const result = await db.query("SELECT id,display_name,email,role,status,avatar_updated_at,session_version FROM community_users WHERE id=$1 AND status='active'", [stored.id]); const user = result.rows[0]; if (!user || Number(stored.sessionVersion || 0) !== Number(user.session_version || 0)) return null; const matchesConfiguredOwner = configuredOwnerEmail() === String(user.email).toLowerCase(); const role = matchesConfiguredOwner ? 'owner' : user.role === 'owner' ? 'member' : user.role; return { id:user.id, displayName:user.display_name, role, avatarUpdatedAt:user.avatar_updated_at }; } catch { return null; } }
 const jailHousePoker = createPokerService({ db: communityDb, user: v2User, isOwner, ensureSchema: ensureCommunitySchema, parseBody: parseCommunityBody, json: communityJson, cors: applyApiCors, rate: v2Rate });
 const ownerService = createOwnerService({ db: communityDb, user: v2User, isOwner, ensureSchema: ensureCommunitySchema, parseBody: parseCommunityBody, json: communityJson, cors: applyApiCors, rate: v2Rate });
 function isOwner(user) { return Boolean(user && user.role === 'owner' && configuredOwnerEmail()); }
@@ -2039,8 +2050,8 @@ async function v2Register(request, response) {
     if (!await v2Rate(request, 'signup-v2', 20, 3600)) return communityJson(response, 429, { error: 'Please wait before trying again.' });
     try { const hash = await argon2.hash(password, { type: argon2.argon2id }); const result = await db.query('INSERT INTO community_users (first_name,last_name,display_name,email,phone_number,password_hash,role,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id,display_name,role', [firstName, lastName, displayName, email, phoneNumber, hash, 'member', 'active']); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [result.rows[0].id, 'registered']); return v2StartSession(response, result.rows[0]); } catch (error) { if (error.code === '23505') return communityJson(response, 409, { error: 'Those account details are already in use.' }); return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); }
 }
-async function v2StartSession(response, user) { const sid = crypto.randomBytes(32).toString('hex'), key = v2SessionKey(sid); if (!key) return communityJson(response, 503, { error: 'Community sessions are not configured yet.' }); const saved = await redisPipeline([['SET', key, JSON.stringify({ id: user.id }), 'EX', 604800]]); if (!saved) return communityJson(response, 503, { error: 'Community sessions are temporarily unavailable.' }); v2Cookie(response, sid); return communityJson(response, 201, { user: { id: user.id, displayName: user.display_name, role:user.role || 'member', avatarUpdatedAt:user.avatar_updated_at || null } }); }
-async function v2Login(request, response) { applyApiCors(request, response); const db = communityDb(); if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' }); try { await ensureCommunitySchema(); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } if (!await v2Rate(request, 'login', 12, 900)) return communityJson(response, 429, { error: 'Please wait before trying again.' }); const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), password = String(body?.password || ''); if (!email || !password) return communityJson(response, 401, { error: 'Email or password is not correct.' }); const accountScope = crypto.createHash('sha256').update(email).digest('hex').slice(0, 24); if (!await v2Rate(request, `login-account:${accountScope}`, 10, 900)) return communityJson(response, 429, { error: 'Please wait before trying again.' }); try { const result = await db.query('SELECT id,display_name,password_hash,status,avatar_updated_at,role FROM community_users WHERE email=$1', [email]); const user = result.rows[0]; if (!user || user.status !== 'active' || !await argon2.verify(user.password_hash, password)) { await db.query('INSERT INTO community_audit_log (event_type,metadata) VALUES ($1,$2)', ['login_failed', JSON.stringify({ accountFound: Boolean(user) })]); return communityJson(response, 401, { error: 'Email or password is not correct.' }); } await db.query('UPDATE community_users SET last_login_at=now(),last_activity_at=now() WHERE id=$1', [user.id]); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [user.id, 'logged_in']); return v2StartSession(response, user); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } }
+async function v2StartSession(response, user) { const sid = crypto.randomBytes(32).toString('hex'), key = v2SessionKey(sid); if (!key) return communityJson(response, 503, { error: 'Community sessions are not configured yet.' }); const saved = await redisPipeline([['SET', key, JSON.stringify({ id: user.id, sessionVersion: Number(user.session_version || 0) }), 'EX', 604800]]); if (!saved) return communityJson(response, 503, { error: 'Community sessions are temporarily unavailable.' }); v2Cookie(response, sid); return communityJson(response, 201, { user: { id: user.id, displayName: user.display_name, role:user.role || 'member', avatarUpdatedAt:user.avatar_updated_at || null } }); }
+async function v2Login(request, response) { applyApiCors(request, response); const db = communityDb(); if (!db || !process.env.REDIS_URL) return communityJson(response, 503, { error: 'Community accounts are not configured yet.' }); try { await ensureCommunitySchema(); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } if (!await v2Rate(request, 'login', 12, 900)) return communityJson(response, 429, { error: 'Please wait before trying again.' }); const body = await parseCommunityBody(request), email = normalizeCommunityEmail(body?.email), password = String(body?.password || ''); if (!email || !password) return communityJson(response, 401, { error: 'Email or password is not correct.' }); const accountScope = crypto.createHash('sha256').update(email).digest('hex').slice(0, 24); if (!await v2Rate(request, `login-account:${accountScope}`, 10, 900)) return communityJson(response, 429, { error: 'Please wait before trying again.' }); try { const result = await db.query('SELECT id,display_name,password_hash,status,avatar_updated_at,role,session_version FROM community_users WHERE email=$1', [email]); const user = result.rows[0]; if (!user || user.status !== 'active' || !await argon2.verify(user.password_hash, password)) { await db.query('INSERT INTO community_audit_log (event_type,metadata) VALUES ($1,$2)', ['login_failed', JSON.stringify({ accountFound: Boolean(user) })]); return communityJson(response, 401, { error: 'Email or password is not correct.' }); } await db.query('UPDATE community_users SET last_login_at=now(),last_activity_at=now() WHERE id=$1', [user.id]); await db.query('INSERT INTO community_audit_log (user_id,event_type) VALUES ($1,$2)', [user.id, 'logged_in']); return v2StartSession(response, user); } catch { return communityJson(response, 503, { error: 'Community accounts are temporarily unavailable.' }); } }
 async function v2OwnerRecovery(request, response) {
     applyApiCors(request, response);
     const db = communityDb(), ownerEmail = configuredOwnerEmail(), recoveryToken = String(process.env.OWNER_RECOVERY_TOKEN || '');
@@ -2052,7 +2063,7 @@ async function v2OwnerRecovery(request, response) {
     try {
         await ensureCommunitySchema();
         const hash = await argon2.hash(password, { type: argon2.argon2id });
-        const result = await db.query("UPDATE community_users SET password_hash=$1,status='active',role='owner' WHERE lower(email)=$2 RETURNING id,display_name,role,avatar_updated_at", [hash, ownerEmail]);
+        const result = await db.query("UPDATE community_users SET password_hash=$1,session_version=session_version+1,status='active',role='owner' WHERE lower(email)=$2 RETURNING id,display_name,role,avatar_updated_at,session_version", [hash, ownerEmail]);
         const user = result.rows[0];
         if (!user) return communityJson(response, 404, { error: 'The configured owner account has not been created yet.' });
         await db.query('DELETE FROM community_password_reset_tokens WHERE user_id=$1', [user.id]);
@@ -2164,6 +2175,18 @@ const server = http.createServer((request, response) => {
 
     if (request.method === 'POST' && requestUrl.pathname === '/api/analytics/event') {
         ownerService.collect(request,response).catch(() => communityJson(response,503,{error:'Analytics temporarily unavailable.'}));
+        return;
+    }
+
+    if ((request.method==='GET' && requestUrl.pathname==='/api/billing/options') || (request.method==='POST' && requestUrl.pathname==='/api/billing/portal')) {
+        applyApiCors(request,response);
+        billingService(request,response,requestUrl.pathname).catch(()=>communityJson(response,503,{error:'Billing management is temporarily unavailable. Please email Payments@carceralcollections.org.'}));
+        return;
+    }
+
+    if (request.method === 'POST' && ['/api/auth/forgot-password','/api/auth/reset-password'].includes(requestUrl.pathname)) {
+        applyApiCors(request,response);
+        accountEmailService(request,response,requestUrl.pathname).catch(()=>communityJson(response,503,{error:'Password reset is temporarily unavailable. Please try again.'}));
         return;
     }
 

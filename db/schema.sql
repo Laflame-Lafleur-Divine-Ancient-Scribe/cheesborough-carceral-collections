@@ -130,3 +130,6 @@ CREATE TABLE IF NOT EXISTS game_presence (
     PRIMARY KEY (game_key,user_id)
 );
 CREATE INDEX IF NOT EXISTS game_presence_game_seen_index ON game_presence(game_key,last_seen DESC);
+
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS session_version integer NOT NULL DEFAULT 0;
+CREATE UNIQUE INDEX IF NOT EXISTS community_reset_token_hash_idx ON community_password_reset_tokens(token_hash);
