@@ -1,8 +1,9 @@
 /* Real page essentials: parsed DOM, masthead image, and document fonts when supported. */
 (() => {
   'use strict';
-  const loader = document.getElementById('page-loader');
-  if (!loader) return;
+  const loader = document.getElementById('archive-loading-screen');
+  if (!loader || loader.dataset.initialized === 'true') return;
+  loader.dataset.initialized = 'true';
   const preview = new URLSearchParams(location.search).get('previewLoader') === '1';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const controller = new AbortController();

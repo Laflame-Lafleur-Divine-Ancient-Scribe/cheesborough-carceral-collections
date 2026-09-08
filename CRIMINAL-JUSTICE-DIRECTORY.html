@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Criminal Justice Directory | Carceral Collections</title>
+  <meta name="description" content="Find organizations working on criminal justice, legal assistance, reentry, family support, and reform. Search by need, location, and kind of support.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="criminal-justice-directory.css?v=20260908c">
+  <script src="criminal-justice-directory.js?v=20260908c" defer></script>
+  <script src="site-theme.js" defer></script>
+  <script src="site-analytics.js" defer></script>
+  <script src="community-auth.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#directory-search">Skip to directory search</a>
+  <header class="directory-header">
+    <a class="directory-brand" href="index.html"><span class="directory-monogram" aria-hidden="true">CC</span><span>Cheesborough<br>Carceral Collections</span></a>
+    <nav aria-label="Primary navigation"><a href="index.html">Home</a><a href="LAW-LIBRARY.html">Law library</a><a href="CRIMINAL-JUSTICE-DIRECTORY.html" aria-current="page">Directory</a><a href="CONTACT.html">Contact</a></nav>
+  </header>
+  <main>
+    <section class="directory-hero" aria-labelledby="directory-title">
+      <div class="hero-heading"><p class="eyebrow">Criminal Justice Directory</p><h1 id="directory-title">A place to start.<br><em>A way forward.</em></h1></div>
+      <div class="hero-intro"><p>Facing a charge, supporting someone in prison, or starting again after release? Find organizations working on the issues that matter to you&mdash;and see where to turn for support.</p><p class="hero-note">Practical resources. Clear connections. Your next step.</p></div>
+      <ol class="directory-steps" aria-label="How to use this directory"><li><span>01</span> Find your focus</li><li><span>02</span> Narrow your search</li><li><span>03</span> Connect directly</li></ol>
+    </section>
+    <section class="directory-search-panel" aria-label="Search organizations">
+      <label for="directory-search">What do you need help finding?</label>
+      <div class="search-field"><span aria-hidden="true">&#9906;</span><input id="directory-search" type="search" placeholder="Try reentry, legal assistance, or an organization name" autocomplete="off"><button type="button" id="clear-search" aria-label="Clear search" hidden>&times;</button></div>
+      <div class="suggested-needs"><span>Start here:</span><button type="button" data-need="reentry">Coming home</button><button type="button" data-need="wrongful-convictions">Wrongful conviction</button><button type="button" data-need="family-support">Supporting someone in prison</button></div>
+    </section>
+    <div class="directory-layout">
+      <aside class="directory-sidebar"><details id="topic-disclosure" open><summary><span class="topic-summary-copy">Find your focus <small id="active-topic-label">All organizations</small></span><span class="topic-summary-toggle" aria-hidden="true">+</span></summary><div id="topic-filters" role="group" aria-label="Filter by topic"><p class="loading-topics">Topics are loading...</p></div></details><p class="sidebar-note">Looking for individual help? Choose <strong>Assistance</strong> below. Advocacy and research groups may offer information without taking individual cases.</p></aside>
+      <section class="directory-results" aria-labelledby="results-heading">
+        <div class="results-topline"><div><p class="eyebrow">Make a connection</p><h2 id="results-heading">Organizations &amp; resources</h2></div><button type="button" id="reset-filters" class="reset-button" hidden>Reset filters &#8634;</button></div>
+        <div class="result-filters"><div><label for="region-filter">Where are you looking?</label><select id="region-filter"><option value="all">All locations</option></select></div><div><label for="type-filter">What kind of support?</label><select id="type-filter"><option value="all">All organization types</option><option value="assistance">Assistance</option><option value="advocacy">Advocacy &amp; reform</option><option value="research">Research &amp; data</option><option value="professional">Professional network</option><option value="journalism">Journalism</option></select></div></div>
+        <div class="results-meta"><p id="result-count" role="status" aria-live="polite">Loading organizations...</p><span>Assistance listed first</span></div>
+        <p id="region-note" class="region-note" hidden>Includes organizations listed nationally. Contact each organization to confirm the places and cases it serves.</p>
+        <div id="organization-list" class="organization-list" aria-busy="true"><div class="directory-message"><span class="message-mark" aria-hidden="true">&hellip;</span><h3>Finding your starting points.</h3><p>Loading organizations and resources.</p></div></div>
+        <button id="show-more" class="show-more" type="button" hidden>Show more organizations</button>
+        <noscript><p class="directory-message">Turn on JavaScript to search this directory, or <a href="data/criminal-justice-directory.json">open the organization list</a>.</p></noscript>
+      </section>
+    </div>
+    <section class="connection-note"><span aria-hidden="true">&#8599;</span><div><h2>A good next step: ask directly.</h2><p>Services and eligibility differ. Visit an organization&rsquo;s website to learn what it offers, who it serves, and how to reach its team.</p></div></section>
+  </main>
+  <footer class="directory-footer"><a class="footer-brand" href="index.html">Carceral Collections</a><div><h2>Directory notice</h2><p>This directory is for information, not legal advice. Inclusion does not imply endorsement, partnership, or affiliation. Organizations set their own eligibility requirements, priorities, and policies. Contact them directly; a listing does not guarantee help or acceptance of a case.</p></div><a href="CONTACT.html">Suggest a correction &#8599;</a></footer>
+</body>
+</html>

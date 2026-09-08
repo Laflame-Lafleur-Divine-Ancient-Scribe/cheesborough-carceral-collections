@@ -1,0 +1,1235 @@
+[
+  {
+    "id": "vera-institute-of-justice",
+    "name": "Vera Institute of Justice",
+    "description": "Research and policy tools on reducing incarceration, improving prison conditions, and racial disparities.",
+    "focus": [
+      "prisons-jails",
+      "research-data"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://www.vera.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "prison-policy-initiative",
+    "name": "Prison Policy Initiative",
+    "description": "Accessible data and reports on prisons, jails, sentencing, and the effects of incarceration.",
+    "focus": [
+      "prisons-jails",
+      "sentencing",
+      "research-data",
+      "records-rights"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://www.prisonpolicy.org/",
+    "checkedDate": "2026-09-08",
+    "helpUrl": "https://www.prisonpolicy.org/resources/legal/",
+    "helpLabel": "Browse legal resources"
+  },
+  {
+    "id": "the-sentencing-project",
+    "name": "The Sentencing Project",
+    "description": "Research and advocacy on sentencing, racial disparities, youth justice, and voting rights.",
+    "focus": [
+      "sentencing",
+      "youth-justice",
+      "records-rights",
+      "research-data"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://www.sentencingproject.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "brennan-center-for-justice",
+    "name": "Brennan Center for Justice",
+    "description": "Policy research on criminal justice, policing, incarceration, and civil liberties.",
+    "focus": [
+      "policing",
+      "sentencing",
+      "records-rights",
+      "research-data"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://www.brennancenter.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "famm",
+    "name": "FAMM",
+    "description": "Sentencing reform, second-chance advocacy, prison oversight, and resources for families.",
+    "focus": [
+      "sentencing",
+      "prisons-jails",
+      "family-support"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.famm.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "reform-alliance",
+    "name": "REFORM Alliance",
+    "description": "Campaigns to change probation and parole laws and improve pathways back to community life.",
+    "focus": [
+      "probation-parole",
+      "reentry"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://reformalliance.com/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "justice-action-network",
+    "name": "Justice Action Network",
+    "description": "Bipartisan legislative advocacy on sentencing, reentry, criminal records, and court costs.",
+    "focus": [
+      "sentencing",
+      "reentry",
+      "records-rights"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.justiceactionnetwork.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "alliance-for-safety-and-justice",
+    "name": "Alliance for Safety and Justice",
+    "description": "Organizes crime survivors and communities around safety, recovery, and changes to incarceration policy.",
+    "focus": [
+      "prisons-jails",
+      "records-rights",
+      "family-support"
+    ],
+    "scope": "Multi-state",
+    "regions": [
+      "multi-state"
+    ],
+    "type": "advocacy",
+    "url": "https://allianceforsafetyandjustice.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "innocence-project",
+    "name": "Innocence Project",
+    "description": "Reviews eligible post-conviction innocence claims, primarily involving DNA evidence. Read the intake criteria and state exclusions before applying.",
+    "focus": [
+      "wrongful-convictions"
+    ],
+    "scope": "United States; case and state restrictions apply",
+    "regions": [
+      "national"
+    ],
+    "type": "assistance",
+    "url": "https://innocenceproject.org/",
+    "helpUrl": "https://innocenceproject.org/submit-case/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "equal-justice-initiative",
+    "name": "Equal Justice Initiative",
+    "description": "Legal representation in selected wrongful-conviction, excessive-punishment, and death-penalty cases, alongside broader reform work.",
+    "focus": [
+      "wrongful-convictions",
+      "sentencing",
+      "death-penalty"
+    ],
+    "scope": "Alabama-based; selected cases and national advocacy",
+    "regions": [
+      "alabama",
+      "southern-states",
+      "national"
+    ],
+    "type": "assistance",
+    "url": "https://eji.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "southern-center-for-human-rights",
+    "name": "Southern Center for Human Rights",
+    "description": "Selected civil-rights and capital litigation addressing prison conditions, extreme punishment, and access to defense.",
+    "focus": [
+      "prisons-jails",
+      "death-penalty",
+      "public-defense"
+    ],
+    "scope": "Georgia and Alabama; Southern advocacy",
+    "regions": [
+      "georgia",
+      "alabama",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://www.schr.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "civil-rights-corps",
+    "name": "Civil Rights Corps",
+    "description": "Civil-rights litigation and advocacy challenging money bail, court debt, and unlawful detention.",
+    "focus": [
+      "bail-pretrial",
+      "prisons-jails",
+      "records-rights"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://civilrightscorps.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "american-civil-liberties-union-criminal-law-reform-project",
+    "name": "American Civil Liberties Union Criminal Law Reform Project",
+    "description": "Constitutional litigation and policy advocacy on policing, pretrial detention, public defense, and supervision.",
+    "focus": [
+      "policing",
+      "sentencing",
+      "public-defense",
+      "probation-parole"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.aclu.org/issues/criminal-law-reform",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "aclu-national-prison-project",
+    "name": "ACLU National Prison Project",
+    "description": "Systemic litigation and advocacy concerning prison and jail conditions and the rights of incarcerated people.",
+    "focus": [
+      "prisons-jails"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.aclu.org/issues/prisoners-rights",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "fair-and-just-prosecution",
+    "name": "Fair and Just Prosecution",
+    "description": "Resources and a peer network for elected prosecutors pursuing changes in prosecution policy and practice.",
+    "focus": [
+      "public-defense",
+      "sentencing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "professional",
+    "url": "https://fairandjustprosecution.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "right-on-crime",
+    "name": "Right on Crime",
+    "description": "Conservative policy advocacy on sentencing, corrections, reentry, and public safety.",
+    "focus": [
+      "sentencing",
+      "prisons-jails",
+      "reentry"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://rightoncrime.com/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "law-enforcement-action-partnership",
+    "name": "Law Enforcement Action Partnership",
+    "description": "A network of justice professionals advocating changes to policing, drug policy, and public safety.",
+    "focus": [
+      "policing",
+      "sentencing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://lawenforcementactionpartnership.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "dream-org",
+    "name": "Dream.Org",
+    "description": "Organizing and policy campaigns focused on justice reform, clemency, and reducing incarceration.",
+    "focus": [
+      "sentencing",
+      "prisons-jails",
+      "policing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://dream.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "justleadershipusa",
+    "name": "JustLeadershipUSA",
+    "description": "Leadership development and organizing led by people directly affected by incarceration.",
+    "focus": [
+      "prisons-jails",
+      "reentry"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://jlusa.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "color-of-change",
+    "name": "Color Of Change",
+    "description": "Racial-justice campaigns addressing policing, prosecutors, incarceration, and media accountability.",
+    "focus": [
+      "policing",
+      "prisons-jails"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://colorofchange.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "ella-baker-center-for-human-rights",
+    "name": "Ella Baker Center for Human Rights",
+    "description": "Community organizing on incarceration, family support, and investment in Black and Brown communities.",
+    "focus": [
+      "prisons-jails",
+      "youth-justice",
+      "family-support"
+    ],
+    "scope": "California/National advocacy",
+    "regions": [
+      "california",
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://ellabakercenter.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "critical-resistance",
+    "name": "Critical Resistance",
+    "description": "Grassroots organizing and educational resources for prison abolition and community responses to harm.",
+    "focus": [
+      "prisons-jails",
+      "policing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://criticalresistance.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "center-for-justice-innovation",
+    "name": "Center for Justice Innovation",
+    "description": "Community and court programs offering alternatives to incarceration, alongside national research and technical assistance.",
+    "focus": [
+      "bail-pretrial",
+      "reentry",
+      "youth-justice"
+    ],
+    "scope": "New York and New Jersey programs; national research and consulting",
+    "regions": [
+      "new-york",
+      "new-jersey",
+      "national"
+    ],
+    "type": "assistance",
+    "url": "https://www.innovatingjustice.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "justice-policy-institute",
+    "name": "Justice Policy Institute",
+    "description": "Research reports and policy resources on incarceration and youth justice remain available online.",
+    "focus": [
+      "prisons-jails",
+      "youth-justice",
+      "research-data"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://justicepolicy.org/",
+    "verificationNote": "JPI announced that operations would close on August 15, 2025. Listed for its available research, not active services.",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "council-on-criminal-justice",
+    "name": "Council on Criminal Justice",
+    "description": "Research, policy analysis, and cross-sector discussions about crime trends and the justice system.",
+    "focus": [
+      "research-data",
+      "sentencing",
+      "policing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://counciloncj.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "the-marshall-project",
+    "name": "The Marshall Project",
+    "description": "Independent reporting and investigations about prisons, courts, policing, and criminal justice.",
+    "focus": [
+      "prisons-jails",
+      "policing",
+      "sentencing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "journalism",
+    "url": "https://www.themarshallproject.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "prison-journalism-project",
+    "name": "Prison Journalism Project",
+    "description": "Publishes reporting by incarcerated and formerly incarcerated writers and supports their journalism skills.",
+    "focus": [
+      "prisons-jails"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "journalism",
+    "url": "https://prisonjournalismproject.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "national-legal-aid-defender-association",
+    "name": "National Legal Aid & Defender Association",
+    "description": "Training, policy resources, and support for legal-aid organizations and public-defense professionals.",
+    "focus": [
+      "public-defense"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "professional",
+    "url": "https://www.nlada.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "national-association-of-criminal-defense-lawyers",
+    "name": "National Association of Criminal Defense Lawyers",
+    "description": "Training, legal resources, and policy advocacy for criminal defense lawyers.",
+    "focus": [
+      "public-defense",
+      "wrongful-convictions",
+      "sentencing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "professional",
+    "url": "https://www.nacdl.org/",
+    "checkedDate": "2026-09-08",
+    "helpUrl": "https://www.nacdl.org/Content/FindaLawyer",
+    "helpLabel": "Find a lawyer"
+  },
+  {
+    "id": "national-association-for-public-defense",
+    "name": "National Association for Public Defense",
+    "description": "A professional community offering training, resources, and advocacy for public-defense teams.",
+    "focus": [
+      "public-defense"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "professional",
+    "url": "https://thenapd.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "the-bail-project",
+    "name": "The Bail Project",
+    "description": "Free bail assistance and pretrial support in selected local jurisdictions. Use its help page to check coverage and request assistance.",
+    "focus": [
+      "bail-pretrial"
+    ],
+    "scope": "Selected local jurisdictions; check current coverage",
+    "regions": [
+      "multi-state"
+    ],
+    "type": "assistance",
+    "url": "https://bailproject.org/",
+    "helpUrl": "https://bailproject.org/help/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "pretrial-justice-institute",
+    "name": "Pretrial Justice Institute",
+    "description": "Research and educational tools on pretrial detention and alternatives to money bail.",
+    "focus": [
+      "bail-pretrial",
+      "research-data"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://www.pretrial.org/",
+    "verificationNote": "The organization announced reduced operations in November 2025; its research and tools remain available. Check the site for updates.",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "community-justice-exchange",
+    "name": "Community Justice Exchange",
+    "description": "Supports community bail funds and local organizing to challenge detention and incarceration.",
+    "focus": [
+      "bail-pretrial",
+      "prisons-jails"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.communityjusticeexchange.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "partners-for-justice",
+    "name": "Partners for Justice",
+    "description": "Client advocates work through partner public-defender offices to address housing, employment, and other needs during a case.",
+    "focus": [
+      "public-defense",
+      "reentry"
+    ],
+    "scope": "Selected partner public-defender offices",
+    "regions": [
+      "multi-state"
+    ],
+    "type": "assistance",
+    "url": "https://partnersforjustice.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "campaign-for-the-fair-sentencing-of-youth",
+    "name": "Campaign for the Fair Sentencing of Youth",
+    "description": "Advocates to end life-without-parole sentences for children and supports people affected by extreme youth sentences.",
+    "focus": [
+      "youth-justice",
+      "sentencing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://cfsy.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "the-gault-center",
+    "name": "The Gault Center",
+    "description": "Training, standards, and policy support for lawyers defending children in the youth justice system.",
+    "focus": [
+      "youth-justice",
+      "public-defense"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "professional",
+    "url": "https://www.defendyouthrights.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "center-on-juvenile-and-criminal-justice",
+    "name": "Center on Juvenile and Criminal Justice",
+    "description": "Community programs and alternatives to incarceration in San Francisco, with California policy research.",
+    "focus": [
+      "youth-justice",
+      "reentry",
+      "research-data"
+    ],
+    "scope": "San Francisco programs; California research",
+    "regions": [
+      "california"
+    ],
+    "type": "assistance",
+    "url": "https://www.cjcj.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "youth-first-initiative",
+    "name": "Youth First Justice Collaborative (formerly Youth First Initiative)",
+    "description": "Supports youth-led campaigns to end youth incarceration and invest in community alternatives.",
+    "focus": [
+      "youth-justice",
+      "prisons-jails"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.nokidsinprison.org/",
+    "checkedDate": "2026-09-08",
+    "aliases": [
+      "Youth First Initiative"
+    ]
+  },
+  {
+    "id": "national-juvenile-justice-network",
+    "name": "National Youth Justice Network (formerly National Juvenile Justice Network)",
+    "description": "A network of advocates and organizers working to end youth criminalization and build community support.",
+    "focus": [
+      "youth-justice",
+      "policing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://nyjn.org/",
+    "checkedDate": "2026-09-08",
+    "aliases": [
+      "National Juvenile Justice Network"
+    ]
+  },
+  {
+    "id": "death-penalty-information-center",
+    "name": "Death Penalty Information Center",
+    "description": "Public information and data about death sentences, executions, and capital-punishment policy.",
+    "focus": [
+      "death-penalty",
+      "research-data"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://deathpenaltyinfo.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "witness-to-innocence",
+    "name": "Witness to Innocence",
+    "description": "Death-row survivors organize against capital punishment and support fellow exonerees.",
+    "focus": [
+      "death-penalty",
+      "wrongful-convictions"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.witnesstoinnocence.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "death-penalty-action",
+    "name": "Death Penalty Action",
+    "description": "Public education and action campaigns opposing executions and capital punishment.",
+    "focus": [
+      "death-penalty"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://deathpenaltyaction.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "national-coalition-to-abolish-the-death-penalty",
+    "name": "National Coalition to Abolish the Death Penalty",
+    "description": "Death-penalty abolition advocacy and public information.",
+    "focus": [
+      "death-penalty"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": null,
+    "verificationNote": "Current official website could not be confirmed. The previously listed domain is not linked."
+  },
+  {
+    "id": "center-for-death-penalty-litigation",
+    "name": "Center for Death Penalty Litigation",
+    "description": "A nonprofit law firm representing people on North Carolina death row and supporting capital-defense work.",
+    "focus": [
+      "death-penalty",
+      "public-defense"
+    ],
+    "scope": "North Carolina",
+    "regions": [
+      "north-carolina",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://www.cdpl.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "california-innocence-project",
+    "name": "California Western Innocence and Justice Clinic (formerly California Innocence Project)",
+    "description": "Reviews eligible innocence claims from incarcerated people convicted in selected Southern California jurisdictions.",
+    "focus": [
+      "wrongful-convictions"
+    ],
+    "scope": "Selected Southern California jurisdictions",
+    "regions": [
+      "california"
+    ],
+    "type": "assistance",
+    "url": "https://www.cwsl.edu/experiential_learning/clinics/california_western_innocence_and_justice_clinic/index.html",
+    "helpUrl": "https://www.cwsl.edu/experiential_learning/clinics/california_western_innocence_and_justice_clinic/ijc_legal_assistance.html",
+    "checkedDate": "2026-09-08",
+    "aliases": [
+      "California Innocence Project"
+    ]
+  },
+  {
+    "id": "northern-california-innocence-project",
+    "name": "Northern California Innocence Project",
+    "description": "Investigates eligible wrongful-conviction claims and pursues post-conviction relief in Northern and Central California.",
+    "focus": [
+      "wrongful-convictions"
+    ],
+    "scope": "Northern and Central California; listed counties only",
+    "regions": [
+      "california"
+    ],
+    "type": "assistance",
+    "url": "https://ncip.org/",
+    "checkedDate": "2026-09-08",
+    "helpUrl": "https://ncip.org/get-help/",
+    "helpLabel": "Review case criteria"
+  },
+  {
+    "id": "innocence-network",
+    "name": "Innocence Network",
+    "description": "A network of independent innocence organizations. Its directory helps identify projects with relevant geographic and case criteria.",
+    "focus": [
+      "wrongful-convictions"
+    ],
+    "scope": "National/International",
+    "regions": [
+      "national"
+    ],
+    "type": "professional",
+    "url": "https://innocencenetwork.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "national-registry-of-exonerations",
+    "name": "National Registry of Exonerations",
+    "description": "Searchable data, reports, and information about exonerations across the United States.",
+    "focus": [
+      "wrongful-convictions",
+      "research-data"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://exonerationregistry.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "center-for-employment-opportunities",
+    "name": "Center for Employment Opportunities",
+    "description": "Employment preparation, transitional work, and job-placement support for eligible people returning from incarceration.",
+    "focus": [
+      "reentry"
+    ],
+    "scope": "Selected locations in multiple states",
+    "regions": [
+      "multi-state"
+    ],
+    "type": "assistance",
+    "url": "https://ceoworks.org/",
+    "checkedDate": "2026-09-08",
+    "helpUrl": "https://ceoworks.org/locations/",
+    "helpLabel": "Find a program"
+  },
+  {
+    "id": "the-fortune-society",
+    "name": "The Fortune Society",
+    "description": "Reentry services including housing support, employment, education, and alternatives to incarceration in New York City.",
+    "focus": [
+      "reentry",
+      "family-support"
+    ],
+    "scope": "New York City",
+    "regions": [
+      "new-york"
+    ],
+    "type": "assistance",
+    "url": "https://fortunesociety.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "the-osborne-association",
+    "name": "The Osborne Association",
+    "description": "Family connections, employment, housing, and reentry programs for people affected by incarceration in New York.",
+    "focus": [
+      "reentry",
+      "family-support"
+    ],
+    "scope": "New York; program locations vary",
+    "regions": [
+      "new-york"
+    ],
+    "type": "assistance",
+    "url": "https://www.osborneny.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "root-rebound",
+    "name": "Root & Rebound",
+    "description": "Reentry legal support and guides about employment, housing, family issues, and barriers created by criminal records.",
+    "focus": [
+      "reentry",
+      "records-rights",
+      "family-support"
+    ],
+    "scope": "California and South Carolina; national resources",
+    "regions": [
+      "california",
+      "south-carolina",
+      "southern-states",
+      "national"
+    ],
+    "type": "assistance",
+    "url": "https://www.rootandreboundsc.org/",
+    "helpUrl": "https://www.rootandreboundsc.org/get-support/",
+    "verificationNote": "Check current program availability and contact details.",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "prison-fellowship",
+    "name": "Prison Fellowship",
+    "description": "Faith-based prison programs, family support, and reentry resources; availability depends on local programs.",
+    "focus": [
+      "reentry",
+      "prisons-jails",
+      "family-support"
+    ],
+    "scope": "United States; local program availability varies",
+    "regions": [
+      "national"
+    ],
+    "type": "assistance",
+    "url": "https://www.prisonfellowship.org/",
+    "helpUrl": "https://www.prisonfellowship.org/family/",
+    "helpLabel": "Find family resources",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "national-reentry-resource-center",
+    "name": "National Reentry Resource Center",
+    "description": "Reentry guides, policy tools, and information for people returning home, families, and service providers.",
+    "focus": [
+      "reentry",
+      "research-data",
+      "records-rights"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://nationalreentryresourcecenter.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "legal-action-center",
+    "name": "Legal Action Center",
+    "description": "Legal services in New York and national advocacy on criminal records, recovery, discrimination, and access to work.",
+    "focus": [
+      "records-rights",
+      "reentry"
+    ],
+    "scope": "New York legal services; national advocacy",
+    "regions": [
+      "new-york",
+      "national"
+    ],
+    "type": "assistance",
+    "url": "https://www.lac.org/",
+    "verificationNote": "Contact the organization to confirm current services and resources."
+  },
+  {
+    "id": "national-hire-network",
+    "name": "National HIRE Network",
+    "description": "Legal Action Center initiative with information and policy resources on employment barriers after a conviction.",
+    "focus": [
+      "records-rights",
+      "reentry"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.lac.org/major-project/national-hire-network",
+    "verificationNote": "Contact the organization to confirm current services and resources."
+  },
+  {
+    "id": "collateral-consequences-resource-center",
+    "name": "Collateral Consequences Resource Center",
+    "description": "State-by-state information about record clearing, pardons, rights restoration, and barriers after conviction.",
+    "focus": [
+      "records-rights",
+      "reentry",
+      "research-data"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "research",
+    "url": "https://ccresourcecenter.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "clean-slate-initiative",
+    "name": "Clean Slate Initiative",
+    "description": "Campaigns to pass and implement laws that automatically clear eligible criminal records.",
+    "focus": [
+      "records-rights",
+      "reentry"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.cleanslateinitiative.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "free-hearts",
+    "name": "Free Hearts",
+    "description": "Formerly incarcerated women support and organize families affected by incarceration in Tennessee.",
+    "focus": [
+      "family-support",
+      "reentry",
+      "prisons-jails"
+    ],
+    "scope": "Tennessee",
+    "regions": [
+      "tennessee",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://freeheartsorg.com/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "national-council-for-incarcerated-and-formerly-incarcerated-women-and-girls",
+    "name": "National Council for Incarcerated and Formerly Incarcerated Women and Girls",
+    "description": "Leadership and organizing by incarcerated and formerly incarcerated women and girls to end their incarceration.",
+    "focus": [
+      "prisons-jails",
+      "family-support",
+      "sentencing"
+    ],
+    "scope": "National",
+    "regions": [
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://www.nationalcouncil.us/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "a-new-way-of-life-reentry-project",
+    "name": "A New Way of Life Reentry Project",
+    "description": "Housing, case management, legal support, and family reunification services for people rebuilding their lives after incarceration.",
+    "focus": [
+      "reentry",
+      "records-rights",
+      "family-support"
+    ],
+    "scope": "California and selected partner locations",
+    "regions": [
+      "california",
+      "multi-state"
+    ],
+    "type": "assistance",
+    "url": "https://anewwayoflife.org/",
+    "checkedDate": "2026-09-08",
+    "helpUrl": "https://anewwayoflife.org/expungement/",
+    "helpLabel": "Explore legal services"
+  },
+  {
+    "id": "essie-justice-group",
+    "name": "Essie Justice Group",
+    "description": "Builds community and organizing power among women with incarcerated loved ones.",
+    "focus": [
+      "family-support",
+      "prisons-jails"
+    ],
+    "scope": "California organizing; national advocacy",
+    "regions": [
+      "california",
+      "national"
+    ],
+    "type": "advocacy",
+    "url": "https://essiejusticegroup.org/",
+    "checkedDate": "2026-09-08",
+    "helpUrl": "https://essiejusticegroup.org/nominate/",
+    "helpLabel": "Find community support"
+  },
+  {
+    "id": "anti-recidivism-coalition",
+    "name": "Anti-Recidivism Coalition",
+    "description": "Reentry support, mentoring, education, employment resources, and policy advocacy for formerly incarcerated people in California.",
+    "focus": [
+      "reentry",
+      "sentencing"
+    ],
+    "scope": "California",
+    "regions": [
+      "california"
+    ],
+    "type": "assistance",
+    "url": "https://antirecidivism.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "florida-rights-restoration-coalition",
+    "name": "Florida Rights Restoration Coalition",
+    "description": "Voting-rights and reentry support for Floridians with convictions. Check the fines-and-fees program for current availability.",
+    "focus": [
+      "records-rights",
+      "reentry"
+    ],
+    "scope": "Florida",
+    "regions": [
+      "florida",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://floridarrc.com/",
+    "helpUrl": "https://floridarrc.com/fines-and-fees-assistance-program/",
+    "helpLabel": "Check program availability",
+    "verificationNote": "Fines-and-fees applications are paused; check the program page for current intake.",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "operation-new-hope",
+    "name": "Operation New Hope",
+    "description": "Reentry job training, employment support, case management, and services through Florida programs.",
+    "focus": [
+      "reentry",
+      "family-support"
+    ],
+    "scope": "Florida",
+    "regions": [
+      "florida",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://operationnewhope.org/",
+    "helpUrl": "https://operationnewhope.org/our-programs/ready4work/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "florida-justice-institute",
+    "name": "Florida Justice Institute",
+    "description": "Selected civil-rights litigation involving Florida prisons, housing discrimination, and barriers faced by people with low incomes.",
+    "focus": [
+      "prisons-jails",
+      "records-rights"
+    ],
+    "scope": "Florida",
+    "regions": [
+      "florida",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://fji.law/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "florida-association-of-criminal-defense-lawyers",
+    "name": "Florida Association of Criminal Defense Lawyers",
+    "description": "A statewide professional association offering training, resources, and legislative advocacy for criminal defense lawyers.",
+    "focus": [
+      "public-defense"
+    ],
+    "scope": "Florida",
+    "regions": [
+      "florida",
+      "southern-states"
+    ],
+    "type": "professional",
+    "url": "https://facdl.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "georgia-justice-project",
+    "name": "Georgia Justice Project",
+    "description": "Criminal-record assistance in Georgia and criminal defense with social support in Fulton and DeKalb counties.",
+    "focus": [
+      "records-rights",
+      "reentry",
+      "public-defense"
+    ],
+    "scope": "Georgia; criminal defense in Fulton and DeKalb counties",
+    "regions": [
+      "georgia",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://www.gjp.org/",
+    "helpUrl": "https://www.gjp.org/get-help/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "louisiana-center-for-children-s-rights",
+    "name": "Louisiana Center for Children's Rights",
+    "description": "Legal defense and support for children in New Orleans and Baton Rouge, with statewide youth-justice advocacy.",
+    "focus": [
+      "youth-justice",
+      "public-defense"
+    ],
+    "scope": "New Orleans and Baton Rouge; Louisiana advocacy",
+    "regions": [
+      "louisiana",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://lakidsrights.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "louisiana-parole-project",
+    "name": "Louisiana Parole Project",
+    "description": "Reentry planning, transitional housing, employment support, and selected representation for eligible people in Louisiana.",
+    "focus": [
+      "probation-parole",
+      "reentry"
+    ],
+    "scope": "Louisiana",
+    "regions": [
+      "louisiana",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://www.paroleproject.org/",
+    "checkedDate": "2026-09-08",
+    "helpUrl": "https://www.paroleproject.org/client-eligibility-survey/",
+    "helpLabel": "Check eligibility"
+  },
+  {
+    "id": "promise-of-justice-initiative",
+    "name": "Promise of Justice Initiative",
+    "description": "Selected litigation and advocacy addressing excessive sentences, capital punishment, and prison conditions in Louisiana.",
+    "focus": [
+      "prisons-jails",
+      "sentencing",
+      "death-penalty"
+    ],
+    "scope": "Louisiana",
+    "regions": [
+      "louisiana",
+      "southern-states"
+    ],
+    "type": "assistance",
+    "url": "https://promiseofjustice.org/",
+    "checkedDate": "2026-09-08"
+  },
+  {
+    "id": "voice-of-the-experienced",
+    "name": "Voice of the Experienced",
+    "description": "Formerly incarcerated people organize for voting rights, reentry opportunities, and changes to Louisiana's justice system.",
+    "focus": [
+      "records-rights",
+      "reentry",
+      "prisons-jails"
+    ],
+    "scope": "Louisiana",
+    "regions": [
+      "louisiana",
+      "southern-states"
+    ],
+    "type": "advocacy",
+    "url": "https://www.voiceoftheexperienced.org/",
+    "checkedDate": "2026-09-08"
+  }
+]

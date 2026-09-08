@@ -26,3 +26,26 @@
   document.querySelector('.hub-filters').hidden = false;
   render();
 })();
+/* Local document catalogue enhancements; every resource remains readable without JS. */
+(() => {
+  const search = document.getElementById('resource-search');
+  if (!search) return;
+  const rows = [...document.querySelectorAll('.research-document')];
+  const type = document.getElementById('resource-type');
+  const reset = document.getElementById('resource-reset');
+  [...new Set(rows.map(row => row.dataset.resourceType))].sort().forEach(value => {
+    const option = document.createElement('option'); option.value = value; option.textContent = value; type.append(option);
+  });
+  const render = () => {
+    const terms = search.value.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
+    let visible = 0;
+    rows.forEach(row => { const matches = (type.value === 'all' || row.dataset.resourceType === type.value) && terms.every(term => row.textContent.toLocaleLowerCase().includes(term)); row.hidden = !matches; if (matches) visible += 1; });
+    document.getElementById('resource-count').textContent = 'Showing ' + visible + ' of ' + rows.length + ' documents';
+    document.getElementById('resource-empty').hidden = visible !== 0;
+    reset.hidden = !terms.length && type.value === 'all';
+  };
+  const clear = () => { search.value = ''; type.value = 'all'; render(); search.focus({ preventScroll: true }); };
+  search.addEventListener('input', render); type.addEventListener('change', render); reset.addEventListener('click', clear); document.getElementById('resource-empty-reset').addEventListener('click', clear);
+  document.querySelector('.resource-filters').hidden = false;
+  render();
+})();

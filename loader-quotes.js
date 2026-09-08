@@ -804,9 +804,11 @@
     "attribution": "Oscar Wilde, The Ballad of Reading Gaol"
   }
 ]);
-  const quoteElement = document.querySelector("[data-loader-quote]");
-  const attributionElement = document.querySelector("[data-loader-attribution]");
-  const panel = quoteElement && quoteElement.closest(".page-loader-panel");
+  const loader = document.getElementById("archive-loading-screen");
+  if (!loader) return;
+  const quoteElement = loader.querySelector("[data-loader-quote]");
+  const attributionElement = loader.querySelector("[data-loader-attribution]");
+  const panel = quoteElement && quoteElement.closest(".archive-loader-panel");
 
   if (!quoteElement || !attributionElement || !loaderQuotes.length) return;
 
