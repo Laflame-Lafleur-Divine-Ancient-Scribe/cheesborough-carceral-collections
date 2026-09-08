@@ -54,3 +54,13 @@
 .mh-lead-bottom { flex-wrap:wrap; }
 .mh-lead-bottom .mh-join-link { margin-left:auto; }
 @media(max-width:700px) { .mh-conversation { padding:23px 19px; margin-top:42px; }.mh-conversation-heading>p:not(.mh-kicker) { font-size:17px; }.mh-lead-bottom { gap:8px 20px; }.mh-lead-bottom .mh-join-link { margin-left:0; }.mh-share { margin-left:auto; } }
+
+/* Square video covers retain the actual YouTube thumbnail until playback. */
+.mh-video-frame,.mh-video-frame:has(iframe) { position:relative; width:100%; max-width:420px; aspect-ratio:1; min-height:0; padding:0; overflow:hidden; }
+.mh-video-frame .mh-video-thumbnail { position:relative; display:block; width:100%; height:100%; min-height:0; padding:0; border:0; margin:0; background:#0c2233; color:#fff6e8; text-decoration:none; cursor:pointer; }
+.mh-video-thumbnail img { display:block; width:100%; height:100%; object-fit:cover; }
+.mh-video-play-label { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; align-items:center; gap:12px; padding:14px 19px; white-space:nowrap; background:#0c2233ee; border:1px solid #d2b27a; color:#fff6e8; font:600 13px "Source Sans 3",sans-serif; }
+.mh-video-play-label>span { color:#e2bd7d; font-size:16px; }
+.mh-video-thumbnail:hover .mh-video-play-label { background:#17394b; }
+.mh-video-frame .mh-video-thumbnail:focus-visible { outline:3px solid #e2bd7d; outline-offset:-5px; }
+.mh-video-frame iframe { aspect-ratio:1; }

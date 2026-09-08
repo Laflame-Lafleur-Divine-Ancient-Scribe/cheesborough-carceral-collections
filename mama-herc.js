@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   'use strict';
   const article = document.getElementById('mh-article');
   if (!article) return;
@@ -43,10 +43,14 @@
   document.querySelectorAll('[data-video-id]').forEach(frame => {
     const id = frame.dataset.videoId;
     if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return;
-    const button = document.createElement('button'); button.type = 'button'; button.textContent = 'Play Video';
+    const thumbnail = frame.querySelector('.mh-video-thumbnail');
+    if (!thumbnail) return;
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'mh-video-thumbnail';
+    button.setAttribute('aria-label', 'Play video: ' + (frame.dataset.videoTitle || 'Related video'));
+    button.append(...thumbnail.childNodes);
     button.addEventListener('click', () => {
       const iframe = document.createElement('iframe'); iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?playsinline=1&rel=0'; iframe.title = frame.dataset.videoTitle || 'Related video'; iframe.allow = 'encrypted-media; picture-in-picture; fullscreen'; iframe.allowFullscreen = true; iframe.referrerPolicy = 'strict-origin-when-cross-origin'; frame.replaceChildren(iframe); iframe.focus();
     });
-    frame.replaceChildren(button);
+    thumbnail.replaceWith(button);
   });
 })();
