@@ -1,0 +1,43 @@
+﻿/* Shared loading overlay: editorial typography and measured, real progress. */
+.archive-loader { --al-ink:#091e30; --al-paper:#f3ead8; --al-gold:#d5b272; position:fixed; inset:0; z-index:10000; overflow:auto; background:radial-gradient(ellipse at 50% 35%,#183748 0,transparent 65%),#091e30; color:var(--al-paper); font-family:"Source Sans 3",sans-serif; transition:opacity .28s ease,visibility .28s; }
+.archive-loader[hidden] { display:none; }
+.archive-loader *, .archive-loader *::before,.archive-loader *::after { box-sizing:border-box; }
+.archive-loader.is-closing { opacity:0; visibility:hidden; pointer-events:none; }
+.archive-loader-shell { max-width:1600px; min-height:100%; margin:auto; padding:clamp(22px,4vw,56px); display:flex; flex-direction:column; }
+.archive-loader-top { display:flex; align-items:center; justify-content:space-between; gap:20px; padding-bottom:20px; border-bottom:1px solid #cfb57935; }
+.archive-loader-brand { display:flex; align-items:center; gap:14px; font:32px Georgia,serif; color:var(--al-gold); }
+.archive-loader-brand span { color:var(--al-paper); font:600 10px/1.5 "Source Sans 3",sans-serif; letter-spacing:.15em; text-transform:uppercase; }
+.archive-loader button { font-family:inherit; cursor:pointer; border-radius:0; }
+.archive-loader button:focus-visible { outline:2px solid #f2d79a; outline-offset:5px; }
+.archive-loader-skip,.archive-loader-motion { background:none; color:#c9d1cd; border:0; min-height:44px; font-size:12px; padding:8px; }
+.archive-loader-skip span { margin-left:10px; color:var(--al-gold); }
+.archive-loader-panel { width:min(100%,760px); margin:auto; padding:36px 0; text-align:center; }
+.archive-loader-emblem { display:flex; align-items:center; justify-content:center; gap:5px; height:32px; margin-bottom:24px; }
+.archive-loader-emblem span { display:block; width:14px; height:23px; border:1px solid var(--al-gold); transform:rotate(-12deg); }
+.archive-loader-emblem span:nth-child(2) { height:30px; transform:rotate(0); background:#d5b27218; }
+.archive-loader-emblem span:nth-child(3) { transform:rotate(12deg); }
+.archive-loader-eyebrow { color:var(--al-gold); text-transform:uppercase; letter-spacing:.25em; font-size:10px; font-weight:600; margin:0 0 20px; }
+.archive-loader .archive-loader-title { color:var(--al-paper); font-family:Georgia,"Times New Roman",serif; font-weight:400; font-size:clamp(31px,4.2vw,60px); letter-spacing:-.035em; line-height:1.1; margin:0; padding:0; border:0; }
+.archive-loader-title em { color:var(--al-gold); font-weight:400; }
+.archive-loader-description { color:#bfcac5; font-size:15px; line-height:1.6; margin:23px 0 28px; }
+.archive-loader-epigraph { max-width:600px; margin:0 auto 32px; padding-top:22px; position:relative; }
+.archive-loader-epigraph::before { content:""; position:absolute; top:0; left:calc(50% - 23px); height:1px; width:46px; background:var(--al-gold); }
+.archive-loader-epigraph blockquote { margin:0; padding:0; border:0; background:none; color:#e7e0d2; font:italic 19px/1.5 Georgia,serif; overflow-wrap:anywhere; }
+.archive-loader-epigraph p { color:var(--al-gold); font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.12em; line-height:1.5; margin:13px 0 0; }
+.archive-loader-panel.has-long-epigraph .archive-loader-epigraph blockquote { font-size:16px; }
+.archive-loader-panel.has-extended-epigraph .archive-loader-epigraph blockquote { font-size:15px; }
+.archive-loader-progress-head,.archive-loader-progress-foot { max-width:510px; margin:auto; display:flex; justify-content:space-between; align-items:center; gap:14px; text-align:left; }
+.archive-loader-progress-head { font-size:12px; color:#d5d9cf; padding-bottom:12px; }
+[data-loader-percent] { font:24px/1 Georgia,serif; color:var(--al-gold); font-variant-numeric:tabular-nums; }
+.archive-loader-track { height:3px; background:#bda77d30; max-width:510px; margin:auto; overflow:hidden; }
+.archive-loader-track span { display:block; width:0; height:100%; background:var(--al-gold); transition:width .2s ease; }
+.archive-loader-progress-foot { font-size:10px; color:#a8b8b5; padding-top:10px; letter-spacing:.03em; }
+.archive-loader-bottom { border-top:1px solid #cfb57935; padding-top:12px; display:flex; align-items:center; justify-content:space-between; gap:16px; color:#a8b8b5; font-size:11px; }
+.archive-loader-motion:hover,.archive-loader-skip:hover { color:var(--al-gold); }
+.archive-loader-motion:disabled { cursor:default; color:#a9b8b6; }
+.archive-loader.is-still *, .archive-loader.is-still { transition:none!important; }
+@media(max-width:600px) {
+ .archive-loader-shell { padding:18px 22px; }.archive-loader-top { gap:12px; padding-bottom:13px; }.archive-loader-brand { font-size:25px; gap:9px; }.archive-loader-brand span { font-size:8px; }.archive-loader-skip { font-size:11px; white-space:nowrap; padding:5px; }.archive-loader-skip span { margin-left:4px; }
+ .archive-loader-panel { padding:28px 0; }.archive-loader-emblem { margin-bottom:19px; }.archive-loader-eyebrow { font-size:9px; margin-bottom:17px; }.archive-loader .archive-loader-title { font-size:clamp(29px,7.6vw,43px); line-height:1.13; }.archive-loader-description { font-size:13px; margin:19px 0 22px; }.archive-loader-epigraph { padding-top:19px; margin-bottom:26px; }.archive-loader-epigraph blockquote { font-size:17px; }.archive-loader-panel.has-long-epigraph .archive-loader-epigraph blockquote { font-size:15px; }.archive-loader-panel.has-extended-epigraph .archive-loader-epigraph blockquote { font-size:14px; }.archive-loader-epigraph p { font-size:9px; }.archive-loader-progress-head { font-size:11px; }.archive-loader-bottom { font-size:9px; }.archive-loader-motion { font-size:10px; white-space:nowrap; }
+}
+@media(prefers-reduced-motion:reduce) { .archive-loader,.archive-loader * { transition:none!important; } }

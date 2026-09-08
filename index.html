@@ -809,37 +809,10 @@
       .state-band { border-bottom: 5px solid var(--press-red); border-top: 1px solid var(--gold); }
       .news { background: var(--ink-dark); border-top: 1px solid var(--gold); }
       footer { border-top: 5px solid var(--gold); }
-      .page-loader { align-items: center; background: var(--deep-navy); color: #f8f5ed; display: flex; inset: 0; justify-content: center; padding: 1.5rem; position: fixed; text-align: center; z-index: 10000; }
-      .page-loader[hidden] { display: none; }
-      .page-loader::before { border: 1px solid rgba(194, 155, 83, 0.42); content: ""; inset: 1rem; pointer-events: none; position: absolute; }
-      .page-loader.is-closing { opacity: 0; transition: opacity 260ms ease; }
-      .page-loader-panel { border-bottom: 4px solid var(--gold); box-sizing: border-box; max-height: calc(100svh - 3rem); max-width: 40rem; overflow-y: auto; padding: 1.5rem 2rem 1.75rem; position: relative; width: min(100%, 40rem); }
-      .page-loader-kicker { color: #e9c77f; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; margin: 0 0 0.75rem; text-transform: uppercase; }
-      .page-loader-title { font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.55rem, 5vw, 2.45rem); line-height: 1.16; margin: 0; }
-      .page-loader-epigraph { border-top: 1px solid rgba(233, 199, 127, 0.48); margin: 1.25rem auto 0; max-width: 35rem; padding: 1rem 1.3rem 0; position: relative; }
-      .page-loader-epigraph::before { background: var(--deep-navy); color: var(--gold); content: "✦"; font-size: 0.8rem; left: 50%; line-height: 1; padding: 0 0.55rem; position: absolute; top: -0.42rem; transform: translateX(-50%); }
-      .page-loader-quote { color: rgba(248, 245, 237, 0.86); font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(0.88rem, 2.25vw, 1.06rem); font-style: italic; line-height: 1.5; margin: 0; overflow-wrap: anywhere; }
-      .page-loader-attribution { color: #e9c77f; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em; line-height: 1.45; margin: 0.65rem 0 0; overflow-wrap: anywhere; text-transform: uppercase; }
-      .page-loader-panel.has-long-epigraph .page-loader-quote { font-size: clamp(0.82rem, 2vw, 0.95rem); line-height: 1.43; }
-      .page-loader-panel.has-long-epigraph .page-loader-attribution { font-size: 0.59rem; letter-spacing: 0.08em; }
-      .page-loader-panel.has-extended-epigraph { padding-bottom: 1.35rem; padding-top: 1.2rem; }
-      .page-loader-panel.has-extended-epigraph .page-loader-kicker { margin-bottom: 0.55rem; }
-      .page-loader-panel.has-extended-epigraph .page-loader-progress { margin-top: 0.9rem; }
-      .page-loader-progress { display: flex; gap: 0.38rem; justify-content: center; margin: 1.3rem auto 0; width: 8.5rem; }
-      .page-loader-progress span { animation: archive-pulse 1.25s ease-in-out infinite; background: var(--gold); display: block; height: 0.35rem; transform-origin: center; width: 1.12rem; }
-      .page-loader-progress span:nth-child(2) { animation-delay: 0.14s; background: #e9c77f; }
-      .page-loader-progress span:nth-child(3) { animation-delay: 0.28s; background: var(--press-red); }
-      .page-loader-progress span:nth-child(4) { animation-delay: 0.42s; background: #e9c77f; }
-      @keyframes archive-pulse { 0%, 100% { opacity: 0.38; transform: scaleY(0.55); } 50% { opacity: 1; transform: scaleY(1.35); } }
-      @media (prefers-reduced-motion: reduce) { .page-loader.is-closing { transition: none; } .page-loader-progress span { animation: none; } }
       @media (max-width: 760px) {
         .publication-inner { padding: 0 1rem; }
         .blackwhite-news-inner::after { bottom: 0.4rem; left: 0.4rem; right: 0.4rem; top: 0.4rem; }
         .prison-hero-copy { border-left-width: 4px; }
-        .page-loader { padding: 1rem; }
-        .page-loader-panel { max-height: calc(100svh - 2rem); padding: 1.2rem 1.1rem 1.35rem; }
-        .page-loader-epigraph { margin-top: 1rem; padding: 0.85rem 0.45rem 0; }
-        .page-loader-panel.has-extended-epigraph .page-loader-title { font-size: clamp(1.35rem, 7vw, 1.9rem); }
       }
     </style>
     <link rel="stylesheet" href="desktop-integrity.css" />
@@ -847,19 +820,27 @@
 <script src="community-auth.js?avatar-fill=full-frame-1" defer></script>  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="stylesheet" href="youtube-player.css?v=20260906b">
   <script src="youtube-player.js?v=20260906b" defer></script>
+  <link rel="stylesheet" href="archive-loader.css?v=20260908b">
 </head>
-  <body aria-busy="true">
-    <div class="page-loader" id="page-loader" role="status" aria-live="polite" aria-label="Loading Cheesborough Carceral Collections">
-      <div class="page-loader-panel">
-        <p class="page-loader-kicker">Cheesborough Carceral Collections</p>
-        <p class="page-loader-title">The Investigation Begins</p>
-        <div class="page-loader-epigraph" aria-hidden="true">
-          <blockquote class="page-loader-quote" data-loader-quote>“Justice must not only be done, but must also be seen to be done.”</blockquote>
-          <p class="page-loader-attribution" data-loader-attribution>— Lord Hewart</p>
+  <body>
+    <section class="archive-loader" id="page-loader" role="dialog" aria-modal="true" aria-labelledby="archive-loader-title" hidden>
+      <div class="archive-loader-shell">
+        <div class="archive-loader-top"><span class="archive-loader-brand">CC<span>Cheesborough<br>Carceral Collections</span></span><button type="button" data-loader-skip class="archive-loader-skip">Skip loading <span aria-hidden="true">&#8599;</span></button></div>
+        <div class="archive-loader-panel page-loader-panel">
+          <div class="archive-loader-emblem" aria-hidden="true"><span></span><span></span><span></span></div>
+          <p class="archive-loader-eyebrow">Cases. Evidence. History.</p>
+          <h2 id="archive-loader-title" class="archive-loader-title">Exploring Criminal Justice<br>Through Cases, Evidence,<br><em>and History.</em></h2>
+          <p class="archive-loader-description">Tracing the people, decisions, and systems<br>that shape justice and punishment.</p>
+          <div class="archive-loader-epigraph"><blockquote data-loader-quote>&ldquo;Justice must not only be done, but must also be seen to be done.&rdquo;</blockquote><p data-loader-attribution>&mdash; Lord Hewart</p></div>
+          <div class="archive-loader-progress-head"><span data-loader-status role="status">Opening the case files...</span><span data-loader-percent aria-hidden="true">0%</span></div>
+          <div class="archive-loader-track" role="progressbar" aria-label="Page essentials" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-loader-progress></span></div>
+          <div class="archive-loader-progress-foot"><span data-loader-count>Page essentials</span><span data-loader-preview hidden>Preview mode</span></div>
         </div>
-        <div class="page-loader-progress" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <div class="archive-loader-bottom"><span>Connecting the record to the human story.</span><button class="archive-loader-motion" type="button" data-loader-motion aria-pressed="true">Motion on</button></div>
       </div>
-    </div>
+    </section>
+    <script src="loader-quotes.js"></script>
+    <script src="archive-loader.js?v=20260908b"></script>
     <header>
       <div class="topbar">
         <nav aria-label="Primary navigation">
@@ -1168,7 +1149,7 @@
                   <li class="dropdown-item">
                     <a class="dropdown-link" href="${item.url}">
                       <div class="dropdown-meta">
-                        <span class="dropdown-badge ${getBadgeClass(item.category)}">${item.icon || '📄'} ${escapeHtml(item.badge || item.category)}</span>
+                        <span class="dropdown-badge ${getBadgeClass(item.category)}">${item.icon || 'ðŸ“„'} ${escapeHtml(item.badge || item.category)}</span>
                         ${item.date ? `<span style="color:#777; font-weight:600;">${escapeHtml(item.date)}</span>` : ''}
                       </div>
                       <div class="dropdown-title">${item.highlightedTitle || escapeHtml(item.title)}</div>
@@ -1349,26 +1330,6 @@
               if (stories.length >= 6) render(stories.slice(0, 6));
               else fallback();
             }).catch(fallback);
-          })();
-        </script>
-        <script src="loader-quotes.js"></script>
-        <script>
-          (() => {
-            const loader = document.getElementById("page-loader");
-            const cardsReady = () => document.querySelectorAll("#blackwhite-news-stories .blackwhite-story").length >= 6;
-            let pageLoaded = document.readyState === "complete";
-            let closed = false;
-            const closeLoader = () => {
-              if (closed || !loader) return;
-              closed = true;
-              document.body.setAttribute("aria-busy", "false");
-              loader.classList.add("is-closing");
-              window.setTimeout(() => { loader.hidden = true; }, 260);
-            };
-            const whenReady = () => { if (pageLoaded && cardsReady()) closeLoader(); };
-            window.addEventListener("load", () => { pageLoaded = true; whenReady(); }, { once: true });
-            whenReady();
-            window.setTimeout(closeLoader, 10000);
           })();
         </script>
         <script src="title-case.js"></script></body>
