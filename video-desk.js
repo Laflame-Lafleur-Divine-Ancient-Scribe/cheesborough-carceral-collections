@@ -121,6 +121,7 @@ const CCC_VIDEO_CATALOG = [
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    if (!document.querySelector('#watch-page') && document.body.dataset.videoPage !== 'browse') return;
     hydrateCatalog().finally(() => {
       if (document.body.dataset.videoPage === 'browse') {
         if (!window.CCCVideoBrowse && typeof CCC_TODAYS_VIDEOS === 'undefined') browse();
