@@ -23,7 +23,7 @@
     selectedTier = plans[tier]?.price ? tier : 'plugged_in';
     const plan=plans[selectedTier];
     $('upgrade-title').textContent=plan.name;
-    $('upgrade-copy').textContent=selectedTier==='legacy_circle' ? 'Stronger support for the archive, with room for up to 200 private research notes. All reading stays free.' : selectedTier==='full_member' ? 'Support the archive and create up to 50 private research notes. All reading stays free.' : 'Voluntary monthly support for the archive. Articles, guides, videos, games, search, and the Justice Directory remain free.';
+    $('upgrade-copy').textContent=selectedTier==='legacy_circle' ? 'Download archive PDFs, with room for up to 200 private research notes. All reading stays free.' : selectedTier==='full_member' ? 'Download archive PDFs and create up to 50 private research notes. All reading stays free.' : 'Download archive PDFs with an active $3 subscription. Reading, videos, games, search, and the Justice Directory remain free.';
     $('upgrade-price').textContent='$'+plan.price+' / month';
     $('upgrade-status').textContent=membership ? (membership.configured ? '' : 'Membership checkout is not available yet. You can still explore the public collection.') : 'Refresh access before continuing. We could not verify your membership.';
     $('upgrade-buy').hidden=!membership?.user;

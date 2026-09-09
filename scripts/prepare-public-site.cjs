@@ -8,7 +8,7 @@ const rootFiles=new Set(['server.js','package.json','package-lock.json','local.s
 function isPublic(relative){
  const parts=relative.replaceAll('\\','/').split('/');
  if(parts.at(-1)==='THIRD-PARTY-NOTICES.md'&&!parts.some(p=>p.startsWith('.'))&&!excluded.has(parts[0]))return true;
- return !parts.some(p=>p.startsWith('.')||p==='__pycache__')&&!excluded.has(parts[0])&&!(parts.length===1&&rootFiles.has(parts[0]))&&!/\.(?:log|sql|env|py|cjs|md|toml|yml|yaml)$/i.test(relative)&&!/(?:^|\/)poker-service\.js$/i.test(relative);
+ return !parts.some(p=>p.startsWith('.')||p==='__pycache__')&&!excluded.has(parts[0])&&parts[0]!=='STUB'&&!(parts.length===1&&rootFiles.has(parts[0]))&&!/\.(?:pdf|log|sql|env|py|cjs|md|toml|yml|yaml)$/i.test(relative)&&!/(?:^|\/)poker-service\.js$/i.test(relative);
 }
 function build(root,out){
  const source=path.resolve(root),target=path.resolve(out);
@@ -20,6 +20,13 @@ function build(root,out){
   fs.cpSync(path.join(source,entry),path.join(target,entry),{recursive:true,filter:file=>isPublic(path.relative(source,file))&&!fs.lstatSync(file).isSymbolicLink()});
  }
  fs.writeFileSync(path.join(target,'.nojekyll'),'');
+ // Include the download gate on every published HTML page, including archive pages.
+ function protect(dir){for(const item of fs.readdirSync(dir,{withFileTypes:true})){
+  const file=path.join(dir,item.name);if(item.isDirectory()){protect(file);continue}
+  if(!/\.html?$/i.test(item.name))continue;
+  let html=fs.readFileSync(file,'utf8');
+  if(!html.includes('src="/pdf-access.js"')){html=html.replace(/<head([^>]*)>/i,'<head$1><script src="/pdf-access.js" defer></script>');fs.writeFileSync(file,html)}
+ }}protect(target);
 }
 if(require.main===module){build(path.resolve(__dirname,'..'),path.resolve(process.argv[2]||'_site'));console.log('Public site staged without server or private files.');}
 module.exports={isPublic,build};

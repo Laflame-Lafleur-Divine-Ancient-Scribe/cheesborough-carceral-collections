@@ -1,6 +1,6 @@
 # Membership operations
 
-The Reading Room (`MEMBERS.html`) is the member entrance. All existing public articles remain readable. All articles, reading guides, CrimeNewsTV videos, games, search, and the Criminal Justice Directory are free. The $3 level is voluntary support; $6 includes a private notebook of up to 50 notes; $9 raises notebook capacity to 200. Upgrade overlays apply only to notebook tools and capacity. These are cumulative monthly USD prices, not one-time payments. One-time giving remains independent.
+The Reading Room (`MEMBERS.html`) is the member entrance. All existing public articles remain readable. All articles, reading guides, CrimeNewsTV videos, games, search, and the Criminal Justice Directory are free. $3 includes archive PDF downloads; $6 includes a private notebook of up to 50 notes; $9 raises notebook capacity to 200. Upgrade overlays apply to PDF downloads and notebook tools/capacity. Free PDF reading uses image previews; the original PDF bytes require an active $3-or-higher subscription. These are cumulative monthly USD prices, not one-time payments. One-time giving remains independent.
 
 ## Where data lives
 
@@ -12,7 +12,7 @@ The Reading Room (`MEMBERS.html`) is the member entrance. All existing public ar
 
 ## Activation checklist
 
-1. Deploy the code to Railway and the public files through the Pages workflow. Pages runs 50 isolated membership/account/analytics checks before upload. Tests use temporary PGlite, never production `DATABASE_URL`.
+1. Deploy the code to Railway and the public files through the Pages workflow. Pages runs 58 isolated membership/account/analytics checks before upload. Tests use temporary PGlite, never production `DATABASE_URL`.
 2. Verify existing Railway account configuration: `DATABASE_URL`, `REDIS_URL`, `SESSION_SECRET`, `OWNER_ACCOUNT_EMAIL`, allowed site origins, and the email delivery settings already used for account recovery.
 3. Verify `STRIPE_SECRET_KEY`, the three monthly Price IDs (`STRIPE_PRICE_PLUGGED_IN`, `STRIPE_PRICE_FULL_MEMBER`, `STRIPE_PRICE_LEGACY_CIRCLE`), and `STRIPE_WEBHOOK_SECRET`. Prices must be active, USD, recurring monthly, interval count 1, and exactly 300/600/900 cents. The existing Managed Payments integration is retained and requires compatible Stripe account configuration.
 4. Stripe webhook URL: `https://serviceapi-production-f574.up.railway.app/api/stripe/webhook`. Subscribe to `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `customer.subscription.paused`, `customer.subscription.resumed`, `invoice.paid`, and `invoice.payment_failed`. Use the endpoint's signing secret in the matching environment. Do not put keys or signing secrets in frontend files or chat.
@@ -39,3 +39,9 @@ Run `node --test scripts/test-membership.cjs scripts/test-account-email.cjs scri
 Browser review passed desktop/tablet/mobile: no horizontal overflow, upgrade dialogs, Escape/focus restoration, and preview retention. Production Stripe configuration and real authenticated payment return remain separate activation checks. The subsequent free-access revision is covered by tests for anonymous reading and notebook tier/capacity rules.
 
 References: [Stripe subscription lifecycle](https://docs.stripe.com/billing/subscriptions/webhooks), [Stripe portal configuration](https://docs.stripe.com/customer-management/configure-portal), [GitHub Pages static hosting](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
+
+## PDF delivery
+
+The Pages artifact excludes every PDF, including uppercase extensions. `/api/pdf/download?id=...` checks the signed-in account and verified membership before accessing a file; it fails closed if billing is unavailable. `/api/pdf/info` and `/api/pdf/page` provide free reading without returning PDF bytes. Poppler renders page images in Railway. The catalog pins existing archive source files to a Git revision and allows no arbitrary upstream URL or filesystem path. Run `node scripts/build-pdf-catalog.cjs` after publishing source additions. The runtime retrieves missing source files from that pinned public repository revision, including Git LFS media; originals already published in the public repository or by third parties cannot be made private by the website gate. Downloaded images/screenshots can also be saved by readers.
+
+Use `node --test scripts/test-pdf-access.cjs` with Poppler installed to verify anonymous/expired denials, all three paid levels, fail-closed billing, real image rendering, and artifact exclusion.

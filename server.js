@@ -16,6 +16,7 @@ const { createEmailDelivery } = require('./lib/email-delivery');
 const { createBillingService } = require('./lib/billing-service');
 const { createMembershipService } = require('./lib/membership-service');
 const membershipService = createMembershipService({db:communityDb,ensureSchema:ensureCommunitySchema,user:request=>v2User(request,true),stripe:stripeApi,json:communityJson,parseBody:parseCommunityBody,rate:permitCommunityAction,isOwner,siteUrl:publicSiteUrl,mail:createEmailDelivery()});
+const pdfService = require('./lib/pdf-service').createPdfService({user:request=>v2User(request,true),state:membershipService.state,json:communityJson,rate:permitCommunityAction});
 const billingService = createBillingService({db:communityDb,ensureSchema:ensureCommunitySchema,user:v2User,stripe:stripeApi,rate:permitCommunityAction,json:communityJson,siteUrl:publicSiteUrl});
 const { createAccountEmailService } = require('./lib/account-email-service');
 const accountEmailService = createAccountEmailService({db:communityDb,ensureSchema:ensureCommunitySchema,parseBody:parseCommunityBody,json:communityJson,rate:permitCommunityAction,rateEmail:permitResetEmail,mail:createEmailDelivery(),hashPassword:password=>argon2.hash(password,{type:argon2.argon2id}),siteUrl:publicSiteUrl});
@@ -2193,6 +2194,15 @@ const server = http.createServer((request, response) => {
         return;
     }
 
+    if (requestUrl.pathname.startsWith('/api/pdf/')) {
+        applyApiCors(request,response);
+        pdfService(request,response,requestUrl).catch(()=>communityJson(response,503,{error:'We could not verify PDF access. Please try again.'}));
+        return;
+    }
+    if (/\.pdf$/i.test(decodeURIComponent(requestUrl.pathname))) {
+        communityJson(response,403,{error:'PDF downloads require an active $3 or higher subscription. Open the document through the website reader.',requiredTier:'plugged_in'});
+        return;
+    }
     if (requestUrl.pathname === '/api/membership' || requestUrl.pathname.startsWith('/api/membership/')) {
         applyApiCors(request,response);
         membershipService.handle(request,response,requestUrl).catch(() => communityJson(response,503,{error:'We could not verify or update your membership. Please try again shortly.'}));
@@ -2434,7 +2444,10 @@ const server = http.createServer((request, response) => {
             return;
         }
 
-        fs.createReadStream(filePath).pipe(response);
+        if(extension==='.html') {
+            const html=fs.readFileSync(filePath,'utf8');
+            response.end(html.includes('src="/pdf-access.js"')?html:html.replace(/<head([^>]*)>/i,'<head$1><script src="/pdf-access.js" defer></script>'));
+        } else fs.createReadStream(filePath).pipe(response);
     });
 });
 
