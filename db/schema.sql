@@ -1,4 +1,4 @@
-﻿CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE TABLE IF NOT EXISTS community_users (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), first_name varchar(60), last_name varchar(60), display_name varchar(39) NOT NULL, email varchar(254) NOT NULL UNIQUE, phone_number varchar(30), avatar_data bytea, avatar_mime_type varchar(30), avatar_updated_at timestamptz, password_hash text NOT NULL, role varchar(16) NOT NULL DEFAULT 'member', status varchar(16) NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now());
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS first_name varchar(60);
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_name varchar(60);
