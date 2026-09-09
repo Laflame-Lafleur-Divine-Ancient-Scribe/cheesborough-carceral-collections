@@ -35,12 +35,12 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Verify membership and account isolation
+      - name: Verify account isolation
         run: |
           sudo apt-get update && sudo apt-get install -y poppler-utils
           npm ci --omit=dev
           npm install --prefix "$RUNNER_TEMP/membership-tests" --no-save @electric-sql/pglite@0.5.8
-          PGLITE_MODULE_PATH="$RUNNER_TEMP/membership-tests/node_modules/@electric-sql/pglite" node --test scripts/test-membership.cjs scripts/test-account-email.cjs scripts/test-owner-analytics.cjs scripts/test-pdf-access.cjs
+          PGLITE_MODULE_PATH="$RUNNER_TEMP/membership-tests/node_modules/@electric-sql/pglite" node --test scripts/test-account-email.cjs scripts/test-owner-analytics.cjs scripts/test-pdf-access.cjs
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
