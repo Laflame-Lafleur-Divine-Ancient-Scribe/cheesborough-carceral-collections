@@ -8,6 +8,7 @@ data/video-editions.generated.json
 .env.*
 _site/
 private/
+node_modules/
 
 # Archive files
 *.zip
