@@ -8,6 +8,7 @@ RUN npm ci --omit=dev
 COPY server.js ./
 COPY db ./db
 COPY lib ./lib
+COPY data/reading-guides.json ./data/reading-guides.json
 COPY games/jail-house-poker/poker-service.js ./games/jail-house-poker/poker-service.js
 
 ENV NODE_ENV=production

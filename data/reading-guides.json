@@ -1,0 +1,116 @@
+[
+  {
+    "id": "reading-record",
+    "sections": [
+      {
+        "heading": "Start with the document itself",
+        "text": "Write down its title, date, creator, and purpose before summarizing its claims. An indictment records charges; it does not establish a conviction. A committee report records a committee’s observations and judgments. Preserve those distinctions in your notes."
+      },
+      {
+        "heading": "Separate observation from interpretation",
+        "text": "Make two columns: what the source explicitly records, and what you think it means. For every interpretation, ask what additional record could confirm or challenge it. Keep exact wording in quotation marks and record a page number."
+      },
+      {
+        "heading": "Follow the next lead",
+        "text": "Look for a later court decision, an independent account, or a record created by someone with a different role. Note missing dates, names, and pages. An unanswered question is a useful research result; do not fill the gap with certainty."
+      }
+    ]
+  },
+  {
+    "id": "memory-evidence",
+    "sections": [
+      {
+        "heading": "Identify whose memory you are reading",
+        "text": "Distinguish firsthand experience, a story heard from someone else, and the later retelling of that story. Record when the account was created and how far it sits from the events described. These are different kinds of evidence, each with something to offer."
+      },
+      {
+        "heading": "Preserve differences between accounts",
+        "text": "When two versions disagree, write both down with their source details. Ask whether the speakers occupied different places in the institution or encountered the story at different times. A disagreement can reveal how an institution was experienced without settling every factual claim."
+      },
+      {
+        "heading": "Keep the person in view",
+        "text": "Notice the routines, relationships, fears, and small choices that formal records leave out. Use institutional documents to investigate claims, while keeping clear that a record written by an authority also carries a perspective."
+      }
+    ]
+  },
+  {
+    "id": "follow-case",
+    "sections": [
+      {
+        "heading": "Build an event timeline",
+        "text": "Give each event its own row: date, person, action, source, and open question. Separate an arrest from a charge, a verdict from a sentence, and an appeal from its outcome. Keep individual defendants on separate lines when their legal paths differ."
+      },
+      {
+        "heading": "Read a decision for its actual reach",
+        "text": "Identify the question the court decided and the result it ordered. Do not assume that a ruling on procedure settled every disputed fact. Follow references to later proceedings before describing the final outcome."
+      },
+      {
+        "heading": "Compare carefully",
+        "text": "Choose one question to compare across cases, such as sentencing or access to evidence. Note the different dates, jurisdictions, and procedural settings. A useful comparison explains both the resemblance and the limits of that resemblance."
+      }
+    ]
+  },
+  {
+    "id": "rivers-love",
+    "sections": [
+      {
+        "heading": "Begin with the family record",
+        "text": "Read the family and labor-contract sections of the Rivers Love history before the criminal proceedings. In your chronology, preserve the spelling of each name as it appears in each source. Record the household, location, and date alongside it rather than treating a similar name as proof of identity."
+      },
+      {
+        "heading": "Trace the legal record separately",
+        "text": "Follow the newspaper accounts, trial discussion, custody history, and final weeks as distinct stages. For each event, distinguish the contemporary source from later interpretation. Use the document links in the history to check the original wording and page context."
+      },
+      {
+        "heading": "Investigate the unresolved connection",
+        "text": "Compare the discussion of Powell’s “Sol Love” with the independently reconstructed Rivers Love timeline. List points of correspondence and points still unconfirmed. Keep the proposed connection labeled as a question unless the sources establish it."
+      },
+      {
+        "heading": "Build your own research packet",
+        "text": "Create a family timeline, a legal timeline, and an unresolved-questions sheet. Cite the original source beside each entry. Return to the public history below for its full source images, acknowledgments, and document links."
+      }
+    ]
+  },
+  {
+    "id": "dozier",
+    "sections": [
+      {
+        "heading": "Identify the institutional voice",
+        "text": "Begin with the visiting committee report. For each section, record who is speaking, what they observed, and what they recommended. Keep the report’s descriptions distinct from the archive’s analysis notes."
+      },
+      {
+        "heading": "Read the newspaper as a produced object",
+        "text": "Choose one issue of The Yellow Jacket. Note its date, featured activities, captions, and recurring subjects. Ask what image of the institution the issue presents and whose experiences are difficult to find in its pages."
+      },
+      {
+        "heading": "Use photographs with context",
+        "text": "Read captions and source details before drawing conclusions from an image. Note what is visible and what cannot be learned from the photograph alone. Avoid assigning identities or circumstances that the source does not establish."
+      },
+      {
+        "heading": "Compare across source types",
+        "text": "Choose one topic, such as education, facilities, or daily routine. Compare how the report, newspaper, and photographs represent it. Record differences in date and purpose before treating a contrast as a contradiction."
+      }
+    ]
+  },
+  {
+    "id": "american-siberia",
+    "sections": [
+      {
+        "heading": "Begin with the narrator",
+        "text": "Read Powell’s account with attention to his role inside the institution. Separate episodes he describes from the explanations he offers for them. Record where the archive supplies additional context or signals a limit in the evidence."
+      },
+      {
+        "heading": "Follow changes in place and authority",
+        "text": "Use the linked institutional histories to build a chronology of places and systems. Keep the date and jurisdiction attached to each entry. Do not treat all forms of confinement or prison labor as interchangeable."
+      },
+      {
+        "heading": "Return to named people",
+        "text": "Select one named person from the narrative and collect each reference with its page or section. Compare institutional description with any independent biographical evidence available in the archive. Keep uncertainty visible when the records are incomplete."
+      },
+      {
+        "heading": "Write a bounded conclusion",
+        "text": "Finish with one claim your sources support, one competing interpretation, and one unanswered question. Link each back to its evidence. This makes the packet useful to a later reader who wants to check or extend your work."
+      }
+    ]
+  }
+]

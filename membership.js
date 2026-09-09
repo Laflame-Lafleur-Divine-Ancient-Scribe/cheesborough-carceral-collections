@@ -4,8 +4,8 @@
   const $ = id => document.getElementById(id);
   const plans = {free:{name:'Public reader',rank:0},plugged_in:{name:'Plugged In',price:3,rank:1},full_member:{name:'Full Member',price:6,rank:2},legacy_circle:{name:'Legacy Circle',price:9,rank:3}};
   const params = new URLSearchParams(location.search);
-  let membership = null, resources = [], selectedTier = plans[params.get('tier')]?.price ? params.get('tier') : 'plugged_in', selectedResource = params.get('resource'), readerRequest = 0;
-  const returnTo = () => '/MEMBERS.html' + (selectedResource ? '?resource=' + encodeURIComponent(selectedResource) : '?tier=' + encodeURIComponent(selectedTier));
+  let membership = null, resources = [], selectedTier = plans[params.get('tier')]?.price ? params.get('tier') : null, selectedResource = params.get('resource'), readerRequest = 0;
+  const returnTo = () => '/MEMBERS.html' + (selectedResource ? '?resource=' + encodeURIComponent(selectedResource) : selectedTier ? '?tier=' + encodeURIComponent(selectedTier) : '');
   const loginUrl = () => 'LOGIN.html?returnTo=' + encodeURIComponent(returnTo());
   async function request(path, options = {}) {
     let response;
@@ -22,8 +22,8 @@
   function showUpgrade(tier) {
     selectedTier = plans[tier]?.price ? tier : 'plugged_in';
     const plan=plans[selectedTier];
-    $('upgrade-title').textContent=plan.name + ' opens this door.';
-    $('upgrade-copy').textContent=selectedTier==='legacy_circle' ? 'Your own saved research notes, plus every reading guide and case collection.' : selectedTier==='full_member' ? 'Explore the organized case research collections, along with every guided reading.' : 'Get the member reading guides and a little more context for the records.';
+    $('upgrade-title').textContent=plan.name;
+    $('upgrade-copy').textContent=selectedTier==='legacy_circle' ? 'Stronger support for the archive, with room for up to 200 private research notes. All reading stays free.' : selectedTier==='full_member' ? 'Support the archive and create up to 50 private research notes. All reading stays free.' : 'Voluntary monthly support for the archive. Articles, guides, videos, games, search, and the Justice Directory remain free.';
     $('upgrade-price').textContent='$'+plan.price+' / month';
     $('upgrade-status').textContent=membership ? (membership.configured ? '' : 'Membership checkout is not available yet. You can still explore the public collection.') : 'Refresh access before continuing. We could not verify your membership.';
     $('upgrade-buy').hidden=!membership?.user;
@@ -36,7 +36,7 @@
   function renderCatalog() {
     $('catalog').replaceChildren();
     for(const resource of resources) {
-      const row=element('article',null,'shelf-row'), copy=element('div'), badge=element('span',plans[resource.tier]?.name || 'Member reading','badge');
+      const row=element('article',null,'shelf-row'), copy=element('div'), badge=element('span','Free reading','badge');
       copy.append(badge,element('h3',resource.title),element('p',resource.description));
       const button=element('button','Open reading');button.type='button';button.addEventListener('click',()=>openResource(resource.id));
       row.append(copy,button);$('catalog').append(row);
@@ -45,18 +45,17 @@
   async function openResource(id) {
     selectedResource=id;const serial=++readerRequest;
     history.replaceState(null,'',returnTo());
-    const resource=resources.find(item=>item.id===id), reader=$('reader');reader.hidden=false;reader.replaceChildren(element('h2',resource?.title || 'Member reading'));
+    const resource=resources.find(item=>item.id===id), reader=$('reader');reader.hidden=false;reader.replaceChildren(element('h2',resource?.title || 'Free reading'));
     if(resource) {reader.append(element('p',resource.description));sourceLinks(reader,resource.sources);}
     const status=element('p','Checking access…');reader.append(status);reader.focus();
     try {
       const data=await request('/api/membership/content/'+encodeURIComponent(id));if(serial!==readerRequest)return;
-      reader.replaceChildren(element('p','From the member shelf','eyebrow'),element('h2',data.resource.title));
+      reader.replaceChildren(element('p','Free reading','eyebrow'),element('h2',data.resource.title));
       for(const section of data.resource.sections || []) {reader.append(element('h3',section.heading),element('p',section.text));}
       reader.append(element('h3','Public sources'));sourceLinks(reader,data.resource.sources);
     } catch(error) {
       if(serial!==readerRequest)return;
       status.textContent=error.message;
-      if(error.status===401 || error.status===403) showUpgrade(error.data.requiredTier || resource?.tier || 'plugged_in');
       const retry=element('button','Try again');retry.type='button';retry.addEventListener('click',()=>openResource(id));reader.append(retry);
     }
   }
@@ -65,12 +64,13 @@
     try {
       membership=await request('/api/membership'+(sync?'?refresh=1':''));
       $('owner-publish').hidden=membership.user?.role!=='owner';
+      if(membership.user?.role==='owner') await loadReadiness();
       const plan=plans[membership.tier] || plans.free;
       $('member-name').textContent=plan.name;
       $('member-status').textContent=membership.user ? 'Signed in as '+membership.user.displayName+'. '+(membership.cancelAtPeriodEnd ? 'Cancellation scheduled'+(membership.accessUntil ? '; access ends '+new Date(membership.accessUntil).toLocaleDateString() : '')+'.' : membership.status==='none' ? 'Choose a membership whenever you’re ready.' : 'Billing status: '+membership.status.replace(/_/g,' ')+'.') : 'Sign in to check your membership, save notes, or join a plan.';
       $('manage').hidden=!membership.user || !membership.subscriptions;
       $('signin').hidden=!!membership.user;$('signin').href=loginUrl();
-      const notebook=plan.rank>=3 && !!membership.user;
+      const notebook=plan.rank>=2 && !!membership.user;
       $('notebook-gate').hidden=notebook;$('notebook-workspace').hidden=!membership.user;
       $('note-form').hidden=!notebook;
       $('notebook-retained').hidden=!membership.user || notebook;
@@ -80,6 +80,17 @@
     finally {$('retry').disabled=false;}
   }
   async function loadCatalog() {try {const data=await request('/api/membership/catalog');resources=data.resources || [];renderCatalog();$('catalog-status').textContent=resources.length?'':'There are no readings on the shelf yet.';}catch(error){$('catalog-status').textContent=error.message+' Use Refresh access to try again.';}}
+  async function loadReadiness() {
+    const status=$('readiness-status'),list=$('readiness-checks');
+    status.textContent='Checking membership setup…';list.replaceChildren();
+    try {
+      const data=await request('/api/membership/readiness');
+      if(membership?.user?.role!=='owner')return;
+      status.textContent=data.ready?'Membership setup is ready.':'Membership setup needs attention.';
+      const labels={database:'Account database',stripeKey:'Payment connection',webhookSecret:'Payment confirmations',priceIds:'Monthly plan prices',publicReadings:'Public readings',portalCancellation:'Billing portal cancellation',portalPlanChanges:'Billing portal plan changes'};
+      for(const [key,label] of Object.entries(labels))list.append(element('li',label+': '+(data.checks?.[key]===true?'Ready':'Needs setup')));
+    }catch{status.textContent='Setup checks are unavailable. Refresh access to try again.';}
+  }
   async function loadNotes() {
     $('notes-status').textContent='Loading your notes…';
     try {const data=await request('/api/membership/notebook');$('notes-list').replaceChildren();
@@ -100,7 +111,7 @@
     try {redirectStripe((await request('/api/membership/checkout',{method:'POST',body:JSON.stringify({tier:selectedTier,returnTo:returnTo()})})).url);}
     catch(error){if(error.status===401){location.assign(loginUrl());return;}if(error.status===409 && error.data.manage){await portal(button,$('upgrade-status'));return;}$('upgrade-status').textContent=error.message;button.disabled=false;}
   });
-  $('note-form').addEventListener('submit',async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;$('notes-status').textContent='Saving…';try{await request('/api/membership/notebook',{method:'POST',body:JSON.stringify({title:$('note-title').value,body:$('note-body').value,sourceUrl:$('note-url').value})});$('note-form').reset();await loadNotes();}catch(error){$('notes-status').textContent=error.message+' Your draft is still here.';}finally{button.disabled=false;}});
+  $('note-form').addEventListener('submit',async event=>{event.preventDefault();const button=event.currentTarget.querySelector('button');button.disabled=true;$('notes-status').textContent='Saving…';try{await request('/api/membership/notebook',{method:'POST',body:JSON.stringify({title:$('note-title').value,body:$('note-body').value,sourceUrl:$('note-url').value})});$('note-form').reset();await loadNotes();}catch(error){$('notes-status').textContent=error.message+' Your draft is still here.';if(error.status===409 && error.data?.requiredTier==='legacy_circle')showUpgrade('legacy_circle');}finally{button.disabled=false;}});
   $('notes-refresh').addEventListener('click',loadNotes);
   $('publish-form').addEventListener('submit',async event=>{
     event.preventDefault();if(membership?.user?.role!=='owner')return;
@@ -110,12 +121,12 @@
     button.disabled=true;status.textContent='Checking the reading file…';
     try {
       let resources;try{resources=JSON.parse(await file.text());}catch{status.textContent='This file could not be read as JSON. Check the file and try again.';return;}
-      if(!Array.isArray(resources)||!resources.length){status.textContent='Choose a JSON file containing a list of member readings.';return;}
+      if(!Array.isArray(resources)||!resources.length){status.textContent='Choose a JSON file containing a list of public readings.';return;}
       const body=JSON.stringify({resources});
       if(new Blob([body]).size>195000){status.textContent='The prepared readings exceed the upload limit. Reduce the file size and try again.';return;}
-      status.textContent='Publishing member readings…';
+      status.textContent='Publishing public readings…';
       const result=await request('/api/membership/publish',{method:'POST',body});
-      status.textContent=result.published+' member readings published.';
+      status.textContent=result.published+' public readings published.';
       $('publish-form').reset();await Promise.all([refresh(true),loadCatalog()]);
     }catch(error){status.textContent=error.message || 'Publishing is unavailable. Please try again.';}
     finally{button.disabled=false;}

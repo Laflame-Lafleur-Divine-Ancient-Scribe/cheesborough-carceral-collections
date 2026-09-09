@@ -1,5 +1,7 @@
 # Subscription and access plan
 
+**Latest user decision:** All articles, CrimeNewsTV videos, games, search, and the Criminal Justice Directory stay free. This overrides the initial paid-reading proposals below. The implemented tiers are $3 voluntary support, $6 private notebook (50 notes), and $9 private notebook (200 notes). All six reading guides and collections are free too. See `membership-operations.md` for the current system.
+
 Prepared September 8, 2026. Original planning audit. The subsequent implementation is documented in `membership-operations.md`; its narrower initial catalog and actual delivered features supersede future-benefit suggestions below.
 
 ## Recommendation

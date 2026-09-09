@@ -31,34 +31,47 @@ before(async()=>{
 after(async()=>pg.close());
 test('safe return destinations reject open redirect and backslash payloads',()=>{for(const input of ['https://evil.test','//evil.test','/\\evil.test','/%2f%2fevil.test','/MEMBERS.html\n'])assert.equal(safeReturn(input),'/MEMBERS.html');assert.equal(safeReturn('/MEMBERS.html?resource=dozier'),'/MEMBERS.html?resource=dozier');});
 test('migration is repeatable',async()=>{await pg.exec(fs.readFileSync(path.join(__dirname,'../db/migrations/20260908-membership.sql'),'utf8'));});
-test('public catalog contains only previews and signed out requests cannot read content',async()=>{const catalog=await request('/api/membership/catalog',null);assert.equal(catalog.status,200);assert.equal(catalog.body.resources.length,6);assert.ok(catalog.body.resources.every(r=>!r.sections));assert.equal((await request('/api/membership/content/dozier',null)).status,401);});
-test('unpaid initial invoice and trial cannot unlock membership',async()=>{await sub('price_six','active',false);await webhook();assert.equal((await request('/api/membership')).body.tier,'free');await sub('price_six','trialing',true);await webhook();assert.equal((await request('/api/membership/content/dozier')).status,403);});
-test('paid subscription grants its exact tier and cumulative reading access',async()=>{await sub('price_three');await webhook();assert.equal((await request('/api/membership')).body.tier,'plugged_in');assert.equal((await request('/api/membership/content/reading-record')).status,200);assert.equal((await request('/api/membership/content/dozier')).status,403);});
+test('public catalog and all articles are accessible without signing in',async()=>{const catalog=await request('/api/membership/catalog',null);assert.equal(catalog.status,200);assert.equal(catalog.body.resources.length,6);assert.ok(catalog.body.resources.every(r=>!r.sections));assert.equal((await request('/api/membership/content/dozier',null)).status,200);assert.ok(catalog.body.resources.every(r=>r.tier==='free'));});
+test('unpaid initial invoice and trial cannot unlock membership',async()=>{await sub('price_six','active',false);await webhook();assert.equal((await request('/api/membership')).body.tier,'free');await sub('price_six','trialing',true);await webhook();assert.equal((await request('/api/membership/notebook',account,'POST',{title:'Blocked',body:'Not subscribed'})).status,403);});
+test('paid subscription grants its exact tier while all reading stays free',async()=>{await sub('price_three');await webhook();assert.equal((await request('/api/membership')).body.tier,'plugged_in');assert.equal((await request('/api/membership/content/reading-record')).status,200);assert.equal((await request('/api/membership/notebook',account,'POST',{title:'Blocked',body:'Not subscribed'})).status,403);});
 test('price metadata cannot spoof a higher tier',async()=>{const s=await sub('price_unknown');s.metadata={tier:'legacy_circle'};await webhook();assert.equal((await request('/api/membership')).body.tier,'free');});
 test('scheduled cancellation preserves paid-through access',async()=>{const s=await sub();s.cancel_at_period_end=true;await webhook();const result=await request('/api/membership');assert.equal(result.body.tier,'full_member');assert.equal(result.body.cancelAtPeriodEnd,true);});
-test('cancellation is immediate when Stripe subscription actually ends',async()=>{await sub('price_six','canceled');await webhook('customer.subscription.deleted');assert.equal((await request('/api/membership/content/dozier')).status,403);});
+test('cancellation is immediate when Stripe subscription actually ends',async()=>{await sub('price_six','canceled');await webhook('customer.subscription.deleted');assert.equal((await request('/api/membership/notebook',account,'POST',{title:'Blocked',body:'Not subscribed'})).status,403);});
 test('stale event object cannot reactivate canceled subscription',async()=>{await webhook('customer.subscription.updated',{id:'sub_main',customer:'cus_member',status:'active'});assert.equal((await request('/api/membership')).body.tier,'free');});
 test('duplicate webhook is recorded once',async()=>{await sub();await webhook(undefined,undefined,'evt_duplicate');await webhook(undefined,undefined,'evt_duplicate');assert.equal((await pg.query('SELECT count(*)::int AS n FROM member_webhook_events WHERE id=$1',['evt_duplicate'])).rows[0].n,1);});
 test('failed renewal grace is bounded and retries do not extend it',async()=>{await sub();await webhook();await sub('price_six','past_due',false);await webhook();const first=(await request('/api/membership')).body.accessUntil;await webhook();assert.equal((await request('/api/membership')).body.accessUntil,first);assert.equal(entitlement([{tier:'full_member',status:'past_due',access_until:'2000-01-01'}]),null);});
 test('Legacy notebook saves, edits, and exports only the signed-in account records',async()=>{await sub('price_nine');await webhook();const saved=await request('/api/membership/notebook',account,'POST',{title:'A source',body:'My note',sourceUrl:'https://example.test/source'});assert.equal(saved.status,201);const note=saved.body.note;assert.equal((await request('/api/membership/notebook',other)).body.notes.length,0);assert.equal((await request('/api/membership/notebook/'+note.id,other,'DELETE')).status,404);assert.equal((await request('/api/membership/notebook/'+note.id,account,'PUT',{title:'Edited',body:'New note'})).status,200);assert.equal((await request('/api/membership/export')).body.notes[0].title,'Edited');});
 test('expired members retain export/delete but cannot add or change notes',async()=>{await sub('price_nine','canceled');await webhook();const notes=(await request('/api/membership/export')).body.notes;assert.equal(notes.length,1);assert.equal((await request('/api/membership/notebook',account,'POST',{title:'No',body:'No'})).status,403);assert.equal((await request('/api/membership/notebook/'+notes[0].id,account,'DELETE')).status,200);});
 test('invalid notebook URLs are rejected without writing data',async()=>{await sub('price_nine');await webhook();assert.equal((await request('/api/membership/notebook',account,'POST',{title:'Source',body:'Note',sourceUrl:'javascript:alert(1)'})).status,400);});
+test('Full Member can save 50 notes; Legacy extends capacity without restricting reading or export',async()=>{
+ await sub('price_six');await webhook();
+ await pg.query('DELETE FROM member_notes WHERE user_id=$1',[account.id]);
+ await pg.query("INSERT INTO member_notes(user_id,title,body) SELECT $1,'Capacity fixture','Note' FROM generate_series(1,50)",[account.id]);
+ const full=await request('/api/membership/notebook',account,'POST',{title:'Next note',body:'A thought'});assert.equal(full.status,409);assert.equal(full.body.requiredTier,'legacy_circle');
+ assert.equal((await request('/api/membership/export')).body.notes.length,50);
+ await sub('price_nine');await webhook();assert.equal((await request('/api/membership/notebook',account,'POST',{title:'Next note',body:'A thought'})).status,201);
+ await pg.query('DELETE FROM member_notes WHERE user_id=$1',[account.id]);
+});
 test('owner access is separate; no subscriber receives owner role',async()=>{assert.equal((await request('/api/membership',owner)).body.status,'owner');assert.equal((await request('/api/membership')).body.user.role,'member');});
 test('existing subscriptions cannot open a duplicate checkout',async()=>{const result=await request('/api/membership/checkout',account,'POST',{tier:'legacy_circle'});assert.equal(result.status,409);assert.equal(result.body.manage,true);assert.equal(created,0);});
 test('new checkout requires login and reuses pending session',async()=>{assert.equal((await request('/api/membership/checkout',null,'POST',{tier:'plugged_in'})).status,401);const a=await request('/api/membership/checkout',other,'POST',{tier:'plugged_in',returnTo:'//evil.test'});const b=await request('/api/membership/checkout',other,'POST',{tier:'plugged_in'});assert.equal(a.status,200);assert.equal(a.body.url,b.body.url);assert.equal(created,1);});
 test('switching unpaid checkout expires previous session before creating another',async()=>{const result=await request('/api/membership/checkout',other,'POST',{tier:'full_member'});assert.equal(result.status,200);assert.equal(sessions.get('cs_1').status,'expired');assert.equal(created,2);});
 test('unknown protected resources fail closed',async()=>{assert.equal((await request('/api/membership/content/unknown')).status,404);});
-test('owner publication is private and regular paid accounts cannot publish',async()=>{
- const payload={resources:[{id:'reading-record',sections:[{heading:'Private edition',text:'Only stored in the test database.'}]}]};
+test('owner can publish public reading updates but regular paid accounts cannot',async()=>{
+ const payload={resources:[{id:'reading-record',sections:[{heading:'Public edition',text:'Only stored in the test database.'}]}]};
  assert.equal((await request('/api/membership/publish',account,'POST',payload)).status,403);
  assert.equal((await request('/api/membership/publish',owner,'POST',payload)).body.published,1);
  assert.equal((await request('/api/membership/catalog',null)).body.resources[0].sections,undefined);
  assert.equal((await request('/api/membership/publish',owner,'POST',{resources:[{id:'../server.js',sections:[]}]})).status,400);
 });
-test('checkout stays disabled until the advertised content exists',async()=>{
+test('activation checklist is owner-only and never returns credentials',async()=>{
+ assert.equal((await request('/api/membership/readiness',account)).status,403);
+ const result=await request('/api/membership/readiness',owner);assert.equal(result.status,200);assert.equal(result.body.checks.publicReadings,true);assert.ok(!JSON.stringify(result.body).includes('test-only'));
+});
+test('public reading remains available from the bundled edition without a database override',async()=>{
  await pg.query('DELETE FROM member_content WHERE resource_id=$1',['dozier']);
- assert.equal((await request('/api/membership',null)).body.configured,false);
- assert.equal((await request('/api/membership/checkout',other,'POST',{tier:'plugged_in'})).status,503);
+ assert.equal((await request('/api/membership/content/dozier',null)).status,200);
+ assert.equal((await request('/api/membership',null)).body.configured,true);
  await pg.query('INSERT INTO member_content(resource_id,sections) VALUES($1,$2)',['dozier',JSON.stringify([{heading:'Restored fixture',text:'Test content.'}])]);
 });
 test('billing claim requires proof sent to the billing mailbox and is bound to one account',async()=>{
