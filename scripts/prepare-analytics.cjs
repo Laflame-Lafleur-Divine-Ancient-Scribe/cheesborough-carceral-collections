@@ -4,7 +4,7 @@ const files=execFileSync('git',['ls-files','-z','--','*.html'],{encoding:'utf8'}
 let count=0;
 for(const file of files){
   // Downloaded research documents and design reference copies are source evidence.
-  if((file.includes('/')&&!file.startsWith('games/'))||/(^|\/)(OWNER|LOGIN|JOIN|PROFILE|RECOVER|DEVELOPER|STUDIO|RESET|VERIFY|ANALYTICS-PRIVACY)[^/]*\.html$/i.test(file))continue;
+  if((file.includes('/')&&!file.startsWith('games/'))||/(^|\/)(OWNER|LOGIN|JOIN|PROFILE|RECOVER|DEVELOPER|STUDIO|RESET|VERIFY|ANALYTICS-PRIVACY|INSIDE-ASSISTANCE|HELP-FINDER|ASSISTANCE-|RELEASE-PLANNER|FACILITY-GUIDE)[^/]*\.html$/i.test(file))continue;
   let html=fs.readFileSync(file,'utf8');if(!/<\/head>/i.test(html))continue;
   html=html.replace(/<script\b[^>]*\bsrc=["'][^"']*site-analytics\.js[^"']*["'][^>]*>\s*<\/script>/gi,'');
   html=html.replace(/<\/head>/i,'<script src="/site-analytics.js?v=20260906-owner" defer></script>\n</head>');

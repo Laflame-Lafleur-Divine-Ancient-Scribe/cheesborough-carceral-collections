@@ -1,0 +1,1389 @@
+{
+  "version": 1,
+  "checkedDate": "2026-09-09",
+  "states": [
+    {
+      "code": "AL",
+      "name": "Alabama"
+    },
+    {
+      "code": "AK",
+      "name": "Alaska"
+    },
+    {
+      "code": "AZ",
+      "name": "Arizona"
+    },
+    {
+      "code": "AR",
+      "name": "Arkansas"
+    },
+    {
+      "code": "CA",
+      "name": "California"
+    },
+    {
+      "code": "CO",
+      "name": "Colorado"
+    },
+    {
+      "code": "CT",
+      "name": "Connecticut"
+    },
+    {
+      "code": "DE",
+      "name": "Delaware"
+    },
+    {
+      "code": "DC",
+      "name": "District of Columbia"
+    },
+    {
+      "code": "FL",
+      "name": "Florida"
+    },
+    {
+      "code": "GA",
+      "name": "Georgia"
+    },
+    {
+      "code": "HI",
+      "name": "Hawaii"
+    },
+    {
+      "code": "ID",
+      "name": "Idaho"
+    },
+    {
+      "code": "IL",
+      "name": "Illinois"
+    },
+    {
+      "code": "IN",
+      "name": "Indiana"
+    },
+    {
+      "code": "IA",
+      "name": "Iowa"
+    },
+    {
+      "code": "KS",
+      "name": "Kansas"
+    },
+    {
+      "code": "KY",
+      "name": "Kentucky"
+    },
+    {
+      "code": "LA",
+      "name": "Louisiana"
+    },
+    {
+      "code": "ME",
+      "name": "Maine"
+    },
+    {
+      "code": "MD",
+      "name": "Maryland"
+    },
+    {
+      "code": "MA",
+      "name": "Massachusetts"
+    },
+    {
+      "code": "MI",
+      "name": "Michigan"
+    },
+    {
+      "code": "MN",
+      "name": "Minnesota"
+    },
+    {
+      "code": "MS",
+      "name": "Mississippi"
+    },
+    {
+      "code": "MO",
+      "name": "Missouri"
+    },
+    {
+      "code": "MT",
+      "name": "Montana"
+    },
+    {
+      "code": "NE",
+      "name": "Nebraska"
+    },
+    {
+      "code": "NV",
+      "name": "Nevada"
+    },
+    {
+      "code": "NH",
+      "name": "New Hampshire"
+    },
+    {
+      "code": "NJ",
+      "name": "New Jersey"
+    },
+    {
+      "code": "NM",
+      "name": "New Mexico"
+    },
+    {
+      "code": "NY",
+      "name": "New York"
+    },
+    {
+      "code": "NC",
+      "name": "North Carolina"
+    },
+    {
+      "code": "ND",
+      "name": "North Dakota"
+    },
+    {
+      "code": "OH",
+      "name": "Ohio"
+    },
+    {
+      "code": "OK",
+      "name": "Oklahoma"
+    },
+    {
+      "code": "OR",
+      "name": "Oregon"
+    },
+    {
+      "code": "PA",
+      "name": "Pennsylvania"
+    },
+    {
+      "code": "RI",
+      "name": "Rhode Island"
+    },
+    {
+      "code": "SC",
+      "name": "South Carolina"
+    },
+    {
+      "code": "SD",
+      "name": "South Dakota"
+    },
+    {
+      "code": "TN",
+      "name": "Tennessee"
+    },
+    {
+      "code": "TX",
+      "name": "Texas"
+    },
+    {
+      "code": "UT",
+      "name": "Utah"
+    },
+    {
+      "code": "VT",
+      "name": "Vermont"
+    },
+    {
+      "code": "VA",
+      "name": "Virginia"
+    },
+    {
+      "code": "WA",
+      "name": "Washington"
+    },
+    {
+      "code": "WV",
+      "name": "West Virginia"
+    },
+    {
+      "code": "WI",
+      "name": "Wisconsin"
+    },
+    {
+      "code": "WY",
+      "name": "Wyoming"
+    }
+  ],
+  "sources": [
+    {
+      "id": "state-corrections",
+      "title": "USAGov: state corrections directory",
+      "url": "https://www.usa.gov/state-corrections",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "local-government",
+      "title": "USAGov: local government directory",
+      "url": "https://www.usa.gov/local-governments",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "prisons",
+      "title": "USAGov: prisons, records, visits and complaints",
+      "url": "https://www.usa.gov/prisons-prisoners",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "court-structure",
+      "title": "U.S. Courts: court role and structure",
+      "url": "https://www.uscourts.gov/about-federal-courts/court-role-and-structure",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "court-forms",
+      "title": "U.S. Courts: official forms",
+      "url": "https://www.uscourts.gov/forms-rules/forms",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "civil-forms",
+      "title": "U.S. Courts: civil self-representation forms",
+      "url": "https://www.uscourts.gov/forms-rules/forms/civil-pro-se-forms",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "legal-aid",
+      "title": "LSC: find civil legal aid",
+      "url": "https://www.lsc.gov/about-lsc/what-legal-aid/i-need-legal-help",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "innocence",
+      "title": "Innocence Network: member directory",
+      "url": "https://innocencenetwork.org/directory",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "bop-locator",
+      "title": "Federal Bureau of Prisons: person locator",
+      "url": "https://www.bop.gov/inmateloc/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "bop-contact",
+      "title": "Federal Bureau of Prisons: community ties",
+      "url": "https://www.bop.gov/inmates/communications.jsp",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "bop-visits",
+      "title": "Federal Bureau of Prisons: visiting",
+      "url": "https://www.bop.gov/inmates/visiting.jsp",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "bop-policy",
+      "title": "Federal Bureau of Prisons: policies and resources",
+      "url": "https://www.bop.gov/resources/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "bop-fsa",
+      "title": "Federal Bureau of Prisons: First Step Act questions",
+      "url": "https://www.bop.gov/inmates/fsa/faq.jsp",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "bop-safety",
+      "title": "Federal Bureau of Prisons: sexual abuse prevention",
+      "url": "https://www.bop.gov/inmates/custody_and_care/sexual_abuse_prevention.jsp",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "clemency",
+      "title": "DOJ: federal clemency questions",
+      "url": "https://www.justice.gov/pardon/frequently-asked-questions",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "civil-rights",
+      "title": "DOJ Civil Rights Division: report a concern",
+      "url": "https://civilrights.justice.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "religion",
+      "title": "DOJ: religious practice in institutions",
+      "url": "https://www.justice.gov/crt/religious-land-use-and-institutionalized-persons-act-0",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "disability",
+      "title": "DOJ: disability rights",
+      "url": "https://www.justice.gov/crt/rights-persons-disabilities",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "medical-records",
+      "title": "HHS: your medical records",
+      "url": "https://www.hhs.gov/hipaa/for-individuals/medical-records/index.html",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "foia",
+      "title": "FOIA.gov: requesting federal agency records",
+      "url": "https://www.foia.gov/how-to.html",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "fl-corrections",
+      "title": "Florida Department of Corrections",
+      "url": "https://www.fdc.myflorida.com/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "fl-records",
+      "title": "Florida Department of Corrections: public records",
+      "url": "https://www.fdc.myflorida.com/newsroom/public-records",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "fl-courts",
+      "title": "Florida Courts: official court information",
+      "url": "https://www.flcourts.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "ca-corrections",
+      "title": "California Department of Corrections and Rehabilitation",
+      "url": "https://www.cdcr.ca.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "tx-corrections",
+      "title": "Texas Department of Criminal Justice",
+      "url": "https://www.tdcj.texas.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "ny-corrections",
+      "title": "New York State Department of Corrections and Community Supervision",
+      "url": "https://doccs.ny.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "ga-corrections",
+      "title": "Georgia Department of Corrections",
+      "url": "https://gdc.georgia.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "nc-corrections",
+      "title": "North Carolina Department of Adult Correction",
+      "url": "https://www.dps.nc.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "oh-corrections",
+      "title": "Ohio Department of Rehabilitation and Correction",
+      "url": "https://drc.ohio.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "pa-corrections",
+      "title": "Pennsylvania Department of Corrections",
+      "url": "https://www.pa.gov/agencies/cor.html",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "il-corrections",
+      "title": "Illinois Department of Corrections",
+      "url": "https://idoc.illinois.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "mi-corrections",
+      "title": "Michigan Department of Corrections",
+      "url": "https://www.michigan.gov/corrections",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "az-corrections",
+      "title": "Arizona Department of Corrections, Rehabilitation and Reentry",
+      "url": "https://corrections.az.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "wa-corrections",
+      "title": "Washington State Department of Corrections",
+      "url": "https://doc.wa.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "va-corrections",
+      "title": "Virginia Department of Corrections",
+      "url": "https://vadoc.virginia.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "tn-corrections",
+      "title": "Tennessee Department of Correction",
+      "url": "https://www.tn.gov/correction.html",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "hi-corrections",
+      "title": "Hawaii Department of Corrections and Rehabilitation",
+      "url": "https://dcr.hawaii.gov/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "jobs",
+      "title": "CareerOneStop: jobs, training and justice-impacted job seekers",
+      "url": "https://www.careeronestop.org/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "education",
+      "title": "U.S. Department of Education: prison education questions",
+      "url": "https://www.ed.gov/laws-and-policy/higher-education-laws-and-policy/prison-education-programs-questions-and-answers",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "pell",
+      "title": "Federal Student Aid: Pell Grant information",
+      "url": "https://studentaid.gov/articles/dont-miss-out-on-pell-grants/",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "ssa",
+      "title": "Social Security: incarceration and restarting benefits",
+      "url": "https://www.ssa.gov/life-events/incarceration",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "ssa-prerelease",
+      "title": "Social Security: prerelease application process",
+      "url": "https://www.ssa.gov/ssi/spotlights/spot-prerelease.htm",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "housing",
+      "title": "USAGov: housing assistance",
+      "url": "https://www.usa.gov/housing-help",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "voting",
+      "title": "USAGov: voting eligibility",
+      "url": "https://www.usa.gov/who-can-vote",
+      "checkedDate": "2026-09-09"
+    },
+    {
+      "id": "money",
+      "title": "Consumer Financial Protection Bureau: reentry money tools",
+      "url": "https://www.consumerfinance.gov/consumer-tools/educator-tools/your-money-your-goals/companion-guides/",
+      "checkedDate": "2026-09-09"
+    }
+  ],
+  "topics": [
+    {
+      "id": "legal-self-help",
+      "title": "Understand the next step in your case",
+      "summary": "Organize the papers, identify the right process, and prepare focused questions before you file.",
+      "directoryTopic": "sentencing",
+      "keywords": [
+        "appeal",
+        "postconviction",
+        "habeas",
+        "sentence",
+        "disciplinary",
+        "detainer",
+        "clemency",
+        "pardon",
+        "compassionate",
+        "restoration"
+      ],
+      "steps": [
+        {
+          "title": "Identify the court and custody system",
+          "body": "Write down the court that entered the judgment, case number and current custodian. State convictions, federal convictions and local detention are different starting points. A facility's location does not tell you which court controls a case."
+        },
+        {
+          "title": "Appeals, postconviction and habeas",
+          "body": "These are different ways to seek review, with different rules. Gather the judgment, latest order, docket and earlier filings. Ask counsel or the appropriate court's self-help office which current instructions apply. Do not assume a national sample form fits your case or that asking for records pauses a deadline."
+        },
+        {
+          "title": "Sentence calculation and detainers",
+          "body": "Request the written sentence calculation and underlying judgment from the responsible office. List the credit, dates or hold you want explained; do not calculate an official release date here. For a detainer, ask which agency issued it, the case number and how to obtain the notice."
+        },
+        {
+          "title": "Disciplinary proceedings and grievances",
+          "body": "Obtain the charge, hearing notice, decision and facility review instructions. Keep a dated record of requests and responses. Ask about evidence, assistance and how to seek review using the current policy; a letter on this site is not a disciplinary appeal."
+        },
+        {
+          "title": "Clemency, pardons and compassionate release",
+          "body": "Federal executive clemency is handled through the federal process; state convictions need the appropriate state authority. Compassionate release or medical release is a separate process. Ask counsel about the applicable eligibility, medical documentation and filing route. Do not use federal rules as a state checklist."
+        },
+        {
+          "title": "Restoration of rights",
+          "body": "Voting, occupational licenses and other rights have separate rules. Ask the responsible election office or licensing board what applies to your particular conviction and completion documents. A pardon does not automatically erase a record."
+        },
+        {
+          "title": "Make a one-page case map",
+          "body": "Write three columns: document or event, date shown on the document, question to ask. Mark missing papers. Bring that map to counsel or a legal-help intake instead of sending your only originals."
+        }
+      ],
+      "gather": [
+        "Court name and case number",
+        "Judgment and sentencing order",
+        "Latest docket and orders",
+        "Prior filings and written decisions",
+        "Sentence calculation, hold or disciplinary notice"
+      ],
+      "sourceIds": [
+        "court-structure",
+        "court-forms",
+        "bop-policy",
+        "bop-fsa",
+        "clemency",
+        "voting"
+      ],
+      "related": [
+        "legal-help",
+        "records",
+        "rights"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "legal-help",
+      "title": "Find someone qualified to help",
+      "summary": "Match your question to the right legal service and make a clear first contact.",
+      "directoryTopic": "public-defense",
+      "keywords": [
+        "attorney",
+        "lawyer",
+        "legal aid",
+        "innocence",
+        "public defender",
+        "clinic",
+        "pro bono",
+        "representation"
+      ],
+      "steps": [
+        {
+          "title": "Name the kind of help you need",
+          "body": "For a criminal case, start with existing counsel or the court's public-defense information. Civil legal aid handles civil issues and may have restrictions on the cases it can accept. Ask directly whether the office serves incarcerated people and this kind of matter."
+        },
+        {
+          "title": "Use a suitable directory",
+          "body": "Use the LSC directory for civil legal-aid offices, the Innocence Network for wrongful-conviction organizations, and the Justice Directory for prisoner-rights groups, reentry services and other leads. A listing is a place to ask, not a promise of representation."
+        },
+        {
+          "title": "Check the actual intake rules",
+          "body": "On the organization's own site confirm geography, case type, eligibility, whether it accepts letters from prison and whether intake is open. For law-school clinics or pro bono programs, confirm that the clinic currently handles your issue; semesters and capacity can affect intake."
+        },
+        {
+          "title": "Write a short intake summary",
+          "body": "Include the court and case number, what happened, the latest written decision, any date that needs urgent attention and the help you are requesting. Ask for the office's secure way to receive documents before sending sensitive records."
+        },
+        {
+          "title": "Track the response and keep looking",
+          "body": "Record when and how you contacted each office and its reply. Silence is not acceptance. Ask about another service if the office cannot help, and continue checking your court's requirements while waiting."
+        }
+      ],
+      "gather": [
+        "One-page case summary",
+        "Relevant jurisdiction and case number",
+        "Upcoming dates shown in official papers",
+        "Safe return contact details",
+        "Copies of key orders"
+      ],
+      "sourceIds": [
+        "legal-aid",
+        "innocence",
+        "court-structure"
+      ],
+      "related": [
+        "legal-self-help",
+        "records",
+        "templates"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "rights",
+      "title": "Document a concern and find the right channel",
+      "summary": "Practical preparation for care, safety, access and treatment concerns inside.",
+      "directoryTopic": "records-rights",
+      "keywords": [
+        "medical",
+        "disability",
+        "religion",
+        "mail",
+        "visitation",
+        "force",
+        "sexual abuse",
+        "retaliation",
+        "segregation",
+        "court access",
+        "grievance",
+        "rights"
+      ],
+      "steps": [
+        {
+          "title": "Get help for an urgent safety or medical concern",
+          "body": "If someone faces immediate danger or urgent symptoms, use the facility's emergency reporting or medical channel now. A website packet or routine letter is not emergency care. Families should use the facility's published emergency contact process."
+        },
+        {
+          "title": "Medical care and disability accommodations",
+          "body": "Describe symptoms or the access barrier, when it began, requests already made and the response. Ask the health unit or designated disability contact for the current request process and a written response. Request relevant records separately; do not share another person's medical information without appropriate permission."
+        },
+        {
+          "title": "Religion, mail and visits",
+          "body": "Ask for the current policy and written reason for a restriction. Record the religious practice, mail item, legal correspondence or visit affected. Ask about the policy's review or accommodation route; legal mail may have distinct handling requirements."
+        },
+        {
+          "title": "Force, sexual abuse and retaliation",
+          "body": "Record facts as safely as you can: dates, location, people involved, witnesses and reports made. For sexual abuse, use the facility's published PREA reporting options and seek medical attention. Federal BOP reporting information applies to BOP facilities. Ask for the correct channel at a state prison or local jail. Describe any subsequent threats or retaliation separately."
+        },
+        {
+          "title": "Discipline, segregation and access to courts",
+          "body": "Keep the notice and decision and ask how to obtain review instructions, legal materials and access arrangements. Document missing forms or barriers to submitting a request. Do not assume a transfer or segregation ends a filing obligation."
+        },
+        {
+          "title": "Grievances and outside reporting",
+          "body": "Get the current grievance policy, required form, routing and review instructions. Retain copies and proof of submission when available. An outside DOJ report does not replace a facility grievance or court filing, and this page does not decide whether legal exhaustion requirements have been met."
+        }
+      ],
+      "gather": [
+        "Factual timeline",
+        "Copies of requests and responses",
+        "Policy or notice at issue",
+        "Witness information kept privately",
+        "Specific change or assistance requested"
+      ],
+      "sourceIds": [
+        "civil-rights",
+        "disability",
+        "religion",
+        "bop-safety",
+        "bop-policy",
+        "medical-records",
+        "civil-forms"
+      ],
+      "related": [
+        "templates",
+        "legal-help",
+        "family"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "family",
+      "title": "Stay connected and support someone inside",
+      "summary": "Confirm the current rules before you travel, send anything or request information.",
+      "directoryTopic": "family-support",
+      "keywords": [
+        "family",
+        "mother",
+        "father",
+        "visit",
+        "phone",
+        "books",
+        "money",
+        "property",
+        "emergency",
+        "contact"
+      ],
+      "steps": [
+        {
+          "title": "Confirm where the person is held",
+          "body": "Use the federal locator for BOP custody, the state's official corrections site for state prison, or the county/sheriff's official jail page for local custody. Verify the name and identification number. An absent search result is not proof of release."
+        },
+        {
+          "title": "Verify mail, books and property rules",
+          "body": "Ask which mailing address and identification format apply, whether books need an approved sender, and what property is allowed. Check the current legal-mail instructions separately. Transfers and vendor rules can change where an item should go."
+        },
+        {
+          "title": "Plan visits and calls",
+          "body": "Check approval, identification, scheduling, accessibility, child visitor rules, dress requirements and cancellation notices before travel. Confirm the approved phone or video system on the facility's official site and review costs before using it."
+        },
+        {
+          "title": "Check money and vendor information carefully",
+          "body": "Use only payment instructions linked by the actual facility. Confirm the recipient details and fees before deciding whether to send funds. Inside Assistance does not collect deposits or arrange commissary, calls or visits."
+        },
+        {
+          "title": "Prepare an emergency contact plan",
+          "body": "Find the official process for an urgent family notification or concern about the person inside. Keep the facility's name, identification number and relationship information ready. Medical updates may require the person's authorization."
+        },
+        {
+          "title": "Share one useful next step",
+          "body": "Ask what the person wants help with. Send a short plain-text or printed guide that follows the facility's mail rules. For records, obtain the appropriate permission and send requests to the actual custodian. Start release planning together when useful."
+        }
+      ],
+      "gather": [
+        "Confirmed facility and identification number",
+        "Current visitor and mail instructions",
+        "Permission for private records when required",
+        "Travel or communication questions",
+        "A safe contact list"
+      ],
+      "sourceIds": [
+        "prisons",
+        "bop-locator",
+        "bop-contact",
+        "bop-visits",
+        "medical-records"
+      ],
+      "related": [
+        "facilities",
+        "records",
+        "release"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "reentry",
+      "title": "Build a workable plan for coming home",
+      "summary": "Start with a place to stay, documents, care and a way to reach help.",
+      "directoryTopic": "reentry",
+      "keywords": [
+        "released",
+        "housing",
+        "job",
+        "employment",
+        "identification",
+        "id",
+        "license",
+        "transportation",
+        "bank",
+        "benefits",
+        "expungement",
+        "sealing"
+      ],
+      "steps": [
+        {
+          "title": "Secure the first place and the first ride",
+          "body": "Confirm where you can stay and how you will get there. Ask the housing provider about intake, identification and any restrictions. Have a backup plan and check any supervision approval needed before committing to an address."
+        },
+        {
+          "title": "Gather identification and release papers",
+          "body": "Ask your release coordinator which identification documents you can obtain before leaving. Keep release papers and existing identity documents together. Confirm replacement requirements directly with the issuing agency; do not send originals unless its instructions require them."
+        },
+        {
+          "title": "Connect care and benefits",
+          "body": "Ask the care team about prescriptions, records, follow-up appointments and coverage arrangements. Check benefits with the responsible agency; release does not automatically start every benefit. Social Security offers information about prerelease applications and restarting eligible benefits."
+        },
+        {
+          "title": "Work, education and occupational licensing",
+          "body": "Use CareerOneStop for job and training resources. List work, education and skills gained inside. Before paying for training, ask the licensing board whether the occupation has conviction-related rules and what review process is available."
+        },
+        {
+          "title": "Plan transport, banking and everyday costs",
+          "body": "Write a first-week budget for food, travel, phone and essential appointments. Check local transit and low-cost options. Compare account identification requirements, fees and access to your money. The CFPB reentry tools can help you organize questions."
+        },
+        {
+          "title": "Check voting and record options separately",
+          "body": "Use your state election office's current instructions to check voting eligibility. Ask qualified legal help about sealing, expungement or correcting an inaccurate record where available. Do not assume every conviction can be removed or that record relief restores every right."
+        },
+        {
+          "title": "Put appointments on one list",
+          "body": "Keep supervision reporting instructions and actual appointment dates on paper. Choose a trusted contact if you want help. Use the release planner's reminders for preparation; they do not replace official reporting dates."
+        }
+      ],
+      "gather": [
+        "Release and supervision papers",
+        "Available identity documents",
+        "Housing and transportation contacts",
+        "Medication and care-transition information",
+        "Education and work history"
+      ],
+      "sourceIds": [
+        "housing",
+        "ssa",
+        "ssa-prerelease",
+        "jobs",
+        "money",
+        "voting",
+        "legal-aid"
+      ],
+      "related": [
+        "release",
+        "education",
+        "records"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "education",
+      "title": "Keep learning inside",
+      "summary": "Plan a learning routine and ask about programs that are actually available.",
+      "directoryTopic": "reentry",
+      "keywords": [
+        "education",
+        "ged",
+        "college",
+        "pell",
+        "study",
+        "reading",
+        "writing",
+        "history",
+        "civics",
+        "computer",
+        "financial literacy"
+      ],
+      "steps": [
+        {
+          "title": "Ask what the facility offers",
+          "body": "Request information from the education office about literacy, GED or equivalent preparation, college, vocational work, library access and accessible materials. Ask about eligibility, waitlists, required records and approved correspondence study."
+        },
+        {
+          "title": "Check college and aid details",
+          "body": "Ask whether a program is an approved prison education program and how enrollment and financial-aid applications work there. Pell eligibility depends on the program and individual requirements; a college advertisement is not an award or admission decision."
+        },
+        {
+          "title": "Practice reading and writing",
+          "body": "Choose a free Carceral Collections article. Write five sentences explaining its main point, then separate what a source directly shows from what the author infers. Draft a paragraph about a question the article leaves unanswered. This is a reading exercise, not a credentialed course."
+        },
+        {
+          "title": "Practice civics and research",
+          "body": "Read the U.S. Courts explanation of court structure. Draw a simple map separating state and federal courts, then write three questions you would ask a court clerk about finding a public document. Use the records guide to plan the search."
+        },
+        {
+          "title": "Build everyday skills on paper",
+          "body": "Make a sample weekly budget with the CFPB tools. For computer concepts, sketch folders named Applications, Education and Records and describe what belongs in each; practice writing a clear subject line and a short email draft. No computer or paid service is required for these exercises."
+        },
+        {
+          "title": "Keep a learning record",
+          "body": "Record books read, skills practiced, certificates and questions for your instructor. Ask how to obtain transcripts before a transfer or release and whether credits transfer to your next program."
+        }
+      ],
+      "gather": [
+        "Previous transcripts or certificates",
+        "Program questions and interests",
+        "Any access or accommodation needs",
+        "A notebook for reading and practice"
+      ],
+      "sourceIds": [
+        "education",
+        "pell",
+        "court-structure",
+        "money",
+        "jobs"
+      ],
+      "related": [
+        "templates",
+        "records",
+        "reentry"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "records",
+      "title": "Find the record you actually need",
+      "summary": "Separate court papers, prison records and private medical records before making a request.",
+      "directoryTopic": "records-rights",
+      "keywords": [
+        "records",
+        "sentencing order",
+        "2012",
+        "docket",
+        "medical records",
+        "transcript",
+        "public records",
+        "foia",
+        "research"
+      ],
+      "steps": [
+        {
+          "title": "Write down the exact document",
+          "body": "Instead of asking for everything, name the sentencing order, appellate docket, transcript, grievance decision or medical record and a likely date range. A research question on this site only helps suggest a topic; it is not sent to an agency."
+        },
+        {
+          "title": "Court orders and appellate dockets",
+          "body": "Start with the clerk of the court that handled the case. Use the court name, case number and party name to ask about public access, copies and the correct docket. For an appeal, identify the appellate court separately. Ask about costs or fee assistance before ordering; this guide does not require a paid search service."
+        },
+        {
+          "title": "Prison and agency records",
+          "body": "Contact the agency that keeps the record. Federal FOIA applies to federal agency records; state and local records use their own procedures. First check existing public records. Ask for the relevant custodian and current request instructions rather than sending a federal form everywhere."
+        },
+        {
+          "title": "Medical records",
+          "body": "Ask the facility health-records office or provider for its access process, identification requirements and any authorization needed for a representative. Access rules have exceptions, including in custody. Ask for a written explanation and review information if access is denied; family relationship alone may not authorize access."
+        },
+        {
+          "title": "Send a focused request and keep a copy",
+          "body": "Describe the records and preferred accessible format. Ask for a cost estimate before chargeable work and information about any available waiver. Record when, where and how you submitted it; retain tracking details and replies."
+        },
+        {
+          "title": "If nothing arrives or something is missing",
+          "body": "Use the custodian's published follow-up or review process. Refer to the original request and identify missing documents. If the record relates to a court deadline, seek legal help now; a records request does not itself extend the court's deadline."
+        }
+      ],
+      "gather": [
+        "Document name and date range",
+        "Court or agency name",
+        "Case or identification number if needed",
+        "Authority to request private records",
+        "Request log and copies"
+      ],
+      "sourceIds": [
+        "foia",
+        "court-structure",
+        "court-forms",
+        "medical-records",
+        "prisons"
+      ],
+      "related": [
+        "templates",
+        "legal-help",
+        "legal-self-help"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "templates",
+      "title": "Write a clear request",
+      "summary": "Start a letter you can edit, review and send yourself.",
+      "directoryTopic": "records-rights",
+      "keywords": [
+        "template",
+        "letter",
+        "request",
+        "correspondence",
+        "draft"
+      ],
+      "steps": [
+        {
+          "title": "Pick the right starting letter",
+          "body": "Choose records, medical records, attorney contact, sentencing documents, education, visitation review, grievance process, clemency inquiry or reentry support. These are communication aids, not court filings or official applications."
+        },
+        {
+          "title": "Check the recipient's instructions first",
+          "body": "The agency may require its own form, signature, consent, identification or delivery method. Use official court forms for actual court filings. Do not substitute a template letter for a required grievance or appeal."
+        },
+        {
+          "title": "Replace every bracketed field",
+          "body": "Keep the request factual and specific. Include only the identifiers the recipient needs. Remove unused fields and do not guess dates or make statements you cannot support."
+        },
+        {
+          "title": "Review before sharing",
+          "body": "Check the recipient and return address. Keep sensitive information off shared devices. Drafts stay in this browser; saving is optional. No letter is sent by this site."
+        },
+        {
+          "title": "Keep a copy and a follow-up note",
+          "body": "Copy or download the text for free, then submit it yourself through the verified channel. Write down the submission date and any reference number. A downloaded draft is not proof that the recipient received anything."
+        }
+      ],
+      "gather": [
+        "Verified recipient and instructions",
+        "Specific request",
+        "Supporting documents to list",
+        "Safe return contact"
+      ],
+      "sourceIds": [
+        "court-forms",
+        "foia",
+        "medical-records"
+      ],
+      "related": [
+        "records",
+        "legal-help",
+        "family"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "facilities",
+      "title": "Check the rules at the right facility",
+      "summary": "Find the official source, then verify the details before you act.",
+      "directoryTopic": "prisons-jails",
+      "keywords": [
+        "facility",
+        "prison",
+        "jail",
+        "address",
+        "locator",
+        "commissary",
+        "vendor",
+        "legal mail"
+      ],
+      "steps": [
+        {
+          "title": "Choose the custody system",
+          "body": "For federal BOP custody use BOP resources. For a state prison choose the state on the official corrections directory. For a county or municipal jail start with that local government's official sheriff or corrections page. Some custody arrangements differ, so confirm who operates the facility."
+        },
+        {
+          "title": "Confirm the actual facility",
+          "body": "A facility name entered here is a planning label, not a verified match. Use the official locator and facility page to confirm the current location and identification details. Do not infer release from a missing listing."
+        },
+        {
+          "title": "Verify mail and legal mail separately",
+          "body": "Confirm the current address, required recipient information, book and package rules, and special legal-mail procedure. Ask whether a vendor or central processing address applies."
+        },
+        {
+          "title": "Verify visits, calls and purchases",
+          "body": "Check approval, scheduling, accessibility, phone and video providers, commissary and property instructions on the official page. This site does not sell these services or guarantee that a vendor is approved."
+        },
+        {
+          "title": "Find the right staff contact",
+          "body": "Look for records, education, health information, grievance instructions and family notifications. Keep the official URL and the date you checked it. Recheck before travel or sending money or property."
+        }
+      ],
+      "gather": [
+        "State and custody system",
+        "Facility name to verify",
+        "Person's identification details if needed",
+        "Questions about access and contacts"
+      ],
+      "sourceIds": [
+        "state-corrections",
+        "local-government",
+        "bop-locator",
+        "bop-contact",
+        "bop-visits",
+        "bop-policy"
+      ],
+      "related": [
+        "family",
+        "rights",
+        "education"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    },
+    {
+      "id": "release",
+      "title": "Prepare for release one step at a time",
+      "summary": "Use six planning stages and adjust them to the time you have.",
+      "directoryTopic": "reentry",
+      "keywords": [
+        "release",
+        "12 months",
+        "6 months",
+        "90 days",
+        "30 days",
+        "7 days",
+        "first week",
+        "planning"
+      ],
+      "steps": [
+        {
+          "title": "Confirm the information you are planning around",
+          "body": "Ask the responsible release office for current information and any outstanding holds or conditions. An online locator or this planner is not an official release-date determination."
+        },
+        {
+          "title": "Choose a workable starting point",
+          "body": "Use the 12-month, 6-month, 90-day, 30-day and 7-day groups when time allows. If release is closer, begin with the immediate needs. These are preparation reminders, not legal deadlines or eligibility rules."
+        },
+        {
+          "title": "Prioritize the first night and care",
+          "body": "Confirm housing, transport, essential medication and a way to reach help. Ask about any supervision approval needed for the destination. Identify a backup if the first plan changes."
+        },
+        {
+          "title": "Prepare documents and appointments",
+          "body": "Gather identity and release papers, education records and any benefit or care applications. Ask each agency what can be done before release. Put official reporting instructions ahead of the planner's suggested timing."
+        },
+        {
+          "title": "Use the first week to reconnect",
+          "body": "Confirm appointments, housing stability, food, phone access and transport. Contact benefits offices and employment or education services as appropriate. Keep a paper copy of contacts and next steps."
+        },
+        {
+          "title": "Keep control of your plan",
+          "body": "The planner works without an account. Saving to this device is optional; avoid saving on shared devices. Export or print a copy if useful and clear stored details when you no longer need them."
+        }
+      ],
+      "gather": [
+        "Anticipated release information",
+        "Official reporting instructions",
+        "Housing and transport options",
+        "Documents and care-transition questions",
+        "Trusted contacts if you choose"
+      ],
+      "sourceIds": [
+        "ssa-prerelease",
+        "ssa",
+        "housing",
+        "jobs",
+        "money",
+        "bop-locator"
+      ],
+      "related": [
+        "reentry",
+        "family",
+        "education"
+      ],
+      "notice": "General information to help you prepare questions, not legal advice or a decision about your case. Confirm current instructions with the responsible court, facility or agency. This site does not send your question to staff or submit a request for you."
+    }
+  ],
+  "templates": [
+    {
+      "id": "records-request",
+      "title": "Request for agency records",
+      "description": "Describe existing records and ask about the correct request process.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [records custodian]\nSubject: Request for agency records\n\nI request access to these existing records: [specific records], covering [date range], associated with [case or subject, if needed].\n\nMy preferred format is [format]. Please provide a cost estimate before any chargeable work and tell me about any available fee waiver. If your office is not the custodian, please identify the appropriate office if known. If any material cannot be released, please identify the reason and any review process.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "foia"
+      ]
+    },
+    {
+      "id": "medical-records-request",
+      "title": "Request for my medical records",
+      "description": "For the patient or an appropriately authorized representative.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [health records office]\nSubject: Request for my medical records\n\nI am [the patient / an authorized representative]. I would like to request [records and dates] for [patient name and identifiers required by your office].\n\nPlease explain your access procedure, required identification or authorization, available formats and any permitted costs. [Describe relevant authorization without placing unnecessary medical details here.] Please explain any denial or restriction in writing and identify the available review process.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "medical-records"
+      ]
+    },
+    {
+      "id": "attorney-contact",
+      "title": "Request for legal-help intake",
+      "description": "Ask whether an office can consider the matter; this does not establish representation.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [attorney or legal-help intake office]\nSubject: Request for legal-help intake\n\nI am seeking help with [issue] in [court and jurisdiction], case [number]. The latest decision is [decision and date]. A date that may need urgent attention is [date and where it appears].\n\nMy brief factual summary is: [summary]. I am asking for [specific help]. Please let me know whether your office handles this type of matter and how to submit documents securely. I understand that this request does not mean your office represents me.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "legal-aid",
+        "innocence"
+      ]
+    },
+    {
+      "id": "sentencing-documents",
+      "title": "Request for sentencing documents",
+      "description": "Ask the actual court clerk for the identified court papers.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [clerk of the court that handled the case]\nSubject: Request for sentencing documents\n\nI am seeking [judgment / sentencing order / amended order / docket entry] in [case name and number], decided around [date].\n\nPlease tell me how to inspect or obtain these papers, whether a certified copy is needed for [stated purpose if known], and the available formats, costs or fee-assistance procedure. If a separate office keeps the transcript, please identify that office if known.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "court-structure",
+        "court-forms"
+      ]
+    },
+    {
+      "id": "education-request",
+      "title": "Request for education information",
+      "description": "Ask about current programs, access and enrollment.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [facility education office]\nSubject: Request for education information\n\nI am interested in [literacy / GED or equivalent / college / vocational study / library materials]. My prior education is [brief information].\n\nPlease tell me which programs are available, the entry requirements, waitlist process, needed records and how to request accessible materials or other accommodations. For college, please explain the approved program and financial-aid process. My questions are: [questions].\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "education",
+        "pell"
+      ]
+    },
+    {
+      "id": "visitation-review",
+      "title": "Request for visitation review information",
+      "description": "Ask how to seek review; use any required official appeal form.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [visitation office or designated review office]\nSubject: Request for visitation review information\n\nI received [denial or restriction] dated [date] for [visit or application reference]. I would like the written reason and the current procedure, required form and deadline for requesting review.\n\nThe information I would like considered is: [brief facts and supporting documents]. Please tell me how to submit it through the proper channel. This letter is a request for information and does not replace a required appeal.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "bop-visits",
+        "prisons"
+      ]
+    },
+    {
+      "id": "grievance-process",
+      "title": "Request for grievance procedure and assistance",
+      "description": "Ask for the official route before using a required grievance form.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [designated grievance office]\nSubject: Request for grievance procedure and assistance\n\nI need the current grievance policy, required form, routing instructions and review process for [brief concern]. I also need [language or disability access assistance, if applicable].\n\nI previously requested this on [date, if applicable] and received [response]. Please tell me how to proceed if the form is unavailable. This letter requests process information and is not a substitute for a required grievance or appeal.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "bop-policy",
+        "civil-rights",
+        "disability"
+      ]
+    },
+    {
+      "id": "clemency-inquiry",
+      "title": "Inquiry about clemency information",
+      "description": "Find the responsible authority and current official application.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [appropriate federal or state clemency office]\nSubject: Inquiry about clemency information\n\nI am seeking information about [pardon / commutation / other relief] for a conviction in [court and jurisdiction], case [number].\n\nPlease confirm whether your office handles this conviction and identify the current eligibility instructions, official application, required records and submission method. I am asking for process information, not submitting an application through this letter.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "clemency"
+      ]
+    },
+    {
+      "id": "reentry-support",
+      "title": "Request for reentry service information",
+      "description": "Ask about eligibility, availability and a next contact.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [reentry or community service provider]\nSubject: Request for reentry service information\n\nI expect to return to [community] around [anticipated date, if known]. I am looking for help with [housing / identification / work / education / benefits / transportation].\n\nPlease tell me whether your program serves this area, its eligibility requirements, current availability, required documents and whether intake can begin before release. My safe contact method is [contact]. Please do not assume a place or service has been reserved for me.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "housing",
+        "jobs",
+        "ssa-prerelease"
+      ]
+    },
+    {
+      "id": "records-follow-up",
+      "title": "Follow up on a records request",
+      "description": "Refer to an earlier request and identify what is still needed.",
+      "body": "[Date]\n[Your name and safe return contact]\n[Identification or case number, only if required]\n\nTo: [original records custodian]\nSubject: Follow up on a records request\n\nOn [date], I submitted a request by [method] for [records]. The reference number is [number, if any]. I received [response or records] on [date, if applicable].\n\nI am following up about [status / missing material / clarification]. Please identify the next step or the published review process. I have kept a copy of my original request.\n\nPlease let me know the appropriate next step and how I can receive your response.\n\nThank you,\n[Name]\n[Signature if required]\n\n[Remove all unused brackets before sending. Check the recipient's current instructions. This draft is not a court filing.]",
+      "sourceIds": [
+        "foia",
+        "medical-records"
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "id": "twelve-months",
+      "label": "12 months before release",
+      "monthsBefore": 12,
+      "tasks": [
+        {
+          "id": "twelve-months-1",
+          "text": "Ask the release office about current planning information and outstanding holds."
+        },
+        {
+          "id": "twelve-months-2",
+          "text": "Identify a possible destination and any supervision approval requirements."
+        },
+        {
+          "id": "twelve-months-3",
+          "text": "List identity documents, education records and health-care transition questions."
+        },
+        {
+          "id": "twelve-months-4",
+          "text": "Ask about education, work preparation and available reentry support."
+        }
+      ]
+    },
+    {
+      "id": "six-months",
+      "label": "6 months before release",
+      "monthsBefore": 6,
+      "tasks": [
+        {
+          "id": "six-months-1",
+          "text": "Ask housing and reentry providers about eligibility, intake and backup options."
+        },
+        {
+          "id": "six-months-2",
+          "text": "Check which identity documents can be obtained before release."
+        },
+        {
+          "id": "six-months-3",
+          "text": "Ask the appropriate benefits office about prerelease options."
+        },
+        {
+          "id": "six-months-4",
+          "text": "Begin a simple work and education history."
+        }
+      ]
+    },
+    {
+      "id": "ninety-days",
+      "label": "90 days before release",
+      "daysBefore": 90,
+      "tasks": [
+        {
+          "id": "ninety-days-1",
+          "text": "Recheck housing, transportation and any required destination approval."
+        },
+        {
+          "id": "ninety-days-2",
+          "text": "Ask the care team about follow-up, prescriptions and medical records."
+        },
+        {
+          "id": "ninety-days-3",
+          "text": "Confirm document requests and available program appointments."
+        },
+        {
+          "id": "ninety-days-4",
+          "text": "Write a first-week budget and a short contact list."
+        }
+      ]
+    },
+    {
+      "id": "thirty-days",
+      "label": "30 days before release",
+      "daysBefore": 30,
+      "tasks": [
+        {
+          "id": "thirty-days-1",
+          "text": "Confirm the anticipated release information with the responsible office."
+        },
+        {
+          "id": "thirty-days-2",
+          "text": "Review official reporting requirements and ask about anything unclear."
+        },
+        {
+          "id": "thirty-days-3",
+          "text": "Check housing intake, a backup place and the route from the facility."
+        },
+        {
+          "id": "thirty-days-4",
+          "text": "Organize release papers, identity documents and care information."
+        }
+      ]
+    },
+    {
+      "id": "seven-days",
+      "label": "7 days before release",
+      "daysBefore": 7,
+      "tasks": [
+        {
+          "id": "seven-days-1",
+          "text": "Confirm the ride, destination, arrival arrangements and backup contact."
+        },
+        {
+          "id": "seven-days-2",
+          "text": "Check the medication and care-transition plan with the care team."
+        },
+        {
+          "id": "seven-days-3",
+          "text": "Keep essential contacts and official instructions on paper."
+        },
+        {
+          "id": "seven-days-4",
+          "text": "Ask what property and documents will be provided at release."
+        }
+      ]
+    },
+    {
+      "id": "first-week",
+      "label": "First week after release",
+      "daysAfter": 7,
+      "tasks": [
+        {
+          "id": "first-week-1",
+          "text": "Follow the actual supervision reporting instructions and appointment dates."
+        },
+        {
+          "id": "first-week-2",
+          "text": "Confirm a place to stay, food, transport and essential care."
+        },
+        {
+          "id": "first-week-3",
+          "text": "Contact the relevant benefits offices about release and next steps."
+        },
+        {
+          "id": "first-week-4",
+          "text": "Begin the next employment, education or identity-document appointment."
+        }
+      ]
+    }
+  ],
+  "stateResources": {
+    "FL": {
+      "correctionsSourceId": "fl-corrections",
+      "recordsSourceId": "fl-records",
+      "courtsSourceId": "fl-courts"
+    },
+    "CA": { "correctionsSourceId": "ca-corrections" },
+    "TX": { "correctionsSourceId": "tx-corrections" },
+    "NY": { "correctionsSourceId": "ny-corrections" },
+    "GA": { "correctionsSourceId": "ga-corrections" },
+    "NC": { "correctionsSourceId": "nc-corrections" },
+    "OH": { "correctionsSourceId": "oh-corrections" },
+    "PA": { "correctionsSourceId": "pa-corrections" },
+    "IL": { "correctionsSourceId": "il-corrections" },
+    "MI": { "correctionsSourceId": "mi-corrections" },
+    "AZ": { "correctionsSourceId": "az-corrections" },
+    "WA": { "correctionsSourceId": "wa-corrections" },
+    "VA": { "correctionsSourceId": "va-corrections" },
+    "TN": { "correctionsSourceId": "tn-corrections" },
+    "HI": { "correctionsSourceId": "hi-corrections" }
+  },
+  "systemSources": {
+    "federal": [
+      "bop-locator",
+      "bop-policy",
+      "bop-contact"
+    ],
+    "state": [
+      "state-corrections"
+    ],
+    "local": [
+      "local-government",
+      "prisons"
+    ]
+  }
+}

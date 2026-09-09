@@ -1,6 +1,6 @@
 (() => {
   if (window.CCCAnalytics) return;
-  const excludedPath = /^\/(OWNER|LOGIN|JOIN|PROFILE|RECOVER|DEVELOPER|STUDIO|RESET|VERIFY|api)(?:[/.?-]|$)/i.test(location.pathname);
+  const excludedPath = /^\/(OWNER|LOGIN|JOIN|PROFILE|RECOVER|DEVELOPER|STUDIO|RESET|VERIFY|api|INSIDE-ASSISTANCE|HELP-FINDER|ASSISTANCE-GUIDE|ASSISTANCE-TEMPLATES|RELEASE-PLANNER|FACILITY-GUIDE)(?:[/.?-]|$)/i.test(location.pathname);
   const api = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://serviceapi-production-f574.up.railway.app';
   const key='cheesborough-anonymous-visitor', sessionKey='ccc-analytics-session';
   const uuid=()=>crypto.randomUUID();

@@ -1,0 +1,21 @@
+'use strict';
+const {test,before,after}=require('node:test'),assert=require('node:assert/strict'),http=require('node:http');
+const {createAssistanceService,createPacketPdf,wrap}=require('../lib/assistance-service');
+const {pagePath}=require('../lib/analytics-core');
+const data={version:1,checkedDate:'2026-09-09',states:[{code:'FL',name:'Florida'}],topics:[{id:'records',title:'Find records'}]};
+let server,base;
+const plan=(data,{topic,state,system})=>({title:topic,state,system});
+const text=plan=>`Find records\nState: ${plan.state}\nSystem: ${plan.system}\nGeneral information, not legal advice.\nhttps://www.uscourts.gov/`;
+before(async()=>{
+ const handler=createAssistanceService({data,buildPlan:plan,buildPacketText:text,user:async request=>request.headers['x-test-tier']?{tier:request.headers['x-test-tier']}:null,state:async account=>{if(account.tier==='unavailable')throw Error('Billing unavailable');return {tier:account.tier==='expired'?'free':account.tier}},rate:async()=>true,json:(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json'});res.end(JSON.stringify(body))}});
+ server=http.createServer((req,res)=>handler(req,res,new URL(req.url,'http://test')).catch(()=>{res.writeHead(503);res.end()}));await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));base=`http://127.0.0.1:${server.address().port}`;
+});
+after(async()=>new Promise(resolve=>server.close(resolve)));
+const request=(tier,query='topic=records&state=FL&system=state')=>fetch(base+'/api/assistance/packet?'+query,{headers:tier?{'x-test-tier':tier}:{}});
+test('public assistance readiness returns only release information',async()=>{const r=await fetch(base+'/api/assistance/status');assert.equal(r.status,200);const d=await r.json();assert.equal(d.topics,1);assert.equal(d.ready,true);assert.match(d.version,/^[a-f0-9]{16}$/)});
+test('PDF packets require sign-in and a paid tier',async()=>{assert.equal((await request()).status,401);for(const tier of ['free','expired'])assert.equal((await request(tier)).status,403)});
+test('all three membership levels receive an uncached PDF packet',async()=>{for(const tier of ['plugged_in','full_member','legacy_circle']){const r=await request(tier);assert.equal(r.status,200);assert.equal(r.headers.get('content-type'),'application/pdf');assert.equal(r.headers.get('cache-control'),'private, no-store');assert.match(await r.text(),/^%PDF-1.4/)}});
+test('billing failures cannot grant PDF downloads',async()=>assert.equal((await request('unavailable')).status,503));
+test('rejects private inputs, unknown topics, and invalid jurisdictions',async()=>{for(const query of ['topic=records&question=private','topic=unknown','topic=records&state=ZZ','topic=records&system=guess'])assert.equal((await request('plugged_in',query)).status,400)});
+test('all six assistance routes are excluded from visitor analytics',()=>{for(const name of ['INSIDE-ASSISTANCE','HELP-FINDER','ASSISTANCE-GUIDE','ASSISTANCE-TEMPLATES','RELEASE-PLANNER','FACILITY-GUIDE'])assert.equal(pagePath('/'+name+'.html?question=private'),null)});
+test('print packet is multipage and PDF literals are escaped',()=>{const pdf=createPacketPdf('A (quoted) \\ record\n'+Array(150).fill('A practical step.').join('\n')).toString();assert.match(pdf,/\/Count 4/);assert.match(pdf,/\\\(quoted\\\)/);assert.match(pdf,/startxref\n\d+\n%%EOF/);assert.ok(wrap('x'.repeat(200)).every(line=>line.length<=78))});
