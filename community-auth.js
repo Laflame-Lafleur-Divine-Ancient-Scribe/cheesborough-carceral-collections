@@ -53,7 +53,6 @@
 
   function ensureNavigationSlot() {
     if (document.body.classList.contains('community-auth-page') || document.body.dataset.communityNav === 'off') return;
-    if (document.querySelector('[data-community-account]')) return;
     let topbar = document.querySelector('.topbar, nav.nav, nav[aria-label="Primary navigation"], nav[aria-label="Main navigation"]');
     if (!topbar) {
       topbar = document.createElement('div');
@@ -64,6 +63,13 @@
     }
     const navigation = topbar.matches('nav') ? topbar : topbar.querySelector('nav');
     if (!navigation) return;
+    if (!navigation.querySelector('a[href="/MEMBERS.html"], a[href="MEMBERS.html"]')) {
+      const readingRoom = document.createElement('a');
+      readingRoom.href = '/MEMBERS.html';
+      readingRoom.textContent = 'Reading Room';
+      navigation.append(readingRoom);
+    }
+    if (document.querySelector('[data-community-account]')) return;
     if (!document.querySelector('#community-navigation-style')) {
       const style = document.createElement('style');
       style.id = 'community-navigation-style';

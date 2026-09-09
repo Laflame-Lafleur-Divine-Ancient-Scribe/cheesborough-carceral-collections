@@ -14,6 +14,8 @@ const { createOwnerService } = require('./lib/owner-service');
 const { createContactService } = require('./lib/contact-service');
 const { createEmailDelivery } = require('./lib/email-delivery');
 const { createBillingService } = require('./lib/billing-service');
+const { createMembershipService } = require('./lib/membership-service');
+const membershipService = createMembershipService({db:communityDb,ensureSchema:ensureCommunitySchema,user:request=>v2User(request,true),stripe:stripeApi,json:communityJson,parseBody:parseCommunityBody,rate:permitCommunityAction,isOwner,siteUrl:publicSiteUrl,mail:createEmailDelivery()});
 const billingService = createBillingService({db:communityDb,ensureSchema:ensureCommunitySchema,user:v2User,stripe:stripeApi,rate:permitCommunityAction,json:communityJson,siteUrl:publicSiteUrl});
 const { createAccountEmailService } = require('./lib/account-email-service');
 const accountEmailService = createAccountEmailService({db:communityDb,ensureSchema:ensureCommunitySchema,parseBody:parseCommunityBody,json:communityJson,rate:permitCommunityAction,rateEmail:permitResetEmail,mail:createEmailDelivery(),hashPassword:password=>argon2.hash(password,{type:argon2.argon2id}),siteUrl:publicSiteUrl});
@@ -616,7 +618,8 @@ async function handleStripeWebhook(request, response) {
         return communityJson(response, 400, { error: 'Invalid Stripe signature.' });
     }
 
-    if (event.type !== 'checkout.session.completed') return communityJson(response, 200, { received: true });
+    await membershipService.webhook(event);
+    if (event.type !== 'checkout.session.completed' || event.data?.object?.mode === 'subscription') return communityJson(response, 200, { received: true });
     const session = event.data?.object;
     if (!stripeId(session, 'cs_')) return communityJson(response, 400, { error: 'Invalid Checkout Session event.' });
     const db = communityDb();
@@ -682,6 +685,7 @@ async function handleStripeCheckout(request, response) {
     try { await ensureCommunitySchema(); } catch { return communityJson(response, 503, { error: 'Donations are temporarily unavailable.' }); }
     const body = await parseCommunityBody(request);
     const kind = String(body?.kind || '');
+    if (kind === 'monthly') return membershipService.checkout(request, response, body);
     const supporter = await checkoutSupporter(request);
     const siteUrl = publicSiteUrl();
     const common = {
@@ -902,6 +906,11 @@ function resolveFile(requestPath) {
     const decodedPath = decodeURIComponent(requestPath);
     const relativePath = decodedPath === '/' ? 'index.html' : decodedPath.slice(1);
     const filePath = path.resolve(rootDirectory, relativePath);
+
+    // Never expose server modules, credentials, database migrations, or private
+    // working files through the static server, including encoded/backslash paths.
+    const normalized = path.relative(rootDirectory, filePath).replaceAll('\\', '/');
+    if (normalized.split('/').some(part => part.startsWith('.')) || /^(?:lib|db|src|node_modules|scripts|tools|docs|private)(?:\/|$)/i.test(normalized) || /^(?:server\.js|package(?:-lock)?\.json|local\.settings\.json|Dockerfile|railway\.toml)$/i.test(normalized) || /\.(?:log|sql|env)$/i.test(normalized)) return null;
 
     if (filePath !== rootDirectory && !filePath.startsWith(`${rootDirectory}${path.sep}`)) {
         return null;
@@ -2027,7 +2036,7 @@ function parseCookies(request) {
     return cookies;
 }
 function v2SessionKey(sid) { const secret = process.env.SESSION_SECRET; return secret && /^[a-f0-9]{64}$/.test(sid || '') ? `community:session:${crypto.createHmac('sha256', secret).update(sid).digest('hex')}` : null; }
-async function v2User(request) { const key = v2SessionKey(parseCookies(request).cc_session); const db = communityDb(); if (!key || !db) return null; const session = await redisPipeline([['GET', key]]); if (!session?.[0]) return null; try { await ensureCommunitySchema(); const stored = JSON.parse(session[0]); const result = await db.query("SELECT id,display_name,email,role,status,avatar_updated_at,session_version FROM community_users WHERE id=$1 AND status='active'", [stored.id]); const user = result.rows[0]; if (!user || Number(stored.sessionVersion || 0) !== Number(user.session_version || 0)) return null; const matchesConfiguredOwner = configuredOwnerEmail() === String(user.email).toLowerCase(); const role = matchesConfiguredOwner ? 'owner' : user.role === 'owner' ? 'member' : user.role; return { id:user.id, displayName:user.display_name, role, avatarUpdatedAt:user.avatar_updated_at }; } catch { return null; } }
+async function v2User(request, strict = false) { const key = v2SessionKey(parseCookies(request).cc_session); const db = communityDb(); if (strict && key && !db) throw Error('Membership authentication unavailable'); if (!key || !db) return null; const session = await redisPipeline([['GET', key]]); if (!session?.[0]) return null; try { await ensureCommunitySchema(); const stored = JSON.parse(session[0]); const result = await db.query("SELECT id,display_name,email,role,status,avatar_updated_at,session_version FROM community_users WHERE id=$1 AND status='active'", [stored.id]); const user = result.rows[0]; if (!user || Number(stored.sessionVersion || 0) !== Number(user.session_version || 0)) return null; const matchesConfiguredOwner = configuredOwnerEmail() === String(user.email).toLowerCase(); const role = matchesConfiguredOwner ? 'owner' : user.role === 'owner' ? 'member' : user.role; return { id:user.id, displayName:user.display_name, role, avatarUpdatedAt:user.avatar_updated_at }; } catch (error) { if(strict) throw error; return null; } }
 const jailHousePoker = createPokerService({ db: communityDb, user: v2User, isOwner, ensureSchema: ensureCommunitySchema, parseBody: parseCommunityBody, json: communityJson, cors: applyApiCors, rate: v2Rate });
 const ownerService = createOwnerService({ db: communityDb, user: v2User, isOwner, ensureSchema: ensureCommunitySchema, parseBody: parseCommunityBody, json: communityJson, cors: applyApiCors, rate: v2Rate });
 function isOwner(user) { return Boolean(user && user.role === 'owner' && configuredOwnerEmail()); }
@@ -2181,6 +2190,12 @@ const server = http.createServer((request, response) => {
     if ((request.method==='GET' && requestUrl.pathname==='/api/billing/options') || (request.method==='POST' && requestUrl.pathname==='/api/billing/portal')) {
         applyApiCors(request,response);
         billingService(request,response,requestUrl.pathname).catch(()=>communityJson(response,503,{error:'Billing management is temporarily unavailable. Please email Payments@carceralcollections.org.'}));
+        return;
+    }
+
+    if (requestUrl.pathname === '/api/membership' || requestUrl.pathname.startsWith('/api/membership/')) {
+        applyApiCors(request,response);
+        membershipService.handle(request,response,requestUrl).catch(() => communityJson(response,503,{error:'We could not verify or update your membership. Please try again shortly.'}));
         return;
     }
 

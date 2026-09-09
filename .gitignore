@@ -6,6 +6,8 @@ Thumbs.db
 .env
 data/video-editions.generated.json
 .env.*
+_site/
+private/
 
 # Archive files
 *.zip

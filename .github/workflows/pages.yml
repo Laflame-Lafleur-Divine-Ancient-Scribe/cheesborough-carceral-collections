@@ -31,16 +31,29 @@ jobs:
       - name: Verify source PDFs contain document data
         run: node scripts/verify-source-pdfs.cjs
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify membership and account isolation
+        run: |
+          npm ci --omit=dev
+          npm install --prefix "$RUNNER_TEMP/membership-tests" --no-save @electric-sql/pglite@0.5.8
+          PGLITE_MODULE_PATH="$RUNNER_TEMP/membership-tests/node_modules/@electric-sql/pglite" node --test scripts/test-membership.cjs scripts/test-account-email.cjs scripts/test-owner-analytics.cjs
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Add lightweight public analytics collection
         run: node scripts/prepare-analytics.cjs
 
+      - name: Stage public files without backend or private sources
+        run: node scripts/prepare-public-site.cjs
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment

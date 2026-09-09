@@ -246,8 +246,8 @@
             <span class="tier-number" aria-hidden="true">01</span><p class="tier-price">$3 <span>/ month</span></p>
             <h3>Plugged In</h3>
             <p class="tier-lede">An easy way to help us get new documents while staying connected to selected reading.</p>
-            <ul class="tier-highlights" aria-label="Plugged In highlights"><li>Selected members-only articles and stories</li><li>Featured case files and rotating document updates</li><li>Regular updates on new records we find</li></ul>
-            <button class="cta tier-action" type="button" data-open-tier="plugged_in" aria-haspopup="dialog">Join Plugged In</button>
+            <ul class="tier-highlights" aria-label="Plugged In highlights"><li>Three member reading guides</li><li>Practical ways to read records and follow a case</li><li>Public original sources remain free</li></ul>
+            <button class="cta tier-action" type="button" data-open-tier="plugged_in" >Join Plugged In</button>
           </div>
           <figure class="tier-visual">
             <a href="01_Photos/GenericWeb/InmateReading.jpg" target="_blank" rel="noopener" aria-label="Open the full-size photograph of an incarcerated person reading in a new tab"><img src="01_Photos/GenericWeb/InmateReading.jpg" alt="Incarcerated person reading a book" width="800" height="533" loading="lazy" /></a>
@@ -259,8 +259,8 @@
             <span class="tier-number" aria-hidden="true">02</span><p class="tier-price">$6 <span>/ month</span></p>
             <h3>Full Member</h3>
             <p class="tier-lede">For readers who want to dive deeper into the history, records, and stories we share.</p>
-            <ul class="tier-highlights" aria-label="Full Member highlights"><li>Everything in $3 level, plus wider access to our collection</li><li>Longer articles, full document sets, photos, and research files</li><li>Early access to new online projects and exhibits</li></ul>
-            <button class="cta tier-action" type="button" data-open-tier="full_member" aria-haspopup="dialog">Become a Full Member</button>
+            <ul class="tier-highlights" aria-label="Full Member highlights"><li>Everything in Plugged In</li><li>Organized Rivers Love, Dozier, and American Siberia research collections</li><li>Context and source links for deeper reading</li></ul>
+            <button class="cta tier-action" type="button" data-open-tier="full_member" >Become a Full Member</button>
           </div>
           <figure class="tier-visual">
             <a href="01_Photos/GenericWeb/FullMemberUse.jpg" target="_blank" rel="noopener" aria-label="Open the full-size photograph of incarcerated men singing together in a new tab"><img src="01_Photos/GenericWeb/FullMemberUse.jpg" alt="Incarcerated men singing together with microphones and lyric sheets" width="2560" height="1961" loading="lazy" /></a>
@@ -272,8 +272,8 @@
             <span class="tier-number" aria-hidden="true">03</span><p class="tier-price">$9 <span>/ month</span></p>
             <h3>Legacy Circle</h3>
             <p class="tier-lede">Our strongest level of support for people who want full access and want to help save lost history.</p>
-            <ul class="tier-highlights" aria-label="Legacy Circle highlights"><li>Full access to our entire library, rare papers, and special collections</li><li>Complete case files and deep-dive research reports</li><li>Early looks at major new releases</li></ul>
-            <button class="cta tier-action" type="button" data-open-tier="legacy_circle" aria-haspopup="dialog">Enter Legacy Circle</button>
+            <ul class="tier-highlights" aria-label="Legacy Circle highlights"><li>Every reading guide and case research collection</li><li>Your private cloud research notebook</li><li>Download and keep your own saved notes</li></ul>
+            <button class="cta tier-action" type="button" data-open-tier="legacy_circle" >Enter Legacy Circle</button>
           </div>
           <figure class="tier-visual">
             <a href="01_Photos/GenericWeb/LegacyCircle.jpg" target="_blank" rel="noopener" aria-label="Open the full-size photograph of incarcerated people holding hands in a circle in a new tab"><img src="01_Photos/GenericWeb/LegacyCircle.jpg" alt="Incarcerated people holding hands in a circle" width="749" height="500" loading="lazy" /></a>
@@ -340,7 +340,7 @@
     };
 
     document.querySelectorAll('[data-open-support]').forEach((button) => button.addEventListener('click', () => openDialog()));
-    document.querySelectorAll('[data-open-tier]').forEach((button) => button.addEventListener('click', () => openDialog(button.dataset.openTier)));
+    document.querySelectorAll('[data-open-tier]').forEach((button) => button.addEventListener('click', () => location.assign('MEMBERS.html?tier=' + encodeURIComponent(button.dataset.openTier))));
     document.querySelectorAll('[data-support-mode]').forEach((button) => button.addEventListener('click', () => setMode(button.dataset.supportMode)));
     const updatePresets = () => document.querySelectorAll('[data-amount]').forEach((button) => button.setAttribute('aria-pressed', String(Number(button.dataset.amount) === Number(amount.value))));
     document.querySelectorAll('[data-amount]').forEach((button) => button.addEventListener('click', () => { amount.value = button.dataset.amount; updatePresets(); }));
@@ -349,14 +349,17 @@
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const payload = mode === 'one_time' ? { kind: 'one_time', amount: amount.value } : { kind: 'monthly', tier: tier.value };
+      if (mode === 'monthly') { location.assign('MEMBERS.html?tier=' + encodeURIComponent(tier.value)); return; }
+      const payload = { kind: 'one_time', amount: amount.value };
       checkoutButton.disabled = true;
       status.textContent = 'Opening secure checkout…';
       try {
         const response = await fetch(`${apiBase}/api/donations/checkout`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         const result = await response.json();
         if (!response.ok || !result.url) throw new Error(result.error || 'Checkout could not be started.');
-        location.assign(result.url);
+        const destination = new URL(result.url);
+        if (destination.protocol !== 'https:' || destination.hostname !== 'checkout.stripe.com') throw new Error('The checkout link could not be verified.');
+        location.assign(destination.href);
       } catch (error) {
         status.textContent = error.message || 'Checkout is temporarily unavailable. Please try again.';
         checkoutButton.disabled = false;
