@@ -1,18 +1,18 @@
-    CREATE EXTENSION IF NOT EXISTS pgcrypto;
-    CREATE TABLE IF NOT EXISTS community_users (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), first_name varchar(60), last_name varchar(60), display_name varchar(39) NOT NULL, email varchar(254) NOT NULL UNIQUE, phone_number varchar(30), avatar_data bytea, avatar_mime_type varchar(30), avatar_updated_at timestamptz, password_hash text NOT NULL, role varchar(16) NOT NULL DEFAULT 'member', status varchar(16) NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now());
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS first_name varchar(60);
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_name varchar(60);
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS phone_number varchar(30);
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS avatar_data bytea;
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS avatar_mime_type varchar(30);
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS avatar_updated_at timestamptz;
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS username varchar(39);
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_about varchar(750);
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_now varchar(250);
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_interests jsonb NOT NULL DEFAULT '[]'::jsonb;
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_favorites jsonb NOT NULL DEFAULT '[]'::jsonb;
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_location varchar(50);
-    ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_links jsonb NOT NULL DEFAULT '{}'::jsonb;
+﻿CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE TABLE IF NOT EXISTS community_users (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), first_name varchar(60), last_name varchar(60), display_name varchar(39) NOT NULL, email varchar(254) NOT NULL UNIQUE, phone_number varchar(30), avatar_data bytea, avatar_mime_type varchar(30), avatar_updated_at timestamptz, password_hash text NOT NULL, role varchar(16) NOT NULL DEFAULT 'member', status varchar(16) NOT NULL DEFAULT 'active', created_at timestamptz NOT NULL DEFAULT now());
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS first_name varchar(60);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS last_name varchar(60);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS phone_number varchar(30);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS avatar_data bytea;
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS avatar_mime_type varchar(30);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS avatar_updated_at timestamptz;
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS username varchar(39);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_about varchar(750);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_now varchar(250);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_interests jsonb NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_favorites jsonb NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_location varchar(50);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS profile_links jsonb NOT NULL DEFAULT '{}'::jsonb;
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS location_privacy varchar(16) NOT NULL DEFAULT 'private';
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS social_privacy varchar(16) NOT NULL DEFAULT 'private';
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS activity_privacy varchar(16) NOT NULL DEFAULT 'private';
@@ -22,11 +22,39 @@ ALTER TABLE community_users ADD COLUMN IF NOT EXISTS email_verified_at timestamp
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS suspension_reason varchar(500);
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS suspension_expires_at timestamptz;
 ALTER TABLE community_users ADD COLUMN IF NOT EXISTS admin_notes varchar(2000);
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS stripe_customer_id varchar(255);
 ALTER TABLE community_users DROP CONSTRAINT IF EXISTS community_users_role_check;
 UPDATE community_users SET role='member' WHERE role='user';
 ALTER TABLE community_users ADD CONSTRAINT community_users_role_check CHECK (role IN ('member','moderator','admin','owner'));
 CREATE UNIQUE INDEX IF NOT EXISTS community_users_display_name_unique_index ON community_users (lower(display_name));
 CREATE UNIQUE INDEX IF NOT EXISTS community_users_username_unique_index ON community_users (lower(username)) WHERE username IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS community_users_stripe_customer_unique_index ON community_users (stripe_customer_id) WHERE stripe_customer_id IS NOT NULL;
+CREATE TABLE IF NOT EXISTS stripe_catalog_resources (
+    resource_key varchar(80) PRIMARY KEY,
+    stripe_product_id varchar(255) NOT NULL UNIQUE,
+    stripe_price_id varchar(255),
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS stripe_checkout_records (
+    checkout_session_id varchar(255) PRIMARY KEY,
+    stripe_event_id varchar(255) UNIQUE,
+    community_user_id uuid REFERENCES community_users(id) ON DELETE SET NULL,
+    stripe_customer_id varchar(255),
+    stripe_payment_intent_id varchar(255),
+    stripe_subscription_id varchar(255),
+    support_kind varchar(24) NOT NULL CHECK (support_kind IN ('one_time','monthly')),
+    support_tier varchar(32),
+    amount_cents integer,
+    currency varchar(3) NOT NULL DEFAULT 'usd',
+    payment_status varchar(32) NOT NULL DEFAULT 'created',
+    subscription_status varchar(32),
+    checkout_completed_at timestamptz,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS stripe_checkout_records_user_time_index ON stripe_checkout_records(community_user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS stripe_checkout_records_customer_index ON stripe_checkout_records(stripe_customer_id);
 CREATE TABLE IF NOT EXISTS community_comments (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), content_type varchar(16) NOT NULL CHECK (content_type IN ('video','article')), content_id varchar(151) NOT NULL, author_id uuid NOT NULL REFERENCES community_users(id), body varchar(1200) NOT NULL, status varchar(16) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','published','rejected')), created_at timestamptz NOT NULL DEFAULT now());
 CREATE INDEX IF NOT EXISTS community_comments_public_index ON community_comments(content_type,content_id,created_at) WHERE status='published';
 CREATE TABLE IF NOT EXISTS community_bookmarks (user_id uuid REFERENCES community_users(id), content_type varchar(16) NOT NULL, content_id varchar(151) NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(user_id,content_type,content_id));
@@ -36,3 +64,72 @@ CREATE TABLE IF NOT EXISTS community_audit_log (id bigserial PRIMARY KEY, user_i
 CREATE TABLE IF NOT EXISTS community_moderation_actions (id bigserial PRIMARY KEY, actor_id uuid NOT NULL REFERENCES community_users(id), target_user_id uuid REFERENCES community_users(id), comment_id uuid REFERENCES community_comments(id), action varchar(48) NOT NULL, reason varchar(500), previous_state jsonb, new_state jsonb, created_at timestamptz NOT NULL DEFAULT now());
 CREATE INDEX IF NOT EXISTS community_audit_log_event_time_index ON community_audit_log(event_type,created_at DESC);
 CREATE INDEX IF NOT EXISTS community_comments_status_time_index ON community_comments(status,created_at DESC);
+-- Jail House Poker uses fictional, non-redeemable game chips only. These
+-- records are deliberately separate from community accounts and contain no
+-- payment, withdrawal, or prize information.
+CREATE TABLE IF NOT EXISTS game_wallets (
+    user_id uuid PRIMARY KEY REFERENCES community_users(id) ON DELETE CASCADE,
+    balance bigint NOT NULL DEFAULT 10000 CHECK (balance >= 0),
+    issued_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+-- Issue the initial fictional balance to every existing active community
+-- member exactly once. New members receive the same amount when their wallet
+-- record is first created.
+INSERT INTO game_wallets (user_id,balance)
+SELECT id,10000 FROM community_users WHERE status='active'
+ON CONFLICT (user_id) DO NOTHING;
+CREATE TABLE IF NOT EXISTS game_wallet_ledger (
+    id bigserial PRIMARY KEY,
+    user_id uuid NOT NULL REFERENCES community_users(id) ON DELETE CASCADE,
+    game_key varchar(48) NOT NULL,
+    amount bigint NOT NULL,
+    balance_after bigint NOT NULL CHECK (balance_after >= 0),
+    reason varchar(64) NOT NULL,
+    reference_id varchar(80),
+    created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS game_wallet_ledger_user_time_index ON game_wallet_ledger(user_id,created_at DESC);
+ALTER TABLE game_wallets ALTER COLUMN balance TYPE bigint USING balance::bigint;
+ALTER TABLE game_wallet_ledger ALTER COLUMN amount TYPE bigint USING amount::bigint;
+ALTER TABLE game_wallet_ledger ALTER COLUMN balance_after TYPE bigint USING balance_after::bigint;
+-- The Atum Account is a protected, site-owned fictional-chip ledger. It is
+-- not tied to a person, payment method, withdrawal, or cash value.
+CREATE TABLE IF NOT EXISTS game_house_wallets (
+    account_key varchar(48) PRIMARY KEY,
+    display_name varchar(80) NOT NULL,
+    balance integer NOT NULL DEFAULT 0 CHECK (balance >= 0),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+INSERT INTO game_house_wallets (account_key,display_name,balance)
+VALUES ('atum','Atum Account',0)
+ON CONFLICT (account_key) DO NOTHING;
+CREATE TABLE IF NOT EXISTS game_house_ledger (
+    id bigserial PRIMARY KEY,
+    account_key varchar(48) NOT NULL REFERENCES game_house_wallets(account_key),
+    game_key varchar(48) NOT NULL,
+    amount integer NOT NULL CHECK (amount >= 0),
+    reason varchar(64) NOT NULL,
+    reference_id varchar(80),
+    created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS game_counters (
+    counter_key varchar(80) PRIMARY KEY,
+    value bigint NOT NULL DEFAULT 0 CHECK (value >= 0),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+INSERT INTO game_counters (counter_key,value)
+VALUES ('jail-house-poker:completed-pots',0)
+ON CONFLICT (counter_key) DO NOTHING;
+-- Poker lobby presence is refreshed while a signed-in player has the game
+-- open. It expires automatically, so stale tablets never remain online.
+CREATE TABLE IF NOT EXISTS game_presence (
+    game_key varchar(48) NOT NULL,
+    user_id uuid NOT NULL REFERENCES community_users(id) ON DELETE CASCADE,
+    last_seen timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (game_key,user_id)
+);
+CREATE INDEX IF NOT EXISTS game_presence_game_seen_index ON game_presence(game_key,last_seen DESC);
+
+ALTER TABLE community_users ADD COLUMN IF NOT EXISTS session_version integer NOT NULL DEFAULT 0;
+CREATE UNIQUE INDEX IF NOT EXISTS community_reset_token_hash_idx ON community_password_reset_tokens(token_hash);
