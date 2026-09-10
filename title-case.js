@@ -177,9 +177,9 @@
 
   const normalizeNavigationLabel = (value) => value.split(/(\s+)/).map(normalizeToken).join("");
 
-  const titleCaseSelectors = "h1, h2, h3, h4, h5, nav a, button, .archive-link, .explore-card a, .news-more-link, .prison-hero-link, .topic-card a, .source";
+  const titleCaseSelectors = "h1, h2, h3, h4, h5, nav:not(.assistance-paths) a:not(.assistance-path), button, .archive-link, .explore-card a, .news-more-link, .prison-hero-link, .topic-card a, .source";
   document.querySelectorAll(titleCaseSelectors).forEach((element) => {
-    if (element.dataset.titleCaseApplied === "true") return;
+    if (element.dataset.titleCaseApplied === "true" || element.closest('[data-title-case-applied="true"], [data-no-title-case], .assistance-paths, .assistance-path')) return;
     const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
     const textNodes = [];
     let node;
@@ -188,9 +188,5 @@
       textNode.nodeValue = normalizeNavigationLabel(textNode.nodeValue);
     });
     element.dataset.titleCaseApplied = "true";
-  });
-
-  document.querySelectorAll("nav a").forEach((link) => {
-    link.textContent = normalizeNavigationLabel(link.textContent.trim());
   });
 })();
