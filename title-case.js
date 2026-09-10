@@ -179,7 +179,7 @@
 
   const titleCaseSelectors = "h1, h2, h3, h4, h5, nav:not(.assistance-paths) a:not(.assistance-path), button, .archive-link, .explore-card a, .news-more-link, .prison-hero-link, .topic-card a, .source";
   document.querySelectorAll(titleCaseSelectors).forEach((element) => {
-    if (element.dataset.titleCaseApplied === "true" || element.closest('[data-title-case-applied="true"], [data-no-title-case], .assistance-paths, .assistance-path')) return;
+    if (element.dataset.titleCaseApplied === "true" || element.closest('[data-title-case-applied="true"], [data-no-title-case], .assistance-paths, .assistance-path, .archive-loader, #archive-loading-screen')) return;
     const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
     const textNodes = [];
     let node;
