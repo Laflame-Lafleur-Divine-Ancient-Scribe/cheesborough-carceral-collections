@@ -1,0 +1,387 @@
+/* ==========================================================================
+   Cheesborough Carceral Collections - Responsive Navigation & Mobile System
+   ========================================================================== */
+
+:root {
+  --ccc-navy: #102c4c;
+  --ccc-deep: #091e36;
+  --ccc-gold: #c29b53;
+  --ccc-gold-light: #f1d597;
+  --ccc-paper: #f5f2eb;
+  --ccc-line: rgba(194, 155, 83, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   1. Global Mobile Viewport & Page Sizing Safeguards
+   -------------------------------------------------------------------------- */
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, svg, video, canvas, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent unwanted iOS Safari auto-zoom on form focus */
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Smooth momentum scrolling for touch devices */
+.table-wrap, .shelf-display, .photo-scroll, .scroll-x {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* --------------------------------------------------------------------------
+   2. Desktop Navigation Display (Keep existing bar intact)
+   -------------------------------------------------------------------------- */
+@media (min-width: 769px) {
+  .ccc-mobile-nav-bar,
+  .ccc-quick-scroll-track,
+  .ccc-mobile-drawer,
+  .ccc-mobile-backdrop {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Mobile Navigation System (iPhone & Phone screens <= 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Hide the old multi-row wrapped link lists on mobile */
+  .topbar:not(.ccc-preserve),
+  .pw-header nav {
+    display: none !important;
+  }
+
+  /* Compact Mobile Top Header Bar */
+  .ccc-mobile-nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--ccc-deep);
+    border-bottom: 2px solid var(--ccc-gold);
+    padding: 0.6rem 0.9rem;
+    position: relative;
+    z-index: 1000;
+    min-height: 50px;
+    width: 100%;
+  }
+
+  .ccc-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    color: #fff;
+    min-width: 0;
+  }
+
+  .ccc-brand-crest {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ccc-gold);
+    color: var(--ccc-deep);
+    font-family: Georgia, serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    width: 28px;
+    height: 28px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .ccc-brand-text {
+    font-family: "Source Sans 3", -apple-system, sans-serif;
+    font-size: 0.84rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Hamburger Toggle Button */
+  .ccc-mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: transparent;
+    border: 1px solid var(--ccc-gold);
+    color: var(--ccc-gold-light);
+    padding: 0.35rem 0.65rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    min-height: 38px;
+    touch-action: manipulation;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .ccc-mobile-toggle:hover,
+  .ccc-mobile-toggle:active {
+    background: var(--ccc-gold);
+    color: var(--ccc-deep);
+  }
+
+  .ccc-toggle-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 16px;
+    height: 12px;
+  }
+
+  .ccc-toggle-icon span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: currentColor;
+    border-radius: 1px;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .ccc-mobile-toggle[aria-expanded="true"] .ccc-toggle-icon span:nth-child(1) {
+    transform: translateY(5px) rotate(45deg);
+  }
+  .ccc-mobile-toggle[aria-expanded="true"] .ccc-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+  .ccc-mobile-toggle[aria-expanded="true"] .ccc-toggle-icon span:nth-child(3) {
+    transform: translateY(-5px) rotate(-45deg);
+  }
+
+  /* Horizontal Quick-Scroll Pill Strip */
+  .ccc-quick-scroll-track {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #061527;
+    border-bottom: 1px solid rgba(194, 155, 83, 0.4);
+    padding: 0.45rem 0.65rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    white-space: nowrap;
+    position: relative;
+    z-index: 999;
+  }
+
+  .ccc-quick-scroll-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ccc-quick-pill {
+    display: inline-flex;
+    align-items: center;
+    color: #dbe4ee;
+    text-decoration: none;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    flex-shrink: 0;
+    min-height: 28px;
+    transition: all 0.15s ease;
+  }
+
+  .ccc-quick-pill:hover {
+    color: #fff;
+    background: rgba(194, 155, 83, 0.25);
+    border-color: var(--ccc-gold);
+  }
+
+  .ccc-quick-pill.active,
+  .ccc-quick-pill[aria-current="page"] {
+    background: var(--ccc-gold);
+    color: var(--ccc-deep);
+    border-color: var(--ccc-gold);
+    font-weight: 700;
+  }
+
+  /* Full Mobile Navigation Drawer */
+  .ccc-mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(4, 12, 22, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+
+  .ccc-mobile-drawer.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ccc-drawer-inner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(88vw, 360px);
+    height: 100%;
+    background: var(--ccc-deep);
+    border-left: 3px solid var(--ccc-gold);
+    box-shadow: -6px 0 24px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ccc-mobile-drawer.is-open .ccc-drawer-inner {
+    transform: translateX(0);
+  }
+
+  .ccc-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--ccc-line);
+    background: #061527;
+  }
+
+  .ccc-drawer-title {
+    font-family: Georgia, serif;
+    font-size: 1.05rem;
+    color: var(--ccc-gold-light);
+    letter-spacing: 0.02em;
+  }
+
+  .ccc-drawer-close {
+    background: none;
+    border: 1px solid var(--ccc-line);
+    color: #fff;
+    font-size: 1.6rem;
+    line-height: 1;
+    width: 38px;
+    height: 38px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .ccc-drawer-close:hover {
+    background: var(--ccc-gold);
+    color: var(--ccc-deep);
+  }
+
+  .ccc-drawer-links {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0;
+    flex: 1 1 auto;
+  }
+
+  .ccc-drawer-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    min-height: 48px;
+    color: #f1ece1;
+    text-decoration: none;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .ccc-drawer-link:hover {
+    background: rgba(194, 155, 83, 0.15);
+    color: var(--ccc-gold-light);
+  }
+
+  .ccc-drawer-link.active,
+  .ccc-drawer-link[aria-current="page"] {
+    background: rgba(194, 155, 83, 0.22);
+    color: var(--ccc-gold-light);
+    border-left: 4px solid var(--ccc-gold);
+    font-weight: 700;
+  }
+
+  .ccc-drawer-link .ccc-link-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ccc-gold);
+    border: 1px solid rgba(194, 155, 83, 0.5);
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+  }
+
+  .ccc-drawer-footer {
+    padding: 1.1rem 1.25rem;
+    border-top: 1px solid var(--ccc-line);
+    background: #061527;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .ccc-drawer-footer a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.86rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    min-height: 44px;
+  }
+
+  .ccc-footer-reading {
+    background: var(--ccc-gold);
+    color: var(--ccc-deep);
+  }
+
+  .ccc-footer-signin {
+    background: transparent;
+    border: 1px solid var(--ccc-gold);
+    color: var(--ccc-gold-light);
+  }
+}
+
