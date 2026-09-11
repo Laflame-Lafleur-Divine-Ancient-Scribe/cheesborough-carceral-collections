@@ -54,7 +54,19 @@
       .skip-link { position: fixed; top: .5rem; left: .5rem; transform: translateY(-180%); padding: 1rem; background: white; z-index: 100; }
       .skip-link:focus { transform: none; }
       a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
-      header { padding: 0 1.3rem 3.6rem; background: var(--deep); color: var(--paper); border-bottom: 8px solid var(--gold); }
+      header {
+        position: relative;
+        padding: 0 1.3rem 3.6rem;
+        background-color: var(--deep);
+        background-image:
+          radial-gradient(ellipse at 50% 25%, rgba(9, 30, 54, 0.78) 0%, rgba(5, 14, 26, 0.94) 85%),
+          url("01_Photos/ShareImages/behind%20the%20gate.png");
+        background-position: center 35%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        color: var(--paper);
+        border-bottom: 8px solid var(--gold);
+      }
       .header-inner { max-width: 1180px; }
       .topbar { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem 0; background: var(--gold); color: var(--deep); padding: 1rem; margin-bottom: 3.5rem; }
       .topbar a { font-size: .82rem; font-weight: 700; }
@@ -119,15 +131,16 @@
     <header>
       <div class="header-inner">
         <nav class="topbar" aria-label="Primary navigation">
-          <a href="ABOUT.html">ABOUT</a>
+          <a href="index.html">HOME</a>
           <a href="SEARCH.html">SEARCH</a>
           <a class="active" href="COLLECTIONS.html">COLLECTIONS</a>
-          <a href="RESEARCH.html">Paperwork</a>
+          <a href="RESEARCH.html">PAPERWORK</a>
           <a href="LAW-LIBRARY.html">LAW LIBRARY</a>
           <a href="NEWS.html">NEWS</a>
-          <a href="CONTACT.html">CONTACT</a>
-          <a href="index.html">HOME</a>
+          <a href="EVIDENCE-INDEX.html">EVIDENCE INDEX</a>
+          <a href="ABOUT.html">ABOUT</a>
           <a href="DONATE.html">DONATE</a>
+          <a href="CONTACT.html">CONTACT</a>
         </nav>
         <div class="eyebrow">The collections / Free public access</div>
         <div class="title">

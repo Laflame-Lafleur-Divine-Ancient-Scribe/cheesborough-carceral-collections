@@ -112,11 +112,11 @@
     body { background: var(--paper); }
     .skip-link { position: fixed; top: .5rem; left: .5rem; padding: .8rem; background: white; z-index: 100; transform: translateY(-180%); }
     .skip-link:focus { transform: none; }
-    .topbar { background: var(--gold); color: var(--deep); display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem 0; padding: 1rem; }
-    .topbar a { font-weight: 700; font-size: .83rem; }
-    .topbar a + a { border-color: #725c37; }
-    .topbar .active { text-decoration: underline; text-underline-offset: 5px; }
-    .hero { position: relative; border-bottom: 9px solid var(--gold); padding: clamp(3rem, 6vw, 6rem) max(1.3rem, calc((100% - 1180px) / 2)); background: radial-gradient(ellipse at 100% 0%, #173955 0, transparent 65%), var(--deep); }
+    .topbar { background: var(--gold); color: var(--deep); display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem 0; padding: .85rem 1rem; }
+    .topbar a { color: var(--deep); font-weight: 700; font-size: .82rem; letter-spacing: .04em; padding: 0 .75rem; text-decoration: none; }
+    .topbar a + a { border-left: 1px solid #725c37; }
+    .topbar .active { text-decoration: underline; text-underline-offset: 4px; }
+    .hero { position: relative; border-bottom: 9px solid var(--gold); padding: clamp(3rem, 6vw, 6rem) max(1.3rem, calc((100% - 1180px) / 2)); background-color: var(--deep); background-image: radial-gradient(ellipse at 75% 25%, rgba(16, 44, 76, 0.8) 0%, rgba(9, 30, 54, 0.95) 80%), url("01_Photos/ShareImages/Donate_Share_Image.png"); background-position: center right; background-size: cover; background-repeat: no-repeat; }
     .hero-layout { grid-template-columns: minmax(0, 1.2fr) minmax(0, .9fr); gap: clamp(2rem, 5vw, 5rem); }
     .eyebrow { font-size: .8rem; letter-spacing: .11em; line-height: 1.7; text-transform: none; }
     h1, .content h2, .support-dialog h2, .tier-card h3 { font-family: "DM Serif Display", "Libre Baskerville", serif; font-weight: 400; }
@@ -190,9 +190,7 @@
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <nav class="topbar" aria-label="Primary navigation">
-    <a href="index.html">HOME</a><a href="ABOUT.html">ABOUT</a><a href="SEARCH.html">SEARCH</a><a href="COLLECTIONS.html">COLLECTIONS</a><a href="RESEARCH.html">Paperwork</a><a href="LAW-LIBRARY.html">LAW LIBRARY</a><a href="NEWS.html">NEWS</a><a href="CONTACT.html">CONTACT</a><a class="active" href="DONATE.html">DONATE</a>
-  </nav>
+  <nav class="topbar" aria-label="Primary navigation"><a href="index.html">HOME</a><a href="SEARCH.html">SEARCH</a><a href="COLLECTIONS.html">COLLECTIONS</a><a href="RESEARCH.html">PAPERWORK</a><a href="LAW-LIBRARY.html">LAW LIBRARY</a><a href="NEWS.html">NEWS</a><a href="EVIDENCE-INDEX.html">EVIDENCE INDEX</a><a href="ABOUT.html">ABOUT</a><a class="active" href="DONATE.html" aria-current="page">DONATE</a><a href="CONTACT.html">CONTACT</a></nav>
   <header class="hero">
     <div class="hero-layout">
     <div class="hero-copy">

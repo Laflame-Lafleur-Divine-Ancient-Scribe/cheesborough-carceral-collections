@@ -1,7 +1,17 @@
 /* Homepage-only solid publication palette. Keep after the page and feature styles. */
 .homepage-heroes { --hp-navy:#102b40; --hp-cream:#fff6e8; --hp-gold:#e0bc73; --hp-burgundy:#54232d; --hp-forest:#234a3d; --hp-rust:#ac6847; }
 /* Major bands, in reading order: navy, brass, cream, forest, cream, navy, brass, cream, burgundy, forest. */
-.homepage-heroes .hero { background:var(--hp-navy); background-image:none; }
+.homepage-heroes .hero {
+  position: relative;
+  background-color: #071626;
+  background-image:
+    radial-gradient(ellipse at 50% 25%, rgba(16, 43, 64, 0.74) 0%, rgba(5, 14, 26, 0.93) 85%),
+    url("01_Photos/ShareImages/carceral-history-archival-records-sketch.png");
+  background-position: center 25%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-bottom: 5px solid var(--hp-gold);
+}
 .homepage-heroes .courtroom { background:var(--hp-gold); border-top-color:var(--hp-burgundy); }
 .homepage-heroes .courtroom :is(.courtroom-kicker,.courtroom-title,.courtroom-deck,.courtroom-note) { color:var(--hp-navy); }
 .homepage-heroes .publication { background:var(--hp-cream); }
