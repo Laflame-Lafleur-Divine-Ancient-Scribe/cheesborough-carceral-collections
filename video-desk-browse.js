@@ -1,10 +1,11 @@
-﻿(() => {
+(() => {
   if (document.body.dataset.videoPage !== 'browse') return;
   window.CCCVideoBrowse = true;
   document.addEventListener('error', event => { const image = event.target; if (image.tagName === 'IMG' && image.closest('#featured-film, #video-grid') && !image.dataset.fallback) { image.dataset.fallback = 'true'; image.src = '01_Photos/ShareImages/CrimeNewsTV.png'; } }, true);
   const escape = value => String(value || '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const thumbnail = film => film.thumbnail || `https://i.ytimg.com/vi/${encodeURIComponent(film.embed)}/hqdefault.jpg`;
   const videoMeta = film => { const date = film.publishedAt && new Date(film.publishedAt); const upload = date && !Number.isNaN(date.getTime()) ? 'Uploaded ' + date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}) : ''; const match = String(film.duration || '').match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/); const duration = match ? [match[1] && match[1]+'h',match[2] && match[2]+'m',match[3] && match[3]+'s'].filter(Boolean).join(' ') : ''; return [upload,duration].filter(Boolean).join(' / '); };
+  const formatDuration = film => { const match = String(film.duration || '').match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/); if (!match) return ''; const h = match[1] ? Number(match[1]) : 0; const m = match[2] ? Number(match[2]) : 0; const s = match[3] ? Number(match[3]) : 0; if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; return `${m}:${String(s).padStart(2,'0')}`; };
   const href = film => `VIDEO.html?id=${encodeURIComponent(film.id)}`;
   const editions = typeof CCC_DATED_VIDEO_EDITIONS !== 'undefined' ? CCC_DATED_VIDEO_EDITIONS : [];
   const recent = editions.slice(0,4);
@@ -27,13 +28,20 @@
   const button = (label,value,count) => `<button type="button" data-edition="${escape(value)}" aria-pressed="${edition === value}"><span>${escape(label)}</span><small>${count} videos</small></button>`;
   document.querySelector('#edition-selector').innerHTML = recent.map(item => button(item.date,item.date,item.videos.length)).join('') + button('Earlier editions','archive',editions.slice(4).reduce((sum,item) => sum+item.videos.length,archive.length)) + button('Full desk','all',CCC_VIDEO_CATALOG.length);
   const groups = () => edition === 'all' ? [...editions,{date:'Archive selection',videos:archive}] : edition === 'archive' ? [...editions.slice(4),{date:'Archive selection',videos:archive}] : editions.filter(item => item.date === edition);
-  const card = film => `<article class="video-card"><a href="${href(film)}"><div class="video-thumb"><img src="${escape(thumbnail(film))}" alt="${escape(film.title)} video thumbnail" loading="lazy"><span class="play-mini" aria-hidden="true">&#9654; Watch</span></div><div class="card-copy"><p class="eyebrow">${escape(film.category)}</p><h3>${escape(film.title)}</h3><p class="publisher">${escape(film.channelTitle || 'Public video')}</p><p class="video-metadata">${escape(videoMeta(film))}</p></div></a></article>`;
+  const card = film => {
+    const dur = formatDuration(film);
+    const durChip = dur ? `<span class="duration-chip">${escape(dur)}</span>` : '';
+    const catChip = film.category ? `<span class="thumb-badge">${escape(film.category)}</span>` : '';
+    return `<article class="video-card"><a href="${href(film)}"><div class="video-thumb"><img src="${escape(thumbnail(film))}" alt="${escape(film.title)} video thumbnail" loading="lazy">${catChip}${durChip}<span class="play-mini" aria-hidden="true"><span class="play-icon">&#9654;</span><span>Watch</span></span></div><div class="card-copy"><p class="eyebrow">${escape(film.category)}</p><h3>${escape(film.title)}</h3><p class="publisher">${escape(film.channelTitle || 'Public video')}</p><p class="video-metadata">${escape(videoMeta(film))}</p></div></a></article>`;
+  };
   function featured() {
     const selection = groups().flatMap(item => item.videos);
     const film = selection.find(item => item.priority) || selection.find(item => item.category === 'Trending') || selection[0];
     const mount = document.querySelector('#featured-film');
     if (!film) { mount.replaceChildren(); return; }
-    mount.innerHTML = `<article class="lead-film"><a class="film-visual" href="${href(film)}" aria-label="Watch ${escape(film.title)}"><img src="${escape(thumbnail(film))}" alt="${escape(film.title)} video thumbnail" fetchpriority="high"><span class="play-disc" aria-hidden="true">&#9654;</span></a><div class="lead-copy"><p class="eyebrow">Featured selection / ${escape(film.category)}</p><h2>${escape(film.title)}</h2><p class="feature-publisher">${escape(film.channelTitle || 'From the CrimeNewsTV collection')}</p><p class="video-metadata">${escape(videoMeta(film))}</p><a class="watch-link" href="${href(film)}">Watch the video <span aria-hidden="true">&#8599;</span></a></div></article>`;
+    const dur = formatDuration(film);
+    const durChip = dur ? `<span class="duration-chip lead-duration">${escape(dur)}</span>` : '';
+    mount.innerHTML = `<article class="lead-film"><a class="film-visual" href="${href(film)}" aria-label="Watch ${escape(film.title)}"><img src="${escape(thumbnail(film))}" alt="${escape(film.title)} video thumbnail" fetchpriority="high">${durChip}<span class="play-disc" aria-hidden="true">&#9654;</span></a><div class="lead-copy"><div class="lead-tag-row"><span class="lead-badge">FEATURED SELECTION</span><span class="lead-category">${escape(film.category)}</span></div><h2>${escape(film.title)}</h2><p class="feature-publisher">${escape(film.channelTitle || 'From the CrimeNewsTV collection')}</p><p class="video-metadata">${escape(videoMeta(film))}</p><div class="lead-actions"><a class="watch-link" href="${href(film)}"><span>Watch Full Footage</span> <span aria-hidden="true">&#9654;</span></a></div></div></article>`;
   }
   function render() {
     const query = search.value.trim().toLowerCase();
