@@ -12,10 +12,13 @@
     { href: 'RESEARCH.html', label: 'Paperwork', badge: '50 Cases' },
     { href: 'LAW-LIBRARY.html', label: 'Law Library', badge: '14 Books' },
     { href: 'NEWS.html', label: 'News', badge: 'Dispatches' },
+    { href: 'VIDEOS.html', label: 'CrimeNewsTV', badge: 'Watch' },
+    { href: 'GAMES.html', label: 'Games', badge: 'The Yard' },
+    { href: 'INSIDE-ASSISTANCE.html', label: 'Inside Assistance', badge: 'Support' },
+    { href: 'HELP-FINDER.html', label: 'Research Help', badge: 'Members' },
     { href: 'EVIDENCE-INDEX.html', label: 'Evidence Index', badge: 'Dockets' },
     { href: 'ABOUT.html', label: 'About', badge: 'Mission' },
-    { href: 'DONATE.html', label: 'Donate', badge: 'Support' },
-    { href: 'CONTACT.html', label: 'Contact', badge: 'Inquiries' }
+    { href: 'DONATE.html', label: 'Membership', badge: 'Join' }
   ];
 
   function initMobileNav() {

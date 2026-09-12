@@ -35,9 +35,8 @@
       }
 
       if (!currentUser) {
-        // Unauthenticated visitor -> Redirect to login preserving destination
-        const returnTo = encodeURIComponent(location.pathname + location.search);
-        location.assign(`/LOGIN.html?returnTo=${returnTo}`);
+        // Unauthenticated visitor -> Show service explainer and sign-in CTA (no forced redirect)
+        renderUpgradeScreen(root, { access: false, tier: 'unauthenticated', planName: 'Not Signed In', reason: 'auth_required' });
         return;
       }
 
@@ -81,7 +80,18 @@
   }
 
   function renderUpgradeScreen(container, entitlement) {
-    const currentPlanName = entitlement.planName || 'Public Reader';
+    const isUnauth = entitlement.tier === 'unauthenticated';
+    const currentPlanName = isUnauth ? 'Not Signed In' : (entitlement.planName || 'Public Reader');
+    const returnTo = encodeURIComponent(location.pathname + location.search);
+
+    const actionButtonHtml = isUnauth
+      ? `<div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 1.5rem;">
+           <a href="/LOGIN.html?returnTo=${returnTo}" class="btn-primary-upgrade">Sign In / Join to Unlock ($6/mo)</a>
+           <a href="/MEMBERS.html#plans" style="color: #081d35; font-weight: 700; text-decoration: underline; font-size: 0.95rem;">Explore All Membership Plans &rarr;</a>
+         </div>`
+      : `<div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 1.5rem;">
+           <a href="/MEMBERS.html#plans" class="btn-primary-upgrade">Upgrade to Full Member ($6/mo)</a>
+         </div>`;
 
     container.innerHTML = `
       <div class="upgrade-gate-card">
@@ -92,7 +102,7 @@
         </p>
 
         <div>
-          <span class="current-tier-badge">Current membership: ${esc(currentPlanName)}</span>
+          <span class="current-tier-badge">Current status: ${esc(currentPlanName)}</span>
         </div>
 
         <div class="plan-cards-grid">
@@ -109,9 +119,7 @@
           </div>
         </div>
 
-        <div>
-          <a href="/MEMBERS.html#plans" class="btn-primary-upgrade">Upgrade Membership</a>
-        </div>
+        ${actionButtonHtml}
       </div>
     `;
   }
