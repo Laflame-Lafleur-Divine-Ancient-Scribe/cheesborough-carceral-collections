@@ -22,4 +22,72 @@ document.addEventListener('DOMContentLoaded', async () => {
   input.addEventListener('change', async () => { const file = input.files?.[0]; if (!file) return; if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 12 * 1024 * 1024) { status.textContent = 'Choose a JPG, PNG, or WebP image smaller than 12 MB.'; input.value = ''; return; } status.textContent = 'Preparing your profile photo...'; try { const payload = await community.request('/api/auth/avatar', { method: 'POST', body: JSON.stringify({ imageData: await resizeImage(file) }) }); user = { ...user, avatarUpdatedAt: payload.avatarUpdatedAt }; setAvatar(); community.renderNav(user); status.textContent = 'Your profile photo has been saved.'; } catch (error) { status.textContent = error.message; } input.value = ''; });
   remove.addEventListener('click', async () => { remove.disabled = true; try { await community.request('/api/auth/avatar', { method: 'DELETE' }); user = { ...user, avatarUpdatedAt: null }; setAvatar(); community.renderNav(user); status.textContent = 'Your profile photo has been removed.'; } catch (error) { status.textContent = error.message; } remove.disabled = false; });
   form.addEventListener('submit', async (event) => { event.preventDefault(); clearErrors(); form.querySelectorAll('[aria-invalid]').forEach((node) => node.removeAttribute('aria-invalid')); const data = Object.fromEntries(new FormData(form)); data.interests = selectedInterests; data.favorites = [...document.querySelectorAll('.favorite-row input')].map((node) => node.value.trim()).filter(Boolean); status.textContent = 'Saving your profile...'; try { const payload = await community.request('/api/auth/profile', { method: 'PUT', body: JSON.stringify(data) }); user = { ...user, displayName: payload.user.displayName }; document.querySelector('#profile-display-name').textContent = user.displayName; setAvatar(); community.renderNav(user); status.textContent = 'Your profile has been saved.'; } catch (error) { const message = error.message || 'Your profile could not be saved.'; const control = /display name/i.test(message) ? field('displayName') : /username/i.test(message) ? field('username') : /links|http/i.test(message) ? form.querySelector('input[type="url"]:invalid') || form.querySelector('input[type="url"]') : null; if (control) { showError(control, message); control.focus(); } status.textContent = message; } });
+
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  async function loadMyResearchInquiries() {
+    const host = document.querySelector('#my-research-inquiries-list');
+    if (!host) return;
+    try {
+      const res = await community.request('/api/research-help/my-inquiries');
+      const list = res.inquiries || [];
+      if (!list.length) {
+        host.innerHTML = `
+          <div style="background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;padding:2rem 1.5rem;text-align:center;">
+            <p style="margin:0 0 0.5rem 0;color:#475569;font-size:0.95rem;">You have not submitted any research help inquiries yet.</p>
+            <p style="margin:0;"><a href="HELP-FINDER.html" style="color:#081d35;font-weight:600;text-decoration:underline;">Submit your first research request &rarr;</a></p>
+          </div>
+        `;
+        return;
+      }
+
+      const statusBadges = {
+        new: ['#2563eb', 'Received / New'],
+        under_review: ['#7c3aed', 'Under Review'],
+        researching: ['#d97706', 'Researching'],
+        waiting_for_info: ['#b45309', 'Waiting for Info'],
+        documents_located: ['#059669', 'Documents Located'],
+        response_prepared: ['#0d9488', 'Response Prepared'],
+        completed: ['#16a34a', 'Completed'],
+        unable_to_assist: ['#64748b', 'Unable to Assist'],
+        archived: ['#475569', 'Archived']
+      };
+
+      host.innerHTML = list.map(item => {
+        const badge = statusBadges[item.status] || ['#475569', item.status || 'Active'];
+        const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+        const cats = Array.isArray(item.categories) ? item.categories.join(', ') : '';
+
+        return `
+          <article style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:1.25rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+              <div>
+                <span style="font-family:monospace;font-weight:700;font-size:0.92rem;color:#081d35;letter-spacing:0.02em;">${esc(item.requestId)}</span>
+                <span style="display:inline-block;margin-left:0.5rem;padding:0.2rem 0.55rem;background:${badge[0]};color:#ffffff;border-radius:4px;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;">${esc(badge[1])}</span>
+              </div>
+              <time style="font-size:0.85rem;color:#64748b;">Submitted ${esc(dateStr)}</time>
+            </div>
+            <h3 style="font-family:'Libre Baskerville',serif;font-size:1.15rem;margin:0 0 0.35rem 0;color:#081d35;">
+              Inmate: ${esc(item.inmateName || 'Name not specified')}${item.inmateNumber ? ` (${esc(item.inmateNumber)})` : ''}
+            </h3>
+            <p style="font-size:0.9rem;color:#475569;margin:0 0 0.5rem 0;">
+              ${esc([item.facility, item.state].filter(Boolean).join(' • ') || 'Jurisdiction pending')}
+            </p>
+            ${cats ? `<p style="font-size:0.85rem;color:#64748b;margin:0 0 0.75rem 0;"><strong>Areas:</strong> ${esc(cats)}</p>` : ''}
+            ${item.responseNotes ? `
+              <div style="background:#f0fdf4;border-left:4px solid #16a34a;padding:0.85rem 1rem;border-radius:4px;margin-top:0.75rem;">
+                <h4 style="margin:0 0 0.25rem 0;font-size:0.8rem;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:0.04em;">Staff Research Findings &amp; Response</h4>
+                <p style="margin:0;font-size:0.92rem;color:#14532d;white-space:pre-wrap;line-height:1.5;">${esc(item.responseNotes)}</p>
+              </div>
+            ` : `
+              <p style="margin:0.75rem 0 0 0;font-size:0.85rem;color:#64748b;font-style:italic;">Staff research is in progress. Findings and updates will appear here.</p>
+            `}
+            ${item.outcome ? `<p style="margin:0.5rem 0 0 0;font-size:0.85rem;color:#1e293b;"><strong>Outcome:</strong> ${esc(item.outcome)}</p>` : ''}
+          </article>
+        `;
+      }).join('');
+    } catch (err) {
+      host.innerHTML = `<p style="color:#dc2626;font-size:0.9rem;">Unable to load your research requests at this time: ${esc(err.message)}</p>`;
+    }
+  }
+  loadMyResearchInquiries();
 });

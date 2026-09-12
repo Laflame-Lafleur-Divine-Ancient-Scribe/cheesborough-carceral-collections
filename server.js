@@ -22,6 +22,18 @@ const { createAccountEmailService } = require('./lib/account-email-service');
 const accountEmailService = createAccountEmailService({db:communityDb,ensureSchema:ensureCommunitySchema,parseBody:parseCommunityBody,json:communityJson,rate:permitCommunityAction,rateEmail:permitResetEmail,mail:createEmailDelivery(),hashPassword:password=>argon2.hash(password,{type:argon2.argon2id}),siteUrl:publicSiteUrl});
 
 const contactService = createContactService({ parseBody: parseCommunityBody, json: communityJson, rate: permitCommunityAction });
+const { createResearchHelpService } = require('./lib/research-help-service');
+const researchHelpService = createResearchHelpService({
+    db: communityDb,
+    ensureSchema: ensureCommunitySchema,
+    user: (request, strict) => v2User(request, strict),
+    membershipState: (account) => membershipService.state(account),
+    json: communityJson,
+    parseBody: parseCommunityBody,
+    rate: permitCommunityAction,
+    isOwner,
+    mail: createEmailDelivery()
+});
 
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
@@ -2220,6 +2232,16 @@ const server = http.createServer((request, response) => {
         contactService(request, response).catch(() => communityJson(response, 503, { error: 'The inquiry service is temporarily unavailable. Please email Contact@carceralcollections.org directly.' }));
         return;
     }
+    if (requestUrl.pathname === '/api/research-help' || requestUrl.pathname.startsWith('/api/research-help/')) {
+        applyApiCors(request, response);
+        researchHelpService.handle(request, response, requestUrl).catch((err) => communityJson(response, 503, { error: err.message || 'The research help service is temporarily unavailable.' }));
+        return;
+    }
+    if (requestUrl.pathname.startsWith('/api/owner/research-inquiries')) {
+        applyApiCors(request, response);
+        researchHelpService.handle(request, response, requestUrl).catch((err) => communityJson(response, 503, { error: err.message || 'Research inquiry management is temporarily unavailable.' }));
+        return;
+    }
     if (request.method === 'POST' && requestUrl.pathname === '/api/analytics/collect') {
         // Retain historical Redis totals; retired clients must not keep inflating them.
         applyApiCors(request,response); response.writeHead(204,{'Cache-Control':'no-store'}); response.end();
@@ -2445,6 +2467,28 @@ const server = http.createServer((request, response) => {
         }
 
         if(extension==='.html') {
+            if (requestUrl.pathname === '/HELP-FINDER.html' || requestUrl.pathname === '/HELP-FINDER') {
+                v2User(request).then(async (account) => {
+                    if (!account) {
+                        response.writeHead(302, { Location: '/LOGIN.html?returnTo=' + encodeURIComponent('/HELP-FINDER.html') });
+                        response.end();
+                        return;
+                    }
+                    const ent = await researchHelpService.checkEntitlement(account);
+                    let html = fs.readFileSync(filePath, 'utf8');
+                    const injection = `<script>window.__RESEARCH_HELP_INITIAL__=${JSON.stringify(ent)};</script>`;
+                    html = html.replace('</head>', `${injection}</head>`);
+                    if (!html.includes('src="/pdf-access.js"')) {
+                        html = html.replace(/<head([^>]*)>/i, '<head$1><script src="/pdf-access.js" defer></script>');
+                    }
+                    response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store, max-age=0' });
+                    response.end(html);
+                }).catch(() => {
+                    response.writeHead(302, { Location: '/LOGIN.html?returnTo=' + encodeURIComponent('/HELP-FINDER.html') });
+                    response.end();
+                });
+                return;
+            }
             const html=fs.readFileSync(filePath,'utf8');
             response.end(html.includes('src="/pdf-access.js"')?html:html.replace(/<head([^>]*)>/i,'<head$1><script src="/pdf-access.js" defer></script>'));
         } else fs.createReadStream(filePath).pipe(response);

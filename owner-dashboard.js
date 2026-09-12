@@ -1,5 +1,5 @@
 (() => {
-  const views = {overview:['Overview','Your collection and community at a glance.'],members:['Members','Find accounts and review the private member record.'],comments:['Comments','Review the conversation and manage moderation.'],analytics:['Analytics','Understand readership, discovery, and engagement.'],activity:['Activity','Follow recorded community and visitor activity.'],communications:['Communications','Prepare announcements and review communication records.'],content:['Content','See which pages draw readers and keep their attention.'],security:['Security','Review recorded account and access events.'],audit:['Audit log','Trace administrative changes and their recorded reasons.'],settings:['Settings','Control collection, exclusions, and retention.']};
+  const views = {overview:['Overview','Your collection and community at a glance.'],inquiries:['Research inquiries','Review, manage, and respond to member research requests.'],members:['Members','Find accounts and review the private member record.'],comments:['Comments','Review the conversation and manage moderation.'],analytics:['Analytics','Understand readership, discovery, and engagement.'],activity:['Activity','Follow recorded community and visitor activity.'],communications:['Communications','Prepare announcements and review communication records.'],content:['Content','See which pages draw readers and keep their attention.'],security:['Security','Review recorded account and access events.'],audit:['Audit log','Trace administrative changes and their recorded reasons.'],settings:['Settings','Control collection, exclusions, and retention.']};
   const tabs = ['overview','visitors','geography','sources','pages','engagement','devices','technology','campaigns','search','realtime'];
   const $ = selector => document.querySelector(selector);
   const esc = value => String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -17,10 +17,10 @@
   function tableHtml(table,interactive=true) {
     const columns = table.columns || []; const rows = table.rows || [];
     if (!rows.length) return `<section class="report-panel"><div class="panel-heading"><h2>${esc(title(table.title || table.key || 'Record'))}</h2></div>${empty()}</section>`;
-    const memberTable = table.key === 'members'; const commentTable = table.key === 'comments'; const draftTable = /draft|communication/.test(table.key || '');
+    const memberTable = table.key === 'members'; const commentTable = table.key === 'comments'; const draftTable = /draft|communication/.test(table.key || ''); const inquiryTable = table.key === 'inquiries';
     const header = columns.map(col=>`<th scope="col">${esc(col.label)}</th>`).join('');
-    const cells = rows.map((row,index)=>`<tr>${columns.map(col=>{let value=row[col.key];if(value===null || value===undefined || value==='')value='No data yet'; if(typeof value==='object')value=JSON.stringify(value); return `<td data-column="${esc(col.key)}"${isNumericColumn(col.key,value)?' class="table-number"':''}>${esc(tableValue(col.key,value))}</td>`;}).join('')}${interactive && (memberTable || commentTable || draftTable || row.page_path || row.country || ['source','sources'].includes(table.key) || row.source)?`<td class="row-actions">${draftTable?`<button type="button" data-draft="${esc(row.id)}">View draft</button>`:memberTable?`<button type="button" data-member="${esc(row.id)}">Open record</button>`:commentTable?`<button type="button" data-member="${esc(row.author_id)}">Author</button><form class="comment-moderation-form" data-comment-form="${esc(row.id)}"><label>Action<select name="action" aria-label="Action for comment ${esc(row.id)}"><option value="">Choose action...</option><option value="approve">Approve</option><option value="reject">Reject</option><option value="hide">Hide</option><option value="delete">Delete</option></select></label><label>Reason (optional)<input name="reason" maxlength="500" autocomplete="off"></label><label data-delete-confirmation hidden><input type="checkbox" name="confirmDelete"> Permanently delete this comment</label><button type="submit">Apply</button><p class="form-status" role="status" aria-live="polite"></p></form>${contentLink(row)}`:`<button type="button" data-drill-table="${esc(table.key)}" data-drill-row="${index}">Explore</button>`}</td>`:''}</tr>`).join('');
-    const hasActions = interactive && (memberTable || commentTable || draftTable || rows.some(row=>row.page_path || row.country || ['source','sources'].includes(table.key) || row.source));
+    const cells = rows.map((row,index)=>`<tr>${columns.map(col=>{let value=row[col.key];if(value===null || value===undefined || value==='')value='No data yet'; if(typeof value==='object')value=JSON.stringify(value); return `<td data-column="${esc(col.key)}"${isNumericColumn(col.key,value)?' class="table-number"':''}>${esc(tableValue(col.key,value))}</td>`;}).join('')}${interactive && (inquiryTable || memberTable || commentTable || draftTable || row.page_path || row.country || ['source','sources'].includes(table.key) || row.source)?`<td class="row-actions">${inquiryTable?`<button type="button" data-inquiry="${esc(row.id)}">Open case file</button>`:draftTable?`<button type="button" data-draft="${esc(row.id)}">View draft</button>`:memberTable?`<button type="button" data-member="${esc(row.id)}">Open record</button>`:commentTable?`<button type="button" data-member="${esc(row.author_id)}">Author</button><form class="comment-moderation-form" data-comment-form="${esc(row.id)}"><label>Action<select name="action" aria-label="Action for comment ${esc(row.id)}"><option value="">Choose action...</option><option value="approve">Approve</option><option value="reject">Reject</option><option value="hide">Hide</option><option value="delete">Delete</option></select></label><label>Reason (optional)<input name="reason" maxlength="500" autocomplete="off"></label><label data-delete-confirmation hidden><input type="checkbox" name="confirmDelete"> Permanently delete this comment</label><button type="submit">Apply</button><p class="form-status" role="status" aria-live="polite"></p></form>${contentLink(row)}`:`<button type="button" data-drill-table="${esc(table.key)}" data-drill-row="${index}">Explore</button>`}</td>`:''}</tr>`).join('');
+    const hasActions = interactive && (inquiryTable || memberTable || commentTable || draftTable || rows.some(row=>row.page_path || row.country || ['source','sources'].includes(table.key) || row.source));
     return `<section class="report-panel"><div class="panel-heading"><h2>${esc(title(table.title || table.key || 'Record'))}</h2><span>${rows.length}${table.total > rows.length ? ' of '+table.total : ''} records</span></div><div class="table-scroll" tabindex="0" role="region" aria-label="${esc(table.title || 'Report table')}"><table><thead><tr>${header}${hasActions?'<th scope="col">Actions</th>':''}</tr></thead><tbody>${cells}</tbody></table></div></section>`;
   }
   function contentLink(row) {const value=String(row.content_id||'');if(row.content_type==='video')return `<a href="VIDEO.html?id=${encodeURIComponent(value)}" target="_blank" rel="noopener">Video &#8599;</a>`;if(/^[\w/-]+\.html(?:[?#][\w=&%.-]*)?$/i.test(value) && !value.startsWith('//'))return `<a href="${esc(value)}" target="_blank" rel="noopener">Article &#8599;</a>`;return '';}
@@ -52,7 +52,47 @@
   }
   async function load() {
     if(!authorized)return;const id=++requestId;$('#dashboard-content').setAttribute('aria-busy','true');$('#owner-status').textContent='Loading the record...';$('#export-dashboard').disabled=true;
-    try {let data;if(state.view==='members'){const [dashboard,result]=await Promise.all([request('/api/owner/dashboard?'+new URLSearchParams(state)),request('/api/owner/members?q='+encodeURIComponent(state.q||''))]);data={...dashboard,tables:[...(dashboard.tables||[]).filter(table=>table.key!=='members'),{key:'members',title:'Member directory',columns:[{key:'displayName',label:'Name'},{key:'username',label:'Username'},{key:'email',label:'Email'},{key:'role',label:'Role'},{key:'status',label:'Status'},{key:'createdAt',label:'Joined'},{key:'lastLoginAt',label:'Last login'},{key:'lastActivityAt',label:'Last activity'}],rows:(result.members||[]).map(member=>({...member,displayName:member.displayName||member.display_name,createdAt:member.createdAt||member.created_at,lastLoginAt:member.lastLoginAt||member.last_login_at,lastActivityAt:member.lastActivityAt||member.last_activity_at}))}]};}else data=await request('/api/owner/dashboard?'+new URLSearchParams(state));if(id!==requestId||!authorized)return;renderReport(data);$('#export-dashboard').disabled=false;return true;}
+    try {
+      let data;
+      if (state.view === 'inquiries') {
+        const query = new URLSearchParams({
+          q: state.q || '',
+          status: state.status || 'all',
+          from: state.from || '',
+          to: state.to || ''
+        });
+        const res = await request('/api/owner/research-inquiries?' + query);
+        data = {
+          metrics: [
+            { key: 'total', label: 'Total Inquiries', value: res.metrics?.total ?? 0 },
+            { key: 'new', label: 'New / Unreviewed', value: res.metrics?.new_count ?? 0 },
+            { key: 'open', label: 'Active In Research', value: res.metrics?.open_count ?? 0 },
+            { key: 'completed', label: 'Completed', value: res.metrics?.completed_count ?? 0 }
+          ],
+          tables: [
+            {
+              key: 'inquiries',
+              title: 'Research Inquiries',
+              total: res.total ?? 0,
+              columns: [
+                { key: 'request_id', label: 'Request ID' },
+                { key: 'created_at', label: 'Submitted' },
+                { key: 'inmate_name', label: 'Inmate Name' },
+                { key: 'inmate_number', label: 'DOC / ID #' },
+                { key: 'facility', label: 'Facility' },
+                { key: 'state', label: 'State' },
+                { key: 'requester_name', label: 'Requester' },
+                { key: 'status', label: 'Status' },
+                { key: 'assigned_staff', label: 'Assigned' }
+              ],
+              rows: (res.inquiries || []).map(r => ({
+                ...r,
+                created_at: r.created_at ? new Date(r.created_at).toLocaleDateString() : '—'
+              }))
+            }
+          ]
+        };
+      } else if(state.view==='members'){const [dashboard,result]=await Promise.all([request('/api/owner/dashboard?'+new URLSearchParams(state)),request('/api/owner/members?q='+encodeURIComponent(state.q||''))]);data={...dashboard,tables:[...(dashboard.tables||[]).filter(table=>table.key!=='members'),{key:'members',title:'Member directory',columns:[{key:'displayName',label:'Name'},{key:'username',label:'Username'},{key:'email',label:'Email'},{key:'role',label:'Role'},{key:'status',label:'Status'},{key:'createdAt',label:'Joined'},{key:'lastLoginAt',label:'Last login'},{key:'lastActivityAt',label:'Last activity'}],rows:(result.members||[]).map(member=>({...member,displayName:member.displayName||member.display_name,createdAt:member.createdAt||member.created_at,lastLoginAt:member.lastLoginAt||member.last_login_at,lastActivityAt:member.lastActivityAt||member.last_activity_at}))}]};}else data=await request('/api/owner/dashboard?'+new URLSearchParams(state));if(id!==requestId||!authorized)return;renderReport(data);$('#export-dashboard').disabled=false;return true;}
     catch(error){if(id!==requestId)return;report=null;$('#dashboard-content').innerHTML=empty('The record could not be loaded. Use Refresh to try again.');$('#owner-status').textContent=error.message;return false;}
     finally{if(id===requestId)$('#dashboard-content').setAttribute('aria-busy','false');}
   }
@@ -60,7 +100,13 @@
     clearInterval(pollTimer);report=null;$('#dashboard-content').replaceChildren();$('#view-title').textContent=views[state.view][0];$('#view-description').textContent=views[state.view][1];$('#view-kicker').textContent='Owner record / '+views[state.view][0];document.title=views[state.view][0]+' | Owner Record';
     $('#owner-navigation').innerHTML=Object.entries(views).map(([key,[label]],index)=>`<a href="${urlFor({...state,view:key,tab:'overview',q:'',status:''})}" data-view="${key}" ${state.view===key?'aria-current="page"':''}><span>${String(index+1).padStart(2,'0')}</span>${label}</a>`).join('');
     $('#analytics-tabs').hidden=state.view!=='analytics';$('#analytics-tabs').innerHTML=tabs.map(tab=>`<a href="${urlFor({...state,tab})}" data-tab="${tab}" ${state.tab===tab?'aria-current="page"':''}>${title(tab)}</a>`).join('');
-    const form=$('#report-filters');form.hidden=['settings','communications'].includes(state.view);for(const element of form.elements){if(element.name)element.value=state[element.name]||'';}$('#report-range').value=state.range;form.elements.granularity.value=state.granularity;form.elements.status.value=state.status||'all';document.querySelectorAll('.custom-date').forEach(el=>el.hidden=state.range!=='custom');$('#advanced-filters').hidden=!['analytics','overview','content'].includes(state.view);$('#comment-status-filter').hidden=state.view!=='comments';load();
+    const form=$('#report-filters');form.hidden=['settings','communications'].includes(state.view);for(const element of form.elements){if(element.name)element.value=state[element.name]||'';}$('#report-range').value=state.range;form.elements.granularity.value=state.granularity;
+    document.querySelectorAll('.custom-date').forEach(el=>el.hidden=state.range!=='custom');$('#advanced-filters').hidden=!['analytics','overview','content'].includes(state.view);
+    const commentFilter=$('#comment-status-filter'),inquiryFilter=$('#inquiry-status-filter');
+    if(commentFilter){commentFilter.hidden=state.view!=='comments';const sel=commentFilter.querySelector('select');if(sel){sel.disabled=state.view!=='comments';if(state.view==='comments')sel.value=state.status||'all';}}
+    if(inquiryFilter){inquiryFilter.hidden=state.view!=='inquiries';const sel=inquiryFilter.querySelector('select');if(sel){sel.disabled=state.view!=='inquiries';if(state.view==='inquiries')sel.value=state.status||'all';}}
+    if($('#export-excel'))$('#export-excel').hidden=state.view!=='inquiries';
+    load();
     if(state.view==='analytics'&&state.tab==='realtime')pollTimer=setInterval(()=>{if(!document.hidden)load();},30000);
   }
   function settingsHtml(settings) {if(!settings)return empty('Settings are not available yet.');const bools={enabled:'Collect analytics',geoEnabled:'Approximate country and region',cityEnabled:'Approximate city',excludeOwner:'Exclude owner traffic',excludeBots:'Exclude recognized bots',excludeDevelopment:'Exclude development traffic'};return `<form id="settings-form" class="report-panel action-form"><h2>Collection &amp; Privacy</h2><p class="chart-note">Changes are saved to the service and recorded in the audit log. <a href="ANALYTICS-PRIVACY.html" target="_blank" rel="noopener">Read the public analytics notice</a>.</p><div class="settings-grid">${Object.entries(bools).map(([key,label])=>`<label class="checkbox-label"><input type="checkbox" name="${key}" ${settings[key]?'checked':''}>${label}</label>`).join('')}<label>Analytics retention (days)<input type="number" name="retentionDays" value="${esc(settings.retentionDays)}" min="1" max="730" required></label><label>Security retention (days)<input type="number" name="securityRetentionDays" value="${esc(settings.securityRetentionDays)}" min="1" max="730" required></label><label>Reporting timezone<input name="timezone" value="${esc(settings.timezone)}" required></label><label>Default date range<select name="defaultRange">${['today','yesterday','7d','30d','90d','thismonth','lastmonth','year','all'].map(range=>`<option value="${range}" ${settings.defaultRange===range?'selected':''}>${range}</option>`).join('')}</select></label></div><button class="primary-button" type="submit">Save settings</button><p class="form-status" role="status"></p></form><section class="report-panel"><h2>This Browser</h2><label class="checkbox-label"><input id="browser-exclusion" type="checkbox">Exclude visits from this browser</label><p class="chart-note">This preference applies to this browser only. Owner dashboard visits are always excluded.</p><p id="browser-exclusion-status" role="status"></p></section>`;}
@@ -78,6 +124,7 @@
     document.querySelectorAll('[data-draft]').forEach(button=>button.addEventListener('click',async()=>{const dialog=$('#member-dialog');$('#member-dialog-title').textContent='Communication draft';$('#member-record').textContent='Loading draft...';dialog.showModal();try{const data=await request('/api/owner/communications/'+encodeURIComponent(button.dataset.draft));const draft=data.draft||data.communication||(typeof data.message==='object'?data.message:data);$('#member-record').innerHTML=`<h3>${esc(draft.title || 'Draft')}</h3><p class="chart-note">${esc(draft.type || '')} / ${esc(draft.audience || '')}</p><div class="draft-body">${esc(draft.body || '')}</div><p class="chart-note">Draft preview. No message has been sent by this action.</p>`;}catch(error){$('#member-record').textContent=error.message;}}));
     $('#activity-event-type')?.addEventListener('change',event=>navigate({...state,q:event.target.value}));
     document.querySelectorAll('[data-member]').forEach(button=>button.addEventListener('click',()=>openMember(button.dataset.member)));
+    document.querySelectorAll('[data-inquiry]').forEach(button=>button.addEventListener('click',()=>openInquiry(button.dataset.inquiry)));
     window.CCCOwnerComments.bind($('#dashboard-content'), {request, reload:load, notify:message=>$('#owner-status').textContent=message});
     document.querySelectorAll('[data-drill-table]').forEach(button=>button.addEventListener('click',()=>{const row=report.tables.find(table=>table.key===button.dataset.drillTable)?.rows[Number(button.dataset.drillRow)];if(row?.page_path)navigate({...state,view:'analytics',tab:'pages',page:row.page_path});else if(row?.country)navigate({...state,view:'analytics',tab:'geography',country:row.country,region:row.region||'',city:row.city||''});else if(row?.source || ['source','sources'].includes(button.dataset.drillTable))navigate({...state,view:'analytics',tab:'sources',source:row.source||row.label||''});}));
     $('#communication-form')?.addEventListener('submit',event=>submitForm(event,'/api/owner/communications','POST',Object.fromEntries(new FormData(event.currentTarget))));
@@ -86,11 +133,185 @@
   }
   async function submitForm(event,path,method,body){event.preventDefault();const form=event.currentTarget;const status=form.querySelector('.form-status'),button=form.querySelector('[type=submit]');button.disabled=true;status.textContent='Saving...';try{const result=await request(path,{method,body:JSON.stringify(body)});status.textContent=typeof result.message==='string'?result.message:'Saved.';if(path==='/api/owner/settings')savedDefaultRange=body.defaultRange;}catch(error){status.textContent=error.message;}finally{button.disabled=false;}}
   async function openMember(id){const memberRequest=++memberRequestId;const dialog=$('#member-dialog');$('#member-record').innerHTML='<p>Loading member record...</p>';if(!dialog.open)dialog.showModal();try{const data=await request('/api/owner/members/'+encodeURIComponent(id));if(!dialog.open || memberRequest!==memberRequestId)return;selectedMember=data.member;const member=data.member||{};$('#member-dialog-title').textContent=member.display_name||member.displayName||member.username||'Member';$('#member-record').innerHTML=`<p>${esc(member.email || '')}</p><p class="chart-note">Account ${esc(member.id)} / ${esc(member.role)} / ${esc(member.status||'active')}</p><dl class="member-dates"><dt>Joined</dt><dd>${esc(member.createdAt||member.created_at||'No data yet')}</dd><dt>Last login</dt><dd>${esc(member.lastLoginAt||member.last_login_at||'No data yet')}</dd><dt>Last activity</dt><dd>${esc(member.lastActivityAt||member.last_activity_at||'No data yet')}</dd></dl>${member.role==='owner'?'<p>This owner account cannot be modified here.</p>':`<form id="member-update-form" class="action-form"><label>Role<select name="role">${['member','moderator','admin'].map(role=>`<option ${member.role===role?'selected':''}>${role}</option>`).join('')}</select></label><label>Status<select name="status">${['active','suspended','banned'].map(status=>`<option ${(member.status||'active')===status?'selected':''}>${status}</option>`).join('')}</select></label><label>Reason<textarea name="reason" rows="3" maxlength="500" placeholder="Required when changing account status"></textarea></label><button class="primary-button" type="submit">Save account changes</button><p class="form-status" role="status"></p></form>`}${['membership','security','comments','activity'].map(key=>{const value=data[key];if(!value || Array.isArray(value)&&!value.length)return `<section><h3>${title(key)}</h3><p class="chart-note">No data yet</p></section>`;const rows=Array.isArray(value)?value:[value];const columns=[...new Set(rows.flatMap(row=>Object.keys(row)))].filter(key=>!/(password|token|secret)/i.test(key)).map(key=>({key,label:title(key)}));return tableHtml({key,title:title(key),columns,rows},false);}).join('')}`;$('#member-update-form')?.addEventListener('submit',async event=>{event.preventDefault();const form=event.currentTarget;const body=Object.fromEntries(new FormData(form));if(body.status!==(selectedMember.status||'active')&&!body.reason.trim()){form.querySelector('.form-status').textContent='A reason is required for a status change.';return;}await submitForm(event,'/api/owner/members/'+encodeURIComponent(id),'POST',body);});}catch(error){if(memberRequest===memberRequestId)$('#member-record').textContent=error.message;}}
-  function exportCsv(){if(!report)return;const safe=value=>{let text=String(value??'');if(/^[\s]*[=+@-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';};const rows=[['Report',views[state.view][0]],['Range',report.range?.from||'',report.range?.to||'']];(report.metrics||[]).forEach(metric=>rows.push([metric.label,metric.value]));(report.tables||[]).forEach(table=>{const columns=(table.columns||[]).filter(col=>!/(password|token|secret)/i.test(col.key));rows.push([], [table.title],columns.map(col=>col.label));(table.rows||[]).forEach(row=>rows.push(columns.map(col=>row[col.key])));});const url=URL.createObjectURL(new Blob(['\ufeff'+rows.map(row=>row.map(safe).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`owner-${state.view}-${new Date().toISOString().slice(0,10)}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  async function openInquiry(id){
+    const dialog=$('#inquiry-dialog'),body=$('#inquiry-dialog-body'),titleEl=$('#inquiry-dialog-title');
+    if(!dialog||!body)return;
+    body.innerHTML='<p>Loading case file...</p>';
+    if(!dialog.open)dialog.showModal();
+    try{
+      const data=await request('/api/owner/research-inquiries/'+encodeURIComponent(id));
+      const inq=data.inquiry;
+      if(!inq)throw new Error('Inquiry not found');
+      if(titleEl)titleEl.textContent=`Case File: ${inq.request_id || id}`;
+      const categoriesList=Array.isArray(inq.categories)?inq.categories.join(', '):(inq.categories||'None specified');
+      body.innerHTML=`
+        <div class="case-file-overview" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem;">
+          <section class="report-panel" style="margin:0;">
+            <div class="panel-heading"><h2>Requester Information</h2></div>
+            <p><strong>Name:</strong> ${esc(inq.requester_name||'—')}</p>
+            <p><strong>Email:</strong> <a href="mailto:${esc(inq.requester_email||'')}">${esc(inq.requester_email||'—')}</a></p>
+            <p><strong>Phone:</strong> ${esc(inq.requester_phone||'None provided')}</p>
+            <p><strong>Relationship:</strong> ${esc(inq.relationship||'—')}</p>
+            <p><strong>Preferred Contact:</strong> ${esc(inq.preferred_contact_method||'—')}</p>
+            <p><strong>Permission to Contact:</strong> ${inq.permission_to_contact?'Yes':'No'}</p>
+          </section>
+          <section class="report-panel" style="margin:0;">
+            <div class="panel-heading"><h2>Incarcerated Individual</h2></div>
+            <p><strong>Inmate Name:</strong> ${esc(inq.inmate_name||'—')}</p>
+            <p><strong>DOC / BOP Number:</strong> ${esc(inq.inmate_number||'None provided')}</p>
+            <p><strong>Facility / Institution:</strong> ${esc(inq.facility||'None provided')}</p>
+            <p><strong>State / Jurisdiction:</strong> ${esc([inq.state,inq.jurisdiction].filter(Boolean).join(' / ')||'—')}</p>
+            <p><strong>County & Court:</strong> ${esc([inq.county,inq.court].filter(Boolean).join(' / ')||'—')}</p>
+            <p><strong>Case / Docket Number:</strong> ${esc(inq.case_number||'—')}</p>
+          </section>
+        </div>
+        <section class="report-panel" style="margin-bottom:1.5rem;">
+          <div class="panel-heading"><h2>Request Details</h2></div>
+          <p><strong>Research Categories:</strong> ${esc(categoriesList)}</p>
+          <p><strong>Urgency &amp; Deadline:</strong> ${esc(inq.urgency||'standard')} ${inq.deadline?`(Deadline: ${esc(inq.deadline)})`:''}</p>
+          <div style="margin-top:0.75rem;">
+            <strong>What Records Are Being Sought:</strong>
+            <div style="white-space:pre-wrap;background:#f9fafb;padding:0.75rem;border-radius:4px;border:1px solid #e5e7eb;margin-top:0.25rem;">${esc(inq.description_of_records||'—')}</div>
+          </div>
+          ${inq.background_info?`<div style="margin-top:0.75rem;"><strong>Background Information / Conviction History:</strong><div style="white-space:pre-wrap;background:#f9fafb;padding:0.75rem;border-radius:4px;border:1px solid #e5e7eb;margin-top:0.25rem;">${esc(inq.background_info)}</div></div>`:''}
+          ${inq.additional_details?`<div style="margin-top:0.75rem;"><strong>Additional Notes / Prior Search Efforts:</strong><div style="white-space:pre-wrap;background:#f9fafb;padding:0.75rem;border-radius:4px;border:1px solid #e5e7eb;margin-top:0.25rem;">${esc(inq.additional_details)}</div></div>`:''}
+        </section>
+        <section class="report-panel" style="margin-bottom:1.5rem;">
+          <div class="panel-heading"><h2>Case Management &amp; Response</h2></div>
+          <form id="inquiry-update-form" class="action-form">
+            <div class="settings-grid">
+              <label>Case Status
+                <select name="status">
+                  ${['new','under_review','researching','waiting_for_info','documents_located','response_prepared','completed','unable_to_assist','archived'].map(st=>`<option value="${st}" ${inq.status===st?'selected':''}>${title(st)}</option>`).join('')}
+                </select>
+              </label>
+              <label>Assigned Researcher
+                <input name="assignedStaff" value="${esc(inq.assigned_staff||'')}" placeholder="Staff or researcher name">
+              </label>
+              <label>Public Outcome
+                <input name="outcome" value="${esc(inq.outcome||'')}" placeholder="e.g. Records located and transmitted">
+              </label>
+              <label>Status Change Reason (Audit)
+                <input name="statusReason" placeholder="Reason for status change">
+              </label>
+              <label>Date Reviewed
+                <input name="dateReviewed" type="date" value="${inq.date_reviewed?inq.date_reviewed.slice(0,10):''}">
+              </label>
+              <label>Date Response Sent
+                <input name="dateResponseSent" type="date" value="${inq.date_response_sent?inq.date_response_sent.slice(0,10):''}">
+              </label>
+            </div>
+            <label style="margin-top:0.75rem;">
+              <strong>Private Staff Notes (INTERNAL ONLY &bull; Never visible to member)</strong>
+              <textarea name="staffNotes" rows="4" placeholder="Internal findings, archive references, FOIA request numbers, investigator notes...">${esc(inq.staff_notes||'')}</textarea>
+            </label>
+            <label style="margin-top:0.75rem;">
+              <strong>Member Response Notes (VISIBLE TO REQUESTER ON PROFILE)</strong>
+              <textarea name="memberResponseNotes" rows="4" placeholder="Explanation of findings, record sources, or instructions visible to the member...">${esc(inq.member_response_notes||'')}</textarea>
+            </label>
+            <div style="margin-top:1rem;display:flex;align-items:center;gap:1rem;">
+              <button class="primary-button" type="submit">Save Case File</button>
+              <p class="form-status" role="status" style="margin:0;"></p>
+            </div>
+          </form>
+        </section>
+        <section class="report-panel" style="margin-bottom:1.5rem;">
+          <div class="panel-heading"><h2>Chronological Research Activity Log</h2></div>
+          <form id="inquiry-activity-form" class="action-form" style="margin-bottom:1.25rem;background:#f9fafb;padding:1rem;border-radius:6px;border:1px solid #e5e7eb;">
+            <p style="margin:0 0 0.75rem 0;font-size:0.9rem;font-weight:600;">Log Research Step or Agency Contact</p>
+            <div class="settings-grid">
+              <label>Action Performed *<input name="action" required placeholder="e.g. Searched Appellate Docket"></label>
+              <label>Source / Repository<input name="sourceSearched" placeholder="e.g. Court of Appeals Archives"></label>
+              <label>Agency Contacted<input name="agencyContacted" placeholder="e.g. Clerk of Court Office"></label>
+              <label>Document Located<input name="documentLocated" placeholder="e.g. Trial transcripts Vol 1-3"></label>
+            </div>
+            <div class="settings-grid" style="margin-top:0.5rem;">
+              <label>Result / Summary<input name="result" placeholder="e.g. Records located; microfiche copy requested"></label>
+              <label>Follow-up Needed<input name="followUpNeeded" placeholder="e.g. Follow up in 10 business days"></label>
+            </div>
+            <div style="margin-top:0.75rem;display:flex;align-items:center;gap:1rem;">
+              <button class="primary-button" type="submit">Add Log Entry</button>
+              <p class="form-status" role="status" style="margin:0;"></p>
+            </div>
+          </form>
+          <div id="inquiry-activity-list">
+            ${(data.activityLog&&data.activityLog.length)?`
+              <div class="table-scroll"><table>
+                <thead><tr><th>Date</th><th>Staff</th><th>Action</th><th>Source / Agency</th><th>Result</th><th>Follow-up</th></tr></thead>
+                <tbody>
+                  ${data.activityLog.map(act=>`<tr><td>${act.created_at?new Date(act.created_at).toLocaleString():'—'}</td><td>${esc(act.staff_name||'Staff')}</td><td><strong>${esc(act.action)}</strong></td><td>${esc([act.source_searched,act.agency_contacted].filter(Boolean).join(' / ')||'—')}</td><td>${esc(act.result||act.document_located||'—')}</td><td>${esc(act.follow_up_needed||'—')}</td></tr>`).join('')}
+                </tbody>
+              </table></div>`:
+              '<p class="chart-note">No research activity logged yet for this case.</p>'
+            }
+          </div>
+        </section>
+        <section class="report-panel" style="margin-bottom:1.5rem;">
+          <div class="panel-heading"><h2>Located Documents &amp; Files</h2></div>
+          <form id="inquiry-file-form" class="action-form" style="margin-bottom:1.25rem;background:#f9fafb;padding:1rem;border-radius:6px;border:1px solid #e5e7eb;">
+            <p style="margin:0 0 0.75rem 0;font-size:0.9rem;font-weight:600;">Track Record or Document</p>
+            <div class="settings-grid">
+              <label>Document Name / Title *<input name="fileName" required placeholder="e.g. Sentencing_Hearing_Minutes_1998.pdf"></label>
+              <label>Document Type<input name="documentType" placeholder="e.g. Transcript, Docket, FOIA Release"></label>
+              <label>Description / Location<input name="description" placeholder="e.g. Received from County Clerk microfilm"></label>
+            </div>
+            <div style="margin-top:0.75rem;display:flex;align-items:center;gap:1rem;">
+              <button class="primary-button" type="submit">Record Document</button>
+              <p class="form-status" role="status" style="margin:0;"></p>
+            </div>
+          </form>
+          <div id="inquiry-files-list">
+            ${(data.files&&data.files.length)?`
+              <div class="table-scroll"><table>
+                <thead><tr><th>Date</th><th>Document</th><th>Type</th><th>Description</th><th>Recorded By</th></tr></thead>
+                <tbody>
+                  ${data.files.map(f=>`<tr><td>${f.created_at?new Date(f.created_at).toLocaleString():'—'}</td><td><strong>${esc(f.file_name)}</strong></td><td>${esc(f.document_type||'—')}</td><td>${esc(f.description||'—')}</td><td>${esc(f.uploaded_by||'Staff')}</td></tr>`).join('')}
+                </tbody>
+              </table></div>`:
+              '<p class="chart-note">No documents recorded yet for this case.</p>'
+            }
+          </div>
+        </section>
+        ${(data.statusHistory&&data.statusHistory.length)?`
+          <section class="report-panel">
+            <div class="panel-heading"><h2>Status History</h2></div>
+            <div class="table-scroll"><table>
+              <thead><tr><th>Date</th><th>Transition</th><th>Changed By</th><th>Reason</th></tr></thead>
+              <tbody>
+                ${data.statusHistory.map(h=>`<tr><td>${h.created_at?new Date(h.created_at).toLocaleString():'—'}</td><td>${esc(h.previous_status||'start')} &rarr; <strong>${esc(h.new_status)}</strong></td><td>${esc(h.changed_by||'Staff')}</td><td>${esc(h.reason||'—')}</td></tr>`).join('')}
+              </tbody>
+            </table></div>
+          </section>
+        `:''}
+      `;
+      $('#inquiry-update-form')?.addEventListener('submit',async(e)=>{
+        e.preventDefault();const form=e.currentTarget,statusEl=form.querySelector('.form-status'),btn=form.querySelector('[type=submit]');
+        btn.disabled=true;statusEl.textContent='Saving case updates...';
+        try{await request('/api/owner/research-inquiries/'+encodeURIComponent(id),{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(form)))});statusEl.textContent='Case file updated successfully.';load();}
+        catch(err){statusEl.textContent=err.message||'Failed to update case file.';}
+        finally{btn.disabled=false;}
+      });
+      $('#inquiry-activity-form')?.addEventListener('submit',async(e)=>{
+        e.preventDefault();const form=e.currentTarget,statusEl=form.querySelector('.form-status'),btn=form.querySelector('[type=submit]');
+        btn.disabled=true;statusEl.textContent='Logging activity...';
+        try{await request('/api/owner/research-inquiries/'+encodeURIComponent(id)+'/activity',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(form)))});statusEl.textContent='Activity logged.';openInquiry(id);}
+        catch(err){statusEl.textContent=err.message||'Failed to add activity.';}
+        finally{btn.disabled=false;}
+      });
+      $('#inquiry-file-form')?.addEventListener('submit',async(e)=>{
+        e.preventDefault();const form=e.currentTarget,statusEl=form.querySelector('.form-status'),btn=form.querySelector('[type=submit]');
+        btn.disabled=true;statusEl.textContent='Recording document...';
+        try{await request('/api/owner/research-inquiries/'+encodeURIComponent(id)+'/files',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(form)))});statusEl.textContent='Document recorded.';openInquiry(id);}
+        catch(err){statusEl.textContent=err.message||'Failed to record document.';}
+        finally{btn.disabled=false;}
+      });
+    }catch(err){body.innerHTML=`<p style="color:#dc2626;">Error loading case file: ${esc(err.message)}</p>`;}
+  }
+  function exportCsv(){if(state.view==='inquiries'){location.href='/api/owner/research-inquiries/export?'+new URLSearchParams({format:'csv',q:state.q||'',status:state.status||'all',from:state.from||'',to:state.to||''});return;}if(!report)return;const safe=value=>{let text=String(value??'');if(/^[\s]*[=+@-]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"';};const rows=[['Report',views[state.view][0]],['Range',report.range?.from||'',report.range?.to||'']];(report.metrics||[]).forEach(metric=>rows.push([metric.label,metric.value]));(report.tables||[]).forEach(table=>{const columns=(table.columns||[]).filter(col=>!/(password|token|secret)/i.test(col.key));rows.push([], [table.title],columns.map(col=>col.label));(table.rows||[]).forEach(row=>rows.push(columns.map(col=>row[col.key])));});const url=URL.createObjectURL(new Blob(['\ufeff'+rows.map(row=>row.map(safe).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`owner-${state.view}-${new Date().toISOString().slice(0,10)}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   document.addEventListener('click',event=>{const link=event.target.closest('[data-view],[data-tab]');if(!link||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;event.preventDefault();navigate(link.dataset.view?{...state,view:link.dataset.view,tab:'overview',q:'',status:''}:{...state,tab:link.dataset.tab});});
   $('#report-filters').addEventListener('submit',event=>{event.preventDefault();const values=Object.fromEntries(new FormData(event.currentTarget));if(values.range==='custom'&&(!values.from||!values.to||values.from>values.to)){$('#owner-status').textContent='Choose a valid start and end date.';return;}navigate({...state,...values});});
   $('#report-range').addEventListener('change',event=>document.querySelectorAll('.custom-date').forEach(el=>el.hidden=event.target.value!=='custom'));
-  $('#reset-report').addEventListener('click',()=>navigate({view:state.view,tab:state.tab,range:savedDefaultRange,granularity:'day'}));$('#refresh-dashboard').addEventListener('click',load);$('#export-dashboard').addEventListener('click',exportCsv);$('[data-close-dialog]').addEventListener('click',()=>$('#member-dialog').close());$('#owner-logout').addEventListener('click',()=>{authorized=false;requestId++;clearInterval(pollTimer);$('#owner-app').hidden=true;report=null;window.CCCCommunity.logout();});addEventListener('popstate',()=>{state=readState();renderRoute();});
+  $('#reset-report').addEventListener('click',()=>navigate({view:state.view,tab:state.tab,range:savedDefaultRange,granularity:'day'}));$('#refresh-dashboard').addEventListener('click',load);$('#export-dashboard').addEventListener('click',exportCsv);$('[data-close-dialog]').addEventListener('click',()=>$('#member-dialog').close());$('[data-close-inquiry]')?.addEventListener('click',()=>$('#inquiry-dialog')?.close());$('#export-excel')?.addEventListener('click',()=>{location.href='/api/owner/research-inquiries/export?'+new URLSearchParams({format:'xlsx',q:state.q||'',status:state.status||'all',from:state.from||'',to:state.to||''});});$('#owner-logout').addEventListener('click',()=>{authorized=false;requestId++;clearInterval(pollTimer);$('#owner-app').hidden=true;report=null;window.CCCCommunity.logout();});addEventListener('popstate',()=>{state=readState();renderRoute();});
   async function start(){try{const user=await window.CCCCommunity.restoreSession();if(!user || user.role!=='owner'){$('#access-gate h1').textContent='Owner access required.';$('#access-status').innerHTML='<a href="LOGIN.html?returnTo=%2FOWNER.html">Sign in to your owner account</a> or <a href="PROFILE.html">return to your profile</a>.';return;}authorized=true;if(!new URLSearchParams(location.search).has('range')){try{const defaults=await request('/api/owner/dashboard?view=settings');if(defaults.settings?.defaultRange)savedDefaultRange=defaults.settings.defaultRange;}catch{}}$('#access-gate').hidden=true;$('#owner-app').hidden=false;state=readState();renderRoute();}catch(error){$('#access-status').textContent=error.message;}}
   $('[data-close-metric]').addEventListener('click',()=>$('#metric-dialog').close());
   start();
