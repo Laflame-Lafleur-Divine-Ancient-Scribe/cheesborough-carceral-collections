@@ -10,7 +10,7 @@
     { href: 'SEARCH.html', label: 'Search', badge: 'Desk' },
     { href: 'COLLECTIONS.html', label: 'Collections', badge: 'Series' },
     { href: 'RESEARCH.html', label: 'Paperwork', badge: '50 Cases' },
-    { href: 'LAW-LIBRARY.html', label: 'Law Library', badge: '14 Treatises' },
+    { href: 'LAW-LIBRARY.html', label: 'Law Library', badge: '14 Books' },
     { href: 'NEWS.html', label: 'News', badge: 'Dispatches' },
     { href: 'EVIDENCE-INDEX.html', label: 'Evidence Index', badge: 'Dockets' },
     { href: 'ABOUT.html', label: 'About', badge: 'Mission' },

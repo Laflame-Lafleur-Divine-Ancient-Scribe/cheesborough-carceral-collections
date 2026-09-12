@@ -357,7 +357,7 @@ SEARCH_INDEX.push(
     icon: "📚",
     date: "20th Century",
     author: "U.S. Bureau of Prisons Library",
-    description: "Official bibliographic catalog of penological treatises, institutional management texts, and criminological reference works.",
+    description: "Official bibliographic catalog of penological books and resources, institutional management texts, and criminological reference works.",
     tags: ["Books and Manuscripts", "Correctional Bookshelf", "Bureau of Prisons", "Bibliography", "Reference"],
     keywords: ["correctional bookshelf bibliography pdf", "bureau of prisons library", "penological reference catalog", "books and manuscripts"],
     actionLabel: "Read Catalog Online ↗"
@@ -697,16 +697,16 @@ SEARCH_INDEX.push(
   },
   {
     id: "col-books-manuscripts",
-    title: "Books and Manuscripts Collection: Rare Treatises & Prisoner Writings",
+    title: "Books and Manuscripts Collection: Rare Books & Prisoner Writings",
     url: "BOOKS-AND-MANUSCRIPTS.html",
     category: "Manuscript & Book",
     badge: "Rare Manuscripts",
     icon: "📚",
     date: "1934–1989",
     author: "Special Collections Reading Room",
-    description: "Rare monographs, legal treatises, handwritten inmate notebooks, and reform literature, including The Education Question (1934) and Letters from the Seventh Floor (1978).",
+    description: "Rare monographs, legal resources, handwritten inmate notebooks, and reform literature, including The Education Question (1934) and Letters from the Seventh Floor (1978).",
     tags: ["Books and Manuscripts", "Rare Books", "The Education Question 1934", "Letters from the Seventh Floor 1978", "A History of Reform 1968", "Inmate Writings"],
-    keywords: ["books and manuscripts", "rare books", "the education question 1934", "letters from the seventh floor 1978", "a history of reform 1968", "notes for a hearing 1989", "archival literature", "monographs", "treatises"],
+    keywords: ["books and manuscripts", "rare books", "the education question 1934", "letters from the seventh floor 1978", "a history of reform 1968", "notes for a hearing 1989", "archival literature", "monographs", "resources"],
     actionLabel: "Browse Manuscripts →"
   },
   {

@@ -2212,7 +2212,7 @@ const server = http.createServer((request, response) => {
         return;
     }
     if (/\.pdf$/i.test(decodeURIComponent(requestUrl.pathname))) {
-        communityJson(response,403,{error:'PDF downloads require an active $3 or higher subscription. Open the document through the website reader.',requiredTier:'plugged_in'});
+        communityJson(response,403,{error:'PDF downloads require an active paid subscription. Open the document through the website reader.',requiredTier:'plugged_in'});
         return;
     }
     if (requestUrl.pathname === '/api/membership' || requestUrl.pathname.startsWith('/api/membership/')) {

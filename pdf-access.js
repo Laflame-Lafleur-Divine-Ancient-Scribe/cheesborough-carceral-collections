@@ -12,7 +12,7 @@
   if(!dialog){
    const style=document.createElement('style');style.textContent='#pdf-download-dialog{box-sizing:border-box;width:min(92vw,480px);border:1px solid #b89558;border-radius:12px;padding:28px;background:#f5f2eb;color:#102c4c;font:18px/1.5 system-ui}#pdf-download-dialog::backdrop{background:#091e36bb}#pdf-download-dialog a,#pdf-download-dialog button{display:inline-block;margin:8px 8px 0 0;padding:10px 14px;border:1px solid #102c4c;border-radius:6px;background:#102c4c;color:white;font:inherit}#pdf-download-dialog h2{margin-top:0;font:700 26px/1.2 Georgia}';document.head.append(style);
    dialog=document.createElement('dialog');dialog.id='pdf-download-dialog';dialog.setAttribute('aria-labelledby','pdf-download-title');
-   dialog.innerHTML='<h2 id="pdf-download-title">PDF downloads</h2><p data-message></p><a data-join href="/MEMBERS.html?tier=plugged_in">Join from $3 / month</a><a data-login>Sign in</a><button type="button">Keep reading free</button>';
+   dialog.innerHTML='<h2 id="pdf-download-title">PDF downloads</h2><p data-message></p><a data-join href="/MEMBERS.html?tier=plugged_in">View subscription plans</a><a data-login>Sign in</a><button type="button">Keep reading free</button>';
    dialog.querySelector('button').onclick=()=>dialog.close();document.body.append(dialog);
   }
   dialog.querySelector('[data-message]').textContent=message;
