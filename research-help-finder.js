@@ -2,7 +2,7 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const esc = str => String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>', '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const esc = str => String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   const request = (path, options) => window.CCCCommunity.request(path, options);
 
@@ -14,30 +14,40 @@
     if (!root) return;
 
     try {
-      currentUser = await window.CCCCommunity.restoreSession();
-    } catch {
-      currentUser = null;
-    }
-
-    if (!currentUser) {
-      // Unauthenticated visitor -> Redirect to login preserving destination
-      const returnTo = encodeURIComponent(location.pathname + location.search);
-      location.assign(`/LOGIN.html?returnTo=${returnTo}`);
-      return;
-    }
-
-    if (!currentEntitlement) {
       try {
-        currentEntitlement = await request('/api/research-help/access');
-      } catch (err) {
-        currentEntitlement = { access: false, tier: 'free', planName: 'Public Reader', reason: 'upgrade_required' };
+        currentUser = await window.CCCCommunity.restoreSession();
+      } catch {
+        currentUser = null;
       }
-    }
 
-    if (!currentEntitlement.access) {
-      renderUpgradeScreen(root, currentEntitlement);
-    } else {
-      renderQualifiedForm(root, currentEntitlement, currentUser);
+      if (!currentUser) {
+        // Unauthenticated visitor -> Redirect to login preserving destination
+        const returnTo = encodeURIComponent(location.pathname + location.search);
+        location.assign(`/LOGIN.html?returnTo=${returnTo}`);
+        return;
+      }
+
+      if (!currentEntitlement) {
+        try {
+          currentEntitlement = await request('/api/research-help/access');
+        } catch (err) {
+          currentEntitlement = { access: false, tier: 'free', planName: 'Public Reader', reason: 'upgrade_required' };
+        }
+      }
+
+      if (!currentEntitlement.access) {
+        renderUpgradeScreen(root, currentEntitlement);
+      } else {
+        renderQualifiedForm(root, currentEntitlement, currentUser);
+      }
+    } catch (err) {
+      root.innerHTML = `
+        <div style="max-width: 600px; margin: 3rem auto; text-align: center; padding: 2rem; background: #fff; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+          <h2 style="color: #991b1b; margin-top: 0;">Service Temporarily Unavailable</h2>
+          <p style="color: #555;">We encountered an issue loading your research help service. Please refresh the page or try again in a few moments.</p>
+          <button type="button" onclick="location.reload()" class="btn-secondary" style="margin-top: 1rem; cursor: pointer; padding: 0.6rem 1.25rem;">Refresh Page</button>
+        </div>
+      `;
     }
   }
 
@@ -78,6 +88,36 @@
   }
 
   function renderQualifiedForm(container, entitlement, user) {
+    const searchParams = new URLSearchParams(location.search);
+    const audienceParam = (searchParams.get('audience') || '').toLowerCase();
+    const topicParam = (searchParams.get('topic') || '').toLowerCase();
+
+    let preselectedRelationship = '';
+    if (audienceParam === 'inside') preselectedRelationship = 'Incarcerated individual';
+    else if (audienceParam === 'family') preselectedRelationship = 'Family member';
+    else if (audienceParam === 'released') preselectedRelationship = 'Incarcerated individual';
+    else if (audienceParam === 'research') preselectedRelationship = 'Researcher';
+
+    const autoSelectedCategories = new Set();
+    if (topicParam === 'rights' || audienceParam === 'inside') {
+      autoSelectedCategories.add('Court Records');
+      autoSelectedCategories.add('Appeals');
+      autoSelectedCategories.add('Post-Conviction Research');
+    }
+    if (topicParam === 'reentry' || audienceParam === 'released') {
+      autoSelectedCategories.add('Reentry Resources');
+      autoSelectedCategories.add('Release Information');
+    }
+    if (topicParam === 'records' || audienceParam === 'research') {
+      autoSelectedCategories.add('Court Records');
+      autoSelectedCategories.add('Public Records');
+      autoSelectedCategories.add('Historical Records');
+    }
+    if (topicParam === 'family' || audienceParam === 'family') {
+      autoSelectedCategories.add('Family Research');
+      autoSelectedCategories.add('Prison Records');
+    }
+
     const categories = [
       'Court Records',
       'Sentencing Information',
@@ -99,7 +139,7 @@
 
     const categoryHtml = categories.map((cat, idx) => `
       <label class="category-checkbox-label">
-        <input type="checkbox" name="categories" value="${esc(cat)}" id="cat_${idx}">
+        <input type="checkbox" name="categories" value="${esc(cat)}" id="cat_${idx}" ${autoSelectedCategories.has(cat) ? 'checked' : ''}>
         <span>${esc(cat)}</span>
       </label>
     `).join('');
@@ -144,12 +184,12 @@
               <label for="relationship">Relationship to Individual <span class="req">*</span></label>
               <select id="relationship" name="relationship" required>
                 <option value="">Select relationship...</option>
-                <option value="Incarcerated individual">Incarcerated individual</option>
-                <option value="Family member">Family member</option>
-                <option value="Friend">Friend</option>
-                <option value="Advocate">Advocate</option>
-                <option value="Researcher">Researcher</option>
-                <option value="Other interested person">Other interested person</option>
+                <option value="Incarcerated individual" ${preselectedRelationship === 'Incarcerated individual' ? 'selected' : ''}>Incarcerated individual</option>
+                <option value="Family member" ${preselectedRelationship === 'Family member' ? 'selected' : ''}>Family member</option>
+                <option value="Friend" ${preselectedRelationship === 'Friend' ? 'selected' : ''}>Friend</option>
+                <option value="Advocate" ${preselectedRelationship === 'Advocate' ? 'selected' : ''}>Advocate</option>
+                <option value="Researcher" ${preselectedRelationship === 'Researcher' ? 'selected' : ''}>Researcher</option>
+                <option value="Other interested person" ${preselectedRelationship === 'Other interested person' ? 'selected' : ''}>Other interested person</option>
               </select>
             </div>
 
@@ -476,6 +516,10 @@
     `;
   }
 
-  document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
 })();
 

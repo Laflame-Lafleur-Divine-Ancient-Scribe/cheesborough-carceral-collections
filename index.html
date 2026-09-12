@@ -471,10 +471,13 @@
 
       .assistance-callout { background: var(--navy); color: #fff; padding: clamp(2.5rem, 5vw, 4rem) 1rem; }
       .assistance-callout-inner { margin: 0 auto; max-width: 980px; }
-      .assistance-callout-head { max-width: 42rem; }
+      .assistance-callout-top { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr); gap: clamp(1.5rem, 3vw, 2.5rem); align-items: center; margin-bottom: 2rem; }
+      .assistance-callout-head { max-width: none; }
       .assistance-callout .story-label { color: var(--gold); }
       .assistance-callout h2 { color: #fff; font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(1.6rem, 2.6vw + 0.4rem, 2.35rem); line-height: 1.25; margin: 0.5rem 0 0.75rem; }
-      .assistance-callout-head p { color: #dfe4ea; font-size: 1.03rem; line-height: 1.6; margin: 0 0 1.75rem; }
+      .assistance-callout-head p { color: #dfe4ea; font-size: 1.03rem; line-height: 1.6; margin: 0; }
+      .assistance-callout-media { position: relative; border-radius: 6px; overflow: hidden; border: 1px solid rgba(194, 155, 83, 0.4); box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45); aspect-ratio: 4 / 3; }
+      .assistance-callout-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
       .assistance-paths { display: grid; gap: 1rem; grid-template-columns: repeat(4, 1fr); }
       .assistance-path { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(194, 155, 83, 0.4); border-radius: 4px; color: #fff; display: block; padding: 1.15rem 1rem; transition: background 180ms ease, transform 180ms ease; }
       .assistance-path:hover, .assistance-path:focus-visible { background: rgba(194, 155, 83, 0.16); outline: none; transform: translateY(-2px); }
@@ -484,6 +487,8 @@
       .assistance-callout-foot a { color: var(--gold); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
       .assistance-callout-foot a:hover { text-decoration: underline; }
       @media (max-width: 860px) {
+        .assistance-callout-top { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.75rem; }
+        .assistance-callout-media { max-width: 480px; }
         .assistance-paths { grid-template-columns: repeat(2, 1fr); }
       }
       @media (max-width: 520px) {
@@ -952,10 +957,15 @@
 
       <section class="assistance-callout" id="inside-assistance" aria-labelledby="assistance-callout-title">
         <div class="assistance-callout-inner">
-          <div class="assistance-callout-head">
-            <p class="story-label">A public service desk</p>
-            <h2 id="assistance-callout-title">Preserving the history of American punishment while helping people navigate the system that exists today.</h2>
-            <p>Carceral Collections documents the history of crime, punishment, courts, and incarceration while providing practical information for incarcerated people, their families, researchers, and communities navigating the justice system.</p>
+          <div class="assistance-callout-top">
+            <div class="assistance-callout-head">
+              <p class="story-label">A public service desk</p>
+              <h2 id="assistance-callout-title">Preserving the history of American punishment while helping people navigate the system that exists today.</h2>
+              <p>Carceral Collections documents the history of crime, punishment, courts, and incarceration while providing practical information for incarcerated people, their families, researchers, and communities navigating the justice system.</p>
+            </div>
+            <div class="assistance-callout-media">
+              <img src="01_Photos/ShareImages/inmate-law-library-assistance.jpg" alt="Incarcerated individual studying legal records and law books in a correctional facility library" loading="lazy" decoding="async" />
+            </div>
           </div>
           <nav class="assistance-paths" aria-label="Choose your starting point" data-title-case-applied="true">
             <a class="assistance-path" href="HELP-FINDER.html?audience=inside&amp;topic=rights" data-title-case-applied="true">
