@@ -27,6 +27,102 @@ body.research-help-page {
   font-size: 16px;
 }
 
+/* Site Masthead & Topbar Navigation */
+.site-masthead {
+  background: var(--navy);
+  color: #fff;
+  width: 100%;
+}
+
+.topbar {
+  align-items: center;
+  background: var(--navy-dark);
+  border-bottom: 3px solid var(--gold);
+  color: #fff;
+  display: flex;
+  font-size: 0.92rem;
+  justify-content: center;
+  letter-spacing: 0.04em;
+  min-height: 2.8rem;
+  padding: 0.45rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.topbar nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 0.2rem;
+  align-items: center;
+}
+
+.topbar a {
+  color: #fff;
+  padding: 0 0.72rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  transition: color 150ms ease;
+}
+
+.topbar a + a {
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.topbar a:hover {
+  color: var(--gold-light);
+}
+
+.brand {
+  align-items: end;
+  background: var(--navy);
+  border-bottom: 2px solid var(--gold);
+  color: #fff;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1.1rem clamp(1rem, 6vw, 6rem);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.brand strong {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: clamp(1.3rem, 3vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.brand strong a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand small {
+  font-size: 0.45em;
+  margin-left: 0.12em;
+  vertical-align: super;
+}
+
+.brand span {
+  color: var(--gold);
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 850px) {
+  .brand {
+    display: block;
+  }
+  .brand span {
+    display: block;
+    margin-top: 0.4rem;
+  }
+}
+
 .help-finder-container {
   max-width: 1040px;
   margin: 0 auto;

@@ -4,10 +4,19 @@
   const $ = id => document.getElementById(id);
   const esc = str => String(str ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  const request = (path, options) => window.CCCCommunity.request(path, options);
+  const request = (path, options) => window.CCCCommunity ? window.CCCCommunity.request(path, options) : Promise.reject(new Error('Auth unavailable'));
+  const timeoutPromise = (ms, msg) => new Promise((_, reject) => setTimeout(() => reject(new Error(msg)), ms));
 
   let currentEntitlement = window.__RESEARCH_HELP_INITIAL__ || null;
   let currentUser = null;
+
+  function dismissArchiveLoader() {
+    const loader = $('archive-loading-screen');
+    if (loader && !loader.hidden && !loader.classList.contains('is-closing')) {
+      loader.classList.add('is-closing');
+      setTimeout(() => { loader.hidden = true; }, 320);
+    }
+  }
 
   async function init() {
     const root = $('help-finder-app');
@@ -15,7 +24,12 @@
 
     try {
       try {
-        currentUser = await window.CCCCommunity.restoreSession();
+        if (window.CCCCommunity && typeof window.CCCCommunity.restoreSession === 'function') {
+          currentUser = await Promise.race([
+            window.CCCCommunity.restoreSession(),
+            timeoutPromise(3000, 'Session restore timeout')
+          ]);
+        }
       } catch {
         currentUser = null;
       }
@@ -27,11 +41,29 @@
         return;
       }
 
+      // Owner instant bypass: Owners always have full entitlement immediately
+      if (currentUser.role === 'owner') {
+        currentEntitlement = {
+          access: true,
+          tier: 'owner',
+          planName: 'Owner Account',
+          user: currentUser
+        };
+      }
+
       if (!currentEntitlement) {
         try {
-          currentEntitlement = await request('/api/research-help/access');
+          currentEntitlement = await Promise.race([
+            request('/api/research-help/access'),
+            timeoutPromise(3000, 'Entitlement check timeout')
+          ]);
         } catch (err) {
-          currentEntitlement = { access: false, tier: 'free', planName: 'Public Reader', reason: 'upgrade_required' };
+          const tier = currentUser.tier || currentUser.subscriptionTier || 'free';
+          if (tier === 'full_member' || tier === 'legacy_circle') {
+            currentEntitlement = { access: true, tier, planName: tier === 'legacy_circle' ? 'Legacy Circle' : 'Full Member', user: currentUser };
+          } else {
+            currentEntitlement = { access: false, tier: 'free', planName: 'Public Reader', reason: 'upgrade_required' };
+          }
         }
       }
 
@@ -41,13 +73,10 @@
         renderQualifiedForm(root, currentEntitlement, currentUser);
       }
     } catch (err) {
-      root.innerHTML = `
-        <div style="max-width: 600px; margin: 3rem auto; text-align: center; padding: 2rem; background: #fff; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-          <h2 style="color: #991b1b; margin-top: 0;">Service Temporarily Unavailable</h2>
-          <p style="color: #555;">We encountered an issue loading your research help service. Please refresh the page or try again in a few moments.</p>
-          <button type="button" onclick="location.reload()" class="btn-secondary" style="margin-top: 1rem; cursor: pointer; padding: 0.6rem 1.25rem;">Refresh Page</button>
-        </div>
-      `;
+      console.error('Help Finder init error:', err);
+      renderUpgradeScreen(root, { access: false, tier: 'free', planName: 'Public Reader', reason: 'error' });
+    } finally {
+      dismissArchiveLoader();
     }
   }
 

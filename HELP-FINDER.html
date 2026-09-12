@@ -8,11 +8,55 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="research-help-finder.css?v=20260912b">
+  <link rel="stylesheet" href="archive-loader.css?v=20260908-single-loader">
+  <link rel="stylesheet" href="responsive-navigation.css?v=20260911-mobile-nav">
+  <link rel="stylesheet" href="research-help-finder.css?v=20260912c">
+  <script src="site-theme.js" defer></script>
+  <script src="responsive-navigation.js?v=20260911-mobile-nav" defer></script>
   <script src="community-auth.js" defer></script>
-  <script src="research-help-finder.js?v=20260912b" defer></script>
+  <script src="research-help-finder.js?v=20260912c" defer></script>
 </head>
 <body class="research-help-page">
+  <section class="archive-loader" id="archive-loading-screen" role="dialog" aria-modal="true" aria-labelledby="archive-loader-title" data-title-case-applied="true">
+    <div class="archive-loader-shell">
+      <div class="archive-loader-top"><span class="archive-loader-brand">CC<span>Cheesborough<br>Carceral Collections</span></span><button type="button" data-loader-skip class="archive-loader-skip">Skip loading <span aria-hidden="true">&#8599;</span></button></div>
+      <div class="archive-loader-panel">
+        <div class="archive-loader-emblem" aria-hidden="true"><span></span><span></span><span></span></div>
+        <p class="archive-loader-eyebrow">Cases. Evidence. History.</p>
+        <h2 id="archive-loader-title" class="archive-loader-title" data-title-case-applied="true">Exploring Criminal Justice<br>Through Cases, Evidence,<br><em>and History.</em></h2>
+        <p class="archive-loader-description">Tracing the people, decisions, and systems<br>that shape justice and punishment.</p>
+        <div class="archive-loader-epigraph"><blockquote data-loader-quote>&ldquo;Justice must not only be done, but must also be seen to be done.&rdquo;</blockquote><p data-loader-attribution>&mdash; Lord Hewart</p></div>
+        <div class="archive-loader-progress-head"><span data-loader-status role="status">Verifying research access...</span><span data-loader-percent aria-hidden="true">0%</span></div>
+        <div class="archive-loader-track" role="progressbar" aria-label="Page essentials" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-loader-progress></span></div>
+        <div class="archive-loader-progress-foot"><span data-loader-count>Checking membership status</span><span data-loader-preview hidden>Preview mode</span></div>
+      </div>
+      <div class="archive-loader-bottom"><span>Connecting the record to the human story.</span><button class="archive-loader-motion" type="button" data-loader-motion aria-pressed="true">Motion on</button></div>
+    </div>
+  </section>
+  <script src="loader-quotes.js?v=20260908-single-loader"></script>
+  <script src="archive-loader.js?v=20260908-single-loader"></script>
+
+  <header class="site-masthead">
+    <div class="topbar">
+      <nav class="topbar" aria-label="Primary navigation">
+        <a href="index.html">HOME</a>
+        <a href="SEARCH.html">SEARCH</a>
+        <a href="COLLECTIONS.html">COLLECTIONS</a>
+        <a href="RESEARCH.html">PAPERWORK</a>
+        <a href="LAW-LIBRARY.html">LAW LIBRARY</a>
+        <a href="NEWS.html">NEWS</a>
+        <a href="EVIDENCE-INDEX.html">EVIDENCE INDEX</a>
+        <a href="ABOUT.html">ABOUT</a>
+        <a href="DONATE.html">DONATE</a>
+        <a href="CONTACT.html">CONTACT</a>
+      </nav>
+    </div>
+    <div class="brand">
+      <strong><a href="index.html">The Cheesborough Carceral Collections<small>&reg;</small></a></strong>
+      <span>Evidence &bull; Memory &bull; Record</span>
+    </div>
+  </header>
+
   <a class="skip-link" href="#help-finder-app" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to research form</a>
 
   <div class="help-finder-container">
@@ -25,9 +69,7 @@
     </header>
 
     <main id="help-finder-app" aria-live="polite">
-      <div style="text-align: center; padding: 4rem 1rem; color: #555;">
-        <p style="font-size: 1.15rem; font-weight: 600;">Verifying membership access...</p>
-      </div>
+      <div style="min-height: 280px; display: flex; align-items: center; justify-content: center;"></div>
     </main>
 
     <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #dcd4c3; text-align: center; font-size: 0.9rem; color: #666;">
