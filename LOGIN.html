@@ -16,6 +16,11 @@
       const error = document.querySelector('#error');
       const createFields = [...form.querySelectorAll('[data-create-field]')];
       const password = document.querySelector('#password');
+      const confirmPassword = document.querySelector('#confirmPassword');
+      const identifierLabel = document.querySelector('#identifier-label-text');
+      const identifierInput = document.querySelector('#identifier');
+      const showBtn = document.querySelector('#show');
+      const showConfirmBtn = document.querySelector('#show-confirm');
       let mode = 'signin';
 
       const setMode = (nextMode) => {
@@ -24,14 +29,39 @@
         createFields.forEach((field) => {
           field.hidden = !creating;
           const input = field.querySelector('input');
-          input.disabled = !creating;
-          input.required = creating && input.dataset.required === 'true';
+          if (input) {
+            input.disabled = !creating;
+            input.required = creating && input.dataset.required === 'true';
+          }
         });
-        password.autocomplete = creating ? 'new-password' : 'current-password';
+        password.type = 'password';
+        confirmPassword.type = 'password';
+        showBtn.textContent = 'Show';
+        showBtn.setAttribute('aria-label', 'Show password');
+        showConfirmBtn.textContent = 'Show';
+        showConfirmBtn.setAttribute('aria-label', 'Show confirm password');
+
+        if (creating) {
+          identifierLabel.textContent = 'Email address';
+          identifierInput.type = 'email';
+          identifierInput.autocomplete = 'email';
+          identifierInput.placeholder = 'you@example.com';
+          password.autocomplete = 'new-password';
+          password.minLength = 10;
+        } else {
+          identifierLabel.textContent = 'Email address or Username';
+          identifierInput.type = 'text';
+          identifierInput.autocomplete = 'username';
+          identifierInput.removeAttribute('placeholder');
+          password.autocomplete = 'current-password';
+          password.removeAttribute('minlength');
+        }
         document.querySelectorAll('[data-mode]').forEach((button) => {
           button.setAttribute('aria-selected', String(button.dataset.mode === mode));
         });
         form.querySelector('button[type=submit]').textContent = creating ? 'Create account' : 'Sign in';
+        error.textContent = '';
+        confirmPassword.setCustomValidity('');
       };
 
       document.querySelectorAll('[data-mode]').forEach((button) => {
@@ -39,36 +69,84 @@
       });
       setMode(mode);
 
-      document.querySelector('#show').onclick = () => {
-        password.type = password.type === 'password' ? 'text' : 'password';
+      showBtn.onclick = () => {
+        const isPassword = password.type === 'password';
+        password.type = isPassword ? 'text' : 'password';
+        showBtn.textContent = isPassword ? 'Hide' : 'Show';
+        showBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
       };
+
+      showConfirmBtn.onclick = () => {
+        const isPassword = confirmPassword.type === 'password';
+        confirmPassword.type = isPassword ? 'text' : 'password';
+        showConfirmBtn.textContent = isPassword ? 'Hide' : 'Show';
+        showConfirmBtn.setAttribute('aria-label', isPassword ? 'Hide confirm password' : 'Show confirm password');
+      };
+
+      const validateMatch = () => {
+        if (mode !== 'create') {
+          confirmPassword.setCustomValidity('');
+          return true;
+        }
+        if (confirmPassword.value && password.value !== confirmPassword.value) {
+          confirmPassword.setCustomValidity('Passwords do not match');
+          return false;
+        }
+        confirmPassword.setCustomValidity('');
+        if (error.textContent.includes('Passwords do not match')) {
+          error.textContent = '';
+        }
+        return true;
+      };
+
       password.oninput = () => {
         document.querySelector('#ready').style.width = `${Math.min(100, password.value.length * 8)}%`;
+        if (mode === 'create' && confirmPassword.value) validateMatch();
       };
+
+      confirmPassword.oninput = () => {
+        if (mode === 'create') validateMatch();
+      };
+
       form.onsubmit = async (event) => {
         event.preventDefault();
         error.textContent = '';
+
+        if (mode === 'create') {
+          if (!password.value || password.value.length < 10) {
+            error.textContent = 'Password must be at least 10 characters.';
+            password.focus();
+            return;
+          }
+          if (password.value !== confirmPassword.value) {
+            error.textContent = 'Passwords do not match. Please ensure both passwords match.';
+            confirmPassword.focus();
+            return;
+          }
+        }
+
         if (!form.reportValidity()) return;
         const button = form.querySelector('button[type=submit]');
         button.disabled = true;
         try {
-          const values = { email: form.email.value, password: password.value };
+          const values = { email: identifierInput.value.trim(), password: password.value };
           if (mode === 'create') {
             Object.assign(values, {
-              firstName: form.firstName.value,
-              lastName: form.lastName.value,
-              displayName: form.displayName.value,
-              phoneNumber: form.phoneNumber.value
+              firstName: form.firstName.value.trim(),
+              lastName: form.lastName.value.trim(),
+              displayName: form.displayName.value.trim(),
+              phoneNumber: form.phoneNumber.value.trim()
             });
           }
           await community.submitAccount(mode, values);
           location.assign(community.safeReturnTo(new URLSearchParams(location.search).get('returnTo')));
-        } catch (err) {
-          error.textContent = err.message;
+        } catch (submitError) {
+          error.textContent = submitError.message;
         } finally {
           button.disabled = false;
         }
       };
+
       community.restoreSession().then((user) => {
         if (user) document.querySelector('#state').textContent = `Signed in as ${user.displayName}.`;
       });
@@ -101,17 +179,21 @@
           <label class="field-label" data-create-field hidden>Username (Display Name)
             <input name="displayName" data-required="true" maxlength="39" autocomplete="username">
           </label>
+          <label class="field-label" id="identifier-field"><span id="identifier-label-text">Email address or Username</span>
+            <input id="identifier" name="email" required autocomplete="username">
+          </label>
           <label class="field-label password-wrap">Password
             <input id="password" type="password" name="password" required minlength="10" autocomplete="current-password">
-            <button id="show" class="password-toggle" type="button">Show</button>
+            <button id="show" class="password-toggle" type="button" aria-label="Toggle password visibility">Show</button>
           </label>
-          <label class="field-label">Email address
-            <input type="email" name="email" required autocomplete="email">
+          <label class="field-label password-wrap" data-create-field hidden>Confirm Password
+            <input id="confirmPassword" type="password" name="confirmPassword" data-required="true" minlength="10" autocomplete="new-password">
+            <button id="show-confirm" class="password-toggle" type="button" aria-label="Toggle confirm password visibility">Show</button>
           </label>
+          <p class="password-readiness" data-create-field hidden><span class="readiness-bar"><i id="ready"></i></span>Use at least 10 characters</p>
           <label class="field-label" data-create-field hidden>Phone Number <span class="field-optional">Optional</span>
             <input type="tel" name="phoneNumber" maxlength="30" autocomplete="tel">
           </label>
-          <p class="password-readiness"><span class="readiness-bar"><i id="ready"></i></span>Use at least 10 characters</p>
           <p id="error" class="auth-error" role="alert"></p>
           <button class="auth-submit" type="submit">Sign in</button>
         </form>
