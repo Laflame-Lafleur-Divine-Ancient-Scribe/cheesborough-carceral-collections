@@ -17,3 +17,4 @@ CREATE TABLE IF NOT EXISTS community_connections (
 
 CREATE INDEX IF NOT EXISTS community_connections_receiver_idx ON community_connections(receiver_id, status);
 CREATE INDEX IF NOT EXISTS community_connections_requester_idx ON community_connections(requester_id, status);
+
