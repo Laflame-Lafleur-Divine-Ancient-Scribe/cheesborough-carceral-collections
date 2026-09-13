@@ -2251,7 +2251,7 @@ const server = http.createServer((request, response) => {
         researchHelpService.handle(request, response, requestUrl).catch((err) => communityJson(response, 503, { error: err.message || 'Research inquiry management is temporarily unavailable.' }));
         return;
     }
-    if (requestUrl.pathname === '/api/community/posts' || requestUrl.pathname.startsWith('/api/community/posts/')) {
+    if (requestUrl.pathname.startsWith('/api/community/')) {
         applyApiCors(request, response);
         communityHubService.handle(request, response, requestUrl).catch((err) => communityJson(response, 503, { error: err.message || 'The community platform is temporarily unavailable.' }));
         return;

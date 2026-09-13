@@ -166,3 +166,13 @@ CREATE TABLE IF NOT EXISTS community_post_reactions (
     created_at timestamptz NOT NULL DEFAULT now(),
     PRIMARY KEY (post_id, user_id, reaction_type)
 );
+
+CREATE TABLE IF NOT EXISTS community_follows (
+    follower_id uuid NOT NULL REFERENCES community_users(id) ON DELETE CASCADE,
+    following_id uuid NOT NULL REFERENCES community_users(id) ON DELETE CASCADE,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (follower_id, following_id)
+);
+CREATE INDEX IF NOT EXISTS community_follows_following_idx ON community_follows(following_id);
+CREATE INDEX IF NOT EXISTS community_follows_follower_idx ON community_follows(follower_id);
+

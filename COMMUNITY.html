@@ -1043,16 +1043,16 @@
         <div class="profile-card-role">Verified Archival Member</div>
         <div class="profile-stats">
           <div>
-            <div class="profile-stat-val">19</div>
-            <div class="profile-stat-lbl">Dockets</div>
+            <div class="profile-stat-val" id="profile-stat-connections">19</div>
+            <div class="profile-stat-lbl">Connections</div>
           </div>
           <div>
-            <div class="profile-stat-val">54</div>
-            <div class="profile-stat-lbl">Replies</div>
+            <div class="profile-stat-val" id="profile-stat-followers">54</div>
+            <div class="profile-stat-lbl">Followers</div>
           </div>
           <div>
-            <div class="profile-stat-val">8</div>
-            <div class="profile-stat-lbl">Uncovered</div>
+            <div class="profile-stat-val" id="profile-stat-posts">8</div>
+            <div class="profile-stat-lbl">Posts</div>
           </div>
         </div>
       </div>
@@ -1060,22 +1060,25 @@
       <!-- Quick Navigation Menu -->
       <div class="fb-card fb-menu-list">
         <div class="fb-menu-row active" data-filter="all">
-          <span class="fb-menu-icon">&#127968;</span> All Discussions
+          <span class="fb-menu-icon">&#127968;</span> Feed &amp; Discussions
         </div>
-        <div class="fb-menu-row" data-filter="concealed">
-          <span class="fb-menu-icon">&#128269;</span> Concealed Records Watch
+        <div class="fb-menu-row" data-filter="watch">
+          <span class="fb-menu-icon">&#128680;</span> Breaking &amp; Watch
+        </div>
+        <div class="fb-menu-row" data-filter="cases">
+          <span class="fb-menu-icon">&#9878;&#65039;</span> Trending Trials &amp; Cases
         </div>
         <div class="fb-menu-row" data-filter="legal">
-          <span class="fb-menu-icon">&#9878;&#65039;</span> 8th Amendment &amp; Habeas
+          <span class="fb-menu-icon">&#128220;</span> Law, Rights &amp; Habeas
         </div>
-        <div class="fb-menu-row" data-filter="family">
-          <span class="fb-menu-icon">&#129309;</span> Family Mutual Aid
+        <div class="fb-menu-row" data-filter="mutual_aid">
+          <span class="fb-menu-icon">&#129309;</span> Family &amp; Community Circle
         </div>
-        <div class="fb-menu-row" data-filter="history">
-          <span class="fb-menu-icon">&#128220;</span> Florida Penal Archives
+        <div class="fb-menu-row" data-filter="investigation">
+          <span class="fb-menu-icon">&#128269;</span> Investigative Reports
         </div>
         <a href="PROFILE.html" class="fb-menu-row">
-          <span class="fb-menu-icon">&#128100;</span> My Researcher Profile
+          <span class="fb-menu-icon">&#128100;</span> My Member Profile
         </a>
         <a href="SEARCH.html" class="fb-menu-row">
           <span class="fb-menu-icon">&#128196;</span> Search Full Collections
@@ -1087,26 +1090,26 @@
 
       <!-- Trending Carceral Topics -->
       <div class="fb-card trending-box">
-        <div class="trending-title">Trending Investigations</div>
-        <div class="trend-item" onclick="filterByTag('#DozierCoverup')">
-          <div class="trend-tag">#DozierCoverup</div>
-          <div class="trend-count">2,410 inquiries &bull; Boot Hill anomalies</div>
+        <div class="trending-title">Trending Conversations</div>
+        <div class="trend-item" onclick="filterByTag('YSLRICO')">
+          <div class="trend-tag">#YSLRICO</div>
+          <div class="trend-count">3,840 posts &bull; Lyrics as evidence debate</div>
         </div>
-        <div class="trend-item" onclick="filterByTag('#MissingLedgers')">
-          <div class="trend-tag">#MissingLedgers</div>
-          <div class="trend-count">1,824 posts &bull; Florida 1930-1970 logs</div>
+        <div class="trend-item" onclick="filterByTag('CashBail')">
+          <div class="trend-tag">#CashBail</div>
+          <div class="trend-count">2,910 posts &bull; Pretrial detention &amp; due process</div>
         </div>
-        <div class="trend-item" onclick="filterByTag('#BootHillForensics')">
-          <div class="trend-tag">#BootHillForensics</div>
-          <div class="trend-count">1,150 posts &bull; 55 unmarked graves</div>
+        <div class="trend-item" onclick="filterByTag('CommissaryGouging')">
+          <div class="trend-tag">#CommissaryGouging</div>
+          <div class="trend-count">1,940 posts &bull; Private prison contractor fees</div>
         </div>
-        <div class="trend-item" onclick="filterByTag('#FloridaPrisons')">
-          <div class="trend-tag">#FloridaPrisons</div>
-          <div class="trend-count">3,290 posts &bull; Conditions &amp; grievances</div>
+        <div class="trend-item" onclick="filterByTag('FCIDublin')">
+          <div class="trend-tag">#FCIDublin</div>
+          <div class="trend-count">1,620 posts &bull; DOJ OIG civil rights audits</div>
         </div>
-        <div class="trend-item" onclick="filterByTag('#8thAmendment')">
-          <div class="trend-tag">#8thAmendment</div>
-          <div class="trend-count">940 posts &bull; Solitary confinement suits</div>
+        <div class="trend-item" onclick="filterByTag('BodyCamTruth')">
+          <div class="trend-tag">#BodyCamTruth</div>
+          <div class="trend-count">2,150 posts &bull; Affidavit discrepancy audits</div>
         </div>
       </div>
 
@@ -1119,49 +1122,50 @@
       <div class="fb-stories-strip">
         <div class="fb-story-tile fb-story-create" onclick="openComposer()">
           <div class="fb-story-plus">&#43;</div>
-          <div style="font-size:0.75rem; font-weight:700; text-align:center;">New Inquiry</div>
+          <div style="font-size:0.75rem; font-weight:700; text-align:center;">New Post</div>
         </div>
         
-        <div class="fb-story-tile" onclick="filterByTag('#DozierCoverup')">
+        <div class="fb-story-tile" onclick="filterByTag('YSLRICO')">
+          <img src="01_Photos/ShareImages/Law_Library_Share_Image.png" alt="RICO &amp; Lyrics">
+          <div class="fb-story-gradient">
+            <span style="font-size:1.1rem;">⚖️</span>
+            <span class="fb-story-tag">RICO &amp; Rap Lyrics</span>
+          </div>
+        </div>
+
+        <div class="fb-story-tile" onclick="filterByTag('DozierCoverup')">
           <img src="01_Photos/ShareImages/Dozier_Share_Image.png" alt="Dozier School">
           <div class="fb-story-gradient">
-            <span style="font-size:1.1rem;">&#128193;</span>
+            <span style="font-size:1.1rem;">📁</span>
             <span class="fb-story-tag">Boot Hill: 55 Hidden Graves</span>
           </div>
         </div>
 
-        <div class="fb-story-tile" onclick="filterByTag('#AmericanSiberia')">
+        <div class="fb-story-tile" onclick="filterByTag('CashBail')">
+          <img src="01_Photos/ShareImages/Help_Finder_Share_Image.png" alt="Cash Bail Reform">
+          <div class="fb-story-gradient">
+            <span style="font-size:1.1rem;">🤝</span>
+            <span class="fb-story-tag">Cash Bail Pretrial Debate</span>
+          </div>
+        </div>
+
+        <div class="fb-story-tile" onclick="filterByTag('AmericanSiberia')">
           <img src="01_Photos/ShareImages/American_Siberia_Share_Image.png" alt="American Siberia">
           <div class="fb-story-gradient">
-            <span style="font-size:1.1rem;">&#127963;</span>
-            <span class="fb-story-tag">The Turpentine Lease Camps</span>
-          </div>
-        </div>
-
-        <div class="fb-story-tile" onclick="filterByTag('#8thAmendment')">
-          <img src="01_Photos/ShareImages/Law_Library_Share_Image.png" alt="Law Library">
-          <div class="fb-story-gradient">
-            <span style="font-size:1.1rem;">&#9878;</span>
-            <span class="fb-story-tag">11th Cir. Habeas Motions</span>
-          </div>
-        </div>
-
-        <div class="fb-story-tile" onclick="filterByTag('#EvidenceIndex')">
-          <img src="01_Photos/ShareImages/Evidence_Index_Share_Image.png" alt="Evidence Index">
-          <div class="fb-story-gradient">
-            <span style="font-size:1.1rem;">&#128220;</span>
-            <span class="fb-story-tag">Cross-Examining State Logs</span>
+            <span style="font-size:1.1rem;">🏛️</span>
+            <span class="fb-story-tag">Turpentine Lease Camps</span>
           </div>
         </div>
       </div>
 
       <!-- Feed Filter Pills -->
       <div class="feed-filter-bar">
-        <button type="button" class="filter-pill active" data-filter="all">All Conversations</button>
-        <button type="button" class="filter-pill" data-filter="concealed">&#128269; Concealed Records Watch</button>
-        <button type="button" class="filter-pill" data-filter="legal">&#9878;&#65039; Legal &amp; Rights</button>
-        <button type="button" class="filter-pill" data-filter="family">&#129309; Family Circle</button>
-        <button type="button" class="filter-pill" data-filter="history">&#127963;&#65039; Archival Evidence</button>
+        <button type="button" class="filter-pill active" data-filter="all">All Posts</button>
+        <button type="button" class="filter-pill" data-filter="watch">🚨 Breaking &amp; Watch</button>
+        <button type="button" class="filter-pill" data-filter="cases">⚖️ Trials &amp; Cases</button>
+        <button type="button" class="filter-pill" data-filter="legal">📜 Law &amp; Rights</button>
+        <button type="button" class="filter-pill" data-filter="mutual_aid">🤝 Community Circle</button>
+        <button type="button" class="filter-pill" data-filter="investigation">🔍 Investigations</button>
       </div>
 
       <!-- Post Composer Box -->
@@ -1169,21 +1173,21 @@
         <div class="composer-top">
           <div class="post-author-avatar" id="composer-avatar" style="width:38px; height:38px;">CC</div>
           <button type="button" class="composer-input-btn" onclick="openComposer()">
-            Report a missing ledger, expose a coverup, or ask a case question...
+            What's on your mind? Share a case, question, breaking news, or thoughts with The Yard...
           </button>
         </div>
         <div class="composer-actions">
-          <button type="button" class="composer-action-btn" onclick="openComposer('concealed')" style="color:#b91c1c;">
-            <span>&#128269;</span> Concealed Record
+          <button type="button" class="composer-action-btn" onclick="openComposer('watch')" style="color:#b91c1c;">
+            <span>🚨</span> Breaking &amp; Watch
           </button>
-          <button type="button" class="composer-action-btn" onclick="openComposer('legal')" style="color:#1877f2;">
-            <span>&#9878;&#65039;</span> Legal Citation
+          <button type="button" class="composer-action-btn" onclick="openComposer('cases')" style="color:#1877f2;">
+            <span>⚖️</span> Trending Trial / Case
           </button>
-          <button type="button" class="composer-action-btn" onclick="openComposer('family')" style="color:#059669;">
-            <span>&#129309;</span> Family Inquiry
+          <button type="button" class="composer-action-btn" onclick="openComposer('mutual_aid')" style="color:#059669;">
+            <span>🤝</span> Community &amp; Support
           </button>
-          <button type="button" class="composer-action-btn" onclick="openComposer('history')" style="color:#c29b53;">
-            <span>&#128247;</span> Archival Document
+          <button type="button" class="composer-action-btn" onclick="openComposer('investigation')" style="color:#c29b53;">
+            <span>📑</span> Evidence &amp; Records
           </button>
         </div>
       </div>
@@ -1424,9 +1428,10 @@
       <!-- Core Principle / Manifesto -->
       <div class="manifesto-box mb-3">
         <div class="manifesto-tag">Archival Truth &bull; Our Principle</div>
-        <div class="manifesto-title">&ldquo;The authority was hiding things.&rdquo;</div>
+        <div class="manifesto-title">&ldquo;The official record never tells the whole story.&rdquo;</div>
         <div class="manifesto-text">
-          Official state ledgers and institutional logs were created to protect the administration, not to record the truth. The Yard exists to bring families, historians, and advocates together to cross-examine sanitized records, recover missing narratives, and ensure no injustice remains concealed.
+          <p style="margin:0 0 0.75rem 0;">State ledgers, institutional reports, and administrative files often reflect the priorities of the agencies that created them. They can leave out abuse, conflict, resistance, family testimony, and the experiences of people whose lives were reduced to a line in a ledger.</p>
+          <p style="margin:0;">The Yard brings families, historians, researchers, and advocates together to question those records, compare them against other evidence, recover missing voices, and examine what the official version may have overlooked, minimized, or left unexplained.</p>
         </div>
       </div>
 
@@ -1491,25 +1496,28 @@
   <div class="modal-backdrop" id="compose-modal">
     <div class="modal-card">
       <div class="modal-header">
-        <div class="modal-title">Create Discussion / Disclosure</div>
+        <div class="modal-title">Create Post &bull; The Yard</div>
         <button type="button" class="modal-close" onclick="closeComposer()">&times;</button>
       </div>
       <form onsubmit="publishNewPost(event)">
         <div class="modal-body">
           <label style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--ink-muted);">Topic Category</label>
           <select class="modal-select" id="post-category-select">
-            <option value="concealed">&#128269; Concealed Records Watch (Missing Logs / Redactions)</option>
-            <option value="legal">&#9878; Legal &amp; Rights (Habeas / Civil Rights / 8th Amendment)</option>
-            <option value="family">&#129309; Family Circle (Visitation / Transfers / Public Records)</option>
-            <option value="history">&#127963; Archival History (Convict Lease / Dozier / Reform Schools)</option>
+            <option value="watch">&#128680; Breaking &amp; Watch (Incident Reports / Alerts)</option>
+            <option value="cases">&#9878; Trending Trials &amp; Cases (RICO / Pretrial / Dockets)</option>
+            <option value="legal">&#128220; Law &amp; Rights (4th / 8th Amendment / Habeas)</option>
+            <option value="mutual_aid">&#129309; Community &amp; Family (Support / Visitation / Telecom)</option>
+            <option value="investigation">&#128269; Investigations (DOJ Reports / OIG Audits)</option>
+            <option value="records">&#128218; Deep Dives &amp; Archives (Convict Lease / History)</option>
+            <option value="general">&#128172; General Community Discussion</option>
           </select>
 
-          <label style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--ink-muted);">Discussion or Finding</label>
-          <textarea class="modal-textarea" id="post-content-input" placeholder="Share a docket number, describe missing records, ask the community for guidance, or post archival findings..." required></textarea>
+          <label style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--ink-muted);">What's on your mind?</label>
+          <textarea class="modal-textarea" id="post-content-input" placeholder="What's on your mind? Share a case, question, breaking news, or thoughts with The Yard..." required></textarea>
         </div>
         <div class="modal-footer">
           <button type="button" class="modal-cancel-btn" onclick="closeComposer()">Cancel</button>
-          <button type="submit" class="modal-submit-btn">Publish to The Yard</button>
+          <button type="submit" class="modal-submit-btn">Post to The Yard</button>
         </div>
       </form>
     </div>
@@ -1546,27 +1554,46 @@
 
     // Category display helper
     const catLabels = {
-      watch: { name: 'Concealed Records Watch', cls: 'concealed' },
-      investigation: { name: 'Investigation Desk', cls: 'legal' },
-      records: { name: 'Archival Records', cls: '' },
-      mutual_aid: { name: 'Family & Mutual Aid', cls: 'family' },
-      cases: { name: 'Case Research', cls: 'legal' },
-      general: { name: 'Community Circle', cls: '' }
+      watch: { name: '🚨 Breaking & Watch', cls: 'concealed' },
+      cases: { name: '⚖️ Trials & Cases', cls: 'legal' },
+      legal: { name: '📜 Law & Rights', cls: 'legal' },
+      mutual_aid: { name: '🤝 Community & Support', cls: 'family' },
+      investigation: { name: '🔍 Investigation', cls: 'legal' },
+      records: { name: '📚 Deep Dives & Archives', cls: '' },
+      general: { name: '💬 Community Feed', cls: '' },
+      concealed: { name: '🚨 Breaking & Watch', cls: 'concealed' },
+      family: { name: '🤝 Community Circle', cls: 'family' },
+      history: { name: '📚 Deep Dives & Archives', cls: '' }
     };
 
+    function getAvatarColor(name) {
+      const colors = ['#1e3a8a', '#065f46', '#991b1b', '#854d0e', '#581c87', '#0f766e', '#374151', '#701a75'];
+      let hash = 0;
+      for (let i = 0; i < (name || '').length; i++) hash = (hash * 31 + name.charCodeAt(i)) % colors.length;
+      return colors[Math.abs(hash)];
+    }
+
     function renderPostHtml(post) {
-      const catInfo = catLabels[post.category] || { name: 'Community Discussion', cls: '' };
+      const catInfo = catLabels[post.category] || { name: '💬 Community Feed', cls: '' };
       const authorName = escapeHtml(post.author?.displayName || 'Community Member');
+      const authorUsername = post.author?.username ? `@${escapeHtml(post.author.username)}` : '';
       const initials = escapeHtml(post.author?.initials || 'CC');
+      const avatarBg = getAvatarColor(post.author?.displayName || 'CC');
       const contentHtml = escapeHtml(post.content).replace(/\n/g, '<br>');
       const isOwner = post.author?.role === 'owner';
       const userReacted = Boolean(post.userReacted);
       const rxCount = post.reactionsCount || 0;
       const cmCount = post.commentsCount || (post.comments?.length || 0);
 
+      const tagsHtml = Array.isArray(post.tags) && post.tags.length > 0
+        ? `<div style="margin-top:0.6rem; display:flex; flex-wrap:wrap; gap:0.4rem;">` +
+          post.tags.map(t => `<span class="post-tag-pill" onclick="filterByTag('${escapeHtml(t)}')" style="font-size:0.75rem; color:#1877f2; background:rgba(24,119,242,0.08); padding:0.15rem 0.5rem; border-radius:12px; cursor:pointer; font-weight:600;">#${escapeHtml(t)}</span>`).join('') +
+          `</div>`
+        : '';
+
       const commentsHtml = (post.comments || []).map(cm => `
         <div class="comment-item">
-          <div class="comment-avatar" style="background:#1e3a5f;">${escapeHtml(cm.author?.initials || 'CC')}</div>
+          <div class="comment-avatar" style="background:${getAvatarColor(cm.author?.displayName || 'Member')};">${escapeHtml(cm.author?.initials || 'CC')}</div>
           <div class="comment-bubble">
             <div class="comment-author">${escapeHtml(cm.author?.displayName || 'Member')}${cm.author?.role === 'owner' ? ' <span style="color:#bd9448;font-size:0.75rem;">(Owner)</span>' : ''} &bull; <span style="font-weight:400;color:var(--ink-muted);font-size:0.75rem;">${timeAgo(cm.createdAt)}</span></div>
             <div class="comment-text">${escapeHtml(cm.content)}</div>
@@ -1577,10 +1604,11 @@
       return `
         <div class="post-head">
           <div class="post-author-group">
-            <div class="post-author-avatar">${initials}</div>
+            <div class="post-author-avatar" style="background:${avatarBg};">${initials}</div>
             <div>
               <div class="post-author-name">
                 ${authorName}
+                ${authorUsername ? `<span style="font-size:0.78rem; font-weight:400; color:var(--ink-muted); margin-left:0.25rem;">${authorUsername}</span>` : ''}
                 ${isOwner ? '<span class="post-badge" style="background:#78350f;color:#fef3c7;border:1px solid #d97706;">Site Founder</span>' : ''}
                 <span class="post-badge ${catInfo.cls}">${catInfo.name}</span>
                 ${post.pinned ? '<span class="post-badge" style="background:#0f2744;color:#f1d597;border:1px solid #bd9448;">&#128204; Pinned</span>' : ''}
@@ -1593,6 +1621,7 @@
 
         <div class="post-body">
           <p>${contentHtml}</p>
+          ${tagsHtml}
         </div>
 
         <div class="post-stats-row">
@@ -1607,7 +1636,7 @@
 
         <div class="post-buttons-row">
           <button type="button" class="post-btn rx-toggle-btn ${userReacted ? 'active' : ''}" onclick="togglePostReaction(this)" style="${userReacted ? 'color:#c29b53;' : ''}">
-            <span>&#9878;&#65039;</span> <span>${userReacted ? 'Supported' : 'Justice'}</span>
+            <span>${userReacted ? '&#9878;&#65039;' : '&#128077;'}</span> <span>${userReacted ? 'Supported' : 'Support'}</span>
           </button>
           <button type="button" class="post-btn" onclick="toggleCommentBox(this)">
             <span>&#128172;</span> <span>Comment</span>
@@ -1620,12 +1649,30 @@
         <div class="post-comments">
           ${commentsHtml}
           <form class="comment-composer" onsubmit="submitNewComment(event)">
-            <div class="comment-avatar" style="width:28px; height:28px;">${currentUser.initials}</div>
-            <input type="text" class="comment-input" placeholder="Add your evidence, record citation, or reply..." required>
-            <button type="submit" class="comment-submit-btn">Post</button>
+            <div class="comment-avatar" style="width:28px; height:28px; background:${getAvatarColor(currentUser.name)};">${currentUser.initials}</div>
+            <input type="text" class="comment-input" placeholder="Join the discussion, add a case citation, or reply..." required>
+            <button type="submit" class="comment-submit-btn">Reply</button>
           </form>
         </div>
       `;
+    }
+
+    // Load Profile Stats (Connections, Followers, Posts)
+    async function loadProfileStats() {
+      try {
+        const res = await fetch(`${apiBase}/api/community/profile/stats`, { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          const connEl = document.getElementById('profile-stat-connections');
+          const follEl = document.getElementById('profile-stat-followers');
+          const postEl = document.getElementById('profile-stat-posts');
+          if (connEl && typeof data.connections === 'number') connEl.textContent = data.connections;
+          if (follEl && typeof data.followers === 'number') follEl.textContent = data.followers;
+          if (postEl && typeof data.posts === 'number') postEl.textContent = data.posts;
+        }
+      } catch (err) {
+        console.warn('Profile stats fetch error:', err);
+      }
     }
 
     // Load Live Posts from Railway API
@@ -1666,15 +1713,21 @@
             
             document.getElementById('header-user-name').textContent = currentUser.name;
             document.getElementById('header-avatar').textContent = currentUser.initials;
+            document.getElementById('header-avatar').style.background = getAvatarColor(currentUser.name);
             document.getElementById('sidebar-user-name').textContent = currentUser.name;
             document.getElementById('sidebar-avatar').textContent = currentUser.initials;
+            document.getElementById('sidebar-avatar').style.background = getAvatarColor(currentUser.name);
             document.getElementById('composer-avatar').textContent = currentUser.initials;
+            document.getElementById('composer-avatar').style.background = getAvatarColor(currentUser.name);
           }
         }
       } catch (_) {}
 
-      // Fetch live posts
-      await loadLivePosts();
+      // Fetch live stats and posts
+      await Promise.all([
+        loadProfileStats(),
+        loadLivePosts()
+      ]);
     });
 
     // Composer modal
@@ -1882,8 +1935,22 @@
         el.classList.toggle('active', el.dataset.filter === cat);
       });
 
+      const aliases = {
+        concealed: ['watch', 'concealed'],
+        watch: ['watch', 'concealed'],
+        cases: ['cases', 'legal'],
+        legal: ['legal', 'cases'],
+        family: ['family', 'mutual_aid'],
+        mutual_aid: ['family', 'mutual_aid'],
+        history: ['history', 'records'],
+        records: ['history', 'records'],
+        investigation: ['investigation', 'watch']
+      };
+      const accepted = aliases[cat] || [cat];
+
       document.querySelectorAll('.post-card').forEach(card => {
-        const matches = (cat === 'all' || card.dataset.category === cat);
+        const cCat = card.dataset.category || 'general';
+        const matches = (cat === 'all' || accepted.includes(cCat));
         card.style.display = matches ? 'block' : 'none';
       });
     }
