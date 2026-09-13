@@ -963,6 +963,216 @@
       cursor: pointer;
     }
 
+    
+    /* Section Intro Banners */
+    .section-intro-banner {
+      border-radius: 10px;
+      padding: 1.25rem 1.4rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .banner-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.6rem;
+      border-radius: 9999px;
+      margin-bottom: 0.4rem;
+    }
+    .banner-title {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+      line-height: 1.2;
+    }
+    .banner-desc {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 0 0 0.9rem;
+      max-width: 680px;
+    }
+    .banner-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .banner-btn {
+      background: var(--navy);
+      color: var(--gold-light);
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: opacity 0.15s;
+    }
+    .banner-btn:hover { opacity: 0.9; color: var(--gold-light); }
+    .banner-btn-secondary {
+      background: var(--paper-card);
+      color: var(--ink);
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .banner-btn-secondary:hover { background: var(--border-light); }
+
+    .banner-breaking {
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      border-left: 4px solid #dc2626;
+      color: #7f1d1d;
+    }
+    .banner-breaking .banner-badge { background: #fee2e2; color: #b91c1c; }
+    .banner-breaking .banner-title { color: #991b1b; }
+    .banner-breaking .banner-desc { color: #450a0a; }
+
+    .banner-legal {
+      background: #eff6ff;
+      border: 1px solid #dbeafe;
+      border-left: 4px solid #1877f2;
+      color: #1e3a8a;
+    }
+    .banner-legal .banner-badge { background: #dbeafe; color: #1d4ed8; }
+    .banner-legal .banner-title { color: #1e3a8a; }
+    .banner-legal .banner-desc { color: #172554; }
+
+    .banner-support {
+      background: #f0fdf4;
+      border: 1px solid #dcfce7;
+      border-left: 4px solid #10b981;
+      color: #064e3b;
+    }
+    .banner-support .banner-badge { background: #dcfce7; color: #047857; }
+    .banner-support .banner-title { color: #065f46; }
+    .banner-support .banner-desc { color: #022c22; }
+
+    .banner-dives {
+      background: #fefce8;
+      border: 1px solid #fef08a;
+      border-left: 4px solid var(--gold);
+      color: #713f12;
+    }
+    .banner-dives .banner-badge { background: #fef08a; color: #854d0e; }
+    .banner-dives .banner-title { color: var(--navy); }
+    .banner-dives .banner-desc { color: #451a03; }
+
+    /* Inbox Styles */
+    .inbox-subtab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .inbox-subtab.active {
+      color: var(--navy);
+      border-bottom-color: var(--gold);
+      font-weight: 700;
+    }
+    .inbox-counter-chip {
+      background: var(--red);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.05rem 0.4rem;
+      border-radius: 9999px;
+    }
+    .inbox-compose-btn {
+      background: var(--navy);
+      color: var(--gold-light);
+      border: none;
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .inbox-message-item {
+      padding: 0.9rem 1.1rem;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .inbox-message-item:hover {
+      background: var(--fb-hover);
+    }
+    .inbox-message-item.unread {
+      background: rgba(194, 155, 83, 0.08);
+    }
+    .inbox-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.3rem;
+    }
+    .inbox-sender-name {
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .inbox-subject {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+    .inbox-excerpt {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+    .inbox-request-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.1rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .btn-accept-request {
+      background: #059669;
+      color: #fff;
+      border: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-accept-request:hover { opacity: 0.9; }
+    .btn-decline-request {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-decline-request:hover { background: var(--border-light); }
+
     /* CASES EVERYBODY IS WATCHING VIEW */
     #cases-watching-view {
       display: none;
@@ -1402,31 +1612,34 @@
 
     <!-- Center Navigation Tabs -->
     <nav class="fb-center-nav" aria-label="Discussion Categories">
-      <div class="fb-tab active" data-filter="all">
-        <span>&#128240;</span> Main Feed
+      <div class="fb-tab active" data-nav="feed" onclick="navigateToSection('feed')">
+        <span>&#127968;</span> The Feed
       </div>
-      <div class="fb-tab" data-filter="concealed">
-        <span>&#128269;</span> Concealed Records
+      <div class="fb-tab" data-nav="breaking" onclick="navigateToSection('breaking')">
+        <span>&#128680;</span> What’s Breaking
       </div>
-      <div class="fb-tab" data-filter="legal">
-        <span>&#9878;&#65039;</span> Legal &amp; Rights
+      <div class="fb-tab" data-nav="cases-watching" onclick="navigateToSection('cases-watching')">
+        <span>&#9878;&#65039;</span> Cases Everybody’s Watching
       </div>
-      <div class="fb-tab" data-filter="family">
-        <span>&#129309;</span> Family Circle
+      <div class="fb-tab" data-nav="legal" onclick="navigateToSection('legal')">
+        <span>&#128220;</span> Know the Law
       </div>
-      <div class="fb-tab" data-filter="history">
-        <span>&#127963;&#65039;</span> Archival History
+      <div class="fb-tab" data-nav="support" onclick="navigateToSection('support')">
+        <span>&#129309;</span> Family &amp; Support
+      </div>
+      <div class="fb-tab" data-nav="deep-dives" onclick="navigateToSection('deep-dives')">
+        <span>&#128269;</span> Deep Dives
       </div>
     </nav>
 
     <!-- Right Quick Actions -->
     <div class="fb-right-actions">
       <button type="button" class="fb-round-btn" id="open-modal-btn" title="Start a new inquiry or disclosure" style="background:var(--navy); color:var(--gold); font-size:1.2rem; font-weight:bold;">&#43;</button>
-      <button type="button" class="fb-round-btn" title="Notifications" onclick="alert('You have 3 active updates on watched dockets.')">
-        &#128276;<span class="fb-btn-badge">3</span>
+      <button type="button" class="fb-round-btn" id="notifications-btn" title="Notifications" onclick="openNotifications()">
+        &#128276;<span class="fb-btn-badge" id="notifications-badge" style="display:none;">0</span>
       </button>
-      <button type="button" class="fb-round-btn" title="Inquiries / Messages" onclick="alert('Direct messaging is available for verified research collaborators.')">
-        &#128172;<span class="fb-btn-badge">2</span>
+      <button type="button" class="fb-round-btn" id="inbox-btn" title="Community Inbox &amp; Direct Messages" onclick="openInbox()">
+        &#128172;<span class="fb-btn-badge" id="inbox-badge">1</span>
       </button>
 
       <div class="fb-user-pill" id="user-profile-pill" onclick="location.href='PROFILE.html'">
@@ -1465,32 +1678,32 @@
 
       <!-- Quick Navigation Menu -->
       <div class="fb-card fb-menu-list">
-        <div class="fb-menu-row active" data-filter="all">
-          <span class="fb-menu-icon">&#127968;</span> Feed &amp; Discussions
+        <div class="fb-menu-row active" data-nav="feed" onclick="navigateToSection('feed', this)">
+          <span class="fb-menu-icon">&#127968;</span> The Feed
         </div>
-        <div class="fb-menu-row" data-filter="watch">
-          <span class="fb-menu-icon">&#128680;</span> Breaking &amp; Watch
+        <div class="fb-menu-row" data-nav="breaking" onclick="navigateToSection('breaking', this)">
+          <span class="fb-menu-icon">&#128680;</span> What’s Breaking
         </div>
-        <div class="fb-menu-row" data-filter="cases">
-          <span class="fb-menu-icon">&#9878;&#65039;</span> Trending Trials &amp; Cases
+        <div class="fb-menu-row" data-nav="cases-watching" onclick="navigateToSection('cases-watching', this)">
+          <span class="fb-menu-icon">&#9878;&#65039;</span> Cases Everybody’s Watching
         </div>
-        <div class="fb-menu-row" data-filter="legal">
-          <span class="fb-menu-icon">&#128220;</span> Law, Rights &amp; Habeas
+        <div class="fb-menu-row" data-nav="legal" onclick="navigateToSection('legal', this)">
+          <span class="fb-menu-icon">&#128220;</span> Know the Law
         </div>
-        <div class="fb-menu-row" data-filter="mutual_aid">
-          <span class="fb-menu-icon">&#129309;</span> Family &amp; Community Circle
+        <div class="fb-menu-row" data-nav="support" onclick="navigateToSection('support', this)">
+          <span class="fb-menu-icon">&#129309;</span> Family &amp; Support
         </div>
-        <div class="fb-menu-row" data-filter="investigation">
-          <span class="fb-menu-icon">&#128269;</span> Investigative Reports
+        <div class="fb-menu-row" data-nav="deep-dives" onclick="navigateToSection('deep-dives', this)">
+          <span class="fb-menu-icon">&#128269;</span> Deep Dives
         </div>
-        <a href="PROFILE.html" class="fb-menu-row">
-          <span class="fb-menu-icon">&#128100;</span> My Member Profile
+        <a href="PROFILE.html" class="fb-menu-row" data-nav="profile">
+          <span class="fb-menu-icon">&#128100;</span> My Profile
         </a>
-        <a href="SEARCH.html" class="fb-menu-row">
-          <span class="fb-menu-icon">&#128196;</span> Search Full Collections
+        <a href="SEARCH.html" class="fb-menu-row" data-nav="search">
+          <span class="fb-menu-icon">&#128450;&#65039;</span> Search the Collection
         </a>
-        <a href="LAW-LIBRARY.html" class="fb-menu-row">
-          <span class="fb-menu-icon">&#128218;</span> Open Law Library
+        <a href="COLLECTIONS.html" class="fb-menu-row" data-nav="books">
+          <span class="fb-menu-icon">&#128218;</span> Books &amp; Resources
         </a>
       </div>
 
@@ -1499,23 +1712,23 @@
         <div class="trending-title">Trending Conversations</div>
         <div class="trend-item" onclick="filterByTag('YSLRICO')">
           <div class="trend-tag">#YSLRICO</div>
-          <div class="trend-count">3,840 posts &bull; Lyrics as evidence debate</div>
+          <div class="trend-count">14 discussions &bull; Lyrics on trial receipts</div>
         </div>
         <div class="trend-item" onclick="filterByTag('CashBail')">
           <div class="trend-tag">#CashBail</div>
-          <div class="trend-count">2,910 posts &bull; Pretrial detention &amp; due process</div>
+          <div class="trend-count">8 discussions &bull; Pretrial extortion &amp; rights</div>
         </div>
         <div class="trend-item" onclick="filterByTag('CommissaryGouging')">
           <div class="trend-tag">#CommissaryGouging</div>
-          <div class="trend-count">1,940 posts &bull; Private prison contractor fees</div>
+          <div class="trend-count">12 discussions &bull; Private vendor markups</div>
         </div>
         <div class="trend-item" onclick="filterByTag('FCIDublin')">
           <div class="trend-tag">#FCIDublin</div>
-          <div class="trend-count">1,620 posts &bull; DOJ OIG civil rights audits</div>
+          <div class="trend-count">6 reports &bull; DOJ civil rights audits</div>
         </div>
         <div class="trend-item" onclick="filterByTag('BodyCamTruth')">
           <div class="trend-tag">#BodyCamTruth</div>
-          <div class="trend-count">2,150 posts &bull; Affidavit discrepancy audits</div>
+          <div class="trend-count">9 audits &bull; Affidavit discrepancy checks</div>
         </div>
       </div>
 
@@ -1596,6 +1809,44 @@
           <button type="button" class="composer-action-btn" onclick="openComposer('investigation')" style="color:#c29b53;">
             <span>📑</span> Evidence &amp; Records
           </button>
+        </div>
+      </div>
+
+            <!-- SECTION INTRO BANNERS -->
+      <div id="what-breaking-banner" class="section-intro-banner banner-breaking" style="display:none;">
+        <div class="banner-badge">🚨 Live Incident Reports &amp; Urgent Dockets</div>
+        <h2 class="banner-title">What’s Breaking</h2>
+        <p class="banner-desc">Real-time alerts, emergency filings, DOC inspection findings, and breaking developments from inside facilities and criminal courts across the country.</p>
+      </div>
+
+      <div id="know-law-banner" class="section-intro-banner banner-legal" style="display:none;">
+        <div class="banner-badge">📜 Constitutional Rights &amp; Courtroom Defense</div>
+        <h2 class="banner-title">Know the Law</h2>
+        <p class="banner-desc">Knowledge is your strongest defense. Access legal templates, understand 4th Amendment search protections, Rodriguez traffic stop suppression rules, Franks hearing affidavits, and federal habeas corpus procedures.</p>
+        <div class="banner-links">
+          <a href="LAW-LIBRARY.html" class="banner-btn">&#128218; Open Full Law Library</a>
+          <a href="EVIDENCE-INDEX.html" class="banner-btn-secondary">&#128196; Evidence Index &amp; Motions</a>
+        </div>
+      </div>
+
+      <div id="family-support-banner" class="section-intro-banner banner-support" style="display:none;">
+        <div class="banner-badge">🤝 Mutual Aid &amp; Family Advocacy</div>
+        <h2 class="banner-title">Family &amp; Support</h2>
+        <p class="banner-desc">Support for families with incarcerated loved ones. Guidance on navigating visitation rules, fighting prison canteen price-gouging, finding reentry support, and pulling archival records.</p>
+        <div class="banner-links">
+          <a href="INSIDE-ASSISTANCE.html" class="banner-btn">&#128203; Inside Assistance Guide</a>
+          <a href="HELP-FINDER.html" class="banner-btn-secondary">&#128506;&#65039; Resource &amp; Reentry Finder</a>
+        </div>
+      </div>
+
+      <div id="deep-dives-banner" class="section-intro-banner banner-dives" style="display:none;">
+        <div class="banner-badge">🔎 Historical Archives &amp; Concealed Ledgers</div>
+        <h2 class="banner-title">Deep Dives</h2>
+        <p class="banner-desc">Investigative records that uncover what state agencies concealed. Explore the Arthur G. Dozier School burial records, Florida convict lease turpentine camps, and institutional inspection audits.</p>
+        <div class="banner-links">
+          <a href="DOZIER-RESEARCH.html" class="banner-btn">&#128269; Dozier School Graves Investigation</a>
+          <a href="AMERICAN-SIBERIA.html" class="banner-btn-secondary">&#127963; Convict Leasing &amp; Turpentine Camps</a>
+          <a href="RESEARCH.html" class="banner-btn-secondary">&#128218; Research Directory</a>
         </div>
       </div>
 
@@ -1917,32 +2168,32 @@
       <div class="fb-card" style="padding:1rem;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem;">
           <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-muted);">Working Circles</span>
-          <span style="font-size:0.75rem; color:var(--green); font-weight:700;">&bull; 542 Active</span>
+          <span style="font-size:0.75rem; color:var(--green); font-weight:700;">&bull; Community Circles</span>
         </div>
 
-        <div class="group-row" onclick="filterByTag('#DozierCoverup')">
+        <a href="DOZIER-RESEARCH.html" class="group-row" style="text-decoration:none; color:inherit;">
           <div class="group-badge" style="background:#1e3a8a; color:var(--gold);">&#128269;</div>
           <div>
             <div class="group-title">Dozier Historical Taskforce</div>
-            <div class="group-meta">184 researchers &bull; Active archive matching</div>
+            <div class="group-meta">6 researchers &bull; Active archive matching</div>
           </div>
-        </div>
+        </a>
 
-        <div class="group-row" onclick="filterByTag('#MissingLedgers')">
+        <a href="AMERICAN-SIBERIA.html" class="group-row" style="text-decoration:none; color:inherit;">
           <div class="group-badge" style="background:#78350f; color:#fff;">&#127963;</div>
           <div>
             <div class="group-title">Convict Lease Recovery Project</div>
-            <div class="group-meta">96 researchers &bull; Turpentine camp logs</div>
+            <div class="group-meta">4 researchers &bull; Turpentine camp logs</div>
           </div>
-        </div>
+        </a>
 
-        <div class="group-row" onclick="filterByTag('#FloridaPrisons')">
+        <a href="INSIDE-ASSISTANCE.html" class="group-row" style="text-decoration:none; color:inherit;">
           <div class="group-badge" style="background:#065f46; color:#fff;">&#129309;</div>
           <div>
             <div class="group-title">Family Mutual Aid Network</div>
-            <div class="group-meta">262 advocates &bull; Visitation &amp; records help</div>
+            <div class="group-meta">7 advocates &bull; Visitation &amp; records help</div>
           </div>
-        </div>
+        </a>
       </div>
 
       <!-- Quick Assistance Links -->
@@ -2001,8 +2252,358 @@
     </div>
   </div>
 
+  <!-- Community Inbox Modal -->
+  <div class="modal-backdrop" id="inbox-modal">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.25rem;">&#128172;</span>
+          <div class="modal-title">The Yard &bull; Community Inbox</div>
+        </div>
+        <button type="button" class="modal-close" onclick="closeInbox()">&times;</button>
+      </div>
+
+      <!-- Inbox Tabs -->
+      <div style="display:flex; border-bottom:1px solid var(--border-light); background:var(--paper); padding:0.25rem 0.5rem 0;">
+        <button type="button" id="inbox-tab-messages" class="inbox-subtab active" onclick="switchInboxTab('messages')">
+          Messages <span id="inbox-messages-badge" class="inbox-counter-chip">1</span>
+        </button>
+        <button type="button" id="inbox-tab-requests" class="inbox-subtab" onclick="switchInboxTab('requests')">
+          Connection Requests <span id="inbox-requests-badge" class="inbox-counter-chip" style="display:none;">0</span>
+        </button>
+        <div style="margin-left:auto; display:flex; align-items:center; padding-right:0.5rem;">
+          <button type="button" class="inbox-compose-btn" onclick="openComposeMessageModal()">&#9997;&#65039; New Message</button>
+        </div>
+      </div>
+
+      <!-- Inbox Body -->
+      <div class="modal-body" style="padding:0; max-height:480px; overflow-y:auto;" id="inbox-body-container">
+        <!-- Messages or Requests rendered dynamically -->
+      </div>
+
+      <div class="modal-footer" style="justify-content:space-between;">
+        <div style="font-size:0.75rem; color:var(--ink-muted);">
+          Encrypted Member Direct Messages &bull; The Yard Community
+        </div>
+        <button type="button" class="modal-cancel-btn" onclick="closeInbox()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compose Message Modal -->
+  <div class="modal-backdrop" id="compose-message-modal">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <div class="modal-title">&#9997;&#65039; Send Direct Message</div>
+        <button type="button" class="modal-close" onclick="closeComposeMessageModal()">&times;</button>
+      </div>
+      <form onsubmit="submitDirectMessage(event)">
+        <div class="modal-body">
+          <label style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--ink-muted);">Recipient</label>
+          <select class="modal-select" id="compose-recipient-select" required>
+            <option value="">Select a member...</option>
+          </select>
+
+          <label style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--ink-muted);">Subject</label>
+          <input type="text" class="modal-select" id="compose-subject-input" placeholder="e.g. Case notes, records exchange, or question" required maxlength="150">
+
+          <label style="font-size:0.75rem; font-weight:700; text-transform:uppercase; color:var(--ink-muted);">Message</label>
+          <textarea class="modal-textarea" id="compose-content-input" placeholder="Type your message..." required style="min-height:100px;"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="modal-cancel-btn" onclick="closeComposeMessageModal()">Cancel</button>
+          <button type="submit" class="modal-submit-btn">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="community-auth.js?v=20260912-community-btn"></script>
   <script>
+
+    // Navigation & Section Switching
+    function navigateToSection(section, el) {
+      document.querySelectorAll('.fb-menu-row').forEach(r => r.classList.remove('active'));
+      if (el) {
+        el.classList.add('active');
+      } else {
+        const matchingNav = document.querySelector(`.fb-menu-row[data-nav="${section}"]`);
+        if (matchingNav) matchingNav.classList.add('active');
+      }
+
+      const casesView = document.getElementById('cases-watching-view');
+      const feedStream = document.getElementById('feed-posts-stream');
+      const storiesStrip = document.querySelector('.fb-stories-strip');
+      const composerBox = document.querySelector('.fb-composer');
+      const filterBar = document.querySelector('.feed-filter-bar');
+
+      // Banners
+      const breakingBanner = document.getElementById('what-breaking-banner');
+      const knowLawBanner = document.getElementById('know-law-banner');
+      const familySupportBanner = document.getElementById('family-support-banner');
+      const deepDivesBanner = document.getElementById('deep-dives-banner');
+
+      [breakingBanner, knowLawBanner, familySupportBanner, deepDivesBanner].forEach(b => {
+        if (b) b.style.display = 'none';
+      });
+
+      if (section === 'cases-watching') {
+        if (casesView) casesView.style.display = 'block';
+        if (feedStream) feedStream.style.display = 'none';
+        if (storiesStrip) storiesStrip.style.display = 'none';
+        if (composerBox) composerBox.style.display = 'none';
+        if (filterBar) filterBar.style.display = 'none';
+        loadCasesData();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      if (casesView) casesView.style.display = 'none';
+      if (feedStream) feedStream.style.display = 'block';
+      if (storiesStrip) storiesStrip.style.display = 'flex';
+      if (composerBox) composerBox.style.display = 'block';
+      if (filterBar) filterBar.style.display = 'flex';
+
+      if (section === 'feed') {
+        setFilter('all');
+      } else if (section === 'breaking') {
+        if (breakingBanner) breakingBanner.style.display = 'block';
+        setFilter('watch');
+      } else if (section === 'legal') {
+        if (knowLawBanner) knowLawBanner.style.display = 'block';
+        setFilter('legal');
+      } else if (section === 'support') {
+        if (familySupportBanner) familySupportBanner.style.display = 'block';
+        setFilter('mutual_aid');
+      } else if (section === 'deep-dives') {
+        if (deepDivesBanner) deepDivesBanner.style.display = 'block';
+        setFilter('investigation');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openNotifications() {
+      alert('You have 0 unread alerts. You are fully caught up with the latest dockets.');
+    }
+
+    // Inbox Data & Modal Handlers
+    let currentInboxData = { unreadCount: 1, connectionRequests: [], messages: [] };
+    let currentInboxTab = 'messages';
+    let loadedMembersCache = [];
+
+    async function loadInboxData() {
+      try {
+        const res = await fetch(`${apiBase}/api/community/inbox`, { credentials: 'include' });
+        if (res.ok) {
+          currentInboxData = await res.json();
+          const badgeEl = document.getElementById('inbox-badge');
+          if (badgeEl) {
+            badgeEl.textContent = currentInboxData.unreadCount || 0;
+            badgeEl.style.display = currentInboxData.unreadCount > 0 ? 'inline-block' : 'none';
+          }
+          const msgBadge = document.getElementById('inbox-messages-badge');
+          if (msgBadge) {
+            const unreadMsgs = (currentInboxData.messages || []).filter(m => !m.read).length;
+            msgBadge.textContent = unreadMsgs;
+            msgBadge.style.display = unreadMsgs > 0 ? 'inline-block' : 'none';
+          }
+          const reqBadge = document.getElementById('inbox-requests-badge');
+          if (reqBadge) {
+            const reqCount = (currentInboxData.connectionRequests || []).length;
+            reqBadge.textContent = reqCount;
+            reqBadge.style.display = reqCount > 0 ? 'inline-block' : 'none';
+          }
+        }
+      } catch (err) {
+        console.warn('Inbox load warning:', err);
+      }
+    }
+
+    async function openInbox() {
+      if (!isLoggedIn) {
+        if (confirm('Sign in to view your community inbox and direct messages?')) {
+          location.href = 'LOGIN.html?returnTo=' + encodeURIComponent(location.pathname);
+        }
+        return;
+      }
+      await loadInboxData();
+      renderInboxBody();
+      document.getElementById('inbox-modal').classList.add('open');
+    }
+
+    function closeInbox() {
+      document.getElementById('inbox-modal').classList.remove('open');
+    }
+
+    function switchInboxTab(tab) {
+      currentInboxTab = tab;
+      document.getElementById('inbox-tab-messages').classList.toggle('active', tab === 'messages');
+      document.getElementById('inbox-tab-requests').classList.toggle('active', tab === 'requests');
+      renderInboxBody();
+    }
+
+    function renderInboxBody() {
+      const container = document.getElementById('inbox-body-container');
+      if (!container) return;
+
+      if (currentInboxTab === 'requests') {
+        const requests = currentInboxData.connectionRequests || [];
+        if (requests.length === 0) {
+          container.innerHTML = `
+            <div style="padding:2.5rem 1.5rem; text-align:center; color:var(--ink-muted);">
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🤝</div>
+              <div style="font-weight:700; font-size:0.95rem; color:var(--ink);">No Pending Connection Requests</div>
+              <div style="font-size:0.82rem; margin-top:0.25rem;">When other members request to connect with you, they will appear here.</div>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = requests.map(r => `
+          <div class="inbox-request-row" id="conn-req-${escapeHtml(r.id)}">
+            <div style="display:flex; align-items:center; gap:0.65rem;">
+              <div class="post-author-avatar" style="width:38px; height:38px; background:${getAvatarColor(r.displayName)}; font-size:0.85rem;">
+                ${escapeHtml(r.initials)}
+              </div>
+              <div>
+                <div style="font-weight:700; font-size:0.88rem;">${escapeHtml(r.displayName)}</div>
+                <div style="font-size:0.75rem; color:var(--ink-muted);">Sent you a connection request &bull; ${timeAgo(r.createdAt)}</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:0.4rem;">
+              <button type="button" class="btn-accept-request" onclick="respondConnection('${escapeHtml(r.id)}', 'accept')">Accept</button>
+              <button type="button" class="btn-decline-request" onclick="respondConnection('${escapeHtml(r.id)}', 'decline')">Decline</button>
+            </div>
+          </div>
+        `).join('');
+        return;
+      }
+
+      // Messages Tab
+      const messages = currentInboxData.messages || [];
+      if (messages.length === 0) {
+        container.innerHTML = `
+          <div style="padding:2.5rem 1.5rem; text-align:center; color:var(--ink-muted);">
+            <div style="font-size:2rem; margin-bottom:0.5rem;">📫</div>
+            <div style="font-weight:700; font-size:0.95rem; color:var(--ink);">No Messages In Your Inbox</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = messages.map(m => `
+        <div class="inbox-message-item ${m.read ? '' : 'unread'}" onclick="toggleMessageDetail(this, '${escapeHtml(m.id)}')">
+          <div class="inbox-item-header">
+            <div class="inbox-sender-name">
+              <div class="post-author-avatar" style="width:28px; height:28px; background:${getAvatarColor(m.senderName)}; font-size:0.75rem;">
+                ${escapeHtml(m.senderInitials || 'CC')}
+              </div>
+              <span>${escapeHtml(m.senderName)}</span>
+              ${!m.read ? '<span class="post-badge" style="background:#dc2626; color:#fff; font-size:0.6rem;">NEW</span>' : ''}
+            </div>
+            <div style="font-size:0.72rem; color:var(--ink-muted);">${timeAgo(m.createdAt)}</div>
+          </div>
+          <div class="inbox-subject">${escapeHtml(m.subject)}</div>
+          <div class="inbox-excerpt">${escapeHtml(m.content)}</div>
+        </div>
+      `).join('');
+    }
+
+    async function toggleMessageDetail(el, messageId) {
+      el.classList.remove('unread');
+      const badge = el.querySelector('.post-badge');
+      if (badge) badge.remove();
+      try {
+        await fetch(`${apiBase}/api/community/messages/${messageId}/read`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+        loadInboxData();
+      } catch (_) {}
+    }
+
+    async function respondConnection(connId, action) {
+      try {
+        const res = await fetch(`${apiBase}/api/community/connections/${connId}/respond`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ action })
+        });
+        if (res.ok) {
+          const row = document.getElementById(`conn-req-${connId}`);
+          if (row) {
+            row.innerHTML = `<div style="padding:0.75rem 1rem; color:var(--green); font-size:0.82rem; font-weight:700;">Connection ${action === 'accept' ? 'Accepted' : 'Declined'}!</div>`;
+            setTimeout(() => row.remove(), 1200);
+          }
+          await Promise.all([loadProfileStats(), loadInboxData(), loadMembersNetwork()]);
+        }
+      } catch (err) {
+        console.error('Respond connection error:', err);
+      }
+    }
+
+    // Direct Message Compose
+    function openComposeMessageModal(presetRecipientId) {
+      if (!isLoggedIn) {
+        if (confirm('Sign in to message community members?')) {
+          location.href = 'LOGIN.html?returnTo=' + encodeURIComponent(location.pathname);
+        }
+        return;
+      }
+      const select = document.getElementById('compose-recipient-select');
+      select.innerHTML = '<option value="">Select a member...</option>';
+      (loadedMembersCache || []).forEach(m => {
+        select.innerHTML += `<option value="${escapeHtml(m.id)}">${escapeHtml(m.displayName)} (@${escapeHtml(m.username || 'member')})</option>`;
+      });
+      if (presetRecipientId) {
+        select.value = presetRecipientId;
+      }
+      document.getElementById('compose-message-modal').classList.add('open');
+    }
+
+    function closeComposeMessageModal() {
+      document.getElementById('compose-message-modal').classList.remove('open');
+      document.getElementById('compose-subject-input').value = '';
+      document.getElementById('compose-content-input').value = '';
+    }
+
+    async function submitDirectMessage(e) {
+      e.preventDefault();
+      const recipientId = document.getElementById('compose-recipient-select').value;
+      const subject = document.getElementById('compose-subject-input').value.trim();
+      const content = document.getElementById('compose-content-input').value.trim();
+      if (!recipientId || !content) return;
+
+      const submitBtn = e.target.querySelector('button[type=submit]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch(`${apiBase}/api/community/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ recipientId, subject, content })
+        });
+        if (res.ok) {
+          alert('Message sent successfully!');
+          closeComposeMessageModal();
+          await loadInboxData();
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(errData.error || 'Failed to send message.');
+        }
+      } catch (err) {
+        console.error('Send message error:', err);
+        alert('Network error sending message.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    }
+
     // State & User Identity
     const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
       ? ''
@@ -2201,10 +2802,12 @@
         }
       } catch (_) {}
 
-      // Fetch live stats and posts
+      // Fetch live stats, posts, inbox, and members network
       await Promise.all([
         loadProfileStats(),
-        loadLivePosts()
+        loadLivePosts(),
+        loadInboxData(),
+        loadMembersNetwork()
       ]);
     });
 
@@ -2665,6 +3268,7 @@
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data.members)) {
+            loadedMembersCache = data.members;
             container.innerHTML = data.members.map(m => `
               <div class="member-mini-row" data-member-id="${escapeHtml(m.id)}">
                 <div class="member-mini-info">
@@ -2675,11 +3279,18 @@
                   </div>
                 </div>
                 <div class="member-mini-actions">
-                  <button type="button" class="member-action-btn ${m.isConnected ? 'active' : ''}" onclick="toggleConnectMember('${escapeHtml(m.id)}', this)">
-                    ${m.isConnected ? 'Connected' : (m.isPending ? 'Pending' : 'Connect')}
-                  </button>
+                  ${m.isPendingReceived ? `
+                    <button type="button" class="member-action-btn active" style="background:#16a34a; color:#fff; border-color:#16a34a;" onclick="respondConnection('${escapeHtml(m.pendingConnectionId)}', 'accept')">Accept</button>
+                  ` : `
+                    <button type="button" class="member-action-btn ${m.isConnected ? 'active' : ''}" onclick="toggleConnectMember('${escapeHtml(m.id)}', this)">
+                      ${m.isConnected ? 'Connected' : (m.isPending ? 'Pending' : 'Connect')}
+                    </button>
+                  `}
                   <button type="button" class="member-action-btn ${m.isFollowing ? 'active' : ''}" onclick="toggleFollowMember('${escapeHtml(m.id)}', this)">
                     ${m.isFollowing ? 'Following' : 'Follow'}
+                  </button>
+                  <button type="button" class="member-action-btn" title="Send Direct Message" onclick="openComposeMessageModal('${escapeHtml(m.id)}')">
+                    &#9993;
                   </button>
                 </div>
               </div>
@@ -2712,6 +3323,7 @@
           if (connEl && typeof data.connectionsCount === 'number') {
             connEl.textContent = data.connectionsCount;
           }
+          await Promise.all([loadInboxData(), loadMembersNetwork()]);
         }
       } catch (err) {
         console.error('Connect error:', err);

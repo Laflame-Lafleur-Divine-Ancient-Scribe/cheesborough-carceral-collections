@@ -67,6 +67,44 @@ assert(html.includes('id="profile-stat-followers"'), 'HTML must have profile-sta
 assert(html.includes('Followers'), 'HTML must display Followers label');
 assert(html.includes('id="profile-stat-posts"'), 'HTML must have profile-stat-posts element');
 assert(html.includes('Posts'), 'HTML must display Posts label');
-console.log('✓ Profile stats elements and labels in COMMUNITY.html verified.');
+// Left Menu check
+const expectedMenuItems = [
+  'The Feed',
+  'What’s Breaking',
+  'Cases Everybody’s Watching',
+  'Know the Law',
+  'Family &amp; Support',
+  'Deep Dives',
+  'My Profile',
+  'Search the Collection',
+  'Books &amp; Resources'
+];
+for (const item of expectedMenuItems) {
+  assert(html.includes(item), `Left menu must include ${item}`);
+}
+console.log('✓ Left navigation menu items verified.');
+
+// Inbox and Messaging UI check
+assert(html.includes('id="inbox-btn"'), 'HTML must have inbox-btn');
+assert(html.includes('id="inbox-modal"'), 'HTML must have inbox-modal');
+assert(html.includes('id="compose-message-modal"'), 'HTML must have compose-message-modal');
+assert(html.includes('id="inbox-tab-messages"'), 'HTML must have messages tab');
+assert(html.includes('id="inbox-tab-requests"'), 'HTML must have connection requests tab');
+console.log('✓ Community Inbox and messaging modals verified.');
+
+// Realistic stats check
+assert(html.includes('14 discussions'), 'HTML must have realistic 14 discussions');
+assert(html.includes('6 researchers'), 'HTML must have realistic 6 researchers');
+assert(html.includes('4 researchers'), 'HTML must have realistic 4 researchers');
+assert(html.includes('7 advocates'), 'HTML must have realistic 7 advocates');
+console.log('✓ Realistic stats and working circles verified.');
+
+// Service inbox and connection methods check
+assert(typeof service.getInbox === 'function', 'Service must have getInbox');
+assert(typeof service.sendMessage === 'function', 'Service must have sendMessage');
+assert(typeof service.markMessageRead === 'function', 'Service must have markMessageRead');
+assert(typeof service.respondConnection === 'function', 'Service must have respondConnection');
+console.log('✓ Service inbox, connection respond, and messaging methods verified.');
 
 console.log('All tests passed successfully!');
+
