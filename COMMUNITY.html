@@ -1074,6 +1074,9 @@
         <div class="fb-menu-row" data-filter="history">
           <span class="fb-menu-icon">&#128220;</span> Florida Penal Archives
         </div>
+        <a href="PROFILE.html" class="fb-menu-row">
+          <span class="fb-menu-icon">&#128100;</span> My Researcher Profile
+        </a>
         <a href="SEARCH.html" class="fb-menu-row">
           <span class="fb-menu-icon">&#128196;</span> Search Full Collections
         </a>
@@ -1512,14 +1515,143 @@
     </div>
   </div>
 
-  <script src="community-auth.js"></script>
+  <script src="community-auth.js?v=20260912-community-btn"></script>
   <script>
     // State & User Identity
+    const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+      ? ''
+      : 'https://serviceapi-production-f574.up.railway.app';
+
     let activeFilter = 'all';
+    let isLoggedIn = false;
     let currentUser = {
       name: 'Community Member',
-      initials: 'CC'
+      initials: 'CC',
+      role: 'member'
     };
+
+    // Format relative time helper
+    function timeAgo(dateString) {
+      const date = new Date(dateString);
+      const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+      if (seconds < 60) return 'Just now';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      if (days < 7) return `${days}d ago`;
+      return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+
+    // Category display helper
+    const catLabels = {
+      watch: { name: 'Concealed Records Watch', cls: 'concealed' },
+      investigation: { name: 'Investigation Desk', cls: 'legal' },
+      records: { name: 'Archival Records', cls: '' },
+      mutual_aid: { name: 'Family & Mutual Aid', cls: 'family' },
+      cases: { name: 'Case Research', cls: 'legal' },
+      general: { name: 'Community Circle', cls: '' }
+    };
+
+    function renderPostHtml(post) {
+      const catInfo = catLabels[post.category] || { name: 'Community Discussion', cls: '' };
+      const authorName = escapeHtml(post.author?.displayName || 'Community Member');
+      const initials = escapeHtml(post.author?.initials || 'CC');
+      const contentHtml = escapeHtml(post.content).replace(/\n/g, '<br>');
+      const isOwner = post.author?.role === 'owner';
+      const userReacted = Boolean(post.userReacted);
+      const rxCount = post.reactionsCount || 0;
+      const cmCount = post.commentsCount || (post.comments?.length || 0);
+
+      const commentsHtml = (post.comments || []).map(cm => `
+        <div class="comment-item">
+          <div class="comment-avatar" style="background:#1e3a5f;">${escapeHtml(cm.author?.initials || 'CC')}</div>
+          <div class="comment-bubble">
+            <div class="comment-author">${escapeHtml(cm.author?.displayName || 'Member')}${cm.author?.role === 'owner' ? ' <span style="color:#bd9448;font-size:0.75rem;">(Owner)</span>' : ''} &bull; <span style="font-weight:400;color:var(--ink-muted);font-size:0.75rem;">${timeAgo(cm.createdAt)}</span></div>
+            <div class="comment-text">${escapeHtml(cm.content)}</div>
+          </div>
+        </div>
+      `).join('');
+
+      return `
+        <div class="post-head">
+          <div class="post-author-group">
+            <div class="post-author-avatar">${initials}</div>
+            <div>
+              <div class="post-author-name">
+                ${authorName}
+                ${isOwner ? '<span class="post-badge" style="background:#78350f;color:#fef3c7;border:1px solid #d97706;">Site Founder</span>' : ''}
+                <span class="post-badge ${catInfo.cls}">${catInfo.name}</span>
+                ${post.pinned ? '<span class="post-badge" style="background:#0f2744;color:#f1d597;border:1px solid #bd9448;">&#128204; Pinned</span>' : ''}
+              </div>
+              <div class="post-meta">${timeAgo(post.createdAt)} &bull; &#127760; Public Community Record</div>
+            </div>
+          </div>
+          <button type="button" onclick="copyPostUrl()" title="Share link" style="background:none; border:none; color:var(--ink-muted); cursor:pointer; font-size:1.1rem;">&bull;&bull;&bull;</button>
+        </div>
+
+        <div class="post-body">
+          <p>${contentHtml}</p>
+        </div>
+
+        <div class="post-stats-row">
+          <div class="reaction-icons">
+            <span>&#9878;&#65039;</span><span>&#128077;</span>
+            <span class="rx-counter">${rxCount} ${rxCount === 1 ? 'reaction' : 'reactions'}</span>
+          </div>
+          <div>
+            <span class="cm-counter">${cmCount} ${cmCount === 1 ? 'comment' : 'comments'}</span>
+          </div>
+        </div>
+
+        <div class="post-buttons-row">
+          <button type="button" class="post-btn rx-toggle-btn ${userReacted ? 'active' : ''}" onclick="togglePostReaction(this)" style="${userReacted ? 'color:#c29b53;' : ''}">
+            <span>&#9878;&#65039;</span> <span>${userReacted ? 'Supported' : 'Justice'}</span>
+          </button>
+          <button type="button" class="post-btn" onclick="toggleCommentBox(this)">
+            <span>&#128172;</span> <span>Comment</span>
+          </button>
+          <button type="button" class="post-btn" onclick="copyPostUrl()">
+            <span>&#8599;</span> <span>Share</span>
+          </button>
+        </div>
+
+        <div class="post-comments">
+          ${commentsHtml}
+          <form class="comment-composer" onsubmit="submitNewComment(event)">
+            <div class="comment-avatar" style="width:28px; height:28px;">${currentUser.initials}</div>
+            <input type="text" class="comment-input" placeholder="Add your evidence, record citation, or reply..." required>
+            <button type="submit" class="comment-submit-btn">Post</button>
+          </form>
+        </div>
+      `;
+    }
+
+    // Load Live Posts from Railway API
+    async function loadLivePosts() {
+      const stream = document.getElementById('feed-posts-stream');
+      try {
+        const res = await fetch(`${apiBase}/api/community/posts`, { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.posts) && data.posts.length > 0) {
+            // Remove mock items and replace with live database posts
+            stream.innerHTML = '';
+            data.posts.forEach(post => {
+              const article = document.createElement('article');
+              article.className = 'fb-card post-card';
+              article.dataset.postId = post.id;
+              article.dataset.category = post.category;
+              article.innerHTML = renderPostHtml(post);
+              stream.appendChild(article);
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Live community API connecting error:', err);
+      }
+    }
 
     // Session Hook
     document.addEventListener('DOMContentLoaded', async () => {
@@ -1527,7 +1659,9 @@
         if (window.CCCCommunity?.restoreSession) {
           const user = await window.CCCCommunity.restoreSession();
           if (user) {
+            isLoggedIn = true;
             currentUser.name = user.displayName || 'Member';
+            currentUser.role = user.role || 'member';
             currentUser.initials = (user.displayName || 'CC').split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
             
             document.getElementById('header-user-name').textContent = currentUser.name;
@@ -1538,10 +1672,19 @@
           }
         }
       } catch (_) {}
+
+      // Fetch live posts
+      await loadLivePosts();
     });
 
     // Composer modal
     function openComposer(presetCat) {
+      if (!isLoggedIn) {
+        if (confirm('Sign in to publish a discussion to The Yard community?')) {
+          location.href = 'LOGIN.html?returnTo=' + encodeURIComponent(location.pathname);
+        }
+        return;
+      }
       if (presetCat) {
         document.getElementById('post-category-select').value = presetCat;
       }
@@ -1553,20 +1696,45 @@
       document.getElementById('post-content-input').value = '';
     }
 
-    // Reaction Toggle
-    function togglePostReaction(btn) {
-      btn.classList.toggle('active');
-      const card = btn.closest('.post-card');
-      const counter = card.querySelector('.rx-counter');
-      let count = parseInt(counter.textContent) || 0;
-      if (btn.classList.contains('active')) {
-        count += 1;
-        btn.style.color = '#c29b53';
-      } else {
-        count = Math.max(0, count - 1);
-        btn.style.color = '';
+    // Live Reaction Toggle
+    async function togglePostReaction(btn) {
+      if (!isLoggedIn) {
+        if (confirm('Sign in to support or react to community records?')) {
+          location.href = 'LOGIN.html?returnTo=' + encodeURIComponent(location.pathname);
+        }
+        return;
       }
-      counter.textContent = count + ' reactions';
+      const card = btn.closest('.post-card');
+      const postId = card.dataset.postId;
+      if (!postId) {
+        // Fallback for mock items
+        btn.classList.toggle('active');
+        const counter = card.querySelector('.rx-counter');
+        let count = parseInt(counter.textContent) || 0;
+        count = btn.classList.contains('active') ? count + 1 : Math.max(0, count - 1);
+        counter.textContent = count + ' reactions';
+        return;
+      }
+
+      btn.disabled = true;
+      try {
+        const res = await fetch(`${apiBase}/api/community/posts/${postId}/react`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const counter = card.querySelector('.rx-counter');
+          counter.textContent = `${data.count} ${data.count === 1 ? 'reaction' : 'reactions'}`;
+          btn.classList.toggle('active', data.userReacted);
+          btn.style.color = data.userReacted ? '#c29b53' : '';
+          btn.querySelector('span:last-child').textContent = data.userReacted ? 'Supported' : 'Justice';
+        }
+      } catch (err) {
+        console.error('Reaction error:', err);
+      } finally {
+        btn.disabled = false;
+      }
     }
 
     // Toggle comments visibility
@@ -1582,111 +1750,128 @@
       alert('Discussion link copied to clipboard!');
     }
 
-    // Submit new comment
-    function submitNewComment(e) {
+    // Submit new comment to Railway API
+    async function submitNewComment(e) {
       e.preventDefault();
+      if (!isLoggedIn) {
+        if (confirm('Sign in to add a reply or evidence to this record?')) {
+          location.href = 'LOGIN.html?returnTo=' + encodeURIComponent(location.pathname);
+        }
+        return;
+      }
       const form = e.target;
       const input = form.querySelector('.comment-input');
       const text = input.value.trim();
       if (!text) return;
 
       const card = form.closest('.post-card');
+      const postId = card.dataset.postId;
       const commentsContainer = card.querySelector('.post-comments');
+      const submitBtn = form.querySelector('button[type=submit]');
 
-      const commentDiv = document.createElement('div');
-      commentDiv.className = 'comment-item';
-      commentDiv.innerHTML = `
-        <div class="comment-avatar">${currentUser.initials}</div>
-        <div class="comment-bubble">
-          <div class="comment-author">${currentUser.name}</div>
-          <div class="comment-text">${escapeHtml(text)}</div>
-        </div>
-      `;
+      if (!postId) {
+        // Fallback local append
+        const commentDiv = document.createElement('div');
+        commentDiv.className = 'comment-item';
+        commentDiv.innerHTML = `
+          <div class="comment-avatar">${currentUser.initials}</div>
+          <div class="comment-bubble">
+            <div class="comment-author">${currentUser.name}</div>
+            <div class="comment-text">${escapeHtml(text)}</div>
+          </div>
+        `;
+        commentsContainer.insertBefore(commentDiv, form);
+        input.value = '';
+        return;
+      }
 
-      commentsContainer.insertBefore(commentDiv, form);
-      input.value = '';
+      submitBtn.disabled = true;
+      try {
+        const res = await fetch(`${apiBase}/api/community/posts/${postId}/comments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ content: text })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const commentDiv = document.createElement('div');
+          commentDiv.className = 'comment-item';
+          commentDiv.innerHTML = `
+            <div class="comment-avatar" style="background:#1e3a5f;">${currentUser.initials}</div>
+            <div class="comment-bubble">
+              <div class="comment-author">${currentUser.name} &bull; <span style="font-weight:400;color:var(--ink-muted);font-size:0.75rem;">Just now</span></div>
+              <div class="comment-text">${escapeHtml(text)}</div>
+            </div>
+          `;
+          commentsContainer.insertBefore(commentDiv, form);
+          input.value = '';
 
-      // Increment counter
-      const cmCounter = card.querySelector('.cm-counter');
-      const count = (parseInt(cmCounter.textContent) || 0) + 1;
-      cmCounter.textContent = count + ' comments';
+          const cmCounter = card.querySelector('.cm-counter');
+          if (cmCounter && typeof data.commentsCount === 'number') {
+            cmCounter.textContent = `${data.commentsCount} ${data.commentsCount === 1 ? 'comment' : 'comments'}`;
+          }
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(errData.error || 'Failed to submit comment.');
+        }
+      } catch (err) {
+        console.error('Comment error:', err);
+      } finally {
+        submitBtn.disabled = false;
+      }
     }
 
-    // Publish new post
-    function publishNewPost(e) {
+    // Publish new post to Railway API
+    async function publishNewPost(e) {
       e.preventDefault();
+      if (!isLoggedIn) {
+        if (confirm('Sign in to publish a discussion to The Yard community?')) {
+          location.href = 'LOGIN.html?returnTo=' + encodeURIComponent(location.pathname);
+        }
+        return;
+      }
       const cat = document.getElementById('post-category-select').value;
       const text = document.getElementById('post-content-input').value.trim();
       if (!text) return;
 
-      const catLabels = {
-        concealed: { name: 'Concealed Records Watch', cls: 'concealed' },
-        legal: { name: 'Legal & Rights', cls: 'legal' },
-        family: { name: 'Family Circle', cls: 'family' },
-        history: { name: 'Archival History', cls: '' }
-      };
-      const catInfo = catLabels[cat] || { name: 'General Discussion', cls: '' };
+      const submitBtn = e.target.querySelector('button[type=submit]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Publishing...';
 
-      const article = document.createElement('article');
-      article.className = 'fb-card post-card';
-      article.dataset.category = cat;
-      article.innerHTML = `
-        <div class="post-head">
-          <div class="post-author-group">
-            <div class="post-author-avatar">${currentUser.initials}</div>
-            <div>
-              <div class="post-author-name">
-                ${currentUser.name}
-                <span class="post-badge ${catInfo.cls}">${catInfo.name}</span>
-              </div>
-              <div class="post-meta">Just now &bull; &#127760; Public Community Post</div>
-            </div>
-          </div>
-          <button type="button" style="background:none; border:none; color:var(--ink-muted); cursor:pointer; font-size:1.1rem;">&bull;&bull;&bull;</button>
-        </div>
+      try {
+        const res = await fetch(`${apiBase}/api/community/posts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ category: cat, content: text })
+        });
 
-        <div class="post-body">
-          <p>${escapeHtml(text).replace(/\n/g, '<br>')}</p>
-        </div>
+        if (res.ok) {
+          const data = await res.json();
+          const article = document.createElement('article');
+          article.className = 'fb-card post-card';
+          article.dataset.postId = data.post.id;
+          article.dataset.category = cat;
+          article.innerHTML = renderPostHtml(data.post);
 
-        <div class="post-stats-row">
-          <div class="reaction-icons">
-            <span>&#9878;&#65039;</span><span>&#128077;</span>
-            <span class="rx-counter">1 reaction</span>
-          </div>
-          <div>
-            <span class="cm-counter">0 comments</span> &bull; 0 shares
-          </div>
-        </div>
+          const stream = document.getElementById('feed-posts-stream');
+          stream.insertBefore(article, stream.firstChild);
+          closeComposer();
 
-        <div class="post-buttons-row">
-          <button type="button" class="post-btn rx-toggle-btn active" onclick="togglePostReaction(this)" style="color:#c29b53;">
-            <span>&#9878;&#65039;</span> <span>Justice</span>
-          </button>
-          <button type="button" class="post-btn" onclick="toggleCommentBox(this)">
-            <span>&#128172;</span> <span>Comment</span>
-          </button>
-          <button type="button" class="post-btn" onclick="copyPostUrl()">
-            <span>&#8599;</span> <span>Share</span>
-          </button>
-        </div>
-
-        <div class="post-comments">
-          <form class="comment-composer" onsubmit="submitNewComment(event)">
-            <div class="comment-avatar" style="width:28px; height:28px;">${currentUser.initials}</div>
-            <input type="text" class="comment-input" placeholder="Add your evidence, record citation, or reply..." required>
-            <button type="submit" class="comment-submit-btn">Post</button>
-          </form>
-        </div>
-      `;
-
-      const stream = document.getElementById('feed-posts-stream');
-      stream.insertBefore(article, stream.firstChild);
-      closeComposer();
-
-      // Ensure post is visible under current filter
-      if (activeFilter !== 'all' && activeFilter !== cat) {
-        setFilter('all');
+          if (activeFilter !== 'all' && activeFilter !== cat) {
+            setFilter('all');
+          }
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          alert(errData.error || 'Failed to publish post.');
+        }
+      } catch (err) {
+        console.error('Publish error:', err);
+        alert('Network error publishing discussion. Please try again.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Post to The Yard';
       }
     }
 
@@ -1727,7 +1912,7 @@
     });
 
     function escapeHtml(str) {
-      return str.replace(/[&<>'"]/g, tag => ({
+      return String(str || '').replace(/[&<>'"]/g, tag => ({
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',

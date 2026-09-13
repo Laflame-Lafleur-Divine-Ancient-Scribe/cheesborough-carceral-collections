@@ -34,6 +34,15 @@ const researchHelpService = createResearchHelpService({
     isOwner,
     mail: createEmailDelivery()
 });
+const { createCommunityHubService } = require('./lib/community-hub-service');
+const communityHubService = createCommunityHubService({
+    db: communityDb,
+    ensureSchema: ensureCommunitySchema,
+    user: (request) => v2User(request),
+    json: communityJson,
+    parseBody: parseCommunityBody,
+    rate: permitCommunityAction
+});
 
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
@@ -2240,6 +2249,11 @@ const server = http.createServer((request, response) => {
     if (requestUrl.pathname.startsWith('/api/owner/research-inquiries')) {
         applyApiCors(request, response);
         researchHelpService.handle(request, response, requestUrl).catch((err) => communityJson(response, 503, { error: err.message || 'Research inquiry management is temporarily unavailable.' }));
+        return;
+    }
+    if (requestUrl.pathname === '/api/community/posts' || requestUrl.pathname.startsWith('/api/community/posts/')) {
+        applyApiCors(request, response);
+        communityHubService.handle(request, response, requestUrl).catch((err) => communityJson(response, 503, { error: err.message || 'The community platform is temporarily unavailable.' }));
         return;
     }
     if (request.method === 'POST' && requestUrl.pathname === '/api/analytics/collect') {
