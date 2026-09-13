@@ -1,0 +1,773 @@
+{
+  "updated": "2026-09-13",
+  "title": "Cases Everybody Is Watching",
+  "subtitle": "Court Watch, RAP ON TRIAL & The Official Record",
+  "description": "Investigative dossiers examining high-profile prosecutions, forensic discrepancies, plea bargains versus cooperation, and where street rumors collide with verified court filings.",
+  "categories": [
+    { "id": "all", "label": "All Cases", "count": 27 },
+    { "id": "rap-on-trial", "label": "RAP ON TRIAL", "count": 15 },
+    { "id": "chicago-drill", "label": "Chicago Drill: Court Record", "count": 8 }
+  ],
+  "cases": [
+    {
+      "id": "durk-banks",
+      "slug": "united-states-v-durk-banks",
+      "title": "United States v. Durk Banks (Lil Durk)",
+      "shortName": "Lil Durk / OTF",
+      "docket": "U.S. District Court, Central District of California (2:24-cr-00628)",
+      "category": "rap-on-trial",
+      "badges": ["Acquitted", "Witness Testimony", "Alleged Cooperation", "Unresolved"],
+      "image": "01_Photos/ShareImages/Law_Library_Share_Image.png",
+      "caseStatus": "Acquitted on murder-for-hire charges (Sept 11, 2026); in federal custody awaiting separate racketeering trial.",
+      "charges": "Use of interstate facilities in murder-for-hire resulting in death (18 U.S.C. § 1958); conspiracy to commit murder-for-hire; pending separate federal RICO indictment.",
+      "keyEvidence": "Flight booking records tied to OTF credit cards, rental car telemetry in Los Angeles, encrypted messaging logs, and testimony from cooperating former OTF associates.",
+      "prosecutionSays": "Prosecutors alleged Banks placed a commercial bounty and financed flights and rentals for associates to carry out a retaliatory execution against Quando Rondo in revenge for King Von's 2020 death.",
+      "defenseSays": "Lead defense counsel attacked cooperating witness credibility, showing co-defendants fabricated claims in exchange for 5K1.1 substantial assistance sentence reductions; argued OTF business cards were routinely shared for travel without criminal knowledge.",
+      "majorRulings": "September 11, 2026: Federal jury returns NOT GUILTY verdict on all murder-for-hire counts; Magistrate Judge denied immediate release pending trial in the companion RICO docket.",
+      "timeline": [
+        { "date": "Nov 6, 2020", "event": "King Von killed in Atlanta confrontation outside Monaco Hookah Lounge." },
+        { "date": "Aug 19, 2022", "event": "Ambush shooting at Beverly Center gas station in Los Angeles targeting Quando Rondo; Saviay'a Robinson fatally shot." },
+        { "date": "Oct 24, 2024", "event": "Federal grand jury returns sealed indictment; Durk arrested in Florida near airport." },
+        { "date": "Sept 11, 2026", "event": "Jury acquits Banks on all murder-for-hire charges after three weeks of testimony." }
+      ],
+      "courtDocuments": [
+        { "title": "Federal Indictment (Murder-for-Hire)", "type": "Indictment", "url": "https://www.courtlistener.com/docket/69305144/united-states-v-banks/" },
+        { "title": "Jury Verdict Form — Acquittal", "type": "Verdict", "url": "https://pacer.uscourts.gov/" }
+      ],
+      "whatHappensNext": "Pretrial hearings begin for the companion federal racketeering trial; defense prepares motion for bail based on the murder-for-hire acquittal.",
+      "rapOnTrialAnalysis": "A prime legal case study illustrating the gap between federal cooperation agreements and jury persuasion. When cooperating witnesses face 20-year mandatory minimums, cross-examination on self-interest can dismantle the government's conspiracy narrative."
+    },
+    {
+      "id": "keffe-d-tupac",
+      "slug": "state-of-nevada-v-duane-davis",
+      "title": "State of Nevada v. Duane 'Keffe D' Davis",
+      "shortName": "Tupac Shakur / Keffe D",
+      "docket": "Eighth Judicial District Court, Clark County, NV (C-23-377488-1)",
+      "category": "rap-on-trial",
+      "badges": ["Convicted", "Murder Case", "Plea Agreement", "Witness Testimony"],
+      "image": "01_Photos/ShareImages/black-white-news-courthouse-evidence-sketch.png",
+      "caseStatus": "Convicted of first-degree murder with use of a deadly weapon on August 31, 2026.",
+      "charges": "Open murder with use of a deadly weapon with gang enhancement (NRS 200.010, 193.165).",
+      "keyEvidence": "Davis's own 2019 memoir 'Compton Street Legend', taped proffer recordings with LAPD/federal taskforces, and dozens of podcast interviews detailing his role in obtaining the .40 caliber firearm and riding in the Cadillac.",
+      "prosecutionSays": "Davis was the on-scene 'shot caller' who orchestrated the retaliatory drive-by shooting at Flamingo Road and Koval Lane following the MGM Grand altercation between Orlando Anderson and Tupac Shakur.",
+      "defenseSays": "Counsel argued Davis's public statements and book excerpts were sensationalized fiction designed to generate book sales and entertainment money, unsupported by contemporaneous 1996 ballistic evidence.",
+      "majorRulings": "August 31, 2026: Las Vegas jury convicts Davis of murder after 14 hours of deliberation, rejecting the 'entertainment embellishment' defense.",
+      "timeline": [
+        { "date": "Sept 7, 1996", "event": "Tupac Shakur shot four times on the Las Vegas Strip; succumbs to wounds Sept 13." },
+        { "date": "2019", "event": "Davis publishes memoir detailing Southside Compton Crip involvement." },
+        { "date": "Sept 29, 2023", "event": "Clark County grand jury indicts Davis; arrested near his Henderson home." },
+        { "date": "Aug 31, 2026", "event": "Jury returns guilty verdict on first-degree murder." }
+      ],
+      "courtDocuments": [
+        { "title": "Grand Jury Indictment (Clark County)", "type": "Indictment", "url": "https://www.clarkcountycourts.us/" },
+        { "title": "Trial Minute Order — Verdict", "type": "Ruling", "url": "https://nvcourts.gov/" }
+      ],
+      "whatHappensNext": "Sentencing scheduled in Clark County District Court; defense prepares notice of appeal challenging the admission of proffer statements.",
+      "rapOnTrialAnalysis": "Demonstrates the danger of talking out of turn. Proffer protections granted during federal investigations in California did not insulate Davis from state murder charges in Nevada once he went on public press tours."
+    },
+    {
+      "id": "luigi-mangione",
+      "slug": "people-v-luigi-mangione",
+      "title": "People v. Luigi Mangione",
+      "shortName": "Luigi Mangione",
+      "docket": "New York Supreme Court, New York County / U.S. District Court, SDNY",
+      "category": "high-profile",
+      "badges": ["Plea Agreement", "Murder Case", "Unresolved"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Pleaded guilty to federal stalking resulting in death (August 2026); New York State second-degree murder prosecution ongoing.",
+      "charges": "New York State: Second-degree murder, criminal possession of a weapon. Federal: Interstate stalking resulting in death (18 U.S.C. § 2261A), firearms offenses.",
+      "keyEvidence": "3D-printed 9mm ghost gun, suppressor, handwritten manifesto recovered in Pennsylvania backpack, shell casings inscribed with words 'Delay', 'Deny', 'Depose', surveillance video tracing transit routes.",
+      "prosecutionSays": "A premeditated assassination carried out against healthcare executive Brian Thompson outside the Midtown Manhattan New York Hilton, meticulously prepared over weeks.",
+      "defenseSays": "State defense focusing on mental state and suppression of evidence seized during the Pennsylvania McDonald's stop; entered federal guilty plea to avert potential federal death penalty arguments.",
+      "majorRulings": "August 2026: Mangione executes federal plea agreement admitting to interstate stalking; state court rejects defense double jeopardy motion, finding separate sovereign jurisdiction.",
+      "timeline": [
+        { "date": "Dec 4, 2024", "event": "UnitedHealthcare CEO Brian Thompson fatally shot in Midtown Manhattan." },
+        { "date": "Dec 9, 2024", "event": "Mangione apprehended at McDonald's in Altoona, Pennsylvania." },
+        { "date": "Aug 14, 2026", "event": "Mangione pleads guilty to federal interstate stalking counts in SDNY." }
+      ],
+      "courtDocuments": [
+        { "title": "SDNY Federal Complaint", "type": "Complaint", "url": "https://www.justice.gov/usao-sdny" },
+        { "title": "New York County Indictment", "type": "Indictment", "url": "https://www.manhattanda.org/" }
+      ],
+      "whatHappensNext": "New York state trial scheduled for early 2027; defense continues motions challenging firearm forensic matches.",
+      "rapOnTrialAnalysis": "Clear illustration of dual-sovereignty doctrine: pleading guilty in federal court does not bar state murder prosecutions for the same underlying homicide."
+    },
+    {
+      "id": "sean-diddy-combs",
+      "slug": "united-states-v-sean-combs",
+      "title": "United States v. Sean 'Diddy' Combs",
+      "shortName": "Sean 'Diddy' Combs",
+      "docket": "U.S. District Court, Southern District of New York (1:24-cr-00542)",
+      "category": "rap-on-trial",
+      "badges": ["Acquitted", "Convicted", "Witness Testimony"],
+      "image": "01_Photos/ShareImages/Collections_Share_Image.png",
+      "caseStatus": "Acquitted of racketeering conspiracy and sex trafficking; convicted on two counts of transportation to engage in prostitution (2025).",
+      "charges": "Racketeering conspiracy (18 U.S.C. § 1962(d)), sex trafficking by force/fraud/coercion (18 U.S.C. § 1591), transportation for prostitution (18 U.S.C. § 2421).",
+      "keyEvidence": "Hotel security footage from 2016, electronic travel vouchers, thousands of bottles of supplies seized from Miami and Los Angeles estates, testimony from multiple commercial sex workers and personal assistants.",
+      "prosecutionSays": "Combs operated Bad Boy and associated entities as an ongoing criminal enterprise devoted to facilitating multi-day coerced sexual encounters ('Freak Offs') enforced by corporate coercion and physical intimidation.",
+      "defenseSays": "Consensual adult lifestyle choices, commercial sex arrangements without enterprise coercion or force; enterprise RICO statute was weaponized over domestic and civil disputes.",
+      "majorRulings": "Mid-2025: Federal jury acquits Combs of the lead RICO and sex trafficking counts, returning guilty verdicts solely on Mann Act transportation counts.",
+      "timeline": [
+        { "date": "March 2024", "event": "HSI executes search warrants on Holmby Hills and Star Island properties." },
+        { "date": "Sept 16, 2024", "event": "Combs arrested at Manhattan hotel; remanded to MDC Brooklyn." },
+        { "date": "May 2025", "event": "Trial commences in SDNY before Judge Arun Subramanian." },
+        { "date": "July 2025", "event": "Split verdict delivered: acquitted of RICO and trafficking." }
+      ],
+      "courtDocuments": [
+        { "title": "SDNY Unsealed Indictment", "type": "Indictment", "url": "https://www.justice.gov/usao-sdny" },
+        { "title": "Trial Verdict Sheet", "type": "Verdict", "url": "https://pacer.uscourts.gov/" }
+      ],
+      "whatHappensNext": "Sentencing proceedings on the transportation counts; defense appeal on guidelines calculation.",
+      "rapOnTrialAnalysis": "Demonstrated that federal juries demand clear, unambiguous proof of corporate enterprise coercion when the government attempts to stretch white-collar/mob RICO laws over intimate interpersonal conduct."
+    },
+    {
+      "id": "young-thug-ysl",
+      "slug": "state-of-georgia-v-jeffery-williams",
+      "title": "State of Georgia v. Jeffery Williams (Young Thug / YSL)",
+      "shortName": "Young Thug / YSL RICO",
+      "docket": "Superior Court of Fulton County, GA (22SC182823)",
+      "category": "rap-on-trial",
+      "badges": ["Plea Agreement", "Witness Testimony", "Alleged Cooperation"],
+      "image": "01_Photos/ShareImages/Law_Library_Share_Image.png",
+      "caseStatus": "Non-negotiated plea entered October 31, 2024; 5-year prison sentence commuted to time served plus 15 years probation.",
+      "charges": "Violation of Georgia RICO Act, participation in criminal street gang, possession of firearms during commission of a felony, drug trafficking.",
+      "keyEvidence": "Rap lyrics from songs including 'Take It To Trial', social media posts, wiretapped conversations, jailhouse phone recordings, and cooperating co-defendant testimony.",
+      "prosecutionSays": "YSL ('Young Slime Life') was founded in 2012 as an affiliate of the national Bloods gang responsible for murders, armed robberies, and street violence in Atlanta.",
+      "defenseSays": "YSL stood exclusively for 'Young Stoner Life', a legitimate, Grammy-winning music imprint; artistic lyrics were constitutionally protected expression under the First Amendment.",
+      "majorRulings": "July 2024: Judge Ural Glanville recused following secret ex parte meeting with prosecutors and key witness Kenneth 'Lil Woody' Copeland; Judge Paige Reese Whitaker took over; non-negotiated plea accepted Oct 31, 2024.",
+      "timeline": [
+        { "date": "May 9, 2022", "event": "Fulton County DA Fani Willis announces 56-count indictment against 28 individuals." },
+        { "date": "Nov 27, 2023", "event": "Opening statements begin after 10 months of jury selection." },
+        { "date": "Oct 31, 2024", "event": "Young Thug enters non-negotiated plea; released under strict special probation conditions." }
+      ],
+      "courtDocuments": [
+        { "title": "Fulton County YSL Indictment", "type": "Indictment", "url": "https://www.fultonclerk.org/" },
+        { "title": "Final Disposition Order", "type": "Order", "url": "https://www.fultonclerk.org/" }
+      ],
+      "whatHappensNext": "Remaining co-defendants Shannon Stillwell and Deamonte Kendrick continue separate trial tracks; Young Thug complies with 15-year ban from Atlanta Metro area except for specified educational appearances.",
+      "rapOnTrialAnalysis": "The defining modern test of Georgia's expansive state RICO statute. Highlighted severe prosecutorial overreach in treating studio creativity as overt acts in furtherance of a criminal gang."
+    },
+    {
+      "id": "gunna-snitch-debate",
+      "slug": "gunna-alford-plea-analysis",
+      "title": "Gunna and the 'Snitch' Debate (Sergio Kitchens)",
+      "shortName": "Gunna: Alford Plea vs Snitching",
+      "docket": "Fulton County Superior Court (22SC182823)",
+      "category": "rap-on-trial",
+      "badges": ["Plea Agreement", "Alleged Cooperation", "Acquitted"],
+      "image": "01_Photos/ShareImages/Paperwork_Share_Image.png",
+      "caseStatus": "Entered negotiated Alford plea on December 14, 2022; sentenced to 5 years with 1 commuted to time served and 4 suspended; NO TRIAL TESTIMONY GIVEN.",
+      "charges": "Single count of conspiracy to violate the Georgia RICO Act.",
+      "keyEvidence": "No cooperation agreement filed; state entered standard Alford plea colloquy where defendant acknowledged the state had evidence that YSL members committed crimes.",
+      "prosecutionSays": "Kitchens admitted under oath that YSL is a gang and that guns and drugs in a 2017 traffic stop did not belong to him.",
+      "defenseSays": "An Alford plea maintains innocence while acknowledging state evidence; Kitchens expressly reserved his 5th Amendment privilege and NEVER signed an agreement to testify.",
+      "majorRulings": "December 2022: Judge Glanville accepts Alford plea; Gunna released the same day without any requirement to testify in the trial against Young Thug.",
+      "timeline": [
+        { "date": "May 2022", "event": "Gunna indicted alongside Young Thug and 26 others." },
+        { "date": "Dec 14, 2022", "event": "Enters Alford plea; releases public statement affirming he has not cooperated." },
+        { "date": "2023–2024", "event": "Never called as a witness; no statements from his plea were admitted against remaining defendants." }
+      ],
+      "courtDocuments": [
+        { "title": "Alford Plea Transcript", "type": "Plea", "url": "https://www.fultonclerk.org/" }
+      ],
+      "whatHappensNext": "Gunna remains on non-reporting probation; continues releasing chart-topping music while the cultural debate surrounding street codes vs legal reality continues.",
+      "rapOnTrialAnalysis": "The sharpest example in hip-hop history of the divide between street codes and courtroom reality. Social media labeled him a 'snitch,' but under the Federal and Georgia Rules of Evidence, an Alford plea without trial testimony cannot legally be used against a co-defendant."
+    },
+    {
+      "id": "tekashi-6ix9ine",
+      "slug": "united-states-v-daniel-hernandez",
+      "title": "Tekashi 6ix9ine / Nine Trey Gangsters (Daniel Hernandez)",
+      "shortName": "Tekashi 6ix9ine",
+      "docket": "U.S. District Court, Southern District of New York (1:18-cr-00834)",
+      "category": "rap-on-trial",
+      "badges": ["Confirmed Cooperation", "Witness Testimony", "Plea Agreement", "Convicted"],
+      "image": "01_Photos/ShareImages/Collections_Share_Image.png",
+      "caseStatus": "Sentenced to 2 years in federal prison following extensive government cooperation (December 2019); released April 2020.",
+      "charges": "Racketeering, firearms offenses, conspiracy to commit murder, armed robbery.",
+      "keyEvidence": "Cooperation agreement, live testimony identifying gang leaders Anthony Ellison and Aljermiah Mack, wiretaps, music video shoot recordings.",
+      "prosecutionSays": "Hernandez was the financial engine of Nine Trey, funding gang activities in exchange for street protection and gang credibility in his rap persona.",
+      "defenseSays": "Hernandez was kidnapped and extorted by senior Nine Trey figures; cooperated fully to protect his family after his former crew turned against him.",
+      "majorRulings": "Judge Paul Engelmayer granted government's 5K1.1 motion for substantial assistance, reducing a mandatory 47-year minimum to 24 months.",
+      "timeline": [
+        { "date": "Nov 18, 2018", "event": "Hernandez arrested by ATF/HSI agents." },
+        { "date": "Jan 23, 2019", "event": "Pleads guilty and signs formal 5K1.1 cooperation agreement." },
+        { "date": "Sept 2019", "event": "Testifies over three days in open court against former associates." }
+      ],
+      "courtDocuments": [
+        { "title": "Federal Cooperation Agreement (U.S. v. Hernandez)", "type": "Plea", "url": "https://pacer.uscourts.gov/" }
+      ],
+      "whatHappensNext": "Case concluded; remains the gold standard of verified, court-documented rapper cooperation in a federal RICO prosecution.",
+      "rapOnTrialAnalysis": "Unlike ambiguous plea deals, this was confirmed, on-the-record cooperation under 18 U.S.C. § 3553(e) and USSG § 5K1.1. Hernandez took the witness stand, reviewed dockets, pointed at defendants, and translated street jargon for federal prosecutors."
+    },
+    {
+      "id": "karen-read",
+      "slug": "commonwealth-v-karen-read",
+      "title": "Commonwealth v. Karen Read",
+      "shortName": "Karen Read",
+      "docket": "Norfolk Superior Court, Dedham, MA (2282CR00115)",
+      "category": "high-profile",
+      "badges": ["Acquitted", "Murder Case", "Unresolved"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Acquitted of second-degree murder and leaving the scene in 2025 retrial following 2024 hung jury mistrial.",
+      "charges": "Second-degree murder, manslaughter while operating under the influence, leaving the scene of personal injury/death.",
+      "keyEvidence": "Tail light fragments recovered at 34 Fairview Road, Lexus vehicle electronic control module data, John O'Keefe's Apple Health data, cell phone search 'hos long to die in cold'.",
+      "prosecutionSays": "Read struck Boston police officer John O'Keefe with her SUV in a blizzard after a night of heavy drinking outside a fellow officer's house and left him to freeze to death.",
+      "defenseSays": "Framing and police cover-up orchestrated by Norfolk County and Massachusetts State Police; O'Keefe was beaten inside the residence by fellow law enforcement figures and placed in the snow.",
+      "majorRulings": "July 2024: Mistrial declared after jury deadlocks; 2025 retrial concludes with acquittal on top murder charges; lead investigator Trooper Michael Proctor disciplined over inappropriate text messages.",
+      "timeline": [
+        { "date": "Jan 29, 2022", "event": "Officer John O'Keefe found dead in snow in Canton, MA." },
+        { "date": "July 1, 2024", "event": "First trial ends in hung jury." },
+        { "date": "2025", "event": "Retrial results in acquittal of murder." }
+      ],
+      "courtDocuments": [
+        { "title": "Defense Motion to Dismiss (Spoliation)", "type": "Motion", "url": "https://www.mass.gov/orgs/executive-office-of-the-trial-court" }
+      ],
+      "whatHappensNext": "Civil wrongful death suit by O'Keefe's estate; federal grand jury investigation into Norfolk County District Attorney's office conduct.",
+      "rapOnTrialAnalysis": "Demonstrated how aggressive defense forensic auditing of police communication logs and digital discovery can overcome official state narratives."
+    },
+    {
+      "id": "lindsay-clancy",
+      "slug": "commonwealth-v-lindsay-clancy",
+      "title": "Commonwealth v. Lindsay Clancy",
+      "shortName": "Lindsay Clancy",
+      "docket": "Plymouth Superior Court, MA",
+      "category": "high-profile",
+      "badges": ["Murder Case", "Unresolved", "Witness Testimony"],
+      "image": "01_Photos/ShareImages/Behind_The_Gate_Share_Image.png",
+      "caseStatus": "2026 trial ended in a mistrial after jury deadlocked 11–1 in favor of finding her not criminally responsible by reason of mental illness.",
+      "charges": "Three counts of first-degree murder, strangulation, assault and battery with a dangerous weapon.",
+      "keyEvidence": "Prescription medication history (over a dozen psychiatric drugs prescribed in a 4-month span), medical records, Apple Watch exercise data, husband's 911 dispatch tape.",
+      "prosecutionSays": "Clancy planned the killings while her husband was on an errand, arguing internet searches and calculated timing showed legal sanity and deliberate premeditation.",
+      "defenseSays": "Severe postpartum depression and postpartum psychosis caused by involuntary medication toxicity, rendering her unable to appreciate the criminality of her conduct under Massachusetts law.",
+      "majorRulings": "2026: Jury declares hopeless deadlock after six days of deliberation; reporting indicates an 11–1 majority favored finding her not guilty by reason of lack of criminal responsibility.",
+      "timeline": [
+        { "date": "Jan 24, 2023", "event": "Three children killed at Duxbury home; Clancy survives suicide attempt." },
+        { "date": "2026", "event": "Trial concludes in mistrial due to hung jury." }
+      ],
+      "courtDocuments": [
+        { "title": "Plymouth County Superior Court Filings", "type": "Dockets", "url": "https://www.mass.gov/" }
+      ],
+      "whatHappensNext": "Commonwealth evaluates whether to schedule a retrial or negotiate a commitment to a secure mental health facility.",
+      "rapOnTrialAnalysis": "A tragic, groundbreaking exploration of mental health jurisprudence, involuntary intoxication, and the high legal bar for the insanity defense."
+    },
+    {
+      "id": "alex-murdaugh",
+      "slug": "state-of-south-carolina-v-alex-murdaugh",
+      "title": "State of South Carolina v. Alex Murdaugh",
+      "shortName": "Alex Murdaugh",
+      "docket": "Colleton County Court of General Sessions / SC Court of Appeals",
+      "category": "high-profile",
+      "badges": ["Convicted", "Murder Case", "Unresolved"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Murder convictions overturned in 2026 over documented jury tampering by Colleton County Clerk of Court Rebecca Hill; retrial set for 2027.",
+      "charges": "Two counts of murder, two counts of possession of a weapon during a violent crime.",
+      "keyEvidence": "Kennel video recorded on son Paul's iPhone minutes before estimated time of death containing Murdaugh's voice, OnStar vehicle location data, cell phone extraction logs.",
+      "prosecutionSays": "Murdaugh executed his wife Maggie and son Paul at their Moselle hunting estate to distract from imminent exposure of multi-million dollar client embezzlement schemes.",
+      "defenseSays": "Murdaugh admitted to financial theft and lying about his presence at the kennels due to opioid paranoia, but maintained absolute innocence of the homicides.",
+      "majorRulings": "March 2023: Convicted and sentenced to consecutive life terms; 2026: Appellate court overturns murder convictions and orders new trial following evidentiary findings that the elected clerk of court improper influenced juror deliberations.",
+      "timeline": [
+        { "date": "June 7, 2021", "event": "Maggie and Paul Murdaugh shot to death at Moselle estate." },
+        { "date": "March 2, 2023", "event": "Jury convicts Murdaugh after six-week trial." },
+        { "date": "2026", "event": "South Carolina appellate courts overturn convictions based on clerk misconduct." }
+      ],
+      "courtDocuments": [
+        { "title": "Motion for New Trial (Jury Tampering)", "type": "Motion", "url": "https://www.sccourts.org/" }
+      ],
+      "whatHappensNext": "Murdaugh remains in state custody serving lengthy sentences on financial crimes; murder retrial scheduled for 2027.",
+      "rapOnTrialAnalysis": "Demonstrates that constitutional rights to an impartial jury under the 6th Amendment cannot be compromised by courtroom administrators seeking book publicity."
+    },
+    {
+      "id": "bryan-kohberger",
+      "slug": "state-of-idaho-v-bryan-kohberger",
+      "title": "State of Idaho v. Bryan Kohberger",
+      "shortName": "Bryan Kohberger (Idaho Student Murders)",
+      "docket": "Second Judicial District Court, Latah County / Ada County, ID (CR29-22-2805)",
+      "category": "high-profile",
+      "badges": ["Plea Agreement", "Convicted", "Murder Case"],
+      "image": "01_Photos/ShareImages/Law_Library_Share_Image.png",
+      "caseStatus": "Pleaded guilty in July 2025 to four counts of first-degree murder in exchange for life in prison without parole, avoiding capital punishment.",
+      "charges": "Four counts of first-degree murder (I.C. § 18-4003), one count of felony burglary.",
+      "keyEvidence": "Single-source male DNA on Ka-Bar knife sheath snap matched via investigative genetic genealogy, white Hyundai Elantra video canvas, cell phone tower records.",
+      "prosecutionSays": "Criminology doctoral student broke into off-campus residence on King Road in Moscow, ID, carrying out an unprovoked stabbing massacre.",
+      "defenseSays": "Challenged investigative genetic genealogy discovery, vehicle identification timestamps, and argued defendant was driving alone stargazing at the time of the killings.",
+      "majorRulings": "July 2025: Kohberger enters binding guilty plea to four consecutive life sentences without parole, formally waiving appellate review.",
+      "timeline": [
+        { "date": "Nov 13, 2022", "event": "Four University of Idaho students murdered at off-campus home." },
+        { "date": "Dec 30, 2022", "event": "Kohberger arrested at parents' home in Pennsylvania." },
+        { "date": "July 2025", "event": "Guilty plea entered in Ada County courthouse." }
+      ],
+      "courtDocuments": [
+        { "title": "Probable Cause Affidavit (Latah County)", "type": "Affidavit", "url": "https://coi.isc.idaho.gov/" }
+      ],
+      "whatHappensNext": "Serving four consecutive life sentences in Idaho Department of Correction maximum security facility.",
+      "rapOnTrialAnalysis": "The highest-profile test of Investigative Genetic Genealogy (IGG) leading to a plea agreement when the defense realized DNA odds were astronomical."
+    },
+    {
+      "id": "richard-allen",
+      "slug": "state-of-indiana-v-richard-allen",
+      "title": "State of Indiana v. Richard Allen (Delphi Murders)",
+      "shortName": "Richard Allen (Delphi)",
+      "docket": "Carroll Circuit Court, Delphi, IN (08C01-2210-MR-000001)",
+      "category": "high-profile",
+      "badges": ["Convicted", "Murder Case"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Convicted in November 2024 of all counts; sentenced to 130 years in prison.",
+      "charges": "Two counts of murder, two counts of murder while committing or attempting to commit kidnapping.",
+      "keyEvidence": "Unspent .40 caliber cartridge cycled through Allen's Sig Sauer pistol found between victims' bodies, audio/video from victim's phone ('Guys, down the hill'), multiple custodial confessions while in solitary confinement.",
+      "prosecutionSays": "Allen was the man on the Monon High Bridge who forced Abigail Williams and Liberty German down the trail to an isolated creek where they were murdered.",
+      "defenseSays": "Challenged toolmark comparative ballistics as junk science, raised alternative suspects connected to Odinism rituals, argued prison confessions were the product of severe solitary-induced psychosis.",
+      "majorRulings": "November 2024: Jury finds Allen guilty on all four counts; Judge Frances Gull sentences him to maximum statutory terms totaling 130 years.",
+      "timeline": [
+        { "date": "Feb 13, 2017", "event": "Abigail Williams and Liberty German disappear from Monon High Bridge." },
+        { "date": "Oct 26, 2022", "event": "Allen arrested after tip narrative rediscovered in police files." },
+        { "date": "Nov 11, 2024", "event": "Jury returns guilty verdicts on all counts." }
+      ],
+      "courtDocuments": [
+        { "title": "Indiana Trial Court Judgment", "type": "Judgment", "url": "https://public.courts.in.gov/" }
+      ],
+      "whatHappensNext": "Direct appeal pending before Indiana Court of Appeals focusing on ballistics admissibility and exclusion of third-party culprit evidence.",
+      "rapOnTrialAnalysis": "Highlights the controversy around forensic toolmark impression analysis where the state's entire physical case hung on a single unspent bullet casing."
+    },
+    {
+      "id": "menendez-brothers",
+      "slug": "people-v-erik-and-lyle-menendez",
+      "title": "People v. Erik and Lyle Menendez (Resentencing Proceedings)",
+      "shortName": "Menendez Brothers",
+      "docket": "Los Angeles Superior Court, Van Nuys, CA",
+      "category": "high-profile",
+      "badges": ["Convicted", "Murder Case", "Unresolved"],
+      "image": "01_Photos/ShareImages/About_Share_Image.png",
+      "caseStatus": "Sentences reduced to 50 years to life in May 2025; brothers become parole eligible under California youthful offender provisions.",
+      "charges": "Two counts of first-degree murder with special circumstances (1989 convictions).",
+      "keyEvidence": "1988 letter from Erik to cousin Andy Cano corroborating sexual abuse, sworn testimony from Menudo member Roy Rosselló alleging abuse by Jose Menendez, extensive prison rehabilitative record.",
+      "prosecutionSays": "Originally prosecuted as cold-blooded killings committed for a multimillion-dollar inheritance; DA George Gascón later filed resentencing petition citing modern understanding of sexual abuse trauma.",
+      "defenseSays": "Imperfect self-defense driven by lifelong physical and sexual abuse; modern California law permits resentencing when abuse evidence was improperly excluded during the 1990s trials.",
+      "majorRulings": "May 2025: L.A. Superior Court judge grants resentencing motion, vacating natural life without parole and replacing it with 50 years to life.",
+      "timeline": [
+        { "date": "Aug 20, 1989", "event": "Jose and Kitty Menendez killed in Beverly Hills mansion." },
+        { "date": "1996", "event": "Second trial ends with life without parole sentences." },
+        { "date": "May 2025", "event": "Sentences reduced, making them eligible for immediate parole consideration." }
+      ],
+      "courtDocuments": [
+        { "title": "Habeas Corpus Petition (New Evidence)", "type": "Petition", "url": "https://www.lacourt.org/" }
+      ],
+      "whatHappensNext": "California Board of Parole Hearings conducts suitability hearings; Governor review process.",
+      "rapOnTrialAnalysis": "Demonstrates the power of evolving evidentiary standards around trauma and abuse to reopen decades-old convictions."
+    },
+    {
+      "id": "adelson-family",
+      "slug": "state-of-florida-v-donna-and-charlie-adelson",
+      "title": "State of Florida v. Donna & Charlie Adelson",
+      "shortName": "Donna & Charlie Adelson (Dan Markel)",
+      "docket": "Second Judicial Circuit, Leon County, FL",
+      "category": "high-profile",
+      "badges": ["Convicted", "Murder Case", "Witness Testimony"],
+      "image": "01_Photos/ShareImages/Florida_Prison_System_Share_Image.png",
+      "caseStatus": "Charlie Adelson convicted of first-degree murder and sentenced to life (2023); Donna Adelson convicted in 2024.",
+      "charges": "First-degree murder, conspiracy to commit murder, solicitation of murder.",
+      "keyEvidence": "FBI wiretaps of Dolce Vita restaurant meeting, recorded jailhouse phone calls, testimony from intermediary Katherine Magbanua and shooter Luis Rivera, cash payoff tracing.",
+      "prosecutionSays": "Family coordinated a contract hit on FSU law professor Dan Markel to allow daughter Wendi Adelson to relocate her children to South Florida following a bitter divorce.",
+      "defenseSays": "Extortion defense: claimed Latin Kings gang members extorted the Adelson family and killed Markel independently to force payments from Charlie.",
+      "majorRulings": "November 2023: Charlie Adelson found guilty; November 2024: Donna Adelson convicted after being apprehended attempting to board a one-way flight to Vietnam.",
+      "timeline": [
+        { "date": "July 18, 2014", "event": "Dan Markel shot in driveway of his Tallahassee home." },
+        { "date": "Nov 2023", "event": "Charlie Adelson convicted of all charges." },
+        { "date": "Nov 2024", "event": "Donna Adelson convicted of murder-for-hire." }
+      ],
+      "courtDocuments": [
+        { "title": "Leon County Indictment (Donna Adelson)", "type": "Indictment", "url": "https://cvweb.leoncountyfl.gov/" }
+      ],
+      "whatHappensNext": "Appeals progressing in First District Court of Appeal; focus turns to potential remaining unindicted conspirators.",
+      "rapOnTrialAnalysis": "A masterclass in how federal and state wiretap recordings can destroy complex alibi and extortion claims constructed by wealthy defendants."
+    },
+    {
+      "id": "wade-wilson",
+      "slug": "state-of-florida-v-wade-wilson",
+      "title": "State of Florida v. Wade Wilson",
+      "shortName": "Wade Wilson (Fort Myers)",
+      "docket": "Twentieth Judicial Circuit, Lee County, FL (19-CF-000624)",
+      "category": "high-profile",
+      "badges": ["Convicted", "Murder Case"],
+      "image": "01_Photos/ShareImages/Juvenile_Death_Penalty_Share_Image.png",
+      "caseStatus": "Convicted of two counts of first-degree murder; sentenced to death in August 2024.",
+      "charges": "Two counts of first-degree murder, grand theft, battery, burglary.",
+      "keyEvidence": "Confession to father recorded on phone, victim vehicle found in defendant's possession, forensic DNA evidence matching Kristine Melton and Diane Ruiz.",
+      "prosecutionSays": "Brutal thrill killing of two innocent women within hours in Cape Coral, showing extreme depravity and premeditation.",
+      "defenseSays": "Severe brain damage, cognitive impairments from chronic drug addiction, and mental illness argued as mitigating factors against capital punishment.",
+      "majorRulings": "June 2024: Jury votes 9–3 and 10–2 for death under Florida's new non-unanimous capital sentencing law (8–4 threshold); Judge Nicholas Thompson imposes death sentence in August 2024.",
+      "timeline": [
+        { "date": "Oct 7, 2019", "event": "Murders of Kristine Melton and Diane Ruiz committed in Cape Coral." },
+        { "date": "Aug 27, 2024", "event": "Sentenced to death in Lee County courthouse." }
+      ],
+      "courtDocuments": [
+        { "title": "Sentencing Order (Lee County)", "type": "Order", "url": "https://www.leeclerk.org/" }
+      ],
+      "whatHappensNext": "Automatic direct appeal to the Florida Supreme Court challenging the constitutionality of the 8–4 non-unanimous jury death recommendation.",
+      "rapOnTrialAnalysis": "Case attracted immense viral TikTok infamy, demonstrating how digital true-crime fandom often fetishizes horrific courtroom proceedings."
+    },
+    {
+      "id": "sarah-boone",
+      "slug": "state-of-florida-v-sarah-boone",
+      "title": "State of Florida v. Sarah Boone",
+      "shortName": "Sarah Boone ('Suitcase Murder')",
+      "docket": "Ninth Judicial Circuit, Orange County, FL (2020-CF-002148-A-O)",
+      "category": "high-profile",
+      "badges": ["Convicted", "Murder Case"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Convicted of second-degree murder in October 2024; sentenced to life in prison.",
+      "charges": "Second-degree murder (F.S. 782.04).",
+      "keyEvidence": "Cellphone videos recorded by Boone showing victim Jorge Torres Jr. trapped inside blue suitcase begging for his life while she taunted him.",
+      "prosecutionSays": "Boone intentionally zipped Torres in suitcase, laughed as he choked and suffocated, went upstairs to sleep, and left him to die.",
+      "defenseSays": "Battered spouse syndrome, alcohol blackout, self-defense claim that she believed he could escape and went upstairs without malicious intent to kill.",
+      "majorRulings": "October 2024: Jury convicts of second-degree murder after Boone went through eight different court-appointed attorneys; sentenced to natural life.",
+      "timeline": [
+        { "date": "Feb 24, 2020", "event": "Torres found dead inside suitcase in Winter Park apartment." },
+        { "date": "Oct 25, 2024", "event": "Jury returns guilty verdict on second-degree murder." }
+      ],
+      "courtDocuments": [
+        { "title": "Orange County Judgment and Sentence", "type": "Judgment", "url": "https://myeclerk.myorangeclerk.com/" }
+      ],
+      "whatHappensNext": "Direct appeal before Fifth District Court of Appeal.",
+      "rapOnTrialAnalysis": "Phone video evidence captured in real time is virtually impossible for defense counsel to explain away."
+    },
+    {
+      "id": "donald-trump-ny",
+      "slug": "people-v-donald-j-trump",
+      "title": "People v. Donald J. Trump (New York Falsifying Business Records)",
+      "shortName": "Trump NY Case",
+      "docket": "New York Supreme Court, New York County (IND-71543-23)",
+      "category": "high-profile",
+      "badges": ["Convicted", "Witness Testimony"],
+      "image": "01_Photos/ShareImages/Law_Library_Share_Image.png",
+      "caseStatus": "Convicted on 34 felony counts (May 2024); sentenced on January 10, 2025 to unconditional discharge (no jail, fines, or probation).",
+      "charges": "34 counts of falsifying business records in the first degree (NY Penal Law § 175.10).",
+      "keyEvidence": "Invoices, general ledger entries, checks signed by Trump, testimony from Michael Cohen, David Pecker, and Stormy Daniels.",
+      "prosecutionSays": "Trump orchestrated an unlawful catch-and-kill scheme to suppress negative stories during the 2016 presidential election and falsified internal records to conceal repayments.",
+      "defenseSays": "Legitimate legal retainer payments to personal attorney; no intent to defraud, misdemeanor records claims were time-barred and inappropriately upgraded to felonies.",
+      "majorRulings": "May 30, 2024: Jury convicts on all 34 counts; Jan 10, 2025: Judge Juan Merchan sentences defendant to unconditional discharge citing presidential immunity implications.",
+      "timeline": [
+        { "date": "May 30, 2024", "event": "Jury delivers unanimous guilty verdict on 34 felony counts." },
+        { "date": "Jan 10, 2025", "event": "Sentenced to unconditional discharge." }
+      ],
+      "courtDocuments": [
+        { "title": "New York Supreme Court Indictment", "type": "Indictment", "url": "https://www.manhattanda.org/" }
+      ],
+      "whatHappensNext": "Appeals pending in New York appellate courts addressing presidential immunity and felony upgrade statutes.",
+      "rapOnTrialAnalysis": "Exemplifies how bookkeeping entries can be elevated to felonies under state law through secondary predicate offense theories."
+    },
+    {
+      "id": "shanna-gardner-mario-fernandez",
+      "slug": "state-of-florida-v-gardner-and-fernandez",
+      "title": "State of Florida v. Shanna Gardner & Mario Fernandez",
+      "shortName": "Jared Bridegan Murder-for-Hire",
+      "docket": "Fourth Judicial Circuit, Duval County, FL (16-2023-CF-002773-AXXX-MA)",
+      "category": "high-profile",
+      "badges": ["Murder Case", "Witness Testimony", "Unresolved"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Prosecution ongoing; state seeking the death penalty against both defendants; co-conspirator Henry Tenon entered guilty plea and cooperating.",
+      "charges": "First-degree murder, conspiracy to commit first-degree murder, solicitation to commit a capital felony, child abuse.",
+      "keyEvidence": "Tire placed in middle of dark road to stage ambush, check payments to shooter Henry Tenon, encrypted phone records, and Tenon's sworn cooperation testimony.",
+      "prosecutionSays": "Gardner and her new husband Fernandez plotted an execution of Microsoft executive Jared Bridegan amidst contentious custody battles, hiring tenant Henry Tenon as gunman.",
+      "defenseSays": "Severance motions filed; defense challenges Tenon's credibility as an admitted shooter trading testimony to avoid the death penalty.",
+      "majorRulings": "2024–2025: Trial court orders separate trials for Gardner and Fernandez; denied defense motions to disqualify State Attorney's Office.",
+      "timeline": [
+        { "date": "Feb 16, 2022", "event": "Jared Bridegan shot to death in Jacksonville Beach after stopping for tire in road." },
+        { "date": "March 2023", "event": "Gunman Henry Tenon pleads guilty to second-degree murder and agrees to testify." },
+        { "date": "Aug 2023", "event": "Shanna Gardner indicted in Washington state and extradited to Florida." }
+      ],
+      "courtDocuments": [
+        { "title": "Duval County Indictment", "type": "Indictment", "url": "https://core.duvalclerk.com/" }
+      ],
+      "whatHappensNext": "Separate capital murder trials scheduled in Duval County courthouse.",
+      "rapOnTrialAnalysis": "Highlights the anatomy of modern contract killings: tire trap ambush, digital financial paper trails, and cooperator testimony."
+    },
+    {
+      "id": "chad-lori-daybell",
+      "slug": "state-of-idaho-v-daybell",
+      "title": "State of Idaho v. Chad & Lori Vallow Daybell",
+      "shortName": "Doomsday Murders (Daybell)",
+      "docket": "Seventh Judicial District Court, Fremont County, ID",
+      "category": "high-profile",
+      "badges": ["Convicted", "Murder Case"],
+      "image": "01_Photos/ShareImages/Research_Starters_Share_Image.png",
+      "caseStatus": "Lori Vallow convicted of multiple murders and sentenced to life without parole (2023); Chad Daybell convicted and sentenced to death (June 2024).",
+      "charges": "First-degree murder, conspiracy to commit first-degree murder, grand theft.",
+      "keyEvidence": "Remains of Tylee Ryan and JJ Vallow discovered buried in Chad Daybell's pet cemetery, text messages discussing 'zombies' and light/dark spirit ratings, life insurance policies.",
+      "prosecutionSays": "Religious extremists who justified murder of spouses and children using bizarre theological delusions while collecting Social Security and life insurance benefits.",
+      "defenseSays": "Chad's defense attempted to blame Lori and her brother Alex Cox; Lori's defense raised mental health delusions.",
+      "majorRulings": "July 2023: Lori Vallow sentenced to consecutive life sentences; June 1, 2024: Fremont County jury sentences Chad Daybell to death by lethal injection.",
+      "timeline": [
+        { "date": "Sept 2019", "event": "Children Tylee Ryan and JJ Vallow disappear." },
+        { "date": "June 2020", "event": "Children's bodies unearthed in Daybell's backyard." },
+        { "date": "June 2024", "event": "Chad Daybell sentenced to death." }
+      ],
+      "courtDocuments": [
+        { "title": "Daybell Death Penalty Sentencing Order", "type": "Order", "url": "https://coi.isc.idaho.gov/" }
+      ],
+      "whatHappensNext": "Lori faces separate pending charges in Arizona for the shooting of Charles Vallow; Chad is on Idaho death row.",
+      "rapOnTrialAnalysis": "Demonstrated how bizarre spiritual rhetoric was paired with mundane financial greed (Social Security checks and life insurance policies)."
+    },
+    {
+      "id": "ruby-franke-jodi-hildebrandt",
+      "slug": "state-of-utah-v-franke-hildebrandt",
+      "title": "State of Utah v. Ruby Franke & Jodi Hildebrandt",
+      "shortName": "Ruby Franke ('8 Passengers')",
+      "docket": "Fifth District Court, Washington County, UT (231500958)",
+      "category": "high-profile",
+      "badges": ["Plea Agreement", "Convicted"],
+      "image": "01_Photos/ShareImages/Help_Finder_Share_Image.png",
+      "caseStatus": "Both pleaded guilty to aggravated child abuse in December 2023; sentenced in February 2024 to consecutive prison terms up to Utah statutory maximum of 30 years.",
+      "charges": "Six counts of aggravated child abuse (Utah Code § 76-5-109).",
+      "keyEvidence": "Malnourished child escaped through window with duct tape on ankles, journals documenting prolonged physical torture and starvation in Ivins, Utah compound.",
+      "prosecutionSays": "Systematic psychological and physical abuse masquerading as parenting mentorship, resulting in severe physical injuries and starvation.",
+      "defenseSays": "Pleaded guilty, acknowledged responsibility, claimed manipulation by co-defendant Jodi Hildebrandt's 'Connexions' doctrine.",
+      "majorRulings": "February 2024: Judge Eric Gentry imposes four consecutive 1-to-15 year prison terms, the maximum under Utah law, leaving release determination to the Utah Board of Pardons.",
+      "timeline": [
+        { "date": "Aug 30, 2023", "event": "12-year-old child escapes window to neighbor's house begging for food and water." },
+        { "date": "Feb 20, 2024", "event": "Sentenced to consecutive terms in Utah State Correctional Facility." }
+      ],
+      "courtDocuments": [
+        { "title": "Utah Plea Agreements and Sentencing Documents", "type": "Plea", "url": "https://www.utcourts.gov/" }
+      ],
+      "whatHappensNext": "Incarcerated in Utah state prison; Utah Board of Pardons and Parole determines actual time served.",
+      "rapOnTrialAnalysis": "Exposed the dark reality behind polished family social media influencers and predatory behavioral coaching."
+    },
+    {
+      "id": "king-von-lul-tim",
+      "slug": "king-von-lul-tim-case",
+      "title": "King Von / Timothy 'Lul Tim' Leeks Shooting",
+      "shortName": "King Von / Lul Tim",
+      "docket": "Fulton County Superior Court, Atlanta, GA",
+      "category": "rap-on-trial",
+      "badges": ["Murder Case", "Acquitted", "Unresolved"],
+      "image": "01_Photos/ShareImages/Law_Library_Share_Image.png",
+      "caseStatus": "Charges of felony murder dropped by Fulton County DA in August 2023 under Georgia's Stand Your Ground statute; shooting later cited as motive in Lil Durk federal prosecution.",
+      "charges": "Felony murder (dismissed 2023).",
+      "keyEvidence": "Surveillance video from Monaco Hookah Lounge showing physical brawl between Dayvon Bennett (King Von) and Quando Rondo prior to Timothy Leeks firing.",
+      "prosecutionSays": "Initially prosecuted as an intentional homicide; later acknowledged Georgia law justified defense of a third party in active physical combat.",
+      "defenseSays": "Stand Your Ground defense under O.C.G.A. § 16-3-21; Leeks intervened to protect Quando Rondo while being assaulted by multiple individuals.",
+      "majorRulings": "August 2023: Fulton County District Attorney officially dismisses all murder charges against Timothy Leeks.",
+      "timeline": [
+        { "date": "Nov 6, 2020", "event": "King Von shot during brawl outside Atlanta lounge; pronounced dead at Grady Memorial." },
+        { "date": "Aug 2023", "event": "Fulton County drops all charges against Timothy Leeks under Stand Your Ground." },
+        { "date": "2024–2026", "event": "Shooting forms core backdrop for federal retaliation prosecution against Lil Durk." }
+      ],
+      "courtDocuments": [
+        { "title": "Fulton County Nolle Prosequi Order", "type": "Order", "url": "https://www.fultonclerk.org/" }
+      ],
+      "whatHappensNext": "No further state prosecution possible; case remains central context in federal racketeering proceedings.",
+      "rapOnTrialAnalysis": "Illustrates the critical tension between state Stand Your Ground self-defense law and subsequent federal conspiracy theories alleging street retaliation."
+    },
+    {
+      "id": "xxxtentacion-murder",
+      "slug": "state-of-florida-v-boatwright-williams-newsome",
+      "title": "XXXTentacion Murder Trial (Jahseh Onfroy)",
+      "shortName": "XXXTentacion",
+      "docket": "Seventeenth Judicial Circuit, Broward County, FL (18-008447CF10A)",
+      "category": "rap-on-trial",
+      "badges": ["Convicted", "Witness Testimony", "Murder Case"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Michael Boatwright, Dedrick Williams, and Trayvon Newsome convicted of first-degree murder in March 2023; all sentenced to life without parole.",
+      "charges": "First-degree murder, armed robbery with a firearm.",
+      "keyEvidence": "Surveillance video inside and outside RIVA Motorsports, cellphone extraction data, social media photographs of defendants flashing stolen $100 bills hours after the robbery, co-defendant Robert Allen testimony.",
+      "prosecutionSays": "Armed ambush robbery targeting Onfroy as he exited dealership with a Louis Vuitton bag containing $50,000 cash; Boatwright delivered fatal shots.",
+      "defenseSays": "Challenged co-defendant Robert Allen's credibility; argued investigators failed to investigate Drake or other rap rivalries.",
+      "majorRulings": "March 2023: Broward County jury returns guilty verdicts on all counts for all three defendants after 8 days of deliberation; life sentences imposed April 2023.",
+      "timeline": [
+        { "date": "June 18, 2018", "event": "XXXTentacion shot to death outside Deerfield Beach dealership." },
+        { "date": "March 20, 2023", "event": "Boatwright, Williams, and Newsome convicted of first-degree murder." }
+      ],
+      "courtDocuments": [
+        { "title": "Broward County Verdict Forms", "type": "Verdict", "url": "https://www.browardclerk.org/" }
+      ],
+      "whatHappensNext": "Appeals affirmed by Florida Fourth District Court of Appeal.",
+      "rapOnTrialAnalysis": "Showed how cell tower location tracking and suspects posting robbery proceeds on Instagram within hours destroyed any trial defense."
+    },
+    {
+      "id": "pnb-rock-freddie-trone",
+      "slug": "state-of-california-v-freddie-trone",
+      "title": "PnB Rock Murder (Rakim Allen)",
+      "shortName": "PnB Rock",
+      "docket": "Los Angeles Superior Court, Compton Courthouse",
+      "category": "rap-on-trial",
+      "badges": ["Convicted", "Murder Case"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Freddie Trone convicted of murder, conspiracy, and armed robbery in August 2024; sentenced to 31 years to life.",
+      "charges": "One count of murder, two counts of second-degree robbery, one count of conspiracy.",
+      "keyEvidence": "Roscoe's House of Chicken 'N Waffles surveillance video, license plate reader tracking, phone communication records between Trone and co-conspirators.",
+      "prosecutionSays": "Trone directed his 17-year-old son to enter restaurant armed and rob Allen of expensive jewelry, resulting in the fatal shooting.",
+      "defenseSays": "Claimed defendant was only an accessory after the fact and did not plan or order the shooting.",
+      "majorRulings": "August 2024: Jury convicts Trone of murder and conspiracy; sentenced in September 2024.",
+      "timeline": [
+        { "date": "Sept 12, 2022", "event": "PnB Rock fatally shot at South Los Angeles restaurant." },
+        { "date": "Aug 7, 2024", "event": "Freddie Trone convicted of murder and conspiracy." }
+      ],
+      "courtDocuments": [
+        { "title": "L.A. Superior Court Sentencing Minute Order", "type": "Order", "url": "https://www.lacourt.org/" }
+      ],
+      "whatHappensNext": "Appeals filed in California Second District Court of Appeal.",
+      "rapOnTrialAnalysis": "A stark warning regarding social-media geolocation tagging, showing how quickly opportunistic robbers mobilized upon seeing Instagram stories."
+    },
+    {
+      "id": "pop-smoke-killing",
+      "slug": "pop-smoke-prosecution",
+      "title": "Pop Smoke Murder (Bashar Jackson)",
+      "shortName": "Pop Smoke",
+      "docket": "Los Angeles Superior Court / Juvenile Justice Center",
+      "category": "rap-on-trial",
+      "badges": ["Plea Agreement", "Convicted", "Murder Case"],
+      "image": "01_Photos/ShareImages/Law_Library_Share_Image.png",
+      "caseStatus": "Multiple adult and juvenile co-defendants entered guilty pleas; adult defendant Corey Walker faced trial.",
+      "charges": "Murder with special circumstances, robbery.",
+      "keyEvidence": "Social media post showing gift bags revealing rental address on Hercules Drive, taped jailhouse conversations of juvenile shooter, surveillance footage.",
+      "prosecutionSays": "Group of Hoover Criminals gang members located Jackson after his address was exposed on Instagram, carrying out a planned home invasion to rob his Rolex watch.",
+      "defenseSays": "Corey Walker argued he remained outside in the vehicle and instructed the juveniles not to use weapons.",
+      "majorRulings": "2023–2024: Juvenile shooter admitted first-degree murder in juvenile court; separate proceedings for adult co-defendants.",
+      "timeline": [
+        { "date": "Feb 19, 2020", "event": "Pop Smoke murdered during Hollywood Hills home invasion." },
+        { "date": "2023–2024", "event": "Juvenile defendants enter admissions." }
+      ],
+      "courtDocuments": [
+        { "title": "L.A. County Criminal Complaint", "type": "Complaint", "url": "https://da.lacounty.gov/" }
+      ],
+      "whatHappensNext": "Remaining adult proceedings finalizing in Los Angeles Superior Court.",
+      "rapOnTrialAnalysis": "Highlighted the deadly speed of social-media address leaks in modern celebrity home-invasion robberies."
+    },
+    {
+      "id": "nipsey-hussle-eric-holder",
+      "slug": "people-v-eric-holder-jr",
+      "title": "Nipsey Hussle Murder (Ermias Asghedom)",
+      "shortName": "Nipsey Hussle",
+      "docket": "Los Angeles Superior Court, Clara Shortridge Foltz Criminal Justice Center",
+      "category": "rap-on-trial",
+      "badges": ["Convicted", "Murder Case", "Witness Testimony"],
+      "image": "01_Photos/ShareImages/Collections_Share_Image.png",
+      "caseStatus": "Eric Holder Jr. convicted of first-degree murder in July 2022; sentenced to 60 years to life in February 2023.",
+      "charges": "First-degree murder, attempted voluntary manslaughter, possession of a firearm by a felon.",
+      "keyEvidence": "High-definition surveillance footage from Marathon Clothing strip mall, eyewitness testimony, get-away vehicle driver testimony, .40 and 9mm shell casings.",
+      "prosecutionSays": "Premeditated execution: Holder engaged in a conversation with Hussle regarding rumors of 'snitching' paperwork, left the scene, loaded two handguns, and returned to shoot Hussle 10 times.",
+      "defenseSays": "Heat of passion defense (voluntary manslaughter): claimed the accusation of being a snitch by a high-profile figure in Rollin 60s territory provoked uncontrollable emotional distress.",
+      "majorRulings": "July 2022: Jury rejected the manslaughter heat-of-passion defense, convicting Holder of deliberate first-degree murder; Judge H. Clay Jacke imposed 60 years to life in 2023.",
+      "timeline": [
+        { "date": "March 31, 2019", "event": "Nipsey Hussle shot outside The Marathon Clothing in South Los Angeles." },
+        { "date": "July 6, 2022", "event": "Jury finds Eric Holder Jr. guilty of first-degree murder." }
+      ],
+      "courtDocuments": [
+        { "title": "L.A. County Verdict and Sentencing Minute Order", "type": "Order", "url": "https://www.lacourt.org/" }
+      ],
+      "whatHappensNext": "Serving life sentence in California Department of Corrections and Rehabilitation.",
+      "rapOnTrialAnalysis": "A crucial legal test of street code defense: the jury firmly rejected the argument that being called a 'snitch' legally constitutes sufficient provocation to reduce murder to manslaughter."
+    },
+    {
+      "id": "jam-master-jay-convictions",
+      "slug": "united-states-v-karl-jordan-and-ronald-washington",
+      "title": "Jam Master Jay Murder (Jason Mizell)",
+      "shortName": "Jam Master Jay",
+      "docket": "U.S. District Court, Eastern District of New York (1:20-cr-00305)",
+      "category": "rap-on-trial",
+      "badges": ["Convicted", "Witness Testimony", "Murder Case"],
+      "image": "01_Photos/ShareImages/Law_Library_Share_Image.png",
+      "caseStatus": "Karl Jordan Jr. and Ronald Washington convicted on all counts in February 2024; third defendant Jay Bryant awaiting separate trial.",
+      "charges": "Murder while engaged in narcotics trafficking (21 U.S.C. § 848(e)(1)(A)), firearms-related murder.",
+      "keyEvidence": "Eyewitness testimony from studio occupants who broke two decades of silence, ballistics evidence matching .40 caliber handgun, narcotics trafficking association records.",
+      "prosecutionSays": "Defendants executed Mizell in his 24/7 Queens studio after being cut out of a 10-kilogram cocaine distribution transaction in Baltimore.",
+      "defenseSays": "Misidentification, alibi arguments, claimed government witnesses were unreliable informants seeking benefits decades after the event.",
+      "majorRulings": "February 2024: Federal jury in Brooklyn convicts Jordan and Washington of all counts after four weeks of testimony.",
+      "timeline": [
+        { "date": "Oct 30, 2002", "event": "Run-DMC DJ Jason Mizell shot dead inside 24/7 Studio in Jamaica, Queens." },
+        { "date": "Feb 27, 2024", "event": "Karl Jordan Jr. and Ronald Washington convicted in EDNY federal court." }
+      ],
+      "courtDocuments": [
+        { "title": "EDNY Federal Indictment", "type": "Indictment", "url": "https://www.justice.gov/usao-edny" }
+      ],
+      "whatHappensNext": "Sentencing hearings in EDNY; trial for third co-defendant Jay Bryant.",
+      "rapOnTrialAnalysis": "Shows how federal prosecutors can dismantle 20 years of street silence once witness safety and federal protections are brought to bear."
+    },
+    {
+      "id": "mo3-yella-beezy",
+      "slug": "state-of-texas-v-kewon-white",
+      "title": "MO3 Homicide / Kewon White & Yella Beezy Allegations",
+      "shortName": "MO3 / Kewon White",
+      "docket": "282nd Judicial District Court, Dallas County, TX",
+      "category": "rap-on-trial",
+      "badges": ["Convicted", "Murder Case", "Alleged Cooperation", "Unresolved"],
+      "image": "01_Photos/ShareImages/Evidence_Index_Share_Image.png",
+      "caseStatus": "Kewon White convicted of capital murder in September 2026 and sentenced to life without parole. Yella Beezy was separately charged but had NOT been tried at the time of the verdict; allegations against Yella Beezy remain unadjudicated claims.",
+      "charges": "Capital murder (Texas Penal Code § 19.03).",
+      "keyEvidence": "I-35 freeway chase surveillance, cell phone tower ping data, firearm recovery, eyewitness descriptions of the shooter wielding an assault-style rifle.",
+      "prosecutionSays": "Kewon White chased Melvin Noble (MO3) down Interstate 35 in Dallas, shooting him as he fled on foot; prosecutors alleged White was hired by rival rapper Yella Beezy.",
+      "defenseSays": "Kewon White claimed misidentification; Yella Beezy's counsel vigorously denies all involvement, emphasizing no conviction or trial evidence establishes the state's murder-for-hire claims against him.",
+      "majorRulings": "September 2026: Dallas County jury convicts Kewon White of capital murder, triggering automatic life without parole.",
+      "timeline": [
+        { "date": "Nov 11, 2020", "event": "MO3 chased and killed on I-35 in Dallas." },
+        { "date": "Sept 2026", "event": "Kewon White convicted of capital murder in Dallas County." }
+      ],
+      "courtDocuments": [
+        { "title": "Dallas County Indictment (Kewon White)", "type": "Indictment", "url": "https://www.dallascounty.org/government/courts/" }
+      ],
+      "whatHappensNext": "Direct appeal for Kewon White; separate proceedings regarding co-defendants and pending allegations.",
+      "rapOnTrialAnalysis": "Crucial distinction in investigative journalism: distinguishing between an individual convicted by a jury (Kewon White) and an alleged sponsor who has not been tried (Yella Beezy)."
+    }
+  ],
+  "chicagoDrillMatrix": {
+    "title": "Chicago Drill: Music, Murder & The Court Record",
+    "subtitle": "Distinguishing Verified Court Filings from Social Media Rumors",
+    "columns": ["Confirmed Facts", "Police Allegations", "Court Findings", "Artist Claims", "Internet Rumors"],
+    "profiles": [
+      {
+        "name": "BloodHound Lil Jeff (Jeffery Lamar Harris, 21)",
+        "set": "BloodHound",
+        "confirmedFacts": "Fatally shot in the chest on June 8, 2024, in the 6600 block of South Rhodes Avenue in Woodlawn. Pronounced dead at University of Chicago Medical Center.",
+        "policeAllegations": "Chicago Police Department reports indicate Harris was shot during an exchange of gunfire while allegedly pursuing an individual toward a porch.",
+        "courtFindings": "No criminal trial conviction reached prior to his death; shooter acted under potential self-defense under CPD preliminary review.",
+        "artistClaims": "Lyrics and music videos made frequent, aggressive references to street warfare and high body counts.",
+        "internetRumors": "YouTube drill channels (Trap Lore Ross, ChicagoScene88) and Reddit users repeatedly claimed responsibility belonged to Trap City members, but no formal murder convictions exist."
+      },
+      {
+        "name": "Lil Scoom89 (Asyrion Hogan, 18)",
+        "set": "BloodHound Affiliate",
+        "confirmedFacts": "Shot and killed in July 2024 in Chicago, roughly one month following Lil Jeff's homicide.",
+        "policeAllegations": "CPD investigated incident as a targeted neighborhood shooting; no formal indictment named as of late 2026.",
+        "courtFindings": "Case remains an open, unresolved police homicide investigation.",
+        "artistClaims": "Close musical partner with BloodHound Q50; music emphasized neighborhood defense and solidarity with Lil Jeff.",
+        "internetRumors": "Online forums speculated about retaliatory cycles across South Side sets, without court documentation."
+      },
+      {
+        "name": "BloodHound Q50",
+        "set": "BloodHound",
+        "confirmedFacts": "ACTIVELY ALIVE AND RELEASING MUSIC. Has NOT been killed. Continues performing and releasing interviews reflecting on the loss of Lil Jeff and Lil Scoom89.",
+        "policeAllegations": "Named in general gang intelligence files regarding BloodHound musical circle; no murder charges or open homicide warrants.",
+        "courtFindings": "No felony convictions for homicide; no active federal indictment naming him as an enterprise principal.",
+        "artistClaims": "Speaks candidly about street trauma, mourning fallen friends, and navigating the emerging Chicago drill scene.",
+        "internetRumors": "Erroneous social media posts falsely claimed he was dead or wounded; debunked by public appearances and fresh releases in 2025–2026."
+      },
+      {
+        "name": "Munna Duke & Youngin",
+        "set": "O'Block (WIIIC City)",
+        "confirmedFacts": "Victims of a fatal double shooting in Chicago's Edgewater neighborhood in June 2026.",
+        "policeAllegations": "CPD investigating whether the double homicide was targeted or linked to past South Side associations.",
+        "courtFindings": "Unresolved open homicide investigation; no arrests announced.",
+        "artistClaims": "Longtime O'Block artists associated with Parkway Gardens drill legacy.",
+        "internetRumors": "Extensive drill vlog speculation connecting the shooting to ongoing North Side vs South Side rivalries."
+      },
+      {
+        "name": "FBG Duck (Carlton Weekly) / O'Block 6",
+        "set": "STL / EBT / FBG vs O'Block",
+        "confirmedFacts": "FBG Duck was shot and killed in broad daylight in Chicago's Gold Coast luxury shopping district on August 4, 2020.",
+        "policeAllegations": "CPD and FBI launched a joint federal racketeering taskforce targeting O'Block gang members for the murder.",
+        "courtFindings": "VERIFIED FEDERAL CONVICTIONS: In January 2024, a federal jury in Chicago convicted six O'Block members (including Marcus Smart, Charles Liggins, Kenneth Roberson, Tacorey Offord, Christopher Thomas) of murder in aid of racketeering (VICAR).",
+        "artistClaims": "FBG Duck released 'Dead Bitches' diss track weeks before his death; King Von and Lil Durk music referenced Parkway Gardens dominance.",
+        "internetRumors": "Online rumors long debated who pulled the triggers, but the federal trial definitively proved the conspiracy through surveillance, rental car telemetry, and witness testimony."
+      },
+      {
+        "name": "THF 46 vs 051 Young Money",
+        "set": "THF 46 (Mixed BD/MC) vs 051 Young Money (Mixed)",
+        "confirmedFacts": "Over a decade of South Side Chicago neighborhood hostility that resulted in multiple documented homicides.",
+        "policeAllegations": "CPD gang audit files document both sets as non-traditional, mixed-affiliation territorial organizations rather than strict BD or GD monoliths.",
+        "courtFindings": "Individual members from both sets have been prosecuted for gun possession and specific assault/homicide dockets.",
+        "artistClaims": "Artists from THF 46 (associated with Lil Durk's broader circle) and 051 Young Money trade continuous diss tracks.",
+        "internetRumors": "Complex fan wikis attempt to assign responsibility for 20+ deaths, but legal records establish that many shootings involved uncharged or mistaken identities."
+      }
+    ]
+  }
+}

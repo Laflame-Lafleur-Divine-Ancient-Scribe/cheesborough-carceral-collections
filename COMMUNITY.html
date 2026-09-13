@@ -962,6 +962,412 @@
       font-weight: 700;
       cursor: pointer;
     }
+
+    /* CASES EVERYBODY IS WATCHING VIEW */
+    #cases-watching-view {
+      display: none;
+    }
+    .cases-hero-card {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, #0d233a 100%);
+      color: #fff;
+      border: 1px solid rgba(194, 155, 83, 0.4);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+    .cases-hero-badge {
+      display: inline-block;
+      background: rgba(194, 155, 83, 0.2);
+      color: var(--gold-light);
+      border: 1px solid var(--gold);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      margin-bottom: 0.6rem;
+    }
+    .cases-hero-title {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 0.35rem;
+      line-height: 1.2;
+    }
+    .cases-hero-sub {
+      color: var(--gold);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0 0 0.6rem;
+      letter-spacing: 0.02em;
+    }
+    .cases-hero-desc {
+      font-size: 0.86rem;
+      color: #cbd5e1;
+      line-height: 1.55;
+      margin: 0 0 1.25rem;
+      max-width: 720px;
+    }
+    .cases-tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 1rem;
+    }
+    .cases-subtab {
+      background: rgba(255,255,255,0.06);
+      color: #e2e8f0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 9999px;
+      padding: 0.4rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .cases-subtab:hover {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    .cases-subtab.active {
+      background: var(--gold);
+      color: var(--navy-dark);
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* RAP ON TRIAL BANNER */
+    .rap-trial-banner {
+      background: #08111d;
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+      color: #f1f5f9;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+    .rap-trial-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .rap-trial-headline {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 0.4rem;
+    }
+    .rap-trial-quote {
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--gold-light);
+      margin: 0 0 0.9rem;
+      line-height: 1.45;
+    }
+    .rap-badge-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .badge-chip {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .badge-chip.badge-coop { background: rgba(234, 88, 12, 0.2); color: #fb923c; border: 1px solid #ea580c; }
+    .badge-chip.badge-alleged { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid #a855f7; }
+    .badge-chip.badge-plea { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid #3b82f6; }
+    .badge-chip.badge-testimony { background: rgba(20, 184, 166, 0.2); color: #5eead4; border: 1px solid #14b8a6; }
+    .badge-chip.badge-murder { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; }
+    .badge-chip.badge-acquitted { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid #22c55e; }
+    .badge-chip.badge-convicted { background: rgba(153, 27, 27, 0.35); color: #f87171; border: 1px solid #b91c1c; }
+    .badge-chip.badge-unresolved { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid #f59e0b; }
+
+    /* CASE DOSSIER CARD */
+    .case-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .case-card-header {
+      padding: 1rem 1.25rem;
+      background: rgba(0,0,0,0.02);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .case-title {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0 0 0.25rem;
+    }
+    .case-docket {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+    }
+    .case-badges-row {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin-top: 0.4rem;
+    }
+    .case-body-grid {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .case-field-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 0.85rem;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    @media (max-width: 640px) {
+      .case-field-row {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+      }
+    }
+    .case-field-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .case-field-label {
+      font-weight: 700;
+      color: var(--navy);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .case-field-val {
+      color: var(--ink);
+    }
+    .case-timeline-list {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+    .case-timeline-list li {
+      margin-bottom: 0.3rem;
+      font-size: 0.84rem;
+    }
+    .case-doc-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-right: 0.4rem;
+      margin-bottom: 0.3rem;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .case-doc-btn:hover {
+      background: var(--fb-hover);
+      color: var(--fb-blue);
+      border-color: var(--fb-blue);
+    }
+
+    /* CHICAGO DRILL MATRIX */
+    .drill-header-card {
+      background: #111827;
+      color: #fff;
+      padding: 1.25rem 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      border: 1px solid #374151;
+    }
+    .drill-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #ef4444;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .drill-headline {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+    }
+    .drill-sub {
+      color: #9ca3af;
+      font-size: 0.85rem;
+      margin: 0 0 0.85rem;
+    }
+    .drill-alert-box {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      color: #fca5a5;
+      padding: 0.65rem 1rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .drill-profile-card {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+    .drill-profile-header {
+      background: rgba(0,0,0,0.03);
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .drill-profile-name {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .drill-profile-set {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      color: var(--ink-muted);
+    }
+    .drill-columns-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+    }
+    .drill-col-box {
+      background: var(--paper);
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      padding: 0.75rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .drill-col-label {
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .drill-col-label.facts { color: #059669; }
+    .drill-col-label.police { color: #2563eb; }
+    .drill-col-label.court { color: var(--navy); }
+    .drill-col-label.artist { color: #d97706; }
+    .drill-col-label.rumors { color: #dc2626; }
+
+    /* MEMBERS & NETWORK CARD IN RIGHT SIDEBAR */
+    .member-mini-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .member-mini-row:last-child {
+      border-bottom: none;
+    }
+    .member-mini-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+    .member-mini-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .member-mini-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .member-mini-sub {
+      font-size: 0.68rem;
+      color: var(--ink-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .member-mini-actions {
+      display: flex;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+    .member-action-btn {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .member-action-btn:hover {
+      background: var(--navy);
+      color: var(--gold-light);
+      border-color: var(--navy);
+    }
+    .member-action-btn.active {
+      background: var(--gold);
+      color: var(--navy-dark);
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+
   </style>
 </head>
 <body>
@@ -1043,15 +1449,15 @@
         <div class="profile-card-role">Verified Archival Member</div>
         <div class="profile-stats">
           <div>
-            <div class="profile-stat-val" id="profile-stat-connections">19</div>
+            <div class="profile-stat-val" id="profile-stat-connections">0</div>
             <div class="profile-stat-lbl">Connections</div>
           </div>
           <div>
-            <div class="profile-stat-val" id="profile-stat-followers">54</div>
+            <div class="profile-stat-val" id="profile-stat-followers">0</div>
             <div class="profile-stat-lbl">Followers</div>
           </div>
           <div>
-            <div class="profile-stat-val" id="profile-stat-posts">8</div>
+            <div class="profile-stat-val" id="profile-stat-posts">0</div>
             <div class="profile-stat-lbl">Posts</div>
           </div>
         </div>
@@ -1161,6 +1567,7 @@
       <!-- Feed Filter Pills -->
       <div class="feed-filter-bar">
         <button type="button" class="filter-pill active" data-filter="all">All Posts</button>
+        <button type="button" class="filter-pill" data-filter="cases-watching">🔥 Cases Everybody Is Watching</button>
         <button type="button" class="filter-pill" data-filter="watch">🚨 Breaking &amp; Watch</button>
         <button type="button" class="filter-pill" data-filter="cases">⚖️ Trials &amp; Cases</button>
         <button type="button" class="filter-pill" data-filter="legal">📜 Law &amp; Rights</button>
@@ -1193,6 +1600,57 @@
       </div>
 
       <!-- POSTS STREAM -->
+      
+      <!-- DEDICATED VIEW: CASES EVERYBODY IS WATCHING -->
+      <section id="cases-watching-view">
+        <!-- Hero Card -->
+        <div class="cases-hero-card">
+          <div class="cases-hero-badge">&#128293; Real-Time Investigative Docket</div>
+          <h2 class="cases-hero-title">Cases Everybody Is Watching</h2>
+          <div class="cases-hero-sub">Court Watch, RAP ON TRIAL &amp; The Official Record</div>
+          <p class="cases-hero-desc">Investigative dossiers examining high-profile prosecutions, forensic discrepancies, plea bargains versus cooperation, and where street rumors collide with verified court filings.</p>
+          
+          <div class="cases-tabs-bar">
+            <button type="button" class="cases-subtab active" onclick="switchCasesSubTab('all', this)">All Cases (22)</button>
+            <button type="button" class="cases-subtab" onclick="switchCasesSubTab('rap-on-trial', this)">&#9878; RAP ON TRIAL (15)</button>
+            <button type="button" class="cases-subtab" onclick="switchCasesSubTab('chicago-drill', this)">&#127961; Chicago Drill: Court Record</button>
+          </div>
+        </div>
+
+        <!-- RAP ON TRIAL BANNER -->
+        <div id="rap-on-trial-header" class="rap-trial-banner" style="display:none;">
+          <div class="rap-trial-tag">SPECIAL INVESTIGATION</div>
+          <h3 class="rap-trial-headline">RAP ON TRIAL</h3>
+          <p class="rap-trial-quote">&ldquo;RICO cases. Cooperation. Street codes. Retaliation. Murder. And what the court record actually says.&rdquo;</p>
+          <div class="rap-badge-legend">
+            <span class="badge-chip badge-coop">Confirmed Cooperation</span>
+            <span class="badge-chip badge-alleged">Alleged Cooperation</span>
+            <span class="badge-chip badge-plea">Plea Agreement</span>
+            <span class="badge-chip badge-testimony">Witness Testimony</span>
+            <span class="badge-chip badge-murder">Murder Case</span>
+            <span class="badge-chip badge-acquitted">Acquitted</span>
+            <span class="badge-chip badge-convicted">Convicted</span>
+            <span class="badge-chip badge-unresolved">Unresolved</span>
+          </div>
+        </div>
+
+        <!-- CHICAGO DRILL VIEW -->
+        <div id="chicago-drill-view" style="display:none;">
+          <div class="drill-header-card">
+            <div class="drill-tag">VERIFIED INVESTIGATION &bull; 2026 AUDIT</div>
+            <h3 class="drill-headline">Chicago Drill: Music, Murder &amp; The Court Record</h3>
+            <p class="drill-sub">Distinguishing Verified Court Filings from Social Media Rumors</p>
+            <div class="drill-alert-box">
+              <strong>CRITICAL FACT CHECK:</strong> BloodHound Q50 is <strong>ACTIVELY ALIVE</strong> and continuing to release music and conduct interviews in 2025–2026. Online death hoaxes are completely false.
+            </div>
+          </div>
+          <div class="drill-matrix-container" id="drill-matrix-cards"></div>
+        </div>
+
+        <!-- CASES DOSSIER CARDS -->
+        <div id="cases-cards-container"></div>
+      </section>
+
       <div id="feed-posts-stream">
 
         <!-- POST 1: OutWest Ace on RICO & Rap Lyrics -->
@@ -1440,6 +1898,18 @@
         <div class="manifesto-text">
           <p style="margin:0 0 0.75rem 0;">State ledgers, institutional reports, and administrative files often reflect the priorities of the agencies that created them. They can leave out abuse, conflict, resistance, family testimony, and the experiences of people whose lives were reduced to a line in a ledger.</p>
           <p style="margin:0;">The Yard brings families, historians, researchers, and advocates together to question those records, compare them against other evidence, recover missing voices, and examine what the official version may have overlooked, minimized, or left unexplained.</p>
+        </div>
+      </div>
+
+      
+      <!-- Yard Members & Interactive Network -->
+      <div class="fb-card" style="padding:1rem; margin-bottom:1rem;" id="community-members-card">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem;">
+          <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-muted);">Community &amp; Personas</span>
+          <span style="font-size:0.72rem; color:var(--gold-dark); font-weight:700;" id="members-count-badge">8 Members</span>
+        </div>
+        <div id="members-list-container" style="display:flex; flex-direction:column; gap:0.4rem;">
+          <!-- Dynamically loaded -->
         </div>
       </div>
 
@@ -1985,6 +2455,296 @@
     document.getElementById('global-search').addEventListener('input', (e) => {
       applySearch(e.target.value);
     });
+
+
+    // Loaded cases data cache
+    let cachedCasesData = null;
+    let activeCasesSubTab = 'all';
+
+    async function loadCasesData() {
+      try {
+        const res = await fetch(`${apiBase}/api/community/cases`);
+        if (res.ok) {
+          cachedCasesData = await res.json();
+          renderCasesView();
+        }
+      } catch (err) {
+        console.warn('Failed to load cases dossier:', err);
+      }
+    }
+
+    function switchCasesSubTab(tab, btn) {
+      activeCasesSubTab = tab;
+      if (btn) {
+        document.querySelectorAll('.cases-subtab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      renderCasesView();
+    }
+
+    function getBadgeClass(badge) {
+      const b = String(badge || '').toLowerCase();
+      if (b.includes('confirmed coop')) return 'badge-coop';
+      if (b.includes('alleged coop')) return 'badge-alleged';
+      if (b.includes('plea')) return 'badge-plea';
+      if (b.includes('testimony')) return 'badge-testimony';
+      if (b.includes('murder')) return 'badge-murder';
+      if (b.includes('acquitted')) return 'badge-acquitted';
+      if (b.includes('convicted')) return 'badge-convicted';
+      return 'badge-unresolved';
+    }
+
+    function renderCasesView() {
+      if (!cachedCasesData) return;
+
+      const rapHeader = document.getElementById('rap-on-trial-header');
+      const drillView = document.getElementById('chicago-drill-view');
+      const casesContainer = document.getElementById('cases-cards-container');
+      const drillCards = document.getElementById('drill-matrix-cards');
+
+      if (activeCasesSubTab === 'chicago-drill') {
+        rapHeader.style.display = 'none';
+        casesContainer.style.display = 'none';
+        drillView.style.display = 'block';
+
+        if (cachedCasesData.chicagoDrillMatrix?.profiles) {
+          drillCards.innerHTML = cachedCasesData.chicagoDrillMatrix.profiles.map(p => `
+            <div class="drill-profile-card">
+              <div class="drill-profile-header">
+                <div>
+                  <span class="drill-profile-name">${escapeHtml(p.name)}</span>
+                  <span class="drill-profile-set">${escapeHtml(p.set)}</span>
+                </div>
+                ${p.name.includes('Q50') ? '<span class="badge-chip badge-acquitted" style="font-size:0.75rem;">&#10004; ACTIVELY ALIVE</span>' : ''}
+              </div>
+              <div class="drill-columns-grid">
+                <div class="drill-col-box">
+                  <div class="drill-col-label facts">&#10004; Confirmed Facts</div>
+                  <div>${escapeHtml(p.confirmedFacts)}</div>
+                </div>
+                <div class="drill-col-box">
+                  <div class="drill-col-label police">&#128652; Police Allegations</div>
+                  <div>${escapeHtml(p.policeAllegations)}</div>
+                </div>
+                <div class="drill-col-box">
+                  <div class="drill-col-label court">&#9878; Court Findings</div>
+                  <div>${escapeHtml(p.courtFindings)}</div>
+                </div>
+                <div class="drill-col-box">
+                  <div class="drill-col-label artist">&#127911; Artist Claims</div>
+                  <div>${escapeHtml(p.artistClaims)}</div>
+                </div>
+                <div class="drill-col-box">
+                  <div class="drill-col-label rumors">&#9888; Internet Rumors</div>
+                  <div>${escapeHtml(p.internetRumors)}</div>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+        return;
+      }
+
+      drillView.style.display = 'none';
+      casesContainer.style.display = 'block';
+
+      if (activeCasesSubTab === 'rap-on-trial') {
+        rapHeader.style.display = 'block';
+      } else {
+        rapHeader.style.display = 'none';
+      }
+
+      let filteredCases = cachedCasesData.cases || [];
+      if (activeCasesSubTab === 'rap-on-trial') {
+        filteredCases = filteredCases.filter(c => c.category === 'rap-on-trial');
+      }
+
+      casesContainer.innerHTML = filteredCases.map(c => {
+        const badgesHtml = (c.badges || []).map(b => `
+          <span class="badge-chip ${getBadgeClass(b)}">${escapeHtml(b)}</span>
+        `).join('');
+
+        const timelineHtml = (c.timeline || []).map(t => `
+          <li><strong>${escapeHtml(t.date)}:</strong> ${escapeHtml(t.event)}</li>
+        `).join('');
+
+        const docsHtml = (c.courtDocuments || []).map(d => `
+          <a href="${escapeHtml(d.url)}" target="_blank" rel="noopener noreferrer" class="case-doc-btn">
+            &#128196; ${escapeHtml(d.title)} <span style="opacity:0.65;">(${escapeHtml(d.type)})</span>
+          </a>
+        `).join('');
+
+        const imageHtml = c.image ? `
+          <div style="margin-top:0.75rem; border-radius:8px; overflow:hidden; border:1px solid var(--border-light); max-height:260px;">
+            <img src="${escapeHtml(c.image)}" alt="${escapeHtml(c.shortName)}" style="width:100%; height:auto; object-fit:cover; display:block;">
+          </div>
+        ` : '';
+
+        const analysisHtml = c.rapOnTrialAnalysis ? `
+          <div class="post-concealment-callout" style="margin-top:0.75rem;">
+            <strong>Rap On Trial Legal Analysis:</strong>
+            ${escapeHtml(c.rapOnTrialAnalysis)}
+          </div>
+        ` : '';
+
+        return `
+          <article class="case-card" id="case-${escapeHtml(c.id)}">
+            <div class="case-card-header">
+              <div>
+                <h3 class="case-title">${escapeHtml(c.title)}</h3>
+                <div class="case-docket">Docket: ${escapeHtml(c.docket)}</div>
+                <div class="case-badges-row">${badgesHtml}</div>
+              </div>
+              <span class="post-badge" style="background:var(--navy); color:var(--gold-light);">${escapeHtml(c.shortName)}</span>
+            </div>
+
+            <div class="case-body-grid">
+              <div class="case-field-row">
+                <div class="case-field-label">1. Case Status</div>
+                <div class="case-field-val"><strong>${escapeHtml(c.caseStatus)}</strong></div>
+              </div>
+
+              <div class="case-field-row">
+                <div class="case-field-label">2. Charges</div>
+                <div class="case-field-val">${escapeHtml(c.charges)}</div>
+              </div>
+
+              <div class="case-field-row">
+                <div class="case-field-label">3. Key Evidence</div>
+                <div class="case-field-val">${escapeHtml(c.keyEvidence)}</div>
+              </div>
+
+              <div class="case-field-row">
+                <div class="case-field-label">4. Prosecution Says</div>
+                <div class="case-field-val">${escapeHtml(c.prosecutionSays)}</div>
+              </div>
+
+              <div class="case-field-row">
+                <div class="case-field-label">5. Defense Says</div>
+                <div class="case-field-val">${escapeHtml(c.defenseSays)}</div>
+              </div>
+
+              <div class="case-field-row">
+                <div class="case-field-label">6. Major Rulings</div>
+                <div class="case-field-val">${escapeHtml(c.majorRulings)}</div>
+              </div>
+
+              <div class="case-field-row">
+                <div class="case-field-label">7. Timeline</div>
+                <div class="case-field-val">
+                  <ul class="case-timeline-list">${timelineHtml}</ul>
+                </div>
+              </div>
+
+              <div class="case-field-row">
+                <div class="case-field-label">8. Court Documents</div>
+                <div class="case-field-val">
+                  <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">${docsHtml || 'Docket under protective order or pending unsealing.'}</div>
+                </div>
+              </div>
+
+              <div class="case-field-row">
+                <div class="case-field-label">9. What Happens Next</div>
+                <div class="case-field-val">${escapeHtml(c.whatHappensNext)}</div>
+              </div>
+
+              ${analysisHtml}
+              ${imageHtml}
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // Members & Network Interactive List
+    async function loadMembersNetwork() {
+      const container = document.getElementById('members-list-container');
+      if (!container) return;
+      try {
+        const res = await fetch(`${apiBase}/api/community/members`, { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.members)) {
+            container.innerHTML = data.members.map(m => `
+              <div class="member-mini-row" data-member-id="${escapeHtml(m.id)}">
+                <div class="member-mini-info">
+                  <div class="member-mini-avatar" style="background:${getAvatarColor(m.displayName)};">${escapeHtml(m.initials)}</div>
+                  <div style="min-width:0;">
+                    <div class="member-mini-name">${escapeHtml(m.displayName)}</div>
+                    <div class="member-mini-sub">${escapeHtml(m.location || m.role)}</div>
+                  </div>
+                </div>
+                <div class="member-mini-actions">
+                  <button type="button" class="member-action-btn ${m.isConnected ? 'active' : ''}" onclick="toggleConnectMember('${escapeHtml(m.id)}', this)">
+                    ${m.isConnected ? 'Connected' : (m.isPending ? 'Pending' : 'Connect')}
+                  </button>
+                  <button type="button" class="member-action-btn ${m.isFollowing ? 'active' : ''}" onclick="toggleFollowMember('${escapeHtml(m.id)}', this)">
+                    ${m.isFollowing ? 'Following' : 'Follow'}
+                  </button>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.warn('Members load warning:', err);
+      }
+    }
+
+    async function toggleConnectMember(userId, btn) {
+      if (!isLoggedIn) {
+        if (confirm('Sign in to connect with Yard members?')) {
+          location.href = 'LOGIN.html?returnTo=' + encodeURIComponent(location.pathname);
+        }
+        return;
+      }
+      btn.disabled = true;
+      try {
+        const res = await fetch(`${apiBase}/api/community/users/${userId}/connect`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          btn.classList.toggle('active', data.isConnected);
+          btn.textContent = data.isConnected ? 'Connected' : (data.isPending ? 'Pending' : 'Connect');
+          const connEl = document.getElementById('profile-stat-connections');
+          if (connEl && typeof data.connectionsCount === 'number') {
+            connEl.textContent = data.connectionsCount;
+          }
+        }
+      } catch (err) {
+        console.error('Connect error:', err);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function toggleFollowMember(userId, btn) {
+      if (!isLoggedIn) {
+        if (confirm('Sign in to follow Yard members?')) {
+          location.href = 'LOGIN.html?returnTo=' + encodeURIComponent(location.pathname);
+        }
+        return;
+      }
+      btn.disabled = true;
+      try {
+        const res = await fetch(`${apiBase}/api/community/users/${userId}/follow`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          btn.classList.toggle('active', data.following);
+          btn.textContent = data.following ? 'Following' : 'Follow';
+          await loadProfileStats();
+        }
+      } catch (err) {
+        console.error('Follow error:', err);
+      } finally {
+        btn.disabled = false;
+      }
+    }
 
     function escapeHtml(str) {
       return String(str || '').replace(/[&<>'"]/g, tag => ({
