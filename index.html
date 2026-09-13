@@ -636,29 +636,214 @@
       .trial-card p { color: #d7d0c3; font-size: 0.78rem; line-height: 1.35; margin: 0; min-height: 3.25rem; padding: 0 0.65rem 0.55rem; text-align: center; }
       .trial-action { color: var(--gold); display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; padding: 0 0.55rem 0.75rem; text-align: center; text-transform: uppercase; }
       .courtroom-note { border-top: 1px solid #cfc5b5; color: #6b675f; font-size: 0.82rem; line-height: 1.45; margin: 1.4rem 0 0; padding-top: 0.8rem; }
-      /* Games promotion: an archival desk recast as an interactive field kit. */
-      .games-promo { background: var(--ink-dark); border-bottom: 7px solid var(--gold); color: #fff; overflow: hidden; padding: clamp(3rem, 6vw, 5.35rem) 1rem; position: relative; }
-      .games-promo::before { background: repeating-linear-gradient(90deg, transparent 0 31px, rgba(194, 155, 83, 0.12) 32px 33px); content: ""; inset: 0; opacity: 0.5; pointer-events: none; position: absolute; }
-      .games-promo-inner { align-items: center; display: grid; gap: clamp(2.5rem, 7vw, 6rem); grid-template-columns: minmax(0, 1.05fr) minmax(17rem, 0.8fr); margin: 0 auto; max-width: 980px; position: relative; }
-      .games-promo-copy { border-left: 6px solid var(--press-red); padding-left: clamp(1rem, 3vw, 2rem); }
-      .games-promo-kicker { color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; margin: 0 0 0.75rem; text-transform: uppercase; }
-      .games-promo-title { color: #fff; font-family: "Libre Baskerville", Georgia, serif; font-size: clamp(2rem, 4.6vw, 3.7rem); line-height: 1.08; margin: 0; max-width: 13ch; }
-      .games-promo-deck { color: #eee4d3; font-size: clamp(1rem, 1.35vw, 1.12rem); line-height: 1.6; margin: 1.15rem 0 1.5rem; max-width: 35rem; }
-      .games-promo-status { align-items: center; background: var(--gold); border: 2px solid var(--gold); color: var(--deep-navy); display: inline-flex; font: inherit; font-size: 0.79rem; font-weight: 800; letter-spacing: 0.08em; min-height: 3rem; padding: 0.65rem 1rem; text-decoration: none; text-transform: uppercase; transition: background 160ms ease, color 160ms ease, transform 160ms ease; }
-      .games-promo-status:hover { background: var(--press-red); border-color: var(--press-red); color: #fff; transform: translateY(-2px); }
-      .games-promo-status:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
-      .games-promo-note { color: #d8cdbb; display: block; font-size: 0.8rem; line-height: 1.45; margin-top: 0.7rem; }
-      .games-promo-stack { min-height: 19rem; position: relative; }
-      .game-file { background: #f7f0e2; border: 1px solid #c9b78e; box-shadow: 9px 10px 0 rgba(0, 0, 0, 0.28); color: var(--navy); min-height: 12.5rem; padding: 1rem; position: absolute; width: min(100%, 18rem); }
-      .game-file::before { border: 1px solid rgba(16, 44, 76, 0.22); content: ""; inset: 0.45rem; pointer-events: none; position: absolute; }
-      .game-file--one { left: 0; top: 2.7rem; transform: rotate(-5deg); }
-      .game-file--two { right: 0; top: 0; transform: rotate(4deg); }
-      .game-file--three { background: var(--navy); border-color: var(--gold); bottom: 0; color: #fff; right: 1.1rem; transform: rotate(-1deg); }
-      .game-file-label { color: var(--press-red); display: block; font-size: 0.67rem; font-weight: 800; letter-spacing: 0.11em; margin-bottom: 1.25rem; position: relative; text-transform: uppercase; }
-      .game-file--three .game-file-label { color: var(--gold); }
-      .game-file-number { color: var(--gold); display: block; font-family: "Libre Baskerville", Georgia, serif; font-size: 3.6rem; line-height: 0.85; position: relative; }
-      .game-file h3 { font-family: "Libre Baskerville", Georgia, serif; font-size: 1.05rem; line-height: 1.22; margin: 0.7rem 0 0; position: relative; }
-      .game-file p { font-size: 0.78rem; line-height: 1.35; margin: 0.5rem 0 0; position: relative; }
+            /* Join Our Community Promo: Replaces the old games promo */
+      .community-promo {
+        background: var(--ink-dark);
+        border-bottom: 7px solid var(--gold);
+        border-top: 1px solid rgba(194, 155, 83, 0.4);
+        color: #fff;
+        overflow: hidden;
+        padding: clamp(3rem, 6vw, 5.5rem) 1rem;
+        position: relative;
+      }
+      .community-promo::before {
+        background: repeating-linear-gradient(90deg, transparent 0 31px, rgba(194, 155, 83, 0.08) 32px 33px);
+        content: "";
+        inset: 0;
+        opacity: 0.6;
+        pointer-events: none;
+        position: absolute;
+      }
+      .community-promo-inner {
+        align-items: center;
+        display: grid;
+        gap: clamp(2rem, 5vw, 4.5rem);
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 1.25fr);
+        margin: 0 auto;
+        max-width: 1140px;
+        position: relative;
+        z-index: 1;
+      }
+      .community-promo-copy {
+        border-left: 6px solid var(--gold);
+        padding-left: clamp(1rem, 3vw, 2rem);
+      }
+      .community-promo-kicker {
+        color: var(--gold);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        margin: 0 0 0.75rem;
+        text-transform: uppercase;
+      }
+      .community-promo-title {
+        color: #fff;
+        font-family: "Libre Baskerville", Georgia, serif;
+        font-size: clamp(2rem, 4.2vw, 3.4rem);
+        line-height: 1.1;
+        margin: 0 0 1rem;
+      }
+      .community-promo-title span.gold { color: var(--gold); }
+      .community-promo-deck {
+        color: #eee4d3;
+        font-size: clamp(1rem, 1.2vw, 1.12rem);
+        line-height: 1.6;
+        margin: 0 0 1.2rem;
+      }
+      .community-promo-free-banner {
+        background: rgba(194, 155, 83, 0.18);
+        border: 1px solid var(--gold);
+        border-radius: 4px;
+        color: #fcebc7;
+        display: inline-block;
+        font-size: 0.88rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding: 0.45rem 0.85rem;
+      }
+      .community-promo-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-bottom: 1.2rem;
+      }
+      .community-btn-primary {
+        align-items: center;
+        background: var(--gold);
+        border: 2px solid var(--gold);
+        color: var(--deep-navy);
+        display: inline-flex;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        min-height: 3rem;
+        padding: 0.65rem 1.3rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: all 160ms ease;
+      }
+      .community-btn-primary:hover {
+        background: #fff;
+        border-color: #fff;
+        color: var(--deep-navy);
+        transform: translateY(-2px);
+      }
+      .community-btn-secondary {
+        align-items: center;
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.75);
+        color: #fff;
+        display: inline-flex;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        min-height: 3rem;
+        padding: 0.65rem 1.2rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: all 160ms ease;
+      }
+      .community-btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: #fff;
+        transform: translateY(-2px);
+      }
+      .community-promo-chips {
+        color: #cfc4b2;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 0.82rem;
+        gap: 0.8rem 1.2rem;
+      }
+      .community-promo-chips span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+      .community-promo-chips b { color: var(--gold); }
+
+      /* Mockup preview frame for the community screenshot */
+      .community-preview-frame {
+        background: #111a24;
+        border: 1px solid rgba(194, 155, 83, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255,255,255,0.08);
+        display: block;
+        overflow: hidden;
+        position: relative;
+        text-decoration: none;
+        transition: transform 250ms ease, box-shadow 250ms ease;
+      }
+      .community-preview-frame:hover {
+        box-shadow: 0 22px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--gold);
+        transform: translateY(-4px);
+      }
+      .community-preview-topbar {
+        align-items: center;
+        background: #091420;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        gap: 0.75rem;
+        padding: 0.65rem 1rem;
+      }
+      .preview-dots {
+        display: flex;
+        gap: 6px;
+      }
+      .preview-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+      .preview-dot.red { background: #ff5f56; }
+      .preview-dot.yellow { background: #ffbd2e; }
+      .preview-dot.green { background: #27c93f; }
+      .preview-address-bar {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+        color: #a0aec0;
+        flex: 1;
+        font-family: monospace;
+        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
+        text-align: center;
+      }
+      .preview-sneak-pill {
+        background: var(--gold);
+        color: var(--deep-navy);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        padding: 0.15rem 0.5rem;
+        border-radius: 3px;
+        text-transform: uppercase;
+      }
+      .community-preview-image-wrap {
+        display: block;
+        line-height: 0;
+        position: relative;
+      }
+      .community-preview-img {
+        display: block;
+        height: auto;
+        width: 100%;
+      }
+      .community-preview-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 65%, rgba(9, 20, 32, 0.92) 100%);
+        pointer-events: none;
+        display: flex;
+        align-items: flex-end;
+        padding: 1rem;
+      }
+      .community-preview-overlay span {
+        color: var(--gold);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
       [hidden] { display: none; }
 
       @media (max-width: 760px) {
@@ -674,9 +859,9 @@
         .prison-hero-copy h2 { font-size: clamp(1.65rem, 8vw, 2.25rem); line-height: 1.18; }
         .prison-hero-copy p { font-size: 1rem; line-height: 1.5; max-width: none; }
         .prison-hero-image { aspect-ratio: 16 / 10; min-height: 0; width: 100%; }
-        .games-promo-inner { grid-template-columns: 1fr; }
-        .games-promo-title { max-width: 19ch; }
-        .games-promo-stack { margin: 0 auto; max-width: 23rem; width: 100%; }
+        .community-promo-inner { grid-template-columns: 1fr; gap: 2rem; }
+        .community-promo-copy { border-left-width: 4px; padding-left: 1rem; }
+        .community-promo-title { font-size: clamp(1.75rem, 7vw, 2.4rem); }
         .state-inner { flex-wrap: wrap; gap: 0.35rem 1rem; justify-content: space-between; }
         .state-inner h2 { flex: 1 1 70%; }
         .map-mark { display: none; }
@@ -924,6 +1109,7 @@
               <p>Crime. Courts. Prison. History. Real people. Real stories. Go past the headline and see what actually happened.</p>
               <nav class="hp-page-jumps" aria-label="Explore this homepage">
                 <a href="#action-hub">Explore Desk <span aria-hidden="true">&#8595;</span></a>
+                <a href="#community">Community <span aria-hidden="true">&#8595;</span></a>
                 <a href="#research-help">Research Help <span aria-hidden="true">&#8595;</span></a>
                 <a href="#paperwork-spotlight">Paperwork <span aria-hidden="true">&#8595;</span></a>
                 <a href="DONATE.html#membership">Become a Member <span aria-hidden="true">&#8599;</span></a>
@@ -1012,11 +1198,11 @@
                 </div>
                 <span class="action-card-arrow">&rarr;</span>
               </a>
-              <a class="action-card" href="GAMES.html">
+              <a class="action-card" href="LOGIN.html?mode=create&amp;returnTo=%2FPROFILE.html">
                 <span class="action-card-number">08</span>
                 <div class="action-card-body">
-                  <h3>Play a Game</h3>
-                  <p>Step onto the yard: Carceral Chess &amp; Poker.</p>
+                  <h3>Join Community</h3>
+                  <p>Step onto The Yard: free member discussion &amp; dockets.</p>
                 </div>
                 <span class="action-card-arrow">&rarr;</span>
               </a>
@@ -1217,20 +1403,45 @@
         </div>
       </section>
 
-      <section class="games-promo" id="games" aria-labelledby="games-promo-title">
-        <div class="games-promo-inner">
-          <div class="games-promo-copy">
-            <p class="games-promo-kicker">Interactive Archive / Now Playing</p>
-            <h2 class="games-promo-title" id="games-promo-title">The Yard Is Open.</h2>
-            <p class="games-promo-deck">The research stops here and the competition begins. Play original games, challenge unpredictable opponents, talk trash across the board, and see whether you can outthink what is waiting on the other side.</p>
-            <a class="games-promo-status" href="GAMES.html" aria-describedby="games-promo-note">Step Onto The Yard</a>
-            <a class="games-promo-note" href="GAMES.html">Browse The Games Desk</a>
-            <span class="games-promo-note" id="games-promo-note">Game Files 01 and 02 are now open.</span>
+            <section class="community-promo" id="community" aria-labelledby="community-promo-title">
+        <div class="community-promo-inner">
+          <div class="community-promo-copy">
+            <p class="community-promo-kicker">Free Member Access &bull; Community Hub</p>
+            <h2 class="community-promo-title" id="community-promo-title">Join Our Community: <span class="gold">The Yard</span></h2>
+            <p class="community-promo-deck">Connect with investigative researchers, families, legal advocates, and historians. Talk and discuss issues, share case dockets, cross-reference unreleased records, and expose what the authorities attempted to conceal.</p>
+            <div class="community-promo-free-banner">
+              &#10003; 100% Free &bull; Included simply by signing up and becoming a member
+            </div>
+            <div class="community-promo-actions">
+              <a class="community-btn-primary" href="LOGIN.html?mode=create&amp;returnTo=%2FPROFILE.html">Join The Community &rarr;</a>
+              <a class="community-btn-secondary" href="LOGIN.html?mode=signin&amp;returnTo=%2FPROFILE.html">Member Sign In</a>
+            </div>
+            <div class="community-promo-chips">
+              <span><b>&#10003;</b> Concealed Records Watch</span>
+              <span><b>&#10003;</b> Family Mutual Aid</span>
+              <span><b>&#10003;</b> Case Inquiries &amp; Dockets</span>
+              <span><b>&#10003;</b> Evidence-Based &amp; Private</span>
+            </div>
           </div>
-          <div class="games-promo-stack" aria-label="Games Desk file preview">
-            <article class="game-file game-file--one"><span class="game-file-label">Game File 01 / Playable</span><span class="game-file-number">01</span><h3>Cheesborough Carceral Chess</h3><p>A 3D strategy table where every move enters the record.</p></article>
-            <article class="game-file game-file--two"><span class="game-file-label">Game File 02 / Playable</span><span class="game-file-number">02</span><h3>Jail House Poker</h3><p>Read the table, hold your nerve, and play for the pot.</p></article>
-            <article class="game-file game-file--three"><span class="game-file-label">Game File 03 / Forthcoming</span><span class="game-file-number">03</span><h3>Map The Record</h3><p>Place people, places, and time in context.</p></article>
+
+          <div class="community-preview-box">
+            <a class="community-preview-frame" href="LOGIN.html?mode=create&amp;returnTo=%2FPROFILE.html" aria-label="Sneak peek preview of The Yard Community Hub">
+              <div class="community-preview-topbar">
+                <div class="preview-dots">
+                  <span class="preview-dot red"></span>
+                  <span class="preview-dot yellow"></span>
+                  <span class="preview-dot green"></span>
+                </div>
+                <div class="preview-address-bar">carceralcollections.org / The Yard &bull; Community Hub</div>
+                <span class="preview-sneak-pill">Sneak Peek</span>
+              </div>
+              <div class="community-preview-image-wrap">
+                <img class="community-preview-img" src="01_Photos/ShareImages/the-yard-community-preview.png" alt="Sneak peek of The Yard Community Hub showing newsfeed, case inquiries, and working circles" loading="lazy" decoding="async" />
+                <div class="community-preview-overlay">
+                  <span>Click to Join Free &amp; Unlock Full Community &rarr;</span>
+                </div>
+              </div>
+            </a>
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 (() => {
   const apiBase = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '' : 'https://serviceapi-production-f574.up.railway.app';
-  const safeReturnTo = (value) => /^\/[\w./?=&%-]*$/.test(value || '') && !value.startsWith('//') ? value : '/VIDEOS.html';
+  const safeReturnTo = (value) => /^\/[\w./?=&%-]*$/.test(value || '') && !value.startsWith('//') ? value : '/PROFILE.html';
 
   async function request(route, options = {}) {
     let response;
