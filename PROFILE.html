@@ -16,7 +16,7 @@
   <meta name="twitter:image" content="https://carceralcollections.org/01_Photos/ShareImages/Home_Share_Image.png" />
   <meta name="twitter:image:alt" content="Your Community Profile | Cheesborough Carceral Collections - Carceral Collections" />
   <link rel="canonical" href="https://carceralcollections.org/PROFILE.html" />
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Manage your Cheesborough Carceral Collections community profile."><title>Your Community Profile | Cheesborough Carceral Collections</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="community-auth.css?profile-refresh=readable-profile-20260828"><script src="community-auth.js?profile-refresh=readable-profile-20260828" defer></script><script src="profile.js?profile-refresh=readable-profile-20260828" defer></script><style>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="description" content="Manage your Cheesborough Carceral Collections community profile."><title>Your Community Profile | Cheesborough Carceral Collections</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="community-auth.css?v=20260912-community-btn"><script src="community-auth.js?v=20260912-community-btn" defer></script><script src="profile.js?v=20260912-community-btn" defer></script><style>
 .profile-portal-section {
   background: #081d35;
   border: 2px solid #bd9448;
@@ -115,7 +115,150 @@
 .portal-choice-card:hover .portal-choice-btn {
   color: #fff;
 }
-</style></head><body class="community-auth-page profile-page"><header class="profile-masthead"><a class="profile-brand" href="index.html">Cheesborough Carceral<br>Collections</a><p>CrimeNewsTV <span aria-hidden="true">/</span> community record</p></header><main class="profile-layout"><aside class="profile-folio" aria-label="Profile record information"><p class="profile-folio-label">Member Page</p><p class="profile-folio-note">Your personal corner of the community for interests, conversation, and connection.</p></aside><section class="profile-card" aria-labelledby="profile-title"><div class="profile-card-top"><a class="profile-return" href="index.html"><span aria-hidden="true">&larr;</span> Return to collections</a><button id="profile-logout" class="profile-logout" type="button">Log out</button></div><div class="profile-portal-section">
+.portal-choice-yard {
+  border: 2px solid #bd9448;
+  background: linear-gradient(135deg, #0f2744 0%, #163860 100%);
+}
+.portal-choice-yard .portal-choice-btn {
+  background: #bd9448;
+  color: #081d35 !important;
+  padding: 0.45rem 0.85rem;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  margin-top: 0.75rem;
+  font-weight: 700;
+}
+.portal-choice-yard:hover .portal-choice-btn {
+  background: #d4a957;
+  color: #040e1a !important;
+}
+.profile-card-top {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #d5cbba;
+}
+.profile-top-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.profile-btn-community {
+  align-items: center;
+  background: #bd9448;
+  border: 1px solid #9e7a36;
+  border-radius: 4px;
+  color: #081d35 !important;
+  display: inline-flex;
+  font: 700 0.82rem/1.2 "Source Sans 3", sans-serif;
+  gap: 0.45rem;
+  letter-spacing: 0.05em;
+  padding: 0.65rem 1.15rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(189, 148, 72, 0.35);
+}
+.profile-btn-community:hover {
+  background: #d4a957;
+  color: #040e1a !important;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(189, 148, 72, 0.45);
+}
+.profile-masthead-nav {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+.masthead-community-link {
+  background: rgba(189, 148, 72, 0.18);
+  border: 1px solid rgba(189, 148, 72, 0.5);
+  border-radius: 4px;
+  color: #f1d597;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.masthead-community-link:hover {
+  background: #bd9448;
+  color: #081d35;
+}
+.masthead-divider {
+  color: rgba(255, 255, 255, 0.3);
+}
+.masthead-search-link {
+  color: #cbd5e1;
+  text-decoration: none;
+}
+.masthead-search-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.profile-folio-yard-cta {
+  background: rgba(189, 148, 72, 0.14);
+  border: 1px solid rgba(189, 148, 72, 0.45);
+  border-radius: 6px;
+  margin-top: 2rem;
+  padding: 1.15rem 1rem;
+  text-align: left;
+}
+.folio-yard-badge {
+  color: #f1d597;
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.45rem;
+  text-transform: uppercase;
+}
+.folio-yard-desc {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin: 0 0 0.85rem;
+}
+.profile-folio-yard-btn {
+  background: #bd9448;
+  border-radius: 4px;
+  color: #081d35 !important;
+  display: block;
+  font: 700 0.78rem/1.2 "Source Sans 3", sans-serif;
+  letter-spacing: 0.06em;
+  padding: 0.6rem 0.85rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.profile-folio-yard-btn:hover {
+  background: #d4a957;
+  color: #040e1a !important;
+}
+@media (max-width: 700px) {
+  .profile-card-top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .profile-top-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .profile-btn-community, .profile-owner-dashboard, .profile-logout {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+</style></head><body class="community-auth-page profile-page"><header class="profile-masthead"><a class="profile-brand" href="index.html">Cheesborough Carceral<br>Collections</a><nav class="profile-masthead-nav" aria-label="Member Navigation"><a href="COMMUNITY.html" class="masthead-community-link">&#128172; Enter The Yard Community</a><span class="masthead-divider" aria-hidden="true">/</span><a href="SEARCH.html" class="masthead-search-link">&#128269; Search Site</a></nav></header><main class="profile-layout"><aside class="profile-folio" aria-label="Profile record information"><p class="profile-folio-label">Member Page</p><p class="profile-folio-note">Your personal corner of the community for interests, conversation, and connection.</p><div class="profile-folio-yard-cta"><span class="folio-yard-badge">&#128172; The Yard Hub</span><p class="folio-yard-desc">Join active member discussions, share case records, and post your questions.</p><a href="COMMUNITY.html" class="profile-folio-yard-btn">Enter The Yard &rarr;</a></div></aside><section class="profile-card" aria-labelledby="profile-title"><div class="profile-card-top"><a class="profile-return" href="index.html"><span aria-hidden="true">&larr;</span> Return to collections</a><div class="profile-top-actions"><a href="COMMUNITY.html" class="profile-btn-community" id="profile-enter-community-btn"><span aria-hidden="true">&#128172;</span> <span>Enter Community Page (The Yard)</span> <span aria-hidden="true">&rarr;</span></a><button id="profile-logout" class="profile-logout" type="button">Log out</button></div></div><div class="profile-portal-section">
   <div class="profile-portal-head">
     <span class="portal-eyebrow">Member Portal</span>
     <h2 class="portal-main-heading">Where would you like to go today?</h2>

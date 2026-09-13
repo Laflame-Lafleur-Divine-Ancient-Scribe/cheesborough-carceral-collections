@@ -16,7 +16,21 @@
 .profile-page .profile-folio-number strong{color:#f4d798}
 .profile-page .profile-folio-rule{margin:1.4rem auto;width:64px}
 .profile-page .profile-folio-note{color:#fff;font-size:1rem;line-height:1.6;margin:0 auto;max-width:19ch}
-.profile-card-top{align-items:center;display:flex;gap:1rem;justify-content:space-between}
+.profile-card-top{align-items:center;display:flex;flex-wrap:wrap;gap:.75rem;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.85rem;border-bottom:1px solid #d5cbba}
+.profile-top-actions{align-items:center;display:flex;flex-wrap:wrap;gap:.65rem}
+.profile-btn-community{align-items:center;background:#bd9448;border:1px solid #9e7a36;border-radius:4px;color:#081d35!important;display:inline-flex;font:700 .82rem/1.2 "Source Sans 3",sans-serif;gap:.45rem;letter-spacing:.05em;padding:.65rem 1.15rem;text-decoration:none;text-transform:uppercase;transition:all .2s ease;box-shadow:0 3px 8px rgba(189,148,72,.35)}
+.profile-btn-community:hover{background:#d4a957;color:#040e1a!important;transform:translateY(-1px);box-shadow:0 5px 14px rgba(189,148,72,.45)}
+.profile-masthead-nav{align-items:center;display:flex;gap:.75rem;font-size:.85rem}
+.masthead-community-link{background:rgba(189,148,72,.18);border:1px solid rgba(189,148,72,.5);border-radius:4px;color:#f1d597;font-weight:700;padding:.35rem .75rem;text-decoration:none;transition:all .2s ease}
+.masthead-community-link:hover{background:#bd9448;color:#081d35}
+.masthead-divider{color:rgba(255,255,255,.3)}
+.masthead-search-link{color:#cbd5e1;text-decoration:none}
+.masthead-search-link:hover{color:#fff;text-decoration:underline}
+.profile-folio-yard-cta{background:rgba(189,148,72,.14);border:1px solid rgba(189,148,72,.45);border-radius:6px;margin-top:2rem;padding:1.15rem 1rem;text-align:left}
+.folio-yard-badge{color:#f1d597;display:block;font-size:.72rem;font-weight:700;letter-spacing:.08em;margin-bottom:.45rem;text-transform:uppercase}
+.folio-yard-desc{color:#cbd5e1;font-size:.85rem;line-height:1.45;margin:0 0 .85rem}
+.profile-folio-yard-btn{background:#bd9448;border-radius:4px;color:#081d35!important;display:block;font:700 .78rem/1.2 "Source Sans 3",sans-serif;letter-spacing:.06em;padding:.6rem .85rem;text-align:center;text-decoration:none;text-transform:uppercase;transition:all .2s ease;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.profile-folio-yard-btn:hover{background:#d4a957;color:#040e1a!important}
 .profile-logout{background:var(--community-navy);border:2px solid var(--community-navy);color:#fff;cursor:pointer;font:700 .73rem "Source Sans 3",sans-serif;letter-spacing:.08em;min-height:2.5rem;padding:.55rem .78rem;text-transform:uppercase}
 .profile-logout:hover{background:transparent;color:var(--community-navy)}
 .profile-logout:focus-visible{outline:3px solid var(--community-gold);outline-offset:3px}
@@ -24,7 +38,7 @@
 .profile-page .auth-kicker,.profile-page .profile-record-label,.profile-page .profile-section-number{color:#7d2921}
 .profile-page .profile-masthead p{color:#8c651f}
 .profile-page .profile-masthead span{color:#7d2921}
-@media(max-width:700px){.profile-page .profile-folio{align-items:center;padding:1.7rem 1.4rem;text-align:center}.profile-page .profile-folio-number{margin:.65rem 0}.profile-page .profile-folio-rule{display:block;margin:1rem auto}.profile-page .profile-folio-note{max-width:31ch}.profile-card-top{align-items:flex-start;flex-direction:column}.profile-logout{width:100%}}
+@media(max-width:700px){.profile-page .profile-folio{align-items:center;padding:1.7rem 1.4rem;text-align:center}.profile-page .profile-folio-number{margin:.65rem 0}.profile-page .profile-folio-rule{display:block;margin:1rem auto}.profile-page .profile-folio-note{max-width:31ch}.profile-card-top{align-items:stretch;flex-direction:column}.profile-top-actions{flex-direction:column;width:100%}.profile-btn-community,.profile-owner-dashboard,.profile-logout{width:100%;justify-content:center;text-align:center}}
 
 /* Keep the accession title as two complete, centered lines. */
 .profile-page .profile-folio-number{font-size:clamp(1.5rem,2.2vw,2.25rem);overflow-wrap:normal;white-space:nowrap;word-break:keep-all}

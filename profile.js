@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const interests = ['True Crime', 'Unsolved Cases', 'Cold Cases', 'Prison Stories', 'Gang History', 'Famous Trials', 'Historical Crime', 'Missing Persons', 'Criminal Justice', 'Courtroom Stories', 'Crime Documentaries', 'Forensics', 'Wrongful Convictions', 'Juvenile Justice']; let selectedInterests = [];
   let user = await community.restoreSession(); if (!user) { location.replace('LOGIN.html?returnTo=%2FPROFILE.html'); return; }
   logout?.addEventListener('click', () => community.logout());
+  if (!document.querySelector('#profile-enter-community-btn') && logout) {
+    const commBtn = document.createElement('a');
+    commBtn.id = 'profile-enter-community-btn';
+    commBtn.className = 'profile-btn-community';
+    commBtn.href = 'COMMUNITY.html';
+    commBtn.innerHTML = '<span aria-hidden="true">&#128172;</span> <span>Enter Community Page (The Yard)</span> <span aria-hidden="true">&rarr;</span>';
+    logout.before(commBtn);
+  }
   if (user.role === 'owner') { const ownerLink = document.createElement('a'); ownerLink.className = 'profile-owner-dashboard'; ownerLink.href = 'OWNER.html'; ownerLink.textContent = 'Owner dashboard'; logout?.before(ownerLink); }
   avatarHelp.textContent = 'JPG, PNG, or WebP. New uploads crop to fill the circular profile frame.';
   const field = (name) => form.elements.namedItem(name);
