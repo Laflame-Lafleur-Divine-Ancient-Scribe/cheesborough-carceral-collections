@@ -34,7 +34,7 @@
       const matchesSearch = terms.length === 0 || terms.every(term => docText.includes(term));
       if (!matchesSearch) return false;
 
-      // Category / filter match
+      // Filter pills match
       if (cat === '48hr-drops') {
         if (!doc.isFeaturedDrop && !String(doc.id || '').startsWith('rot-')) return false;
       } else if (cat === 'indictment') {
@@ -77,7 +77,6 @@
   let records = [];
   let featuredDrops = [];
   let epoch = 0;
-  let nextEpochMs = 0;
 
   const indexEl = document.getElementById('paperwork-index');
   if (indexEl) {
@@ -213,8 +212,8 @@
               <span>🔍 Open In Archive Viewer</span> &rarr;
             </a>
             <div class="pw-card-subactions">
-              <a class="btn-pw-ipad" href="${directPdf}" target="_blank" rel="noopener" data-free="true" title="Direct PDF for iPad Safari">
-                <span>📱 iPad PDF</span> &nearr;
+              <a class="btn-pw-ipad" href="${directPdf}" target="_blank" rel="noopener" data-free="true" title="Direct PDF for iPad Safari & Mobile">
+                <span>📱 Direct PDF</span> &nearr;
               </a>
               <a class="btn-pw-download" href="${directPdf}" download data-free="true" title="Download Document">
                 <span>📥 Download</span>
@@ -225,7 +224,6 @@
       `;
     }).join('');
   }
-
 
   // Render main document list
   function render() {
@@ -275,12 +273,16 @@
       return `
         <article class="pw-document-card" data-document-id="${doc.id}">
           <div class="pw-card-meta-col">
+            <div class="pw-docket-folder-graphic">
+              <span class="folder-seal">UNSEALED FILE</span>
+              <div class="folder-icon">📁</div>
+              <span class="folder-docket">${doc.docket || doc.id}</span>
+            </div>
             ${getCategoryBadge(doc.category)}
             <div class="pw-meta-item">
-              <strong>${doc.date || 'Record'}</strong>
+              <strong>${doc.date || 'Filing Date'}</strong>
               <span>${metaMetrics}</span>
             </div>
-            ${doc.docket ? `<div class="pw-meta-item"><strong>Docket</strong><span>${doc.docket}</span></div>` : ''}
           </div>
           
           <div class="pw-card-body-col">
@@ -296,10 +298,10 @@
             <a class="btn-pw-view" href="${readerUrl}" data-reader-open>
               <span>🔍 Open In Archive Viewer</span> &rarr;
             </a>
-            <a class="btn-pw-ipad-outline" href="${directPdf}" target="_blank" rel="noopener" data-free="true" title="Open directly in Safari without paywall">
-              <span>📱 Open Direct PDF (iPad)</span> &nearr;
+            <a class="btn-pw-ipad-direct" href="${directPdf}" target="_blank" rel="noopener" data-free="true" title="Open directly in phone or tablet browser">
+              <span>📱 Open Direct PDF (Phone / iPad)</span> &nearr;
             </a>
-            <a class="btn-pw-ipad-outline" href="${directPdf}" download data-free="true" title="Download official PDF file">
+            <a class="btn-pw-download-action" href="${directPdf}" download data-free="true" title="Download official PDF file">
               <span>📥 Download PDF</span>
             </a>
             ${sourceLink}
