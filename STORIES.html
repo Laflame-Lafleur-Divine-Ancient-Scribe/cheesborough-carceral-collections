@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investigative Stories & Prison Legends | The Cheesborough Carceral Collections</title>
+  <meta name="description" content="Explore carceral investigations and Florida prison legends ranked by wildness meter, archival complexity, and primary evidence receipts.">
+  <link rel="canonical" href="https://carceralcollections.org/STORIES.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Investigative Stories & Prison Legends | Carceral Collections">
+  <meta property="og:description" content="Explore carceral investigations and Florida prison legends ranked by wildness meter, archival complexity, and primary evidence receipts.">
+  <meta property="og:image" content="01_Photos/ShareImages/carceral-history-archival-records-sketch.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="responsive-navigation.css">
+  <script src="responsive-navigation.js" defer></script>
+  <script src="site-theme.js" defer></script>
+  <script src="community-auth.js" defer></script>
+  <script src="/site-analytics.js?v=20260906-owner" defer></script>
+
+  <style>
+    :root {
+      --navy: #091e36;
+      --navy-light: #102c4c;
+      --gold: #c29b53;
+      --gold-light: #dfc287;
+      --paper: #f7f4ed;
+      --ink: #1b1e22;
+      --ink-muted: #5e6874;
+      --card-bg: #ffffff;
+      --border: #dfd8cb;
+      --wild-flame: #e63946;
+      --wild-bg: #fff1f2;
+      --complexity-color: #2a6f97;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Source Sans 3", -apple-system, sans-serif;
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Top Navigation */
+    .topbar {
+      background: var(--gold);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      justify-content: center;
+      padding: 0.65rem 1rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 2px solid #a8813b;
+    }
+    .topbar a { color: #fff; transition: opacity 0.15s; }
+    .topbar a:hover { opacity: 0.85; }
+
+    /* Hero Section */
+    .stories-hero {
+      background: linear-gradient(180deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: #fff;
+      padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 3.5rem);
+      border-bottom: 4px solid var(--gold);
+      position: relative;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero-kicker {
+      color: var(--gold);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .hero-title {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .hero-title em {
+      color: var(--gold-light);
+      font-style: italic;
+    }
+    .hero-desc {
+      color: #e5ded2;
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      max-width: 780px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* Ranking Metrics Legend */
+    .ranking-legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      background: rgba(9, 30, 54, 0.6);
+      border: 1px solid rgba(194, 155, 83, 0.35);
+      border-radius: 6px;
+      padding: 1.25rem;
+      backdrop-filter: blur(8px);
+    }
+    .legend-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .legend-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .legend-desc {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    /* Main Content Container */
+    .stories-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem clamp(1rem, 4vw, 2.5rem) 5rem;
+    }
+
+    /* Filter & Sort Bar */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .filter-chip {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-chip:hover {
+      border-color: var(--gold);
+      color: var(--navy);
+    }
+    .filter-chip.active {
+      background: var(--navy);
+      color: var(--gold-light);
+      border-color: var(--navy);
+    }
+    .stories-count-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      font-weight: 600;
+    }
+
+    /* Stories Cards Grid */
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 2rem;
+    }
+    @media (max-width: 768px) {
+      .stories-grid { grid-template-columns: 1fr; }
+    }
+
+    .story-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .story-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      border-color: var(--gold);
+    }
+
+    /* Card Image & Overlay Badges */
+    .card-media-wrap {
+      position: relative;
+      height: 220px;
+      background: #0d1218;
+      overflow: hidden;
+    }
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .story-card:hover .card-img {
+      transform: scale(1.04);
+    }
+    .card-era-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: rgba(9, 30, 54, 0.85);
+      backdrop-filter: blur(4px);
+      color: var(--gold-light);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid rgba(194, 155, 83, 0.5);
+    }
+    .card-rank-badge {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: var(--wild-flame);
+      color: #fff;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(230, 57, 70, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Meter Bars Inside Card */
+    .card-meters {
+      background: #fdfaf4;
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .meter-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .meter-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .meter-label-row.wildness { color: var(--wild-flame); }
+    .meter-label-row.complexity { color: var(--complexity-color); }
+
+    .meter-track {
+      height: 6px;
+      background: #e2dcd0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .meter-fill-wild {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #e63946);
+      border-radius: 3px;
+    }
+    .meter-fill-complex {
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #1e40af);
+      border-radius: 3px;
+    }
+
+    /* Card Body */
+    .card-body {
+      padding: 1.35rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-location {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+    .card-title {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.22rem;
+      line-height: 1.3;
+      color: var(--navy);
+      margin-bottom: 0.65rem;
+    }
+    .card-excerpt {
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+      line-height: 1.5;
+      margin-bottom: 1.2rem;
+      flex: 1;
+    }
+
+    /* Primary Quote */
+    .card-quote-callout {
+      background: #f8f6f0;
+      border-left: 3px solid var(--gold);
+      padding: 0.65rem 0.85rem;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: #334155;
+      margin-bottom: 1.2rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Card Footer Info & Button */
+    .card-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #f1ece1;
+      padding-top: 0.9rem;
+      font-size: 0.78rem;
+      color: var(--ink-muted);
+    }
+    .meta-tag-list {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .btn-read-story {
+      background: var(--navy);
+      color: var(--gold-light);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.5rem 1.1rem;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-read-story:hover {
+      background: #143e6d;
+      color: #fff;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--navy);
+      color: #d1d5db;
+      padding: 3rem 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      border-top: 4px solid var(--gold);
+    }
+    footer a { color: var(--gold-light); text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <nav class="topbar" aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a href="STORIES.html" style="color:var(--gold-light); text-decoration:underline;">Stories &amp; Legends</a>
+    <a href="RESEARCH.html">Paperwork &amp; Indictments</a>
+    <a href="COLLECTIONS.html">Collections</a>
+    <a href="LAW-LIBRARY.html">Law Library</a>
+    <a href="NEWS.html">News</a>
+    <a href="VIDEOS.html">CrimeNewsTV</a>
+    <a href="COMMUNITY.html">The Yard</a>
+    <a href="HELP-FINDER.html">Research Help</a>
+    <a href="DONATE.html">Membership</a>
+  </nav>
+
+  <header class="stories-hero">
+    <div class="hero-inner">
+      <div class="hero-kicker">
+        <span>⚡ Investigation &amp; Narrative Desk</span>
+        <span>&bull;</span>
+        <span>Original Receipts</span>
+      </div>
+      <h1 class="hero-title">Cases You Know.<br><em>Stories You Don't.</em></h1>
+      <p class="hero-desc">
+        Explore longform prison histories, grassroots resistance narratives, and maximum-security legends from across the American carceral state. Every story is verified against official ledgers, court exhibits, and family testimony.
+      </p>
+
+      <div class="ranking-legend-grid">
+        <div class="legend-item">
+          <div class="legend-label">🔥 Wildness Meter (0–100%)</div>
+          <div class="legend-desc">Rates unprecedented prison drama, contraband networks, daring escapes, and shocking abuse of institutional power.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-label">🧠 Complexity Score (1–5 Scale)</div>
+          <div class="legend-desc">Measures forensic archival difficulty, missing dockets, conflicting government narratives, and cross-jurisdictional evidence.</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-label">📜 Primary Receipts</div>
+          <div class="legend-desc">Every narrative connects directly to unsealed indictments, prison farm registers, census ledgers, and court transcripts.</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="stories-container">
+    <div class="filter-bar">
+      <div class="filter-chips">
+        <button type="button" class="filter-chip active" onclick="filterStories('all', this)">All Stories</button>
+        <button type="button" class="filter-chip" onclick="filterStories('wildest', this)">🔥 Wildest First</button>
+        <button type="button" class="filter-chip" onclick="filterStories('complex', this)">🧠 Most Complex</button>
+        <button type="button" class="filter-chip" onclick="filterStories('legends', this)">Prison Legends</button>
+        <button type="button" class="filter-chip" onclick="filterStories('convict-lease', this)">Convict Leasing</button>
+        <button type="button" class="filter-chip" onclick="filterStories('civil-rights', this)">Civil Rights &amp; Resistance</button>
+      </div>
+      <div class="stories-count-tag" id="stories-count">Showing 8 Ranked Investigations</div>
+    </div>
+
+    <div class="stories-grid" id="stories-grid">
+
+      <!-- STORY 1: MAMA HERC -->
+      <article class="story-card" data-category="legends" data-wild="98" data-complex="4">
+        <div class="card-media-wrap">
+          <img class="card-img" src="01_Photos/interpreted/Forensic%20Sketch%20Mugshot_Black%20and%20White.png" alt="Mama Herc prison sketch">
+          <span class="card-era-badge">1970s–1990s &bull; Raiford</span>
+          <span class="card-rank-badge">🔥 98% WILD</span>
+        </div>
+        <div class="card-meters">
+          <div class="meter-col">
+            <div class="meter-label-row wildness">
+              <span>Wildness</span>
+              <span>98%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-wild" style="width: 98%;"></div>
+            </div>
+          </div>
+          <div class="meter-col">
+            <div class="meter-label-row complexity">
+              <span>Complexity</span>
+              <span>4 / 5</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-complex" style="width: 80%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">Florida State Prison &bull; "The Rock"</div>
+          <h2 class="card-title">Mama Herc, K-Wing Slim &amp; The Raiford Prison Legends</h2>
+          <p class="card-excerpt">
+            Behind the razor wire of Florida State Prison at Starke, legends weren't born from warden reports—they were forged on the recreation yard. How Mama Herc ran the tier economy, held court in the dayroom, and challenged institutional control.
+          </p>
+          <div class="card-quote-callout">
+            “The guards held the perimeter keys, but Mama Herc controlled the commissary line, the tobacco parcels, and the peace on K-Wing.”
+          </div>
+          <div class="card-footer-row">
+            <div class="meta-tag-list">
+              <span>⏱️ 14 min</span>
+              <span>&bull;</span>
+              <span>🎧 Audio</span>
+            </div>
+            <a href="MAMA-HERC.html" class="btn-read-story">Read Investigation &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 2: AMERICAN SIBERIA -->
+      <article class="story-card" data-category="convict-lease" data-wild="95" data-complex="5">
+        <div class="card-media-wrap">
+          <img class="card-img" src="01_Photos/interpreted/Live%20Oak%20Railroad%20Convict%20Procession,%201876_interpreted.png" alt="Live Oak Railroad Convict Procession 1876">
+          <span class="card-era-badge">1877–1891 &bull; Convict Camps</span>
+          <span class="card-rank-badge">🔥 95% WILD</span>
+        </div>
+        <div class="card-meters">
+          <div class="meter-col">
+            <div class="meter-label-row wildness">
+              <span>Wildness</span>
+              <span>95%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-wild" style="width: 95%;"></div>
+            </div>
+          </div>
+          <div class="meter-col">
+            <div class="meter-label-row complexity">
+              <span>Complexity</span>
+              <span>5 / 5</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-complex" style="width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">Pine Woods &bull; Live Oak &bull; Dutton Camps</div>
+          <h2 class="card-title">The American Siberia Uncovered: J.C. Powell &amp; The Turpentine Camps</h2>
+          <p class="card-excerpt">
+            Inside Captain J.C. Powell's fourteen years commanding Florida's convict leasing empire. Bloodhound manhunts through blackwater swamps, spiked neck-irons, 3:00 AM turpentine runs, and the men who fought back.
+          </p>
+          <div class="card-quote-callout">
+            “Men worked in waist-deep swamp water till their boots rotted off their feet. If you ran, the hounds were turned loose before the sun rose.”
+          </div>
+          <div class="card-footer-row">
+            <div class="meta-tag-list">
+              <span>⏱️ 22 min</span>
+              <span>&bull;</span>
+              <span>📜 1891 Memoir</span>
+            </div>
+            <a href="AmSiberUncovered.html" class="btn-read-story">Read Investigation &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 3: DOZIER SCHOOL -->
+      <article class="story-card" data-category="civil-rights" data-wild="94" data-complex="5">
+        <div class="card-media-wrap">
+          <img class="card-img" src="01_Photos/interpreted/Camp%20Padlock%201877_interpreted.png" alt="Camp Padlock and historical industrial facility">
+          <span class="card-era-badge">1900–2011 &bull; Marianna, FL</span>
+          <span class="card-rank-badge">🔥 94% WILD</span>
+        </div>
+        <div class="card-meters">
+          <div class="meter-col">
+            <div class="meter-label-row wildness">
+              <span>Wildness</span>
+              <span>94%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-wild" style="width: 94%;"></div>
+            </div>
+          </div>
+          <div class="meter-col">
+            <div class="meter-label-row complexity">
+              <span>Complexity</span>
+              <span>5 / 5</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-complex" style="width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">Florida Industrial School for Boys</div>
+          <h2 class="card-title">The Dozier Boys: The White House, Lost Ledgers &amp; Boot Hill</h2>
+          <p class="card-excerpt">
+            Over a century of state-sanctioned terror at Florida's reformatory for boys. Ground-penetrating radar exhumations, the secret night sessions in the White House, and surviving children who forced the state of Florida to confess.
+          </p>
+          <div class="card-quote-callout">
+            “The state listed dozens of boys as 'escaped,' yet their skeletal remains were unearthed by anthropologists a century later in unmarked swamp graves.”
+          </div>
+          <div class="card-footer-row">
+            <div class="meta-tag-list">
+              <span>⏱️ 26 min</span>
+              <span>&bull;</span>
+              <span>🔍 GIS Map</span>
+            </div>
+            <a href="DOZIER-RESEARCH.html" class="btn-read-story">Read Investigation &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 4: NEWBERRY SIX -->
+      <article class="story-card" data-category="civil-rights" data-wild="92" data-complex="5">
+        <div class="card-media-wrap">
+          <img class="card-img" src="01_Photos/ShareImages/carceral-history-archival-records-sketch.png" alt="Archival records and courthouse sketches">
+          <span class="card-era-badge">August 1916 &bull; Alachua County</span>
+          <span class="card-rank-badge">🔥 92% WILD</span>
+        </div>
+        <div class="card-meters">
+          <div class="meter-col">
+            <div class="meter-label-row wildness">
+              <span>Wildness</span>
+              <span>92%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-wild" style="width: 92%;"></div>
+            </div>
+          </div>
+          <div class="meter-col">
+            <div class="meter-label-row complexity">
+              <span>Complexity</span>
+              <span>5 / 5</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-complex" style="width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">Newberry &bull; Alachua County, Florida</div>
+          <h2 class="card-title">The Newberry Six: 1916 Lynchings &amp; The Buried Census</h2>
+          <p class="card-excerpt">
+            Six Black residents lynched in a single night after a deputy was shot while attempting an illegal search. How county tax books were rewritten, families dispossessed of fertile farmland, and census documents altered to hide the atrocity.
+          </p>
+          <div class="card-quote-callout">
+            “The grand jury heard four witnesses, asked zero questions regarding who tied the ropes, and adjourned before lunch.”
+          </div>
+          <div class="card-footer-row">
+            <div class="meta-tag-list">
+              <span>⏱️ 18 min</span>
+              <span>&bull;</span>
+              <span>🗂️ Deeds</span>
+            </div>
+            <a href="SEARCH.html?q=Newberry+Six" class="btn-read-story">Search Records &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 5: BEHIND THE GATE -->
+      <article class="story-card" data-category="legends" data-wild="89" data-complex="3">
+        <div class="card-media-wrap">
+          <img class="card-img" src="01_Photos/ShareImages/books-manuscripts-sketch.png" alt="Behind the Gate book cover sketch">
+          <span class="card-era-badge">Late 20th Century &bull; Maximum Security</span>
+          <span class="card-rank-badge">🔥 89% WILD</span>
+        </div>
+        <div class="card-meters">
+          <div class="meter-col">
+            <div class="meter-label-row wildness">
+              <span>Wildness</span>
+              <span>89%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-wild" style="width: 89%;"></div>
+            </div>
+          </div>
+          <div class="meter-col">
+            <div class="meter-label-row complexity">
+              <span>Complexity</span>
+              <span>3 / 5</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-complex" style="width: 60%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">State Correctional Institution</div>
+          <h2 class="card-title">Behind the Gate: Life &amp; Times of a Correctional Officer</h2>
+          <p class="card-excerpt">
+            Officer Mark Shepard's raw, unvarnished memoir from inside the cellblocks. The psychology of walking the razor line between inmate politics, corrupt administration superiors, and daily survival.
+          </p>
+          <div class="card-quote-callout">
+            “You learn quickly that the badge only protects you if respect is earned on both sides of the bars.”
+          </div>
+          <div class="card-footer-row">
+            <div class="meta-tag-list">
+              <span>⏱️ 16 min</span>
+              <span>&bull;</span>
+              <span>📖 43 Pages</span>
+            </div>
+            <a href="BEHIND-THE-GATE.html" class="btn-read-story">Read Memoir &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 6: SOLITARY CONFINEMENT -->
+      <article class="story-card" data-category="civil-rights" data-wild="88" data-complex="4">
+        <div class="card-media-wrap">
+          <img class="card-img" src="01_Photos/ShareImages/law-library-reform-history-sketch.png" alt="Solitary confinement and law reform sketch">
+          <span class="card-era-badge">1970s–Present Day &bull; Supermax Tier</span>
+          <span class="card-rank-badge">🔥 88% WILD</span>
+        </div>
+        <div class="card-meters">
+          <div class="meter-col">
+            <div class="meter-label-row wildness">
+              <span>Wildness</span>
+              <span>88%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-wild" style="width: 88%;"></div>
+            </div>
+          </div>
+          <div class="meter-col">
+            <div class="meter-label-row complexity">
+              <span>Complexity</span>
+              <span>4 / 5</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-complex" style="width: 80%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">Special Housing Units &bull; Administrative Segregation</div>
+          <h2 class="card-title">The Box: Sensory Deprivation &amp; Architecture of Isolation</h2>
+          <p class="card-excerpt">
+            23 hours locked in a windowless 6x9 foot concrete vault. An investigative look into sensory deprivation, mental breakdown, inmate hunger strikes, and Supreme Court Eighth Amendment jurisprudence.
+          </p>
+          <div class="card-quote-callout">
+            “After twenty days in total sensory silence, your own heartbeat sounds like a bass drum inside the concrete.”
+          </div>
+          <div class="card-footer-row">
+            <div class="meta-tag-list">
+              <span>⏱️ 19 min</span>
+              <span>&bull;</span>
+              <span>⚖️ 8th Amend</span>
+            </div>
+            <a href="SEARCH.html?q=Solitary+Confinement" class="btn-read-story">Read Legal Audit &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 7: FORTUNE FERGUSON -->
+      <article class="story-card" data-category="civil-rights" data-wild="86" data-complex="4">
+        <div class="card-media-wrap">
+          <img class="card-img" src="01_Photos/ShareImages/black-white-news-courthouse-evidence-sketch.png" alt="Courthouse evidence sketch">
+          <span class="card-era-badge">1920s Jim Crow &bull; Citrus County</span>
+          <span class="card-rank-badge">🔥 86% WILD</span>
+        </div>
+        <div class="card-meters">
+          <div class="meter-col">
+            <div class="meter-label-row wildness">
+              <span>Wildness</span>
+              <span>86%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-wild" style="width: 86%;"></div>
+            </div>
+          </div>
+          <div class="meter-col">
+            <div class="meter-label-row complexity">
+              <span>Complexity</span>
+              <span>4 / 5</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-complex" style="width: 80%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">Inverness &bull; Citrus County Courthouse</div>
+          <h2 class="card-title">Fortune Ferguson: The Lost Trial Ledger &amp; Electric Chair Docket</h2>
+          <p class="card-excerpt">
+            Convicted in under an hour by an all-white jury under threat of lynch mob violence outside the courtroom. Investigating the missing stenographer notebooks, the governor's death warrant, and archival erasure.
+          </p>
+          <div class="card-quote-callout">
+            “The trial was held under machine gun guard by the National Guard, but the verdict was written before the jury was sworn.”
+          </div>
+          <div class="card-footer-row">
+            <div class="meta-tag-list">
+              <span>⏱️ 15 min</span>
+              <span>&bull;</span>
+              <span>🏛️ Dockets</span>
+            </div>
+            <a href="SEARCH.html?q=Fortune+Ferguson" class="btn-read-story">Search Case Files &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 8: RIVERS OF LOVE -->
+      <article class="story-card" data-category="legends" data-wild="84" data-complex="3">
+        <div class="card-media-wrap">
+          <img class="card-img" src="01_Photos/Logos/Carceral%20Collections%20Archive_SMShare.png" alt="The Yard Community and Carceral Collections emblem">
+          <span class="card-era-badge">1980s–Present &bull; Mutual Aid</span>
+          <span class="card-rank-badge">🔥 84% WILD</span>
+        </div>
+        <div class="card-meters">
+          <div class="meter-col">
+            <div class="meter-label-row wildness">
+              <span>Wildness</span>
+              <span>84%</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-wild" style="width: 84%;"></div>
+            </div>
+          </div>
+          <div class="meter-col">
+            <div class="meter-label-row complexity">
+              <span>Complexity</span>
+              <span>3 / 5</span>
+            </div>
+            <div class="meter-track">
+              <div class="meter-fill-complex" style="width: 60%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">Family Mutual Aid Network</div>
+          <h2 class="card-title">Rivers of Love: Families Resisting Carceral Extraction</h2>
+          <p class="card-excerpt">
+            Behind every incarcerated individual stands a mother, wife, child, or partner fighting predatory canteen markups, $15 phone calls, and punitive visitation rules. How family love became the ultimate survival tactic.
+          </p>
+          <div class="card-quote-callout">
+            “They can lock the steel gates, but they cannot stop the letters, the commissary support, and the love flowing across the fence.”
+          </div>
+          <div class="card-footer-row">
+            <div class="meta-tag-list">
+              <span>⏱️ 12 min</span>
+              <span>&bull;</span>
+              <span>🤝 Toolkit</span>
+            </div>
+            <a href="RIVERS-LOVE.html" class="btn-read-story">Read Story &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div style="max-width: 900px; margin: 0 auto; line-height: 1.6;">
+      <p style="font-family:'Libre Baskerville', Georgia, serif; font-size:1.1rem; color:#fff; margin-bottom:0.75rem;">
+        The Cheesborough Carceral Collections
+      </p>
+      <p style="margin-bottom: 1rem;">
+        Investigative journalism, primary court records, and carceral history. Preserving the human stories behind the state ledgers.
+      </p>
+      <p style="font-size: 0.78rem; opacity: 0.8;">
+        &copy; 2026 Cheesborough Carceral Collections &bull; <a href="RESEARCH.html">Paperwork &amp; Indictments</a> &bull; <a href="COMMUNITY.html">The Yard Community</a> &bull; <a href="DONATE.html">Support Our Work</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function filterStories(category, btn) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const cards = Array.from(document.querySelectorAll('.story-card'));
+      const container = document.getElementById('stories-grid');
+
+      if (category === 'wildest') {
+        cards.sort((a, b) => parseInt(b.dataset.wild) - parseInt(a.dataset.wild));
+        cards.forEach(c => {
+          c.style.display = 'flex';
+          container.appendChild(c);
+        });
+        document.getElementById('stories-count').textContent = 'Ranked by Wildness (Highest First)';
+        return;
+      }
+
+      if (category === 'complex') {
+        cards.sort((a, b) => parseInt(b.dataset.complex) - parseInt(a.dataset.complex) || parseInt(b.dataset.wild) - parseInt(a.dataset.wild));
+        cards.forEach(c => {
+          c.style.display = 'flex';
+          container.appendChild(c);
+        });
+        document.getElementById('stories-count').textContent = 'Ranked by Archival Complexity (Highest First)';
+        return;
+      }
+
+      let visible = 0;
+      cards.forEach(c => {
+        const cat = c.dataset.category;
+        if (category === 'all' || cat === category) {
+          c.style.display = 'flex';
+          visible++;
+        } else {
+          c.style.display = 'none';
+        }
+      });
+      document.getElementById('stories-count').textContent = `Showing ${visible} Ranked Investigation${visible === 1 ? '' : 's'}`;
+    }
+  </script>
+</body>
+</html>

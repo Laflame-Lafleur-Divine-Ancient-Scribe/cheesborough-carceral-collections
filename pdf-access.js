@@ -5,7 +5,8 @@
  async function lookup(value){
   const url=new URL(value,location.href);let file=decodeURIComponent(url.pathname).replace(/^\//,'');
   if(!catalog)catalog=fetch('/data/pdf-catalog.json').then(r=>{if(!r.ok)throw Error('Document index unavailable.');return r.json()}).catch(e=>{catalog=null;throw e});
-  return (await catalog).documents.find(d=>d.path===file);
+  const catData = await catalog;
+  return catData.documents.find(d=>d.path===file || d.path.endsWith(file) || file.endsWith(d.path));
  }
  function overlay(message,upgrade=true){
   let dialog=document.getElementById('pdf-download-dialog');
@@ -33,11 +34,18 @@
   const link=event.target.closest?.('a[href]');if(!link||link.href.startsWith('blob:'))return;
   let url;try{url=new URL(link.href)}catch{return}
   if(!/\.pdf$/i.test(url.pathname))return;
+  const cleanPath = decodeURIComponent(url.pathname).replace(/^\//, '');
+  // Only gate proprietary books under 02_Books-and-Manuscripts/Books/
+  if(!/^02_Books-and-Manuscripts\/Books\//i.test(cleanPath) || link.dataset.free==='true' || link.classList.contains('pw-view') || link.classList.contains('pw-direct') || link.classList.contains('pw-download')) return;
   event.preventDefault();event.stopImmediatePropagation();download(link.href);
  },true);
- function embeds(){for(const el of document.querySelectorAll('iframe[src],embed[src],object[data]')){
-  const src=el.getAttribute('src')||el.getAttribute('data');let url;try{url=new URL(src,location.href)}catch{continue}if(!/\.pdf$/i.test(url.pathname))continue;
-  const frame=document.createElement('iframe');frame.src='/PDF-READER.html?file='+encodeURIComponent(url.href);frame.title=el.title||'Free document reader';frame.className=el.className;frame.style.cssText=el.style.cssText;frame.style.width='100%';frame.style.minHeight='650px';el.replaceWith(frame);
- }}
+ function embeds(){
+  if(/PDF-READER/i.test(location.pathname))return;
+  for(const el of document.querySelectorAll('iframe[src],embed[src],object[data]')){
+   if(el.dataset.native==='true'||el.closest('#pdf-pages-list'))continue;
+   const src=el.getAttribute('src')||el.getAttribute('data');let url;try{url=new URL(src,location.href)}catch{continue}if(!/\.pdf$/i.test(url.pathname))continue;
+   const frame=document.createElement('iframe');frame.src='/PDF-READER.html?file='+encodeURIComponent(url.href);frame.title=el.title||'Free document reader';frame.className=el.className;frame.style.cssText=el.style.cssText;frame.style.width='100%';frame.style.minHeight='650px';el.replaceWith(frame);
+  }
+ }
  document.addEventListener('DOMContentLoaded',embeds);new MutationObserver(embeds).observe(document.documentElement,{childList:true,subtree:true});embeds();
 })();

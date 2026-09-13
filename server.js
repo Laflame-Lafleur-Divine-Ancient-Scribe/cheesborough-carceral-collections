@@ -43,6 +43,7 @@ const communityHubService = createCommunityHubService({
     parseBody: parseCommunityBody,
     rate: permitCommunityAction
 });
+const { getPaperworkCatalog } = require('./lib/research-paperwork-service');
 
 const rootDirectory = __dirname;
 const port = Number(process.env.PORT) || 8080;
@@ -2215,14 +2216,24 @@ const server = http.createServer((request, response) => {
         return;
     }
 
+    if (request.method === 'GET' && requestUrl.pathname === '/api/research/paperwork') {
+        applyApiCors(request, response);
+        return communityJson(response, 200, getPaperworkCatalog());
+    }
+
     if (requestUrl.pathname.startsWith('/api/pdf/')) {
         applyApiCors(request,response);
         pdfService(request,response,requestUrl).catch(()=>communityJson(response,503,{error:'We could not verify PDF access. Please try again.'}));
         return;
     }
-    if (/\.pdf$/i.test(decodeURIComponent(requestUrl.pathname))) {
-        communityJson(response,403,{error:'PDF downloads require an active paid subscription. Open the document through the website reader.',requiredTier:'plugged_in'});
-        return;
+    const decodedPdfPath = decodeURIComponent(requestUrl.pathname);
+    if (/\.pdf$/i.test(decodedPdfPath)) {
+        const isProprietaryBook = /^\/?02_Books-and-Manuscripts\/Books\//i.test(decodedPdfPath.replace(/^\//, ''));
+        if (isProprietaryBook) {
+            communityJson(response,403,{error:'PDF book downloads require an active paid subscription. Open the document through the website reader.',requiredTier:'plugged_in'});
+            return;
+        }
+        // Public carceral records, indictments, government affidavits, and research PDFs serve freely!
     }
     if (requestUrl.pathname === '/api/membership' || requestUrl.pathname.startsWith('/api/membership/')) {
         applyApiCors(request,response);

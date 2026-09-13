@@ -1,5 +1,5 @@
 {
-  "revision": "8b8c839af9691d0060ec7d4a0a6425b8d3f86375",
+  "revision": "24dd0de4e6b2dbb45a1327520103c1f977bc409c",
   "documents": [
     {
       "id": "fa217464ebdc278081f23b73",
@@ -64,6 +64,62 @@
     {
       "id": "7872b1b0b06ca6ab7b3a4c76",
       "path": "02_Books-and-Manuscripts/Manuscripts/02_Digital-Scans/LaufersweilerDwyer-PhosphateMinesDiplomas-1999.pdf"
+    },
+    {
+      "id": "c1bb9a3a604b1a2dceee62cb",
+      "path": "03_Research/01_Literature-Notes/Blacks-Law-Dictionary-2nd-Edition-1910.pdf"
+    },
+    {
+      "id": "8e9c228d76a181eb97e34601",
+      "path": "03_Research/01_Literature-Notes/Blacks-Law-Dictionary-9th-Edition.pdf"
+    },
+    {
+      "id": "a9a827a6e5361e0b11344e25",
+      "path": "03_Research/01_Literature-Notes/Carceral-Con-Deceptive-Terrain-of-Criminal-Justice-Reform.pdf"
+    },
+    {
+      "id": "31ed1c71bd2ee182ea57a645",
+      "path": "03_Research/01_Literature-Notes/Crime-and-Law-Theory-Research-and-Policy.pdf"
+    },
+    {
+      "id": "383d27595b9ad7d54a2bec35",
+      "path": "03_Research/01_Literature-Notes/Criminality-in-Context-Psychological-Foundations-of-Reform.pdf"
+    },
+    {
+      "id": "a35f1f031a7dd68bfbb960d6",
+      "path": "03_Research/01_Literature-Notes/Examples-and-Explanations-Criminal-Law-7th-Ed.pdf"
+    },
+    {
+      "id": "5e431eb40ad051bd2f54851f",
+      "path": "03_Research/01_Literature-Notes/Handbook-of-Issues-in-Criminal-Justice-Reform-in-the-US.pdf"
+    },
+    {
+      "id": "1dd20c63c3e40c919c46f2a9",
+      "path": "03_Research/01_Literature-Notes/Juvenile-Justice-Redeeming-Our-Children.pdf"
+    },
+    {
+      "id": "c4843f0c9af17414c716fcfa",
+      "path": "03_Research/01_Literature-Notes/Juvenile-Justice-System-Delinquency-Processing-and-the-Law-9th-Ed.pdf"
+    },
+    {
+      "id": "9626cfb6816487c352f3187e",
+      "path": "03_Research/01_Literature-Notes/Juvenile-Justice-in-Global-Perspective.pdf"
+    },
+    {
+      "id": "930c24aec7fd84eceffd9157",
+      "path": "03_Research/01_Literature-Notes/Law-The-Basics.pdf"
+    },
+    {
+      "id": "1a3df291908d8ecdc9d90bb4",
+      "path": "03_Research/01_Literature-Notes/Research-Methods-for-Law-2nd-Ed.pdf"
+    },
+    {
+      "id": "a86e7e730de48730c10f5e5c",
+      "path": "03_Research/01_Literature-Notes/Transforming-Criminal-Justice-Evidence-Based-Agenda.pdf"
+    },
+    {
+      "id": "83e202bca863c678ee1153ee",
+      "path": "03_Research/01_Literature-Notes/Wrongful-Conviction-and-Criminal-Justice-Reform.pdf"
     },
     {
       "id": "0441b0dd44304ed440382351",
@@ -1174,12 +1230,28 @@
       "path": "FullBooks/Rap Music Lyrics and the Construction of Violent Identities.pdf"
     },
     {
+      "id": "acc1786af6b6b820144bd7f8",
+      "path": "FullBooks/Six Years In Gerogia Prison p.1851_CompleteBook.pdf"
+    },
+    {
       "id": "01e57a06a6c92e6b926a9c1d",
       "path": "FullBooks/Understanding the Relationship Between Black Chicago Youth and Ch.pdf"
     },
     {
       "id": "f20407f6a08a134e9becd82d",
       "path": "FullBooks/americansiberiao00powe.pdf"
+    },
+    {
+      "id": "a5a3008f3e6b2a8c27fbc9da",
+      "path": "FullBooks/states-of-delinquency-race-and-science-in-the-making-of-californias-juvenile-justice-system-9780520951556_compress.pdf"
+    },
+    {
+      "id": "ca54071fb5a04adf91d1abf4",
+      "path": "FullBooks/the-evolution-of-the-juvenile-court-race-politics-and-the-criminalizing-of-juvenile-justice-9781479856664_compress.pdf"
+    },
+    {
+      "id": "0925940ade04813cec429aa0",
+      "path": "FullBooks/the-new-jim-crow-mass-incarceration-in-the-age-of-colorblindness-10th-anniversary-edition-.pdf"
     },
     {
       "id": "3871e3de1c2a1a34094686d9",
