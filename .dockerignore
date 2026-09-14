@@ -1,0 +1,59 @@
+# Git and Tooling
+.git
+.github
+.vscode
+.gemini
+
+# Node modules and package logs
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Heavy raw research materials, book collections, and archive intake
+01
+01_Photos
+02_Books-and-Manuscripts
+03_Research
+04_Website-Assets
+05_Archive-Admin
+3D_Prison_Scene
+cheesborough-carceral-collections
+"RESEARCH WEBSITE HERO"
+RESEARCH WEBSITE HERO
+FullBooks
+documents
+assets
+BlackandWhite
+STUB
+docs
+private
+_test_site
+searxng
+tools
+vendor
+scratch
+scripts
+
+# Sub-games with heavy 3D/binary assets
+games/cheesborough-carceral-chess
+games/FBX
+games/street-dice-game
+
+# Media and archive file formats
+*.pdf
+*.mp4
+*.m4v
+*.mov
+*.mp3
+*.wav
+*.psd
+*.ai
+*.sketch
+*.zip
+*.tar.gz
+*.tar
+*.7z
+*.log
+*.cjs
