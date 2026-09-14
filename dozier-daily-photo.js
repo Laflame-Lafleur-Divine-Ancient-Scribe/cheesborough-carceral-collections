@@ -139,7 +139,7 @@
 
     // 2. Target homepage feature-image elements on Dozier articles
     const featureImages = document.querySelectorAll(
-      '.feature-image, .dozier-feature-image, [data-dozier-photo="feature"]'
+      '.dozier-feature-image, [data-dozier-photo="feature"]'
     );
     featureImages.forEach((el) => {
       el.style.backgroundImage = `url("${photoUrl}")`;
