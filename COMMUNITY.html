@@ -1577,7 +1577,207 @@
       border-color: var(--gold);
       font-weight: 700;
     }
+    .member-action-btn.accept-btn {
+      background: #16a34a;
+      color: #fff;
+      border-color: #16a34a;
+      font-weight: 700;
+    }
+    .member-action-btn.accept-btn:hover {
+      background: #15803d;
+      border-color: #15803d;
+      color: #fff;
+    }
+    .member-action-btn.deny-btn {
+      background: var(--paper);
+      color: #dc2626;
+      border-color: rgba(220, 38, 38, 0.4);
+      font-weight: 600;
+    }
+    .member-action-btn.deny-btn:hover {
+      background: #dc2626;
+      color: #fff;
+      border-color: #dc2626;
+    }
 
+    /* Connected with Hover Unconnect */
+    .member-action-btn.connected {
+      background: var(--navy);
+      color: var(--gold-light);
+      border-color: var(--navy);
+      font-weight: 700;
+    }
+    .member-action-btn.connected:hover {
+      background: #dc2626 !important;
+      color: #fff !important;
+      border-color: #b91c1c !important;
+    }
+    .member-action-btn.connected:hover span {
+      display: none;
+    }
+    .member-action-btn.connected:hover::after {
+      content: 'Unconnect';
+    }
+
+    /* Following with Hover Unfollow */
+    .member-action-btn.following {
+      background: var(--gold);
+      color: var(--navy-dark);
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+    .member-action-btn.following:hover {
+      background: #dc2626 !important;
+      color: #fff !important;
+      border-color: #b91c1c !important;
+    }
+    .member-action-btn.following:hover span {
+      display: none;
+    }
+    .member-action-btn.following:hover::after {
+      content: 'Unfollow';
+    }
+
+    /* Pending Sent with Hover Cancel */
+    .member-action-btn.pending {
+      background: var(--paper);
+      color: var(--ink-muted);
+      border-color: var(--border);
+    }
+    .member-action-btn.pending:hover {
+      background: #64748b !important;
+      color: #fff !important;
+      border-color: #475569 !important;
+    }
+    .member-action-btn.pending:hover span {
+      display: none;
+    }
+    .member-action-btn.pending:hover::after {
+      content: 'Cancel';
+    }
+
+    /* Meta-Style Recommendations Carousel */
+    .meta-recs-container {
+      background: var(--paper-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 3px rgba(9, 30, 54, 0.04);
+    }
+    .meta-recs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+    }
+    .meta-recs-title {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .meta-recs-sub {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+    }
+    .meta-recs-scroll {
+      display: flex;
+      gap: 0.85rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+    }
+    .meta-rec-card {
+      width: 195px;
+      flex-shrink: 0;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .meta-rec-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      border-color: var(--gold);
+    }
+    .meta-rec-dismiss {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: none;
+      border: none;
+      color: var(--ink-muted);
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .meta-rec-dismiss:hover {
+      background: var(--border-light);
+      color: var(--ink);
+    }
+    .meta-rec-avatar {
+      margin-bottom: 0.5rem;
+    }
+    .meta-rec-name {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 0.2rem;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .meta-match-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #15803d;
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      border-radius: 9999px;
+      padding: 0.12rem 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+    .meta-rec-reason {
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      line-height: 1.35;
+      margin-bottom: 0.75rem;
+      flex-grow: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .meta-rec-btn {
+      width: 100%;
+      background: var(--navy);
+      color: var(--gold-light);
+      border: 1px solid var(--navy);
+      border-radius: 6px;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .meta-rec-btn:hover {
+      background: #143258;
+    }
   </style>
 </head>
 <body>
@@ -1812,7 +2012,21 @@
         </div>
       </div>
 
-            <!-- SECTION INTRO BANNERS -->
+      <!-- Meta-Style People You May Want to Connect With Strip -->
+      <div id="meta-recommendations-strip" class="meta-recs-container" style="display:none;">
+        <div class="meta-recs-header">
+          <div>
+            <div class="meta-recs-title">🤝 People You May Want to Connect With</div>
+            <div class="meta-recs-sub">Curated algorithm based on research topics, DOC regional records, and network affinity</div>
+          </div>
+          <button type="button" onclick="document.getElementById('meta-recommendations-strip').style.display='none'" style="background:none;border:none;color:var(--ink-muted);font-size:0.8rem;cursor:pointer;">Dismiss</button>
+        </div>
+        <div class="meta-recs-scroll" id="meta-recs-scroll-track">
+          <!-- Cards dynamically populated -->
+        </div>
+      </div>
+
+      <!-- SECTION INTRO BANNERS -->
       <div id="what-breaking-banner" class="section-intro-banner banner-breaking" style="display:none;">
         <div class="banner-badge">🚨 Live Incident Reports &amp; Urgent Dockets</div>
         <h2 class="banner-title">What’s Breaking</h2>
@@ -2155,9 +2369,13 @@
       
       <!-- Yard Members & Interactive Network -->
       <div class="fb-card" style="padding:1rem; margin-bottom:1rem;" id="community-members-card">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem;">
-          <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-muted);">Community &amp; Personas</span>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem;">
+          <span style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-muted);">Community &amp; Network</span>
           <span style="font-size:0.72rem; color:var(--gold-dark); font-weight:700;" id="members-count-badge">8 Members</span>
+        </div>
+        <div style="display:flex; gap:0.35rem; margin-bottom:0.75rem; border-bottom:1px solid var(--border-light); padding-bottom:0.5rem;">
+          <button type="button" id="tab-suggested-members" class="filter-pill active" style="font-size:0.72rem; padding:0.2rem 0.55rem;" onclick="switchMembersTab('suggested')">Suggested</button>
+          <button type="button" id="tab-all-members" class="filter-pill" style="font-size:0.72rem; padding:0.2rem 0.55rem;" onclick="switchMembersTab('all')">All Members</button>
         </div>
         <div id="members-list-container" style="display:flex; flex-direction:column; gap:0.4rem;">
           <!-- Dynamically loaded -->
@@ -2463,9 +2681,7 @@
         container.innerHTML = requests.map(r => `
           <div class="inbox-request-row" id="conn-req-${escapeHtml(r.id)}">
             <div style="display:flex; align-items:center; gap:0.65rem;">
-              <div class="post-author-avatar" style="width:38px; height:38px; background:${getAvatarColor(r.displayName)}; font-size:0.85rem;">
-                ${escapeHtml(r.initials)}
-              </div>
+              ${getAvatarImgHtml(r, 38, 'post-author-avatar')}
               <div>
                 <div style="font-weight:700; font-size:0.88rem;">${escapeHtml(r.displayName)}</div>
                 <div style="font-size:0.75rem; color:var(--ink-muted);">Sent you a connection request &bull; ${timeAgo(r.createdAt)}</div>
@@ -2473,7 +2689,7 @@
             </div>
             <div style="display:flex; gap:0.4rem;">
               <button type="button" class="btn-accept-request" onclick="respondConnection('${escapeHtml(r.id)}', 'accept')">Accept</button>
-              <button type="button" class="btn-decline-request" onclick="respondConnection('${escapeHtml(r.id)}', 'decline')">Decline</button>
+              <button type="button" class="btn-decline-request" onclick="respondConnection('${escapeHtml(r.id)}', 'deny')">Deny</button>
             </div>
           </div>
         `).join('');
@@ -2496,9 +2712,7 @@
         <div class="inbox-message-item ${m.read ? '' : 'unread'}" onclick="toggleMessageDetail(this, '${escapeHtml(m.id)}')">
           <div class="inbox-item-header">
             <div class="inbox-sender-name">
-              <div class="post-author-avatar" style="width:28px; height:28px; background:${getAvatarColor(m.senderName)}; font-size:0.75rem;">
-                ${escapeHtml(m.senderInitials || 'CC')}
-              </div>
+              ${getAvatarImgHtml({ id: m.senderId, displayName: m.senderName, initials: m.senderInitials, avatarUpdatedAt: m.senderAvatarUpdatedAt }, 28, 'post-author-avatar')}
               <span>${escapeHtml(m.senderName)}</span>
               ${!m.read ? '<span class="post-badge" style="background:#dc2626; color:#fff; font-size:0.6rem;">NEW</span>' : ''}
             </div>
@@ -2537,7 +2751,7 @@
             row.innerHTML = `<div style="padding:0.75rem 1rem; color:var(--green); font-size:0.82rem; font-weight:700;">Connection ${action === 'accept' ? 'Accepted' : 'Declined'}!</div>`;
             setTimeout(() => row.remove(), 1200);
           }
-          await Promise.all([loadProfileStats(), loadInboxData(), loadMembersNetwork()]);
+          await Promise.all([loadProfileStats(), loadInboxData(), loadMembersNetwork(), loadLivePosts(), loadRecommendations()]);
         }
       } catch (err) {
         console.error('Respond connection error:', err);
@@ -2652,12 +2866,50 @@
       return colors[Math.abs(hash)];
     }
 
+    function getAvatarImgHtml(author, size = 40, fallbackCls = '') {
+      const avatarUpdatedAt = author?.avatarUpdatedAt || author?.avatar_updated_at;
+      const id = author?.id || author?.author_id;
+      const name = author?.displayName || author?.name || 'CC';
+      const initials = escapeHtml(author?.initials || (name || 'CC').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase());
+      const bg = getAvatarColor(name);
+      const borderStyle = author?.role === 'owner' ? 'border: 2px solid #bd9448;' : '';
+
+      if (id && avatarUpdatedAt) {
+        const src = `${apiBase}/api/auth/avatar/${encodeURIComponent(id)}?v=${encodeURIComponent(avatarUpdatedAt)}`;
+        return `<div class="${fallbackCls}" style="width:${size}px; height:${size}px; border-radius:50%; overflow:hidden; position:relative; flex-shrink:0; background:${bg}; display:flex; align-items:center; justify-content:center; ${borderStyle}">
+          <img src="${escapeHtml(src)}" alt="${escapeHtml(name)}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <span style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:${Math.round(size * 0.4)}px;">${initials}</span>
+        </div>`;
+      }
+      return `<div class="${fallbackCls}" style="width:${size}px; height:${size}px; border-radius:50%; background:${bg}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:${Math.round(size * 0.4)}px; flex-shrink:0; ${borderStyle}">${initials}</div>`;
+    }
+
+    function updateAvatarElement(elementId, user, size = 40) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const avatarUpdatedAt = user?.avatarUpdatedAt || user?.avatar_updated_at;
+      const id = user?.id;
+      const name = user?.displayName || user?.name || 'CC';
+      const initials = (name || 'CC').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+      const bg = getAvatarColor(name);
+
+      el.style.overflow = 'hidden';
+      el.style.position = 'relative';
+      el.style.padding = '0';
+
+      if (id && avatarUpdatedAt) {
+        const src = `${apiBase}/api/auth/avatar/${encodeURIComponent(id)}?v=${encodeURIComponent(avatarUpdatedAt)}`;
+        el.innerHTML = `<img src="${escapeHtml(src)}" alt="${escapeHtml(name)}" style="width:100%; height:100%; object-fit:cover; display:block; border-radius:50%;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><span style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:${Math.round(size * 0.4)}px;">${escapeHtml(initials)}</span>`;
+      } else {
+        el.textContent = initials;
+        el.style.background = bg;
+      }
+    }
+
     function renderPostHtml(post) {
       const catInfo = catLabels[post.category] || { name: '💬 Community Feed', cls: '' };
       const authorName = escapeHtml(post.author?.displayName || 'Community Member');
       const authorUsername = post.author?.username ? `@${escapeHtml(post.author.username)}` : '';
-      const initials = escapeHtml(post.author?.initials || 'CC');
-      const avatarBg = getAvatarColor(post.author?.displayName || 'CC');
       const contentHtml = escapeHtml(post.content).replace(/\n/g, '<br>');
       const isOwner = post.author?.role === 'owner';
       const userReacted = Boolean(post.userReacted);
@@ -2672,7 +2924,7 @@
 
       const commentsHtml = (post.comments || []).map(cm => `
         <div class="comment-item">
-          <div class="comment-avatar" style="background:${getAvatarColor(cm.author?.displayName || 'Member')};">${escapeHtml(cm.author?.initials || 'CC')}</div>
+          ${getAvatarImgHtml(cm.author, 28, 'comment-avatar')}
           <div class="comment-bubble">
             <div class="comment-author">${escapeHtml(cm.author?.displayName || 'Member')}${cm.author?.role === 'owner' ? ' <span style="color:#bd9448;font-size:0.75rem;">(Owner)</span>' : ''} &bull; <span style="font-weight:400;color:var(--ink-muted);font-size:0.75rem;">${timeAgo(cm.createdAt)}</span></div>
             <div class="comment-text">${escapeHtml(cm.content)}</div>
@@ -2683,7 +2935,7 @@
       return `
         <div class="post-head">
           <div class="post-author-group">
-            <div class="post-author-avatar" style="background:${avatarBg};">${initials}</div>
+            ${getAvatarImgHtml(post.author, 42, 'post-author-avatar')}
             <div>
               <div class="post-author-name">
                 ${authorName}
@@ -2728,7 +2980,7 @@
         <div class="post-comments">
           ${commentsHtml}
           <form class="comment-composer" onsubmit="submitNewComment(event)">
-            <div class="comment-avatar" style="width:28px; height:28px; background:${getAvatarColor(currentUser.name)};">${currentUser.initials}</div>
+            ${getAvatarImgHtml(currentUser, 28, 'comment-avatar')}
             <input type="text" class="comment-input" placeholder="Join the discussion, add a case citation, or reply..." required>
             <button type="submit" class="comment-submit-btn">Reply</button>
           </form>
@@ -2779,6 +3031,50 @@
       }
     }
 
+    // Load Meta-Style Recommendations
+    async function loadRecommendations() {
+      const strip = document.getElementById('meta-recommendations-strip');
+      const track = document.getElementById('meta-recs-scroll-track');
+      if (!strip || !track) return;
+      try {
+        const res = await fetch(`${apiBase}/api/community/recommendations`, { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          const recs = data.recommendations || [];
+          if (recs.length === 0) {
+            strip.style.display = 'none';
+            return;
+          }
+          track.innerHTML = recs.map(r => `
+            <div class="meta-rec-card" id="rec-card-${escapeHtml(r.id)}">
+              <button type="button" class="meta-rec-dismiss" title="Dismiss" onclick="dismissRecCard('${escapeHtml(r.id)}')">&times;</button>
+              <div class="meta-rec-avatar">
+                ${getAvatarImgHtml(r, 52)}
+              </div>
+              <div class="meta-rec-name" title="${escapeHtml(r.displayName)}">${escapeHtml(r.displayName)}</div>
+              <span class="meta-match-badge">${escapeHtml(r.matchScore || 85)}% Match</span>
+              <div class="meta-rec-reason">${escapeHtml(r.matchReason || 'Carceral research collaborator')}</div>
+              <button type="button" class="meta-rec-btn" onclick="toggleConnectMember('${escapeHtml(r.id)}', this)">Connect</button>
+            </div>
+          `).join('');
+          strip.style.display = 'block';
+        }
+      } catch (err) {
+        console.warn('Recommendations fetch warning:', err);
+      }
+    }
+
+    function dismissRecCard(id) {
+      const card = document.getElementById(`rec-card-${id}`);
+      if (card) {
+        card.remove();
+        const track = document.getElementById('meta-recs-scroll-track');
+        if (track && track.children.length === 0) {
+          document.getElementById('meta-recommendations-strip').style.display = 'none';
+        }
+      }
+    }
+
     // Session Hook
     document.addEventListener('DOMContentLoaded', async () => {
       try {
@@ -2786,28 +3082,29 @@
           const user = await window.CCCCommunity.restoreSession();
           if (user) {
             isLoggedIn = true;
+            currentUser.id = user.id;
             currentUser.name = user.displayName || 'Member';
+            currentUser.displayName = user.displayName || 'Member';
             currentUser.role = user.role || 'member';
+            currentUser.avatarUpdatedAt = user.avatarUpdatedAt;
             currentUser.initials = (user.displayName || 'CC').split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
             
             document.getElementById('header-user-name').textContent = currentUser.name;
-            document.getElementById('header-avatar').textContent = currentUser.initials;
-            document.getElementById('header-avatar').style.background = getAvatarColor(currentUser.name);
+            updateAvatarElement('header-avatar', user, 30);
             document.getElementById('sidebar-user-name').textContent = currentUser.name;
-            document.getElementById('sidebar-avatar').textContent = currentUser.initials;
-            document.getElementById('sidebar-avatar').style.background = getAvatarColor(currentUser.name);
-            document.getElementById('composer-avatar').textContent = currentUser.initials;
-            document.getElementById('composer-avatar').style.background = getAvatarColor(currentUser.name);
+            updateAvatarElement('sidebar-avatar', user, 64);
+            updateAvatarElement('composer-avatar', user, 38);
           }
         }
       } catch (_) {}
 
-      // Fetch live stats, posts, inbox, and members network
+      // Fetch live stats, posts, inbox, recommendations, and members network
       await Promise.all([
         loadProfileStats(),
         loadLivePosts(),
         loadInboxData(),
-        loadMembersNetwork()
+        loadMembersNetwork(),
+        loadRecommendations()
       ]);
     });
 
@@ -3260,6 +3557,91 @@
     }
 
     // Members & Network Interactive List
+    let activeMembersTab = 'suggested';
+
+    function switchMembersTab(tab) {
+      activeMembersTab = tab;
+      const tabSugg = document.getElementById('tab-suggested-members');
+      const tabAll = document.getElementById('tab-all-members');
+      if (tabSugg) tabSugg.classList.toggle('active', tab === 'suggested');
+      if (tabAll) tabAll.classList.toggle('active', tab === 'all');
+      renderMembersList();
+    }
+
+    function renderMembersList() {
+      const container = document.getElementById('members-list-container');
+      if (!container) return;
+
+      let list = [...(loadedMembersCache || [])];
+      if (activeMembersTab === 'suggested') {
+        // Prioritize unconnected candidates sorted by matchScore
+        const unconnected = list.filter(m => !m.isConnected);
+        unconnected.sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
+        list = unconnected.length > 0 ? unconnected.slice(0, 8) : list.slice(0, 8);
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `<div style="font-size:0.8rem; color:var(--ink-muted); padding:0.5rem 0; text-align:center;">No members found.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(m => {
+        let connBtnHtml = '';
+        if (m.isPendingReceived) {
+          connBtnHtml = `
+            <div style="display:flex; gap:0.25rem;">
+              <button type="button" class="member-action-btn accept-btn" title="Accept Connection" onclick="respondConnection('${escapeHtml(m.pendingConnectionId)}', 'accept')">Accept</button>
+              <button type="button" class="member-action-btn deny-btn" title="Deny Connection" onclick="respondConnection('${escapeHtml(m.pendingConnectionId)}', 'deny')">Deny</button>
+            </div>
+          `;
+        } else if (m.isConnected) {
+          connBtnHtml = `
+            <button type="button" class="member-action-btn connected" onclick="unconnectMember('${escapeHtml(m.id)}', this)">
+              <span>Connected</span>
+            </button>
+          `;
+        } else if (m.isPending) {
+          connBtnHtml = `
+            <button type="button" class="member-action-btn pending" onclick="cancelPendingConnect('${escapeHtml(m.id)}', this)">
+              <span>Pending</span>
+            </button>
+          `;
+        } else {
+          connBtnHtml = `
+            <button type="button" class="member-action-btn" onclick="toggleConnectMember('${escapeHtml(m.id)}', this)">
+              Connect
+            </button>
+          `;
+        }
+
+        const matchHtml = (m.matchScore && !m.isConnected) ? `
+          <span class="meta-match-badge" style="font-size:0.62rem; padding:0.1rem 0.35rem; margin-top:0.15rem; display:inline-block;">${escapeHtml(m.matchScore)}% Match</span>
+        ` : '';
+
+        return `
+          <div class="member-mini-row" data-member-id="${escapeHtml(m.id)}">
+            <div class="member-mini-info">
+              ${getAvatarImgHtml(m, 34, 'member-mini-avatar')}
+              <div style="min-width:0;">
+                <div class="member-mini-name">${escapeHtml(m.displayName)}</div>
+                <div class="member-mini-sub">${escapeHtml(m.location || m.role || 'Member')}</div>
+                ${matchHtml}
+              </div>
+            </div>
+            <div class="member-mini-actions">
+              ${connBtnHtml}
+              <button type="button" class="member-action-btn ${m.isFollowing ? 'following' : ''}" onclick="toggleFollowMember('${escapeHtml(m.id)}', this)">
+                <span>${m.isFollowing ? 'Following' : 'Follow'}</span>
+              </button>
+              <button type="button" class="member-action-btn" title="Send Direct Message" onclick="openComposeMessageModal('${escapeHtml(m.id)}')">
+                &#9993;
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     async function loadMembersNetwork() {
       const container = document.getElementById('members-list-container');
       if (!container) return;
@@ -3269,32 +3651,9 @@
           const data = await res.json();
           if (Array.isArray(data.members)) {
             loadedMembersCache = data.members;
-            container.innerHTML = data.members.map(m => `
-              <div class="member-mini-row" data-member-id="${escapeHtml(m.id)}">
-                <div class="member-mini-info">
-                  <div class="member-mini-avatar" style="background:${getAvatarColor(m.displayName)};">${escapeHtml(m.initials)}</div>
-                  <div style="min-width:0;">
-                    <div class="member-mini-name">${escapeHtml(m.displayName)}</div>
-                    <div class="member-mini-sub">${escapeHtml(m.location || m.role)}</div>
-                  </div>
-                </div>
-                <div class="member-mini-actions">
-                  ${m.isPendingReceived ? `
-                    <button type="button" class="member-action-btn active" style="background:#16a34a; color:#fff; border-color:#16a34a;" onclick="respondConnection('${escapeHtml(m.pendingConnectionId)}', 'accept')">Accept</button>
-                  ` : `
-                    <button type="button" class="member-action-btn ${m.isConnected ? 'active' : ''}" onclick="toggleConnectMember('${escapeHtml(m.id)}', this)">
-                      ${m.isConnected ? 'Connected' : (m.isPending ? 'Pending' : 'Connect')}
-                    </button>
-                  `}
-                  <button type="button" class="member-action-btn ${m.isFollowing ? 'active' : ''}" onclick="toggleFollowMember('${escapeHtml(m.id)}', this)">
-                    ${m.isFollowing ? 'Following' : 'Follow'}
-                  </button>
-                  <button type="button" class="member-action-btn" title="Send Direct Message" onclick="openComposeMessageModal('${escapeHtml(m.id)}')">
-                    &#9993;
-                  </button>
-                </div>
-              </div>
-            `).join('');
+            const countBadge = document.getElementById('members-count-badge');
+            if (countBadge) countBadge.textContent = `${data.members.length} Members`;
+            renderMembersList();
           }
         }
       } catch (err) {
@@ -3317,16 +3676,58 @@
         });
         if (res.ok) {
           const data = await res.json();
-          btn.classList.toggle('active', data.isConnected);
-          btn.textContent = data.isConnected ? 'Connected' : (data.isPending ? 'Pending' : 'Connect');
           const connEl = document.getElementById('profile-stat-connections');
           if (connEl && typeof data.connectionsCount === 'number') {
             connEl.textContent = data.connectionsCount;
           }
-          await Promise.all([loadInboxData(), loadMembersNetwork()]);
+          await Promise.all([loadInboxData(), loadMembersNetwork(), loadRecommendations(), loadLivePosts()]);
         }
       } catch (err) {
         console.error('Connect error:', err);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function cancelPendingConnect(userId, btn) {
+      if (!isLoggedIn) return;
+      btn.disabled = true;
+      try {
+        const res = await fetch(`${apiBase}/api/community/users/${userId}/connect`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'cancel' }),
+          credentials: 'include'
+        });
+        if (res.ok) {
+          await Promise.all([loadInboxData(), loadMembersNetwork(), loadRecommendations()]);
+        }
+      } catch (err) {
+        console.error('Cancel connect error:', err);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function unconnectMember(userId, btn) {
+      if (!isLoggedIn) return;
+      if (!confirm('Are you sure you want to unconnect with this member?')) return;
+      btn.disabled = true;
+      try {
+        const res = await fetch(`${apiBase}/api/community/users/${userId}/unconnect`, {
+          method: 'POST',
+          credentials: 'include'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const connEl = document.getElementById('profile-stat-connections');
+          if (connEl && typeof data.connectionsCount === 'number') {
+            connEl.textContent = data.connectionsCount;
+          }
+          await Promise.all([loadInboxData(), loadMembersNetwork(), loadRecommendations(), loadLivePosts()]);
+        }
+      } catch (err) {
+        console.error('Unconnect error:', err);
       } finally {
         btn.disabled = false;
       }
@@ -3347,9 +3748,7 @@
         });
         if (res.ok) {
           const data = await res.json();
-          btn.classList.toggle('active', data.following);
-          btn.textContent = data.following ? 'Following' : 'Follow';
-          await loadProfileStats();
+          await Promise.all([loadProfileStats(), loadMembersNetwork(), loadLivePosts()]);
         }
       } catch (err) {
         console.error('Follow error:', err);
