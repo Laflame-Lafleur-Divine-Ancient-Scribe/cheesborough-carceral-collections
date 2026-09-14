@@ -273,22 +273,21 @@
       return `
         <article class="pw-document-card" data-document-id="${doc.id}">
           <div class="pw-card-meta-col">
-            <div class="pw-docket-folder-graphic">
-              <span class="folder-seal">UNSEALED FILE</span>
-              <div class="folder-icon">📁</div>
-              <span class="folder-docket">${doc.docket || doc.id}</span>
+            <div class="pw-docket-badge-box">
+              <span class="pw-docket-seal">UNSEALED RECORD</span>
+              <span class="pw-docket-code">${doc.docket ? doc.docket : `DOC #${doc.id.toUpperCase()}`}</span>
             </div>
             ${getCategoryBadge(doc.category)}
             <div class="pw-meta-item">
-              <strong>${doc.date || 'Filing Date'}</strong>
-              <span>${metaMetrics}</span>
+              <strong class="pw-filing-date">${doc.date || 'Filing Date'}</strong>
+              <span class="pw-filing-metrics">${metaMetrics}</span>
             </div>
           </div>
           
           <div class="pw-card-body-col">
             ${getStampBadge(doc)}
             <span class="pw-doc-type-label">${doc.type}</span>
-            <h3>${doc.title}</h3>
+            <h3 class="pw-doc-title">${doc.title}</h3>
             <p class="pw-doc-summary">${doc.summary}</p>
             <p class="pw-doc-court">${doc.jurisdiction} &bull; ${doc.country}</p>
             ${quoteHtml}

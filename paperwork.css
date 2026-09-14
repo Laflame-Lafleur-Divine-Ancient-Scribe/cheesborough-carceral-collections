@@ -187,42 +187,134 @@ button, select { cursor: pointer; }
   color: var(--gold-warm);
 }
 .pw-hero-desc {
-  color: #cbd5e1;
+  color: #e2e8f0;
   font-size: 16px;
   line-height: 1.65;
-  max-width: 500px;
+  max-width: 580px;
 }
-.pw-hero-meta-box {
-  background: rgba(16, 44, 76, 0.65);
-  border: 1px solid rgba(194, 155, 83, 0.35);
+.pw-trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0 24px;
+}
+.pw-trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 44, 76, 0.7);
+  border: 1px solid rgba(194, 155, 83, 0.4);
+  padding: 6px 12px;
   border-radius: 4px;
-  padding: 20px;
-  backdrop-filter: blur(8px);
-}
-.pw-hero-meta-title {
-  color: var(--gold-warm);
   font-size: 12px;
   font-weight: 700;
+  color: #ffffff;
+}
+.pw-hero-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.pw-hero-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: #050f1d;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: background 0.15s, transform 0.15s;
+}
+.pw-hero-btn-primary:hover {
+  background: #fde047;
+  transform: translateY(-1px);
+}
+.pw-hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(9, 30, 54, 0.85);
+  border: 1.5px solid var(--gold);
+  color: #fde047;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.pw-hero-btn-secondary:hover {
+  background: rgba(16, 44, 76, 0.95);
+  border-color: #fde047;
+  color: #ffffff;
+}
+
+/* Executive 48-Hour Vault Notice Box */
+.pw-hero-meta-box {
+  background: rgba(9, 30, 54, 0.92);
+  border: 1.5px solid rgba(194, 155, 83, 0.5);
+  border-radius: 6px;
+  padding: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+}
+.pw-hero-meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: #fde047;
+  background: rgba(217, 119, 6, 0.3);
+  border: 1px solid #f59e0b;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.pw-hero-meta-title {
+  color: #ffffff;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-size: 22px;
+  font-weight: 400;
   margin-bottom: 8px;
 }
 .pw-hero-meta-text {
   color: #e2e8f0;
-  font-size: 13px;
-  line-height: 1.55;
-  margin-bottom: 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
-.pw-ipad-note {
+.pw-hero-meta-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid rgba(194, 155, 83, 0.3);
+  padding-top: 14px;
+}
+.pw-meta-highlight-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #93c5fd;
-  font-size: 12px;
-  background: rgba(29, 78, 216, 0.25);
-  border: 1px solid rgba(147, 197, 253, 0.4);
-  padding: 8px 12px;
-  border-radius: 3px;
+  gap: 12px;
+}
+.pw-meta-highlight-item .highlight-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+.pw-meta-highlight-item strong {
+  color: #ffffff;
+  font-size: 13.5px;
+  display: block;
+}
+.pw-meta-highlight-item small {
+  color: #cbd5e1;
+  font-size: 11.5px;
 }
 
 /* 48-HOUR ROTATING ENGINE SECTION */
@@ -599,13 +691,13 @@ button, select { cursor: pointer; }
 }
 .pw-results-bar h2 {
   font-family: "Libre Baskerville", Georgia, serif;
-  font-size: 22px;
-  color: var(--navy);
-  font-weight: 400;
+  font-size: 24px;
+  color: #091e36;
+  font-weight: 700;
 }
 .pw-results-count {
-  font-size: 13px;
-  color: var(--ink-muted);
+  font-size: 14px;
+  color: #1e293b;
   font-weight: 700;
 }
 
@@ -613,132 +705,175 @@ button, select { cursor: pointer; }
 .pw-documents-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
+  gap: 20px;
 }
 .pw-document-card {
-  background: #ffffff;
-  border: 1px solid var(--paper-border);
-  border-left: 5px solid var(--navy);
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-left: 5px solid #091e36 !important;
   border-radius: 6px;
   padding: 22px 24px;
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr) 230px;
-  gap: 22px;
+  grid-template-columns: 195px minmax(0, 1fr) 230px;
+  gap: 24px;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .pw-document-card:hover {
-  border-color: #cbd5e1;
-  border-left-color: var(--gold);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  border-color: #94a3b8 !important;
+  border-left-color: #c29b53 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
 }
 
-/* Left Column: Authentic Dossier Badge (No More Blank Void!) */
+/* Left Column: Authentic Archival Docket Box */
 .pw-card-meta-col {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-right: 1px solid #f1f5f9;
+  border-right: 1px solid #e2e8f0;
   padding-right: 18px;
 }
-.pw-docket-folder-graphic {
+.pw-docket-badge-box {
   background: #f8fafc;
-  border: 1.5px dashed #cbd5e1;
+  border: 1px solid #cbd5e1;
+  border-left: 3px solid #091e36;
   border-radius: 4px;
-  padding: 10px 8px;
-  text-align: center;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 4px;
 }
-.folder-seal {
-  font-size: 9px;
+.pw-docket-seal {
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: #991b1b;
   text-transform: uppercase;
-  background: #fee2e2;
-  border: 1px solid #fca5a5;
-  padding: 2px 6px;
-  border-radius: 3px;
+  color: #991b1b;
 }
-.folder-icon {
-  font-size: 26px;
-  line-height: 1;
-  margin: 3px 0;
-}
-.folder-docket {
+.pw-docket-code {
   font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  color: #1e293b;
+  color: #091e36;
   word-break: break-all;
 }
 
-.pw-meta-item {
-  font-size: 12px;
-  color: var(--ink-muted);
-}
+.pw-meta-item strong.pw-filing-date,
 .pw-meta-item strong {
   display: block;
-  color: var(--navy);
-  font-size: 13px;
+  color: #091e36 !important;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.pw-meta-item span.pw-filing-metrics,
+.pw-meta-item span {
+  display: block;
+  color: #334155 !important;
+  font-size: 12px;
+  font-weight: 600;
 }
 .pw-meta-category-badge {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: 4px 8px;
-  border-radius: 3px;
+  padding: 5px 10px;
+  border-radius: 4px;
   width: fit-content;
 }
-.cat-murder { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-.cat-drugs { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
-.cat-corruption { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-.cat-sex-trafficking { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
-.cat-fraud { background: #ccfbf1; color: #115e59; border: 1px solid #99f6e4; }
+.cat-murder { background: #fee2e2 !important; color: #7f1d1d !important; border: 1.5px solid #ef4444 !important; }
+.cat-drugs { background: #f3e8ff !important; color: #581c87 !important; border: 1.5px solid #a855f7 !important; }
+.cat-corruption { background: #fef3c7 !important; color: #78350f !important; border: 1.5px solid #f59e0b !important; }
+.cat-sex-trafficking { background: #fce7f3 !important; color: #831843 !important; border: 1.5px solid #ec4899 !important; }
+.cat-fraud { background: #ccfbf1 !important; color: #134e4a !important; border: 1.5px solid #14b8a6 !important; }
 
-/* Middle Column: Case Body */
-.pw-card-body-col h3 {
+/* Middle Column: Case Body - High Contrast & Guaranteed Readability */
+.pw-card-body-col {
+  min-width: 0;
+}
+.pw-card-body-col h3,
+.pw-card-body-col .pw-doc-title {
   font-family: "Libre Baskerville", Georgia, serif;
-  font-size: 20px;
-  line-height: 1.3;
-  color: var(--navy);
-  margin-bottom: 6px;
+  font-size: 21px;
+  line-height: 1.35;
+  color: #091e36 !important;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 .pw-card-body-col .pw-doc-type-label {
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--gold-dim);
+  letter-spacing: 0.08em;
+  color: #92400e !important;
   margin-bottom: 6px;
   display: block;
 }
 .pw-card-body-col .pw-doc-summary {
-  font-size: 14px;
-  color: var(--ink);
-  line-height: 1.55;
-  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #0f172a !important; /* Deep obsidian black - never washed out */
+  line-height: 1.6;
+  margin-bottom: 10px;
 }
 .pw-card-body-col .pw-doc-court {
-  font-size: 12px;
-  color: var(--ink-muted);
-  font-weight: 600;
+  font-size: 13px;
+  color: #1e293b !important; /* Solid dark charcoal */
+  font-weight: 700;
+  line-height: 1.4;
 }
 .pw-card-body-col .pw-doc-receipt-quote {
   font-style: italic;
-  font-size: 12px;
-  color: #1e293b;
-  background: #f8fafc;
-  border-left: 3px solid var(--gold);
-  padding: 8px 12px;
-  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #091e36 !important;
+  background: #f1f5f9;
+  border-left: 4px solid #b45309;
+  padding: 10px 14px;
+  margin-top: 10px;
   border-radius: 0 4px 4px 0;
+  line-height: 1.5;
+}
+
+/* Document Card Stamp Badges on White Cards - High Contrast & Distinct Colors */
+.pw-document-card .pw-stamp-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  margin-bottom: 6px;
+}
+.pw-document-card .stamp-gold {
+  background: #fffbeb !important;
+  color: #92400e !important;
+  border: 1.5px solid #d97706 !important;
+}
+.pw-document-card .stamp-blue {
+  background: #eff6ff !important;
+  color: #1e40af !important;
+  border: 1.5px solid #2563eb !important;
+}
+.pw-document-card .stamp-red {
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+  border: 1.5px solid #dc2626 !important;
+}
+.pw-document-card .stamp-purple {
+  background: #faf5ff !important;
+  color: #6b21a8 !important;
+  border: 1.5px solid #9333ea !important;
+}
+.pw-document-card .stamp-teal {
+  background: #f0fdfa !important;
+  color: #115e59 !important;
+  border: 1.5px solid #0d9488 !important;
 }
 
 /* Right Column: High-Contrast Action Buttons (NO MORE BLANK BUTTONS!) */
@@ -899,10 +1034,11 @@ button, select { cursor: pointer; }
     padding-bottom: 12px;
     align-items: center;
   }
-  .pw-docket-folder-graphic {
+  .pw-docket-badge-box {
     flex-direction: row;
     padding: 6px 10px;
     gap: 8px;
+    align-items: center;
   }
   .pw-dropdowns-row {
     grid-template-columns: 1fr;
