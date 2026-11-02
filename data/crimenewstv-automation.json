@@ -188,6 +188,26 @@
           "verifiedAt": "2026-11-01T18:40:48.424048+00:00",
           "deck": "ABC News reports. Watch the coverage here.",
           "description": "Original coverage from ABC News. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
+        },
+        {
+          "id": "GP__X-YJaCA",
+          "title": "Pregnant woman killed, 6 wounded in shooting at Bay Area Spirit Halloween store",
+          "publishedAt": "2026-11-01T04:40:49Z",
+          "priority": false,
+          "channelTitle": "ABC7",
+          "thumbnail": "https://i.ytimg.com/vi/GP__X-YJaCA/hqdefault.jpg",
+          "duration": "PT21S",
+          "embeddable": true,
+          "privacyStatus": "public",
+          "embed": "GP__X-YJaCA",
+          "deskDate": "November 1, 2026",
+          "category": "Crime Reports",
+          "runtime": "YouTube",
+          "selectedAt": "2026-11-02T00:07:00.673859+00:00",
+          "selectionSlot": "16",
+          "verifiedAt": "2026-11-02T00:07:00.673859+00:00",
+          "deck": "ABC7 reports. Watch the coverage here.",
+          "description": "Original coverage from ABC7. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
         }
       ]
     },
@@ -10191,6 +10211,10 @@
     "2026-11-01:09": {
       "selectedAt": "2026-11-01T18:40:48.424048+00:00",
       "count": 9
+    },
+    "2026-11-01:16": {
+      "selectedAt": "2026-11-02T00:07:00.673859+00:00",
+      "count": 1
     }
   },
   "editorialAdjustments": [
