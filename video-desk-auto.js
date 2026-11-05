@@ -188,6 +188,26 @@ const CCC_AUTO_VIDEO_EDITIONS = [
         "verifiedAt": "2026-11-04T20:37:20.859059+00:00",
         "deck": "CBS Boston reports. Watch the coverage here.",
         "description": "Original coverage from CBS Boston. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
+      },
+      {
+        "id": "PSOgsmKByks",
+        "title": "Former Prince Andrew called to testify as witness in London civil trial",
+        "publishedAt": "2026-11-04T23:54:46Z",
+        "priority": false,
+        "channelTitle": "NBC News",
+        "thumbnail": "https://i.ytimg.com/vi/PSOgsmKByks/hqdefault.jpg",
+        "duration": "PT3M1S",
+        "embeddable": true,
+        "privacyStatus": "public",
+        "embed": "PSOgsmKByks",
+        "deskDate": "November 4, 2026",
+        "category": "Courtroom Watch",
+        "runtime": "YouTube",
+        "selectedAt": "2026-11-05T01:14:59.286327+00:00",
+        "selectionSlot": "16",
+        "verifiedAt": "2026-11-05T01:14:59.286327+00:00",
+        "deck": "NBC News reports. Watch the coverage here.",
+        "description": "Original coverage from NBC News. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
       }
     ]
   },
