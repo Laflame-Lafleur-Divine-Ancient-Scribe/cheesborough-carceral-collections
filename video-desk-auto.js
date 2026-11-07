@@ -186,6 +186,28 @@ const CCC_AUTO_VIDEO_EDITIONS = [
         "verifiedAt": "2026-11-06T20:10:12.878273+00:00",
         "deck": "CBS News reports. Watch the coverage here.",
         "description": "Original coverage from CBS News. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
+      },
+      {
+        "id": "hcmD6RiJQew",
+        "title": "Naresh Bhatt Warns Mamta Their Daughter Could Suffer",
+        "trending": true,
+        "discoveryQuery": "recent court trials latest",
+        "priority": false,
+        "channelTitle": "COURT TV",
+        "publishedAt": "2026-11-06T14:00:11Z",
+        "thumbnail": "https://i.ytimg.com/vi/hcmD6RiJQew/hqdefault.jpg",
+        "duration": "PT12M1S",
+        "embeddable": true,
+        "privacyStatus": "public",
+        "embed": "hcmD6RiJQew",
+        "deskDate": "November 6, 2026",
+        "category": "Trending",
+        "runtime": "YouTube",
+        "selectedAt": "2026-11-07T00:33:25.840877+00:00",
+        "selectionSlot": "16",
+        "verifiedAt": "2026-11-07T00:33:25.840877+00:00",
+        "deck": "COURT TV reports. Watch the coverage here.",
+        "description": "Original coverage from COURT TV. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
       }
     ]
   },
