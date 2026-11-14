@@ -183,6 +183,50 @@
           "verifiedAt": "2026-11-13T20:43:04.262446+00:00",
           "deck": "WPLG Local 10 reports. Watch the coverage here.",
           "description": "Original coverage from WPLG Local 10. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
+        },
+        {
+          "id": "O1u6o1DOQPI",
+          "title": "\u2018Real Housewives\u2019 Son\u2019s Siblings CLAP Back in Sex Crimes Case",
+          "trending": true,
+          "discoveryQuery": "trending crime news latest",
+          "priority": false,
+          "channelTitle": "Law&Crime Network",
+          "publishedAt": "2026-11-13T23:15:39Z",
+          "thumbnail": "https://i.ytimg.com/vi/O1u6o1DOQPI/hqdefault.jpg",
+          "duration": "PT21M59S",
+          "embeddable": true,
+          "privacyStatus": "public",
+          "embed": "O1u6o1DOQPI",
+          "deskDate": "November 13, 2026",
+          "category": "Trending",
+          "runtime": "YouTube",
+          "selectedAt": "2026-11-14T01:11:11.157440+00:00",
+          "selectionSlot": "16",
+          "verifiedAt": "2026-11-14T01:11:11.157440+00:00",
+          "deck": "Law&Crime Network reports. Watch the coverage here.",
+          "description": "Original coverage from Law&Crime Network. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
+        },
+        {
+          "id": "oZF4m94u424",
+          "title": "7 New Shocking Details in Nvidia Affair Scandal",
+          "trending": true,
+          "discoveryQuery": "trending crime news latest",
+          "priority": false,
+          "channelTitle": "Law&Crime Network",
+          "publishedAt": "2026-11-13T02:30:33Z",
+          "thumbnail": "https://i.ytimg.com/vi/oZF4m94u424/hqdefault.jpg",
+          "duration": "PT32M48S",
+          "embeddable": true,
+          "privacyStatus": "public",
+          "embed": "oZF4m94u424",
+          "deskDate": "November 13, 2026",
+          "category": "Trending",
+          "runtime": "YouTube",
+          "selectedAt": "2026-11-14T01:11:11.157440+00:00",
+          "selectionSlot": "16",
+          "verifiedAt": "2026-11-14T01:11:11.157440+00:00",
+          "deck": "Law&Crime Network reports. Watch the coverage here.",
+          "description": "Original coverage from Law&Crime Network. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
         }
       ]
     },
@@ -13548,6 +13592,10 @@
     "2026-11-13:09": {
       "selectedAt": "2026-11-13T20:43:04.262446+00:00",
       "count": 9
+    },
+    "2026-11-13:16": {
+      "selectedAt": "2026-11-14T01:11:11.157440+00:00",
+      "count": 2
     }
   },
   "editorialAdjustments": [
