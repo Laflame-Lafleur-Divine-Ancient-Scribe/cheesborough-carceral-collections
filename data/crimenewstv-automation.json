@@ -182,6 +182,48 @@
           "verifiedAt": "2026-11-14T18:54:48.589077+00:00",
           "deck": "WFLA News Channel 8 reports. Watch the coverage here.",
           "description": "Original coverage from WFLA News Channel 8. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
+        },
+        {
+          "id": "EF90Fh192qc",
+          "title": "SC v. Alex Murdaugh | Alex Murdaugh Back in Court - Pretrial Hearing",
+          "trending": true,
+          "discoveryQuery": "recent court trials latest",
+          "priority": false,
+          "channelTitle": "COURT TV",
+          "publishedAt": "2026-11-13T17:10:29Z",
+          "thumbnail": "https://i.ytimg.com/vi/EF90Fh192qc/hqdefault.jpg",
+          "duration": "PT2H24M41S",
+          "embeddable": true,
+          "privacyStatus": "public",
+          "embed": "EF90Fh192qc",
+          "deskDate": "November 14, 2026",
+          "category": "Trending",
+          "runtime": "YouTube",
+          "selectedAt": "2026-11-15T00:37:05.745871+00:00",
+          "selectionSlot": "16",
+          "verifiedAt": "2026-11-15T00:37:05.745871+00:00",
+          "deck": "COURT TV reports. Watch the coverage here.",
+          "description": "Original coverage from COURT TV. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
+        },
+        {
+          "id": "B_mG03fJo2A",
+          "title": "5 puppies abandoned around Oxford, police identify owners",
+          "publishedAt": "2026-11-13T22:58:47Z",
+          "priority": false,
+          "channelTitle": "CBS Boston",
+          "thumbnail": "https://i.ytimg.com/vi/B_mG03fJo2A/hqdefault.jpg",
+          "duration": "PT1M44S",
+          "embeddable": true,
+          "privacyStatus": "public",
+          "embed": "B_mG03fJo2A",
+          "deskDate": "November 14, 2026",
+          "category": "Crime Reports",
+          "runtime": "YouTube",
+          "selectedAt": "2026-11-15T00:37:05.745871+00:00",
+          "selectionSlot": "16",
+          "verifiedAt": "2026-11-15T00:37:05.745871+00:00",
+          "deck": "CBS Boston reports. Watch the coverage here.",
+          "description": "Original coverage from CBS Boston. Automatically selected for CrimeNewsTV. Statements and allegations are attributed to the original publisher."
         }
       ]
     },
@@ -13785,6 +13827,10 @@
     "2026-11-14:09": {
       "selectedAt": "2026-11-14T18:54:48.589077+00:00",
       "count": 9
+    },
+    "2026-11-14:16": {
+      "selectedAt": "2026-11-15T00:37:05.745871+00:00",
+      "count": 2
     }
   },
   "editorialAdjustments": [
